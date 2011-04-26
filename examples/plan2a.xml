@@ -1,0 +1,1486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query_plan_bundle>
+  <query_plan id="0">
+    <properties>
+      <property name="cs">
+        <property name="mapping" value="1">
+          <property name="cs">
+            <property name="offset" value="1">
+              <property name="type" value="str"/>
+            </property>
+          </property>
+        </property>
+        <property name="mapping" value="2">
+          <property name="cs">
+            <property name="offset" value="2">
+              <property name="type" value="int"/>
+            </property>
+          </property>
+        </property>
+      </property>
+      <property name="overallResultType" value="LIST"/>
+    </properties>
+    <logical_query_plan unique_names="true">
+      <node id="0" kind="table">
+        <content>
+          <column name="iter" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+      </node>
+      <node id="1" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="str">Simon</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="2" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="1"/>
+      </node>
+      <node id="3" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="str">MS</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="4" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="3"/>
+      </node>
+      <node id="5" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="int">80</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="6" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="5"/>
+      </node>
+      <node id="7" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+        </content>
+        <edge to="6"/>
+      </node>
+      <node id="8" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="4"/>
+        <edge to="7"/>
+      </node>
+      <node id="9" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="8"/>
+      </node>
+      <node id="10" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+          <column old_name="item2" name="item3" new="true"/>
+        </content>
+        <edge to="9"/>
+      </node>
+      <node id="11" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="2"/>
+        <edge to="10"/>
+      </node>
+      <node id="12" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="11"/>
+      </node>
+      <node id="13" kind="attach">
+        <content>
+          <column name="item99999801" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="12"/>
+      </node>
+      <node id="14" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="str">Erik</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="15" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="14"/>
+      </node>
+      <node id="16" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="int">90</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="17" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="16"/>
+      </node>
+      <node id="18" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+        </content>
+        <edge to="17"/>
+      </node>
+      <node id="19" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="4"/>
+        <edge to="18"/>
+      </node>
+      <node id="20" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="19"/>
+      </node>
+      <node id="21" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+          <column old_name="item2" name="item3" new="true"/>
+        </content>
+        <edge to="20"/>
+      </node>
+      <node id="22" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="15"/>
+        <edge to="21"/>
+      </node>
+      <node id="23" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="22"/>
+      </node>
+      <node id="24" kind="attach">
+        <content>
+          <column name="item99999801" new="true">
+            <value type="nat">2</value>
+          </column>
+        </content>
+        <edge to="23"/>
+      </node>
+      <node id="25" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="str">Phil</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="26" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="25"/>
+      </node>
+      <node id="27" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="str">Ed</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="28" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="27"/>
+      </node>
+      <node id="29" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="int">40</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="30" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="29"/>
+      </node>
+      <node id="31" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+        </content>
+        <edge to="30"/>
+      </node>
+      <node id="32" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="28"/>
+        <edge to="31"/>
+      </node>
+      <node id="33" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="32"/>
+      </node>
+      <node id="34" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+          <column old_name="item2" name="item3" new="true"/>
+        </content>
+        <edge to="33"/>
+      </node>
+      <node id="35" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="26"/>
+        <edge to="34"/>
+      </node>
+      <node id="36" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="35"/>
+      </node>
+      <node id="37" kind="attach">
+        <content>
+          <column name="item99999801" new="true">
+            <value type="nat">3</value>
+          </column>
+        </content>
+        <edge to="36"/>
+      </node>
+      <node id="38" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="str">Gordon</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="39" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="38"/>
+      </node>
+      <node id="40" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="int">45</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="41" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="40"/>
+      </node>
+      <node id="42" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+        </content>
+        <edge to="41"/>
+      </node>
+      <node id="43" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="28"/>
+        <edge to="42"/>
+      </node>
+      <node id="44" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="43"/>
+      </node>
+      <node id="45" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+          <column old_name="item2" name="item3" new="true"/>
+        </content>
+        <edge to="44"/>
+      </node>
+      <node id="46" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="39"/>
+        <edge to="45"/>
+      </node>
+      <node id="47" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="46"/>
+      </node>
+      <node id="48" kind="attach">
+        <content>
+          <column name="item99999801" new="true">
+            <value type="nat">4</value>
+          </column>
+        </content>
+        <edge to="47"/>
+      </node>
+      <node id="49" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="str">Paul</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="50" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="49"/>
+      </node>
+      <node id="51" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="str">Yale</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="52" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="51"/>
+      </node>
+      <node id="53" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="int">60</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="54" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="53"/>
+      </node>
+      <node id="55" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+        </content>
+        <edge to="54"/>
+      </node>
+      <node id="56" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="52"/>
+        <edge to="55"/>
+      </node>
+      <node id="57" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="56"/>
+      </node>
+      <node id="58" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+          <column old_name="item2" name="item3" new="true"/>
+        </content>
+        <edge to="57"/>
+      </node>
+      <node id="59" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="50"/>
+        <edge to="58"/>
+      </node>
+      <node id="60" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="59"/>
+      </node>
+      <node id="61" kind="attach">
+        <content>
+          <column name="item99999801" new="true">
+            <value type="nat">5</value>
+          </column>
+        </content>
+        <edge to="60"/>
+      </node>
+      <node id="62" kind="union">
+        <edge to="48"/>
+        <edge to="61"/>
+      </node>
+      <node id="63" kind="union">
+        <edge to="37"/>
+        <edge to="62"/>
+      </node>
+      <node id="64" kind="union">
+        <edge to="24"/>
+        <edge to="63"/>
+      </node>
+      <node id="65" kind="union">
+        <edge to="13"/>
+        <edge to="64"/>
+      </node>
+      <node id="66" kind="rank">
+        <content>
+          <column name="item99999601" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="item99999801" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="pos" new="false"/>
+        </content>
+        <edge to="65"/>
+      </node>
+      <node id="67" kind="rownum">
+        <content>
+          <column name="item99999701" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="iter" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="item99999801" new="false"/>
+          <column function="sort" position="3" direction="ascending" name="pos" new="false"/>
+        </content>
+        <edge to="66"/>
+      </node>
+      <node id="68" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="67"/>
+      </node>
+      <node id="69" kind="rownum">
+        <content>
+          <column name="item99999401" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="iter" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="pos" new="false"/>
+        </content>
+        <edge to="68"/>
+      </node>
+      <node id="70" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item99999401" name="item99999401" new="true"/>
+        </content>
+        <edge to="69"/>
+      </node>
+      <node id="71" kind="attach">
+        <content>
+          <column name="item99999601" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="69"/>
+      </node>
+      <node id="72" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="71"/>
+      </node>
+      <node id="73" kind="project">
+        <content>
+          <column old_name="iter" name="item99999703" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="72"/>
+      </node>
+      <node id="74" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item2" name="item1" new="true"/>
+          <column old_name="item3" name="item2" new="true"/>
+        </content>
+        <edge to="72"/>
+      </node>
+      <node id="75" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="74"/>
+      </node>
+      <node id="76" kind="project">
+        <content>
+          <column old_name="iter" name="item99999701" new="true"/>
+          <column old_name="item1" name="item4" new="true"/>
+        </content>
+        <edge to="75"/>
+      </node>
+      <node id="77" kind="eqjoin">
+        <content>
+          <column position="1" name="item99999703" new="false"/>
+          <column position="2" name="item99999701" new="false"/>
+        </content>
+        <edge to="73"/>
+        <edge to="76"/>
+      </node>
+      <node id="78" kind="eqjoin">
+        <content>
+          <column position="1" name="item99999401" new="false"/>
+          <column position="2" name="item99999701" new="false"/>
+        </content>
+        <edge to="70"/>
+        <edge to="77"/>
+      </node>
+      <node id="79" kind="rowrank">
+        <content>
+          <column name="item99999001" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="iter" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="item4" new="false"/>
+        </content>
+        <edge to="78"/>
+      </node>
+      <node id="80" kind="project">
+        <content>
+          <column old_name="item99999001" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="79"/>
+      </node>
+      <node id="81" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="item99999001" name="pos" new="true"/>
+          <column old_name="item99999001" name="item2" new="true"/>
+          <column old_name="item4" name="item1" new="true"/>
+        </content>
+        <edge to="79"/>
+      </node>
+      <node id="82" kind="distinct">
+        <edge to="81"/>
+      </node>
+      <node id="83" kind="rownum">
+        <content>
+          <column name="item99999401" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="iter" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="pos" new="false"/>
+        </content>
+        <edge to="82"/>
+      </node>
+      <node id="84" kind="attach">
+        <content>
+          <column name="item99999601" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="83"/>
+      </node>
+      <node id="85" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="84"/>
+      </node>
+      <node id="86" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item2" name="item1" new="true"/>
+        </content>
+        <edge to="85"/>
+      </node>
+      <node id="87" kind="project">
+        <content>
+          <column old_name="iter" name="item99999501" new="true"/>
+          <column old_name="item99999401" name="item99999401" new="true"/>
+          <column old_name="pos" name="item99999601" new="true"/>
+        </content>
+        <edge to="83"/>
+      </node>
+      <node id="88" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999401" new="false"/>
+        </content>
+        <edge to="86"/>
+        <edge to="87"/>
+      </node>
+      <node id="89" kind="project">
+        <content>
+          <column old_name="item99999501" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="88"/>
+      </node>
+      <node id="90" kind="rownum">
+        <content>
+          <column name="item99999401" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="iter" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="pos" new="false"/>
+        </content>
+        <edge to="89"/>
+      </node>
+      <node id="91" kind="attach">
+        <content>
+          <column name="item99999601" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="90"/>
+      </node>
+      <node id="92" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="91"/>
+      </node>
+      <node id="93" kind="project">
+        <content>
+          <column old_name="iter" name="item99999701" new="true"/>
+          <column old_name="item1" name="item99999001" new="true"/>
+        </content>
+        <edge to="92"/>
+      </node>
+      <node id="94" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999001" new="false"/>
+        </content>
+        <edge to="80"/>
+        <edge to="93"/>
+      </node>
+      <node id="95" kind="project">
+        <content>
+          <column old_name="item99999701" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="94"/>
+      </node>
+      <node id="96" kind="rownum">
+        <content>
+          <column name="item99999401" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="iter" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="pos" new="false"/>
+        </content>
+        <edge to="95"/>
+      </node>
+      <node id="97" kind="attach">
+        <content>
+          <column name="item99999601" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="96"/>
+      </node>
+      <node id="98" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="97"/>
+      </node>
+      <node id="99" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item2" name="item1" new="true"/>
+          <column old_name="item3" name="item2" new="true"/>
+        </content>
+        <edge to="98"/>
+      </node>
+      <node id="100" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="99"/>
+      </node>
+      <node id="101" kind="project">
+        <content>
+          <column old_name="iter" name="item99999501" new="true"/>
+          <column old_name="item99999401" name="item99999401" new="true"/>
+          <column old_name="pos" name="item99999601" new="true"/>
+        </content>
+        <edge to="96"/>
+      </node>
+      <node id="102" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999401" new="false"/>
+        </content>
+        <edge to="100"/>
+        <edge to="101"/>
+      </node>
+      <node id="103" kind="project">
+        <content>
+          <column old_name="item99999501" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="102"/>
+      </node>
+      <node id="104" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+        </content>
+        <edge to="90"/>
+      </node>
+      <node id="105" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="iter" name="item1" new="true"/>
+        </content>
+        <edge to="104"/>
+      </node>
+      <node id="106" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="105"/>
+      </node>
+      <node id="107" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+        </content>
+        <edge to="106"/>
+      </node>
+      <node id="108" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="106"/>
+        <edge to="107"/>
+      </node>
+      <node id="109" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="108"/>
+      </node>
+      <node id="110" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+          <column old_name="item2" name="item3" new="true"/>
+        </content>
+        <edge to="109"/>
+      </node>
+      <node id="111" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="106"/>
+        <edge to="110"/>
+      </node>
+      <node id="112" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="111"/>
+      </node>
+      <node id="113" kind="project">
+        <content>
+          <column old_name="iter" name="item99999501" new="true"/>
+          <column old_name="item99999401" name="item99999401" new="true"/>
+          <column old_name="pos" name="item99999601" new="true"/>
+        </content>
+        <edge to="90"/>
+      </node>
+      <node id="114" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999401" new="false"/>
+        </content>
+        <edge to="112"/>
+        <edge to="113"/>
+      </node>
+      <node id="115" kind="project">
+        <content>
+          <column old_name="item99999501" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="114"/>
+      </node>
+      <node id="116" kind="rownum">
+        <content>
+          <column name="item99999401" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="iter" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="pos" new="false"/>
+        </content>
+        <edge to="115"/>
+      </node>
+      <node id="117" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+        </content>
+        <edge to="116"/>
+      </node>
+      <node id="118" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item2" name="item1" new="true"/>
+        </content>
+        <edge to="99"/>
+      </node>
+      <node id="119" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999401" new="false"/>
+        </content>
+        <edge to="118"/>
+        <edge to="101"/>
+      </node>
+      <node id="120" kind="project">
+        <content>
+          <column old_name="item99999501" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="119"/>
+      </node>
+      <node id="121" kind="attach">
+        <content>
+          <column name="item99999601" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="116"/>
+      </node>
+      <node id="122" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="121"/>
+      </node>
+      <node id="123" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item2" name="item1" new="true"/>
+          <column old_name="item3" name="item2" new="true"/>
+        </content>
+        <edge to="122"/>
+      </node>
+      <node id="124" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item2" name="item1" new="true"/>
+        </content>
+        <edge to="123"/>
+      </node>
+      <node id="125" kind="project">
+        <content>
+          <column old_name="iter" name="item99999701" new="true"/>
+          <column old_name="item1" name="item99999001" new="true"/>
+        </content>
+        <edge to="124"/>
+      </node>
+      <node id="126" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999001" new="false"/>
+        </content>
+        <edge to="120"/>
+        <edge to="125"/>
+      </node>
+      <node id="127" kind="project">
+        <content>
+          <column old_name="item99999701" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="126"/>
+      </node>
+      <node id="128" kind="aggr">
+        <content>
+          <column function="partition" name="iter" new="false"/>
+          <aggregate kind="sum">
+            <column name="item1" new="true"/>
+            <column function="item" name="item1" new="false"/>
+          </aggregate>
+        </content>
+        <edge to="127"/>
+      </node>
+      <node id="129" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+        </content>
+        <edge to="128"/>
+      </node>
+      <node id="130" kind="difference">
+        <edge to="117"/>
+        <edge to="129"/>
+      </node>
+      <node id="131" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="int">0</value>
+          </column>
+        </content>
+        <edge to="130"/>
+      </node>
+      <node id="132" kind="union">
+        <edge to="131"/>
+        <edge to="128"/>
+      </node>
+      <node id="133" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="132"/>
+      </node>
+      <node id="134" kind="project">
+        <content>
+          <column old_name="iter" name="item99999501" new="true"/>
+          <column old_name="item99999401" name="item99999401" new="true"/>
+          <column old_name="pos" name="item99999601" new="true"/>
+        </content>
+        <edge to="116"/>
+      </node>
+      <node id="135" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999401" new="false"/>
+        </content>
+        <edge to="133"/>
+        <edge to="134"/>
+      </node>
+      <node id="136" kind="rownum">
+        <content>
+          <column name="item99999001" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="item1" new="false"/>
+          <column function="partition" name="item99999501" new="false"/>
+        </content>
+        <edge to="135"/>
+      </node>
+      <node id="137" kind="project">
+        <content>
+          <column old_name="item99999401" name="item99999401" new="true"/>
+          <column old_name="item99999501" name="item99999501" new="true"/>
+          <column old_name="item99999601" name="item99999601" new="true"/>
+          <column old_name="item99999001" name="item99999001" new="true"/>
+        </content>
+        <edge to="136"/>
+      </node>
+      <node id="138" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999501" new="false"/>
+        </content>
+        <edge to="115"/>
+        <edge to="137"/>
+      </node>
+      <node id="139" kind="eq">
+        <content>
+          <column name="item99999002" new="true"/>
+          <column position="1" name="pos" new="false"/>
+          <column position="2" name="item99999601" new="false"/>
+        </content>
+        <edge to="138"/>
+      </node>
+      <node id="140" kind="select">
+        <content>
+          <column name="item99999002" new="false"/>
+        </content>
+        <edge to="139"/>
+      </node>
+      <node id="141" kind="project">
+        <content>
+          <column old_name="item99999501" name="iter" new="true"/>
+          <column old_name="item99999001" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="140"/>
+      </node>
+      <node id="142" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="item99999601" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="141"/>
+      </node>
+      <node id="143" kind="rownum">
+        <content>
+          <column name="pos" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="item99999601" new="false"/>
+          <column function="partition" name="iter" new="false"/>
+        </content>
+        <edge to="142"/>
+      </node>
+      <node id="144" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="143"/>
+      </node>
+      <node id="145" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="int">5</value>
+          </column>
+        </content>
+        <edge to="0"/>
+      </node>
+      <node id="146" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="145"/>
+      </node>
+      <node id="147" kind="project">
+        <content>
+          <column old_name="iter" name="item99999701" new="true"/>
+          <column old_name="item1" name="item99999301" new="true"/>
+        </content>
+        <edge to="146"/>
+      </node>
+      <node id="148" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999701" new="false"/>
+        </content>
+        <edge to="144"/>
+        <edge to="147"/>
+      </node>
+      <node id="149" kind="cast">
+        <content>
+          <column name="item99999601" new="true"/>
+          <column name="pos" new="false"/>
+          <type name="int"/>
+        </content>
+        <edge to="148"/>
+      </node>
+      <node id="150" kind="gt">
+        <content>
+          <column name="item99999001" new="true"/>
+          <column position="1" name="item99999301" new="false"/>
+          <column position="2" name="item99999601" new="false"/>
+        </content>
+        <edge to="149"/>
+      </node>
+      <node id="151" kind="eq">
+        <content>
+          <column name="item99999002" new="true"/>
+          <column position="1" name="item99999301" new="false"/>
+          <column position="2" name="item99999601" new="false"/>
+        </content>
+        <edge to="150"/>
+      </node>
+      <node id="152" kind="or">
+        <content>
+          <column name="item99999003" new="true"/>
+          <column position="1" name="item99999002" new="false"/>
+          <column position="2" name="item99999001" new="false"/>
+        </content>
+        <edge to="151"/>
+      </node>
+      <node id="153" kind="select">
+        <content>
+          <column name="item99999003" new="false"/>
+        </content>
+        <edge to="152"/>
+      </node>
+      <node id="154" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="153"/>
+      </node>
+      <node id="155" kind="rownum">
+        <content>
+          <column name="item99999401" new="true"/>
+          <column function="sort" position="1" direction="ascending" name="iter" new="false"/>
+          <column function="sort" position="2" direction="ascending" name="pos" new="false"/>
+        </content>
+        <edge to="154"/>
+      </node>
+      <node id="156" kind="attach">
+        <content>
+          <column name="item99999601" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="155"/>
+      </node>
+      <node id="157" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+          <column old_name="item3" name="item3" new="true"/>
+        </content>
+        <edge to="156"/>
+      </node>
+      <node id="158" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item2" name="item1" new="true"/>
+          <column old_name="item3" name="item2" new="true"/>
+        </content>
+        <edge to="157"/>
+      </node>
+      <node id="159" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="158"/>
+      </node>
+      <node id="160" kind="project">
+        <content>
+          <column old_name="iter" name="item99999701" new="true"/>
+          <column old_name="item1" name="item99999001" new="true"/>
+        </content>
+        <edge to="159"/>
+      </node>
+      <node id="161" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999001" new="false"/>
+        </content>
+        <edge to="103"/>
+        <edge to="160"/>
+      </node>
+      <node id="162" kind="project">
+        <content>
+          <column old_name="item99999701" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="161"/>
+      </node>
+      <node id="163" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="162"/>
+      </node>
+      <node id="164" kind="distinct">
+        <edge to="163"/>
+      </node>
+      <node id="165" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="164"/>
+      </node>
+      <node id="166" kind="project">
+        <content>
+          <column old_name="item99999401" name="iter" new="true"/>
+        </content>
+        <edge to="155"/>
+      </node>
+      <node id="167" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item2" name="item1" new="true"/>
+        </content>
+        <edge to="158"/>
+      </node>
+      <node id="168" kind="project">
+        <content>
+          <column old_name="iter" name="item99999701" new="true"/>
+          <column old_name="item1" name="item99999001" new="true"/>
+        </content>
+        <edge to="167"/>
+      </node>
+      <node id="169" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999001" new="false"/>
+        </content>
+        <edge to="120"/>
+        <edge to="168"/>
+      </node>
+      <node id="170" kind="project">
+        <content>
+          <column old_name="item99999701" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+        </content>
+        <edge to="169"/>
+      </node>
+      <node id="171" kind="aggr">
+        <content>
+          <column function="partition" name="iter" new="false"/>
+          <aggregate kind="sum">
+            <column name="item1" new="true"/>
+            <column function="item" name="item1" new="false"/>
+          </aggregate>
+        </content>
+        <edge to="170"/>
+      </node>
+      <node id="172" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+        </content>
+        <edge to="171"/>
+      </node>
+      <node id="173" kind="difference">
+        <edge to="166"/>
+        <edge to="172"/>
+      </node>
+      <node id="174" kind="attach">
+        <content>
+          <column name="item1" new="true">
+            <value type="int">0</value>
+          </column>
+        </content>
+        <edge to="173"/>
+      </node>
+      <node id="175" kind="union">
+        <edge to="174"/>
+        <edge to="171"/>
+      </node>
+      <node id="176" kind="attach">
+        <content>
+          <column name="pos" new="true">
+            <value type="nat">1</value>
+          </column>
+        </content>
+        <edge to="175"/>
+      </node>
+      <node id="177" kind="project">
+        <content>
+          <column old_name="iter" name="iter99991" new="true"/>
+          <column old_name="item1" name="item2" new="true"/>
+        </content>
+        <edge to="176"/>
+      </node>
+      <node id="178" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="iter99991" new="false"/>
+        </content>
+        <edge to="165"/>
+        <edge to="177"/>
+      </node>
+      <node id="179" kind="project">
+        <content>
+          <column old_name="iter" name="iter" new="true"/>
+          <column old_name="pos" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="178"/>
+      </node>
+      <node id="180" kind="project">
+        <content>
+          <column old_name="iter" name="item99999501" new="true"/>
+          <column old_name="item99999401" name="item99999401" new="true"/>
+          <column old_name="pos" name="item99999601" new="true"/>
+        </content>
+        <edge to="155"/>
+      </node>
+      <node id="181" kind="eqjoin">
+        <content>
+          <column position="1" name="iter" new="false"/>
+          <column position="2" name="item99999401" new="false"/>
+        </content>
+        <edge to="179"/>
+        <edge to="180"/>
+      </node>
+      <node id="182" kind="project">
+        <content>
+          <column old_name="item99999501" name="iter" new="true"/>
+          <column old_name="item99999601" name="pos" new="true"/>
+          <column old_name="item1" name="item1" new="true"/>
+          <column old_name="item2" name="item2" new="true"/>
+        </content>
+        <edge to="181"/>
+      </node>
+      <node id="183" kind="nil"/>
+      <node id="184" kind="serialize relation">
+        <content>
+          <column name="iter" new="false" function="iter"/>
+          <column name="pos" new="false" function="pos"/>
+          <column name="item1" new="false" function="item" position="1"/>
+          <column name="item2" new="false" function="item" position="2"/>
+        </content>
+        <edge to="183"/>
+        <edge to="182"/>
+      </node>
+    </logical_query_plan>
+  </query_plan>
+</query_plan_bundle>
