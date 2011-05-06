@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  *
  */
 
-public class AlgebraWebEditor implements EntryPoint {
+public class AlgebraEditor implements EntryPoint {
 
 
 	/**

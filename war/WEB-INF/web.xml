@@ -5,20 +5,11 @@
 
 <web-app>
   
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.algebraweb.editor.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/algebrawebeditor/greet</url-pattern>
-  </servlet-mapping>
+
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>AlgebraWebEditor.html</welcome-file>
+    <welcome-file>AlgebraEditor.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
