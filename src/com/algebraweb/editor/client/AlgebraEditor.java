@@ -1,5 +1,7 @@
 package com.algebraweb.editor.client;
 
+import com.algebraweb.editor.client.graphcanvas.DragPanel;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 

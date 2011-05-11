@@ -1,5 +1,9 @@
 package com.algebraweb.editor.client;
 
+import com.algebraweb.editor.client.graphcanvas.CircleSorter;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
+import com.algebraweb.editor.client.graphcanvas.InlineSorter;
+import com.algebraweb.editor.client.graphcanvas.SimpleSorter;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -215,46 +219,18 @@ Button sortBBBBBBB = new Button("Zoom out");
 
 	}
 	
-	
-	private int count=1;
+
 	
 	private void makeTest() {
 		
 		
+		GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
+		
+			
+		f.fill(new RemoteFiller());
 		
 		
-		for (int i=0;i<4;i++) {
 			
-			//TODO: center this correctly
-			
-			GraphNode a = c.addNode(count,300+(int)(Math.random()*600),250+(int)(Math.random()*500),(int)(70+Math.random()*100),(int)(20 + Math.random() * 40),"Node " + count);
-			
-			count++;
-			
-			int toid =(int)( Math.random() * (c.getNodes().size() -1));
-			
-			GraphNode to = c.getNodes().get(toid);
-			
-			if (!to.equals(a)) c.createEdge(a, to);
-			
-			if (Math.random() > 0.7) {
-				
-				toid =(int)( Math.random() * (c.getNodes().size() -1));
-				
-				to = c.getNodes().get(toid);
-				
-				if (!to.equals(a)) c.createEdge(a, to);
-				
-			}
-			
-		}
-		
-		
-		
-		
-	
-		
-		
 		
 	}
 

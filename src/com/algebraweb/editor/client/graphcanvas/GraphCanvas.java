@@ -1,7 +1,8 @@
-package com.algebraweb.editor.client;
+package com.algebraweb.editor.client.graphcanvas;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -37,6 +38,7 @@ public class GraphCanvas extends Raphael  {
 
 
 	private ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();
+	private ArrayList<GraphEdge> edges = new ArrayList<GraphEdge>();
 
 	public GraphCanvas(int width, int height) {
 		
@@ -229,7 +231,7 @@ public class GraphCanvas extends Raphael  {
 
 	public void createEdge(GraphNode from, GraphNode to) {
 
-		new GraphEdge(this,from,to);
+		this.edges.add(new GraphEdge(this,from,to));
 	}
 
 
@@ -274,6 +276,16 @@ public class GraphCanvas extends Raphael  {
 		g.getText().addDomHandler(GraphNodeModifier.mouseOutHandlerBuilder(g), MouseOutEvent.getType());
 
 		return g;
+
+	}
+	
+	
+	public GraphNode addNode(int id,int width, int height,String text) {
+
+		int x = this.width / 2;
+		int y = this.height / 2;
+		
+		return this.addNode(id,x,y,width,height,text);
 
 	}
 
@@ -335,6 +347,45 @@ public class GraphCanvas extends Raphael  {
 		m.sortGraph(nodes, s);
 
 	}
+	
+	
+	public GraphNode getGraphNodeById(int id) throws NodeNotFoundException{
+		
+		Iterator<GraphNode> i = nodes.iterator();
+		
+		while(i.hasNext()) {
+			
+			GraphNode current = i.next();
+			if (current.getId() == id) return current;
+				
+		}
+		
+		throw new NodeNotFoundException(id);
+		
+	}
+	
+	public void clear() {
+		
+		this.nodes.clear();
+		this.edges.clear();
+		super.clear();		
+		
+	}
+	
+	public void showEdges() {
+		
+	Iterator<GraphNode> i = nodes.iterator();
+		
+		while(i.hasNext()) {
+		
+			this.getGraphNodeModifier().showEdges(i.next());
+			
+				
+		}
+		
+	}
+	
+
 
 
 }

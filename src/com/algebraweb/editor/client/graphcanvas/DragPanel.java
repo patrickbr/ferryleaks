@@ -1,4 +1,4 @@
-package com.algebraweb.editor.client;
+package com.algebraweb.editor.client.graphcanvas;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;

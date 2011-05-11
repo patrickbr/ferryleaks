@@ -1,4 +1,4 @@
-package com.algebraweb.editor.client;
+package com.algebraweb.editor.client.graphcanvas;
 
 import java.util.ArrayList;
 
@@ -39,11 +39,14 @@ public class GraphNode {
 		this.c=c;
 		this.height = height;
 		this.width = width;
+		
+		this.x=x;
+		this.y=y;
 
-		this.rect = c.new Rect(c.getWidth()/2,c.getHeight()/2,width,height,5);
+		this.rect = c.new Rect(x,y,width,height,5);
 		rect.getElement().setAttribute("class", "node");
 
-		text = c.new Text(c.getWidth()/2 + width/2,c.getHeight()/2+height/2,textStr);
+		text = c.new Text(x + width/2,y+height/2,textStr);
 		this.text.attr("text-anchor","left");
 
 		text.getElement().setAttribute("class", "node-text");
@@ -51,8 +54,7 @@ public class GraphNode {
 		rect.attr("fill", "#EEE");
 		text.attr("fill", "#000");
 
-		c.getGraphNodeModifier().animateTo(this,x,y);
-
+		
 
 		MouseDownHandler mouseDownH = new MouseDownHandler() {
 

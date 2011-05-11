@@ -1,4 +1,4 @@
-package com.algebraweb.editor.client;
+package com.algebraweb.editor.client.graphcanvas;
 
 
 import com.hydro4ge.raphaelgwt.client.Raphael.Path;

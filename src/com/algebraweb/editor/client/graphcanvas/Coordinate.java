@@ -1,4 +1,4 @@
-package com.algebraweb.editor.client;
+package com.algebraweb.editor.client.graphcanvas;
 
 /**
  * A simple coordinate with x and y

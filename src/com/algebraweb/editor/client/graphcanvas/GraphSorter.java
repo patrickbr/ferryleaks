@@ -1,6 +1,7 @@
-package com.algebraweb.editor.client;
+package com.algebraweb.editor.client.graphcanvas;
 
 import java.util.ArrayList;
+
 
 
 public interface GraphSorter {

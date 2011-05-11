@@ -1,6 +1,7 @@
-package com.algebraweb.editor.client;
+package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 
 /**
  * A very simple inline sorter, for testing purposes
