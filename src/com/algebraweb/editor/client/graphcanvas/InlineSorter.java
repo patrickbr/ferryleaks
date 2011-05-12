@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 public class InlineSorter  implements GraphSorter {
 
-	public void doSort(ArrayList<GraphNode> nodes) {
+	public void doSort(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges,GraphManipulationCallback cb) {
 
 		Iterator<GraphNode> i = nodes.iterator();
 
@@ -35,6 +35,8 @@ public class InlineSorter  implements GraphSorter {
 			c = -c;
 
 		}
+		
+		cb.onComplete();
 	}
 }
 

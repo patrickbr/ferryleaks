@@ -13,7 +13,7 @@ import java.util.Iterator;
 public class SimpleSorter implements GraphSorter {
 	
 
-	public void doSort(ArrayList<GraphNode> nodes) {
+	public void doSort(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges,GraphManipulationCallback cb) {
 
 		Iterator<GraphNode> i = nodes.iterator();
 
@@ -40,6 +40,8 @@ public class SimpleSorter implements GraphSorter {
 				c=0;
 			}
 		}
+		
+		cb.onComplete();
 	}
 
 }

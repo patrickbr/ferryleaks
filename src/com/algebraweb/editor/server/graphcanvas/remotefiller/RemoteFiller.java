@@ -1,10 +1,10 @@
-package com.algebraweb.editor.server;
+package com.algebraweb.editor.server.graphcanvas.remotefiller;
 
 import java.util.ArrayList;
 
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
-import com.algebraweb.editor.client.RemoteFillingService;
+import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class RemoteFiller extends RemoteServiceServlet implements RemoteFillingService {

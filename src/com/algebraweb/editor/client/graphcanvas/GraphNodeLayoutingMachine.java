@@ -14,6 +14,7 @@ public class GraphNodeLayoutingMachine {
 
 
 	protected ArrayList<GraphNode> nodes;
+	protected ArrayList<GraphEdge> edges;
 	protected GraphNodeModifier gnm;
 
 	private static int offsetX = 600;
@@ -32,10 +33,11 @@ public class GraphNodeLayoutingMachine {
 	 * @param sorter
 	 */
 
-	public void sortGraph(ArrayList<GraphNode> nodes,GraphSorter sorter) {
+	public void sortGraph(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges,GraphSorter sorter) {
 
 		this.nodes=nodes;
-
+		this.edges=edges;
+		
 		Iterator<GraphNode> i = nodes.iterator();
 
 		GraphNode current;
@@ -45,18 +47,32 @@ public class GraphNodeLayoutingMachine {
 			current = i.next();
 			gnm.hideEdges(current);
 
-		}			
+		}		
+		
+		
+		//TODO: lock screen, show something like "sorting"...
+		
 
-		sorter.doSort(nodes);
-		Iterator<GraphNode> a = nodes.iterator();
+		sorter.doSort(nodes,edges, new GraphManipulationCallback() {
 
-		while(a.hasNext()) {
+			@Override
+			public void onComplete() {
+				
+				Iterator<GraphNode> a = GraphNodeLayoutingMachine.this.nodes.iterator();
 
-			current = a.next();
+				while(a.hasNext()) {
 
-			gnm.animateTo(current,current.getX()+offsetX, current.getY()+offsetY);
+					GraphNode current = a.next();
 
-		}
+					gnm.animateTo(current,current.getX()+offsetX, current.getY()+offsetY);
+
+				}
+				
+			}
+		});
+				
+	
 	}
+	
 
 }

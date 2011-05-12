@@ -21,6 +21,8 @@ public class GraphNode {
 	private GraphCanvas c;
 	private ArrayList<GraphEdge> edgesTo = new ArrayList<GraphEdge>();
 	private ArrayList<GraphEdge> edgesFrom = new ArrayList<GraphEdge>();
+	
+	private String textString;
 
 	private int width = 200;
 	private int height = 50;
@@ -45,6 +47,8 @@ public class GraphNode {
 
 		this.rect = c.new Rect(x,y,width,height,5);
 		rect.getElement().setAttribute("class", "node");
+		
+		textString = textStr;
 
 		text = c.new Text(x + width/2,y+height/2,textStr);
 		this.text.attr("text-anchor","left");
@@ -158,5 +162,8 @@ public class GraphNode {
 		this.edgesTo.add(e);
 	}
 
+	public String getTextString() {
+		return textString;
+	}
 
 }

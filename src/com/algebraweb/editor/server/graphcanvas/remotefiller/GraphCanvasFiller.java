@@ -1,4 +1,4 @@
-package com.algebraweb.editor.server;
+package com.algebraweb.editor.server.graphcanvas.remotefiller;
 
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;

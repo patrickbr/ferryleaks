@@ -1,9 +1,11 @@
 package com.algebraweb.editor.client;
 
-import com.algebraweb.editor.client.graphcanvas.CircleSorter;
+
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.InlineSorter;
 import com.algebraweb.editor.client.graphcanvas.SimpleSorter;
+import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
+import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -48,7 +50,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.sort(new CircleSorter());
+				c.sort(new RemoteSorter());
 				
 			}});
 		

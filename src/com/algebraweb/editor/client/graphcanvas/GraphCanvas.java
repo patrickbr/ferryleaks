@@ -344,7 +344,7 @@ public class GraphCanvas extends Raphael  {
 	public void sort(GraphSorter s) {
 
 		GraphNodeLayoutingMachine m = new GraphNodeLayoutingMachine(gnm);
-		m.sortGraph(nodes, s);
+		m.sortGraph(nodes,edges, s);
 
 	}
 	

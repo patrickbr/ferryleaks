@@ -1,8 +1,11 @@
-package com.algebraweb.editor.client;
+package com.algebraweb.editor.client.graphcanvas.remotefiller;
 
 import java.util.ArrayList;
 
 
+import com.algebraweb.editor.client.GraphCanvasRemoteFillingMachine;
+import com.algebraweb.editor.client.RawEdge;
+import com.algebraweb.editor.client.RawNode;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

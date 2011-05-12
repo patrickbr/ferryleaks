@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.SimpleSorter;
+import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 
 public class GraphCanvasRemoteFillingMachine {
 	

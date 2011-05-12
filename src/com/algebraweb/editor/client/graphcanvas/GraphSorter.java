@@ -6,6 +6,6 @@ import java.util.ArrayList;
 
 public interface GraphSorter {
 		
-	public void doSort(ArrayList<GraphNode> nodes);
+	public void doSort(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges, GraphManipulationCallback cb);
 	
 }

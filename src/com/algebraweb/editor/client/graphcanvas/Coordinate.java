@@ -1,12 +1,14 @@
 package com.algebraweb.editor.client.graphcanvas;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * A simple coordinate with x and y
  * @author Patrick Brosi
  *
  */
 
-public class Coordinate {
+public class Coordinate implements IsSerializable{
 
 	private double x;
 	private double y;	
@@ -14,6 +16,10 @@ public class Coordinate {
 	public Coordinate(double x,double y) {
 		this.x=x;
 		this.y=y;
+	}
+	
+	public Coordinate() {
+		
 	}
 
 	public double getX() {

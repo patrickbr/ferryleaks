@@ -7,12 +7,22 @@
 
   <servlet>
     <servlet-name>RemoteFiller</servlet-name>
-    <servlet-class>com.algebraweb.editor.server.RemoteFiller</servlet-class>
+    <servlet-class>com.algebraweb.editor.server.graphcanvas.remotefiller.RemoteFiller</servlet-class>
   </servlet>
   
   <servlet-mapping>
     <servlet-name>RemoteFiller</servlet-name>
     <url-pattern>/algebraeditor/communication</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>RemoteSorter</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSorter</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>RemoteSorter</servlet-name>
+    <url-pattern>/algebraeditor/sorter</url-pattern>
   </servlet-mapping>
   
 
