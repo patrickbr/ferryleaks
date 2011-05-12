@@ -35,7 +35,7 @@ public class GraphCanvasRemoteFillingMachine {
 		while (ni.hasNext()) {
 			
 			RawNode current = ni.next();
-			c.addNode(current.getNid(),current.getWidth(), current.getHeight(), current.getText());
+			c.addNode(current.getNid(),current.getColor(),current.getWidth(), current.getHeight(), current.getText());
 			
 		}
 		

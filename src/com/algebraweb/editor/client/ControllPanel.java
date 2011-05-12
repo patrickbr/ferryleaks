@@ -44,7 +44,7 @@ public class ControllPanel extends AbsolutePanel{
 
 		this.c=g;
 				
-		Button sortB = new Button("Sort circle");
+		Button sortB = new Button("Sort using dot");
 		
 		sortB.addClickHandler(new ClickHandler() {
 

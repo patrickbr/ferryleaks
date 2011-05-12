@@ -17,7 +17,7 @@
   
   <servlet>
     <servlet-name>RemoteSorter</servlet-name>
-    <servlet-class>com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSorter</servlet-class>
+    <servlet-class>com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSortingServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>

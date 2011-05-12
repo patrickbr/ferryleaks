@@ -158,10 +158,10 @@ public class GraphEdgeModifier {
 		p[1] = new Coordinate(fromX  + e.getOffsetFrom(),fromY + fromHeight + 1);
 		p[2] = new Coordinate(fromX  - 1,fromY + e.getOffsetFrom());
 		p[3] = new Coordinate(fromX  + from.getWidth() + 1,fromY + e.getOffsetFrom());
-		p[4] = new Coordinate(toX  + e.getOffset(),toY - 1-e.getSize());
-		p[5] = new Coordinate(toX  + e.getOffset(),toY + toHeight + 1 + e.getSize());
-		p[6] = new Coordinate(toX  - 1 - e.getSize(),toY+ e.getOffset());
-		p[7] = new Coordinate(toX  + toWidth + 1 + e.getSize(),toY + e.getOffset());
+		p[4] = new Coordinate(toX  + e.getOffset(),toY - 1-e.getArrowSize());
+		p[5] = new Coordinate(toX  + e.getOffset(),toY + toHeight + 1 + e.getArrowSize());
+		p[6] = new Coordinate(toX  - 1 - e.getArrowSize(),toY+ e.getOffset());
+		p[7] = new Coordinate(toX  + toWidth + 1 + e.getArrowSize(),toY + e.getOffset());
 
 		e.setP(p);
 
@@ -202,13 +202,13 @@ public class GraphEdgeModifier {
 			e.getEdgePath().attr("path",e.getEdgePathString());
 		}
 
-		double[] xA = {e.getX4(), e.getX4(), e.getX4()+e.getSize(),e.getX4()-e.getSize()};
-		double[] yA = {e.getY4()+e.getSize() ,e.getY4()-e.getSize(), e.getY4(), e.getY4()};
+		double[] xA = {e.getX4(), e.getX4(), e.getX4()+e.getArrowSize(),e.getX4()-e.getArrowSize()};
+		double[] yA = {e.getY4()+e.getArrowSize() ,e.getY4()-e.getArrowSize(), e.getY4(), e.getY4()};
 
 		double angle = Math.atan2(e.getX3()-xA[e.getToPosition()],yA[e.getToPosition()]-e.getY3());
 		angle = ((angle / (2 * Math.PI)) * 360);
 
-		String arrowPath = "M" + xA[e.getToPosition()] + "," + yA[e.getToPosition()] + "," + (xA[e.getToPosition()] - e.getSize()) + "," + (yA[e.getToPosition()] - e.getSize()) + " L" + (xA[e.getToPosition()] - e.getSize()) + "," + (yA[e.getToPosition()] + e.getSize()) + " L" + xA[e.getToPosition()] + "," + yA[e.getToPosition()];
+		String arrowPath = "M" + xA[e.getToPosition()] + "," + yA[e.getToPosition()] + "," + (xA[e.getToPosition()] - e.getArrowSize()) + "," + (yA[e.getToPosition()] - e.getArrowSize()) + " L" + (xA[e.getToPosition()] - e.getArrowSize()) + "," + (yA[e.getToPosition()] + e.getArrowSize()) + " L" + xA[e.getToPosition()] + "," + yA[e.getToPosition()];
 
 		if (e.getArrowPath() ==null) {
 			e.setArrowPath(c.new Path());
@@ -245,10 +245,10 @@ public class GraphEdgeModifier {
 		p[1] = new Coordinate(fromX + fromWidth / 2,fromY + fromHeight + 1);
 		p[2] = new Coordinate(fromX - 1,fromY + fromHeight/ 2);
 		p[3] = new Coordinate(fromX + fromWidth + 1,fromY + fromHeight / 2);
-		p[4] = new Coordinate(toX + toWidth  / 2,toY - 1-e.getSize());
-		p[5] = new Coordinate(toX + toWidth  / 2,toY + toHeight + 1 + e.getSize());
-		p[6] = new Coordinate(toX - 1 - e.getSize(),toY + toHeight / 2);
-		p[7] = new Coordinate(toX + toWidth  + 1 + e.getSize(),toY + toHeight / 2);
+		p[4] = new Coordinate(toX + toWidth  / 2,toY - 1-e.getArrowSize());
+		p[5] = new Coordinate(toX + toWidth  / 2,toY + toHeight + 1 + e.getArrowSize());
+		p[6] = new Coordinate(toX - 1 - e.getArrowSize(),toY + toHeight / 2);
+		p[7] = new Coordinate(toX + toWidth  + 1 + e.getArrowSize(),toY + toHeight / 2);
 
 		e.setP(p);
 

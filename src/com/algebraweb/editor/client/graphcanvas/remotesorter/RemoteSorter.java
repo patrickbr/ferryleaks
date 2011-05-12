@@ -47,7 +47,7 @@ public class RemoteSorter implements GraphSorter {
 
 			GraphNode c= i.next();
 
-			rawNodeList.add(new RawNode(c.getId(),c.getTextString(),"black",c.getWidth(),c.getHeight()));
+			rawNodeList.add(new RawNode(c.getId(),c.getTextString(),c.getColor(),c.getWidth(),c.getHeight()));
 
 
 		}

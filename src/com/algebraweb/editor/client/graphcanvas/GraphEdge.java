@@ -62,7 +62,7 @@ public class GraphEdge {
 	}
 
 
-	public int getSize() {
+	public int getArrowSize() {
 		return arrowSize;
 	}
 
@@ -276,6 +276,8 @@ public class GraphEdge {
 	public void setAniStep(int x, int y) {
 
 	}
+
+
 
 
 

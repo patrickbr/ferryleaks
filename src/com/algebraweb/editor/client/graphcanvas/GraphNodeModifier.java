@@ -54,7 +54,7 @@ public class GraphNodeModifier {
 		/**
 		 * TODO: scale!!
 		 */
-		
+
 		if (x+n.getWidth() > c.getWidth()) {
 			c.setWidth((int)(c.getWidth() + 50 + (x+n.getWidth() - c.getWidth())));
 		}
@@ -312,8 +312,13 @@ public class GraphNodeModifier {
 				if (!n.aniLock()) {
 
 					JSONObject newAttrs = new JSONObject();
-					newAttrs.put("fill", new JSONString("#DDD"));
-					n.getShape().animate(newAttrs, 200);
+
+					
+						newAttrs.put("stroke", new JSONString("#000"));
+				
+
+						n.getShape().animate(newAttrs, 100);
+				
 
 				}
 
@@ -334,8 +339,8 @@ public class GraphNodeModifier {
 				if (!n.aniLock()) {
 
 					JSONObject newAttrs = new JSONObject();
-					newAttrs.put("fill", new JSONString("#EEE"));
-					n.getShape().animate(newAttrs, 200);
+					newAttrs.put("stroke", new JSONString("#555"));
+					n.getShape().animate(newAttrs, 100);
 
 				}
 			}

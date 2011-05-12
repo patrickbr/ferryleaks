@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
@@ -17,10 +18,10 @@ import com.sun.corba.se.impl.orbutil.graph.Graph;
  *
  */
 
-public class CircleSorter {
+public class CircleSorter implements RemoteSorter {
 
 
-	public HashMap<Integer,Coordinate> getCoordinateHashMap(ArrayList<RawNode> nodes,ArrayList<GraphEdge> edges) {
+	public HashMap<Integer,Coordinate> getCoordinateHashMap(ArrayList<RawNode> nodes,ArrayList<RawEdge> edges) {
 
 		Iterator<RawNode> i = nodes.iterator();
 

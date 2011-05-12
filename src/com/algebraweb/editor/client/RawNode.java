@@ -1,5 +1,6 @@
 package com.algebraweb.editor.client;
 
+
 import java.io.Serializable;
 
 
@@ -13,13 +14,13 @@ public class RawNode implements Serializable  {
 	private static final long serialVersionUID = 2613849213898458764L;
 	private int nid;
 	private String text;
-	private String color;
+	private int color;
 	
 	private int width;
 	private int height;
 	
 	
-	public RawNode(int nid, String text, String color, int width, int height) {
+	public RawNode(int nid, String text, int color, int width, int height) {
 		
 		this.nid=nid;
 		this.text=text;
@@ -54,12 +55,12 @@ public class RawNode implements Serializable  {
 	}
 
 
-	public String getColor() {
+	public int getColor() {
 		return color;
 	}
 
 
-	public void setColor(String color) {
+	public void setColor(int color) {
 		this.color = color;
 	}
 

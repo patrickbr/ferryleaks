@@ -41,7 +41,7 @@ public class GraphCanvas extends Raphael  {
 	private ArrayList<GraphEdge> edges = new ArrayList<GraphEdge>();
 
 	public GraphCanvas(int width, int height) {
-		
+
 		super(width, height);
 
 		this.height=height;
@@ -246,7 +246,10 @@ public class GraphCanvas extends Raphael  {
 
 	private void clearDrag() {
 
-		this.dragNode = null;
+		if (this.dragNode != null) {
+			dragNode.setDragged(false);
+			this.dragNode = null;
+		}
 
 	}
 
@@ -261,9 +264,9 @@ public class GraphCanvas extends Raphael  {
 	 * @return
 	 */
 
-	public GraphNode addNode(int id,int x, int y,int width, int height,String text) {
+	public GraphNode addNode(int id,int color,int x, int y,int width, int height,String text) {
 
-		GraphNode g =  new GraphNode(this,x,y, width, height,text,id);
+		GraphNode g =  new GraphNode(this,color,x,y, width, height,text,id);
 
 		this.nodes.add( g);
 
@@ -278,14 +281,14 @@ public class GraphCanvas extends Raphael  {
 		return g;
 
 	}
-	
-	
-	public GraphNode addNode(int id,int width, int height,String text) {
+
+
+	public GraphNode addNode(int id,int color,int width, int height,String text) {
 
 		int x = this.width / 2;
 		int y = this.height / 2;
-		
-		return this.addNode(id,x,y,width,height,text);
+
+		return this.addNode(id,color,x,y,width,height,text);
 
 	}
 
@@ -308,6 +311,7 @@ public class GraphCanvas extends Raphael  {
 			current = it.next();			
 			gem.snakeIn(current);
 			gem.deleteFromFrom(current);
+			this.edges.remove(current);
 
 		}
 
@@ -318,6 +322,7 @@ public class GraphCanvas extends Raphael  {
 			current = it.next();			
 			gem.snakeIn(current);
 			gem.deleteFromTo(current);
+			this.edges.remove(current);
 
 		}	
 
@@ -347,44 +352,44 @@ public class GraphCanvas extends Raphael  {
 		m.sortGraph(nodes,edges, s);
 
 	}
-	
-	
+
+
 	public GraphNode getGraphNodeById(int id) throws NodeNotFoundException{
-		
+
 		Iterator<GraphNode> i = nodes.iterator();
-		
+
 		while(i.hasNext()) {
-			
+
 			GraphNode current = i.next();
 			if (current.getId() == id) return current;
-				
+
 		}
-		
+
 		throw new NodeNotFoundException(id);
-		
+
 	}
-	
+
 	public void clear() {
-		
+
 		this.nodes.clear();
 		this.edges.clear();
 		super.clear();		
-		
+
 	}
-	
+
 	public void showEdges() {
-		
-	Iterator<GraphNode> i = nodes.iterator();
-		
+
+		Iterator<GraphNode> i = nodes.iterator();
+
 		while(i.hasNext()) {
-		
+
 			this.getGraphNodeModifier().showEdges(i.next());
-			
-				
+
+
 		}
-		
+
 	}
-	
+
 
 
 
