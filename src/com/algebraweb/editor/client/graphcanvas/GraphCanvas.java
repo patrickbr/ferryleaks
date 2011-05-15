@@ -3,6 +3,9 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.xalan.trace.SelectionEvent;
+
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -44,8 +47,11 @@ public class GraphCanvas extends Raphael  {
 
 		super(width, height);
 
+		preventTextSelection(this.getElement(),true);
+
 		this.height=height;
 		this.width=width;
+
 
 		gnm = new GraphNodeModifier(this);
 		gem = new GraphEdgeModifier(this);
@@ -159,7 +165,7 @@ public class GraphCanvas extends Raphael  {
 
 				if (GraphCanvas.this.dragNode != null) {
 					DOM.eventGetCurrentEvent().preventDefault();
-					double x =scale * (event.getRelativeX(GraphCanvas.this.getElement())-dragOffsetX);
+					double x = scale * (event.getRelativeX(GraphCanvas.this.getElement())-dragOffsetX);
 					double y = scale *(event.getRelativeY(GraphCanvas.this.getElement())-dragOffsetY);
 					gnm.moveTo(dragNode,x,y);
 				}
@@ -238,8 +244,8 @@ public class GraphCanvas extends Raphael  {
 	protected void registerDrag(GraphNode n,int offsetX,int offsetY) {
 
 		this.dragNode = n;
-		this.dragOffsetX=offsetX-5;
-		this.dragOffsetY=offsetY-5;
+		this.dragOffsetX=offsetX;
+		this.dragOffsetY=offsetY;
 
 	}
 
@@ -389,6 +395,25 @@ public class GraphCanvas extends Raphael  {
 		}
 
 	}
+	
+	/**
+	 * We need this to prevent a text selection while dragging around nodes.
+	 * 
+	 * @param el
+	 * @param disable
+	 */
+
+	protected native static void preventTextSelection(Element el, boolean disable)/*-{
+		
+	    if (disable) {
+	        el.ondrag = function () { return false; };
+	        el.onselectstart = function () { return false; };
+	    } else {
+	        el.ondrag = null;
+	        el.onselectstart = null;
+	    }
+	    
+	}-*/;
 
 
 

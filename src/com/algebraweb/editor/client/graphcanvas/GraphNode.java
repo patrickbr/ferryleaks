@@ -60,6 +60,7 @@ public class GraphNode {
 		this.text.attr("text-anchor","left");
 
 		text.getElement().setAttribute("class", "node-text");
+		rect.getElement().setAttribute("r", "");
 		
 		if (color < 0xDFDFDF) color+= 0x202020;
 		
@@ -78,6 +79,8 @@ public class GraphNode {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
 				
+				GWT.log("GURR: " + Double.toString(GraphNode.this.rect.getElement().getOffsetWidth()- GraphNode.this.getWidth()));
+				
 				GraphNode.this.getShape().toFront();
 				GraphNode.this.text.toFront();
 							
@@ -90,16 +93,22 @@ public class GraphNode {
 				double rx;
 				double ry;
 
-				if (event.getSource().equals(text)) {
+				//if (event.getSource().equals(text)) {
 
-					rx=event.getRelativeX(GraphNode.this.rect.getElement());
-					ry=event.getRelativeY(GraphNode.this.rect.getElement());
+				//	rx=event.getRelativeX(GraphNode.this.rect.getElement());
+				//	ry=event.getRelativeY(GraphNode.this.rect.getElement());
 
-				}else{
-					rx=event.getX();
-					ry=event.getY();
-
-				}
+				//}else{
+					//rx=event.getX();
+					//ry=event.getY();
+					
+					rx=event.getRelativeX(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()* GraphNode.this.getX()) ;
+					ry=event.getRelativeY(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()*GraphNode.this.getY()) ;
+				//}
+				
+				
+				
+				
 				GraphNode.this.setDragged(true);
 				GraphNode.this.c.registerDrag(GraphNode.this,(int)rx,(int)ry);
 			}

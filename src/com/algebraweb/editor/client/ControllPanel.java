@@ -188,7 +188,8 @@ Button sortBBBBBBB = new Button("Zoom out");
 				ControllPanel.this.c.addStyleName("movy");
 				ControllPanel.this.addStyleName("movy");
 				dragStart(event.getX(), event.getY());
-
+				
+			
 			}
 
 		}, MouseDownEvent.getType());
