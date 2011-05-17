@@ -36,7 +36,7 @@ public class GraphEdge {
 	private String paths;
 
 
-	public GraphEdge(GraphCanvas c, GraphNode from, GraphNode to) {
+	public GraphEdge(GraphCanvas c, GraphNode from, GraphNode to,boolean quiet) {
 
 		this.c =c;
 
@@ -45,7 +45,7 @@ public class GraphEdge {
 
 		from.addEdgeFrom(this);
 		to.addEdgeTo(this);
-		c.getGraphEdgeModifier().makeConnection(this,from,to,false);
+		c.getGraphEdgeModifier().makeConnection(this,from,to,quiet);
 
 	}
 

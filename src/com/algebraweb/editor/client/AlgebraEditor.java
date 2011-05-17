@@ -29,7 +29,7 @@ public class AlgebraEditor implements EntryPoint {
 		RootPanel.get().add(d);
 		RootPanel.get().add(new ControllPanel(300,300,graphCanvas));
 		
-		d.center();
+		d.center(graphCanvas.getWidth(), graphCanvas.getHeight());
 				
 	
 	}

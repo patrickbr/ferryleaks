@@ -62,12 +62,10 @@ public class GraphNode {
 		text.getElement().setAttribute("class", "node-text");
 		rect.getElement().setAttribute("r", "");
 		
-		if (color < 0xDFDFDF) color+= 0x202020;
+		
 		
 		String cString = Integer.toHexString(0x1000000 + color).substring(1, 7);
-		
-		GWT.log(cString);
-	
+				
 		rect.attr("fill", "#"+cString);
 		rect.attr("stroke", "#555");
 		text.attr("fill", "#000");
@@ -78,8 +76,6 @@ public class GraphNode {
 
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				
-				GWT.log("GURR: " + Double.toString(GraphNode.this.rect.getElement().getOffsetWidth()- GraphNode.this.getWidth()));
 				
 				GraphNode.this.getShape().toFront();
 				GraphNode.this.text.toFront();

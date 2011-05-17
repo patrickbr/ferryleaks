@@ -214,8 +214,9 @@ public class GraphEdgeModifier {
 			e.setArrowPath(c.new Path());
 			e.getArrowPath().hide();
 		}
-
+		
 		e.getArrowPath().attr("path",arrowPath);
+		
 
 		e.getArrowPath().rotate(90+angle,xA[e.getToPosition()],yA[e.getToPosition()]);
 

@@ -17,6 +17,11 @@ public class GraphNodeModifier {
 
 	private GraphCanvas c;
 
+	public GraphCanvas getCanvas() {
+		return c;
+	}
+
+	
 	protected GraphNodeModifier(GraphCanvas c) {
 
 		this.c=c;
@@ -50,17 +55,17 @@ public class GraphNodeModifier {
 	}
 
 
-	private void checkDimension(GraphNode n,double x, double y) {
+	protected void checkDimension(GraphNode n,double x, double y) {
 		/**
 		 * TODO: scale!!
 		 */
 
-		if (x+n.getWidth() > c.getWidth()) {
-			c.setWidth((int)(c.getWidth() + 50 + (x+n.getWidth() - c.getWidth())));
+		if ((x/c.getScale())+(n.getWidth() / c.getScale()) > c.getWidth()) {
+			c.setWidth((int)(c.getWidth() + (50 / c.getScale()) + ((x/c.getScale())+(n.getWidth() / c.getScale()) - c.getWidth())));
 		}
 
-		if (y+n.getHeight() > c.getHeight()) {
-			c.setHeight((int)(c.getHeight() + 50 + (y+n.getHeight() - c.getHeight())));
+		if ((y/c.getScale())+(n.getHeight() / c.getScale())> c.getHeight()) {
+			c.setHeight((int)(c.getHeight() + (50 / c.getScale()) + ((y/c.getScale())+(n.getHeight() / c.getScale()) - c.getHeight())));
 		}
 	}
 
@@ -175,7 +180,7 @@ public class GraphNodeModifier {
 
 			@Override
 			public void onComplete() {
-				update(n,true);
+				//update(n,true);
 				n.unsetAniLock();
 				showEdges(n);
 			}

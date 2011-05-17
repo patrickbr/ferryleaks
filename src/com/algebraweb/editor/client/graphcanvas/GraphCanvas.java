@@ -14,6 +14,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.hydro4ge.raphaelgwt.client.Raphael;
 
 /**
@@ -29,6 +30,9 @@ public class GraphCanvas extends Raphael  {
 	private int dragOffsetX = 0;
 	private int dragOffsetY = 0;
 	private double scale = 1;
+	
+	private int oldScrollX=0;
+	private int oldScrollY=0;
 
 	private GraphNodeModifier gnm;
 	private GraphEdgeModifier gem;
@@ -207,15 +211,30 @@ public class GraphCanvas extends Raphael  {
 	public void zoom (double percent) {
 
 		scale = 100/percent;
+		this.oldScrollX = Window.getScrollLeft();
+		this.oldScrollY = Window.getScrollTop();
 		updateZoom();
 
 	}
 
 
 	private void updateZoom() {
-
+		
+		Iterator<GraphNode> i = nodes.iterator();
+		
+		while (i.hasNext()) {
+			GraphNode current = i.next();
+			gnm.checkDimension(current, current.getX(), current.getY());
+		}
+		
 		this.getElement().getFirstChildElement().setAttribute("viewBox", "0 0 " + (int)(this.width * scale) + " " +  (int)(this.height * scale));
 
+	
+		
+		//Window.scrollTo((int)(oldScrollX / scale),(int)( oldScrollY / scale));
+
+		
+		
 	}
 
 	/**
@@ -233,11 +252,12 @@ public class GraphCanvas extends Raphael  {
 	 * Draw an edge from node "from" to node "to"
 	 * @param from
 	 * @param to
+	 * @param quiet
 	 */
 
-	public void createEdge(GraphNode from, GraphNode to) {
+	public void createEdge(GraphNode from, GraphNode to, boolean quiet) {
 
-		this.edges.add(new GraphEdge(this,from,to));
+		this.edges.add(new GraphEdge(this,from,to,quiet));
 	}
 
 
@@ -288,6 +308,7 @@ public class GraphCanvas extends Raphael  {
 
 	}
 
+	
 
 	public GraphNode addNode(int id,int color,int width, int height,String text) {
 

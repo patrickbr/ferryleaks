@@ -60,6 +60,7 @@ public class GraphNodeLayoutingMachine {
 				
 				Iterator<GraphNode> a = GraphNodeLayoutingMachine.this.nodes.iterator();
 
+				
 				while(a.hasNext()) {
 
 					GraphNode current = a.next();
@@ -67,6 +68,9 @@ public class GraphNodeLayoutingMachine {
 					gnm.animateTo(current,current.getX()+offsetX, current.getY()+offsetY);
 
 				}
+				
+				((DragPanel)gnm.getCanvas().getParent()).center(gnm.getCanvas().getWidth(),gnm.getCanvas().getHeight());
+				
 				
 			}
 		});

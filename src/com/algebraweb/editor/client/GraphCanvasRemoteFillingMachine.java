@@ -3,6 +3,7 @@ package com.algebraweb.editor.client;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.graphcanvas.DragPanel;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.SimpleSorter;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
@@ -42,12 +43,12 @@ public class GraphCanvasRemoteFillingMachine {
 		while (ne.hasNext()) {
 			
 			RawEdge current = ne.next();
-			c.createEdge(c.getGraphNodeById(current.getFrom()), c.getGraphNodeById(current.getTo()));
+			c.createEdge(c.getGraphNodeById(current.getFrom()), c.getGraphNodeById(current.getTo()),true);
 		}
 		
-		c.sort(new SimpleSorter());
+		//c.sort(new SimpleSorter());
 		
-		
+		((DragPanel)c.getParent()).center(c.getWidth(),c.getHeight());
 	}
 	
 	
