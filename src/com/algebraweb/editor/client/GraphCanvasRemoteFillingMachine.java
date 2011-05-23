@@ -47,6 +47,7 @@ public class GraphCanvasRemoteFillingMachine {
 		}
 		
 		//c.sort(new SimpleSorter());
+		c.showEdges();
 		
 		((DragPanel)c.getParent()).center(c.getWidth(),c.getHeight());
 	}

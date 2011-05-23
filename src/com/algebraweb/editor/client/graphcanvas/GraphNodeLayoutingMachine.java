@@ -3,6 +3,8 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.google.gwt.user.client.Window;
+
 
 /**
  * Provides animated layouting after sorting by a GraphSorter
@@ -38,6 +40,8 @@ public class GraphNodeLayoutingMachine {
 		this.nodes=nodes;
 		this.edges=edges;
 		
+		
+		
 		Iterator<GraphNode> i = nodes.iterator();
 
 		GraphNode current;
@@ -60,10 +64,17 @@ public class GraphNodeLayoutingMachine {
 				
 				Iterator<GraphNode> a = GraphNodeLayoutingMachine.this.nodes.iterator();
 
+				offsetX =(gnm.getCanvas().getWidth()/2) - (Window.getClientWidth()/2);
+				offsetY =(gnm.getCanvas().getHeight()/2) - (Window.getClientHeight()/2);
+					
+				offsetX = (int)(gnm.getCanvas().getScale() * offsetX);
+				offsetY = (int)(gnm.getCanvas().getScale() * offsetY);
 				
 				while(a.hasNext()) {
 
 					GraphNode current = a.next();
+					
+				
 
 					gnm.animateTo(current,current.getX()+offsetX, current.getY()+offsetY);
 

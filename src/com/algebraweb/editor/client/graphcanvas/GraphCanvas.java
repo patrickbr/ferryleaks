@@ -29,8 +29,15 @@ public class GraphCanvas extends Raphael  {
 	private GraphNode dragNode = null;
 	private int dragOffsetX = 0;
 	private int dragOffsetY = 0;
+	private int mouseX = 0;
+	private int mouseY = 0;
 	private double scale = 1;
 	
+	private int uWidth = 0;
+	private int uHeight=0;
+	
+	private int oldWidth=0;
+	private int oldHeight=0;
 	private int oldScrollX=0;
 	private int oldScrollY=0;
 
@@ -55,6 +62,9 @@ public class GraphCanvas extends Raphael  {
 
 		this.height=height;
 		this.width=width;
+		
+		this.uWidth = width;
+		this.uHeight= height;
 
 
 		gnm = new GraphNodeModifier(this);
@@ -167,6 +177,9 @@ public class GraphCanvas extends Raphael  {
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 
+				GraphCanvas.this.mouseX = event.getRelativeX(GraphCanvas.this.getElement());
+				GraphCanvas.this.mouseY = event.getRelativeY(GraphCanvas.this.getElement());
+				
 				if (GraphCanvas.this.dragNode != null) {
 					DOM.eventGetCurrentEvent().preventDefault();
 					double x = scale * (event.getRelativeX(GraphCanvas.this.getElement())-dragOffsetX);
@@ -207,14 +220,40 @@ public class GraphCanvas extends Raphael  {
 	 * Zoom to percent
 	 * @param percent
 	 */
+	
+
 
 	public void zoom (double percent) {
+		
+		if (percent < 5) percent = 5;
 
-		scale = 100/percent;
 		this.oldScrollX = Window.getScrollLeft();
 		this.oldScrollY = Window.getScrollTop();
+	
+		
+		this.oldWidth =(int)( width * scale);
+		this.oldHeight =(int)( height * scale);
+		
+		
+		scale =100/(percent);
+		
+				
+		
 		updateZoom();
+		
+		if ((oldScrollX+ (oldWidth -(width * scale))/2 == 0) || (oldScrollY + (oldScrollY + (oldHeight -(height * scale))/2) == 0)) {
+			this.oldWidth = (int)(width * scale);
+			this.oldHeight = (int)(height * scale);
+		
+		
+		}
+		
+		Window.scrollTo((int)(oldScrollX + (oldWidth -(width * scale))/2), (int)(oldScrollY + (oldHeight -(height * scale))/2));
+		
+		
 
+		
+		
 	}
 
 
@@ -229,10 +268,7 @@ public class GraphCanvas extends Raphael  {
 		
 		this.getElement().getFirstChildElement().setAttribute("viewBox", "0 0 " + (int)(this.width * scale) + " " +  (int)(this.height * scale));
 
-	
 		
-		//Window.scrollTo((int)(oldScrollX / scale),(int)( oldScrollY / scale));
-
 		
 		
 	}
@@ -312,9 +348,9 @@ public class GraphCanvas extends Raphael  {
 
 	public GraphNode addNode(int id,int color,int width, int height,String text) {
 
-		int x = this.width / 2;
-		int y = this.height / 2;
-
+		int x = (int)(this.width * this.getScale()) / 2;
+		int y = (int)(this.height * this.getScale()) / 2;
+		
 		return this.addNode(id,color,x,y,width,height,text);
 
 	}
@@ -415,6 +451,13 @@ public class GraphCanvas extends Raphael  {
 
 		}
 
+	}
+	
+	
+	public void centerAt(int x,int y) {
+		
+		Window.scrollTo((int)((x) - (Window.getClientWidth()/2)),(int)((y) - (Window.getClientHeight()/2)));
+		
 	}
 	
 	/**

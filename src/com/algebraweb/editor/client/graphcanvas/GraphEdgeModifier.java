@@ -158,10 +158,11 @@ public class GraphEdgeModifier {
 		p[1] = new Coordinate(fromX  + e.getOffsetFrom(),fromY + fromHeight + 1);
 		p[2] = new Coordinate(fromX  - 1,fromY + e.getOffsetFrom());
 		p[3] = new Coordinate(fromX  + from.getWidth() + 1,fromY + e.getOffsetFrom());
-		p[4] = new Coordinate(toX  + e.getOffset(),toY - 1-e.getArrowSize());
-		p[5] = new Coordinate(toX  + e.getOffset(),toY + toHeight + 1 + e.getArrowSize());
-		p[6] = new Coordinate(toX  - 1 - e.getArrowSize(),toY+ e.getOffset());
-		p[7] = new Coordinate(toX  + toWidth + 1 + e.getArrowSize(),toY + e.getOffset());
+		
+		p[4] = new Coordinate(toX  + e.getOffset(),toY - 1-(e.getArrowSize()));
+		p[5] = new Coordinate(toX  + e.getOffset(),toY + toHeight + 1 + (e.getArrowSize()));
+		p[6] = new Coordinate(toX  - 1 - (e.getArrowSize()),toY+ e.getOffset());
+		p[7] = new Coordinate(toX  + toWidth + 1 + (e.getArrowSize()),toY + e.getOffset());
 
 		e.setP(p);
 
@@ -216,9 +217,17 @@ public class GraphEdgeModifier {
 		}
 		
 		e.getArrowPath().attr("path",arrowPath);
-		
 
-		e.getArrowPath().rotate(90+angle,xA[e.getToPosition()],yA[e.getToPosition()]);
+		switch(e.getToPosition()) {
+		
+			case 0: angle = 90;break; //oben
+			case 1: angle = 270;break;
+			case 2: angle = 0;break;
+			case 3: angle = 180;break; 
+		
+		}
+
+		e.getArrowPath().rotate(angle,xA[e.getToPosition()],yA[e.getToPosition()]);
 
 		JSONObject newAttrs = new JSONObject();
 		newAttrs.put("stroke-opacity", new JSONNumber(1));
@@ -251,6 +260,8 @@ public class GraphEdgeModifier {
 		p[6] = new Coordinate(toX - 1 - e.getArrowSize(),toY + toHeight / 2);
 		p[7] = new Coordinate(toX + toWidth  + 1 + e.getArrowSize(),toY + toHeight / 2);
 
+
+		
 		e.setP(p);
 
 		HashMap<Integer,Coordinate> d = new HashMap<Integer,Coordinate>();
@@ -259,8 +270,16 @@ public class GraphEdgeModifier {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 4; j < 8; j++) {
 				double dx = Math.abs(p[i].getX() - p[j].getX() );
-				double dy = Math.abs(p[i].getY() - p[j].getY());
-				if ((i == j - 4) || (((i != 3 && j != 6) || p[i].getX()  < p[j].getX() ) && ((i != 2 && j != 7) || p[i].getX()  > p[j].getX()) && ((i != 0 && j != 5) || p[i].getY() > p[j].getY()) && ((i != 1 && j != 4) || p[i].getY() < p[j].getY()))) {
+				double dy = Math.abs(p[i].getY()-e.getArrowSize() - p[j].getY());
+				
+				//TODO: arrow angle on overlapping nodes
+				
+				if ((i == j - 4) || 
+						(((i != 3 && j != 6) || p[i].getX()-e.getArrowSize()  < p[j].getX()+e.getArrowSize()) 
+								
+								&& ((i != 2 && j != 7) || p[i].getX()+e.getArrowSize() > p[j].getX()-e.getArrowSize()) 
+								&& ((i != 0 && j != 5) || p[i].getY()-e.getArrowSize()  > p[j].getY() +e.getArrowSize()) 
+								&& ((i != 1 && j != 4) || p[i].getY()+e.getArrowSize() < p[j].getY()-e.getArrowSize()))) {
 					dis.add((int) (dx + dy));
 
 					d.put(dis.get(dis.size() - 1), new Coordinate(i, j));

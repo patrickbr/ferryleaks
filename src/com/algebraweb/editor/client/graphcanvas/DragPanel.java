@@ -91,25 +91,21 @@ public class DragPanel extends FlowPanel {
 		this.addDomHandler(mouseDownHandler, MouseDownEvent.getType());
 		this.addDomHandler(mouseMoveHandler, MouseMoveEvent.getType());
 		this.addDomHandler(mouseOutHandler, MouseOutEvent.getType());
-				
+
 	}
-	
+
 	public void center(){
-		
-		//TODO: center this correctly
 
 		this.scrollTo((int)(this.getOffsetWidth()/2 - Window.getClientWidth()/2), (int)(this.getOffsetHeight()/2) -  Window.getClientHeight()/2);
-		
-		
+
 	}
-	
+
 	public void center(int width, int height){
-		
-		//TODO: center this correctly
+
 
 		this.scrollTo((int)(width/2 - Window.getClientWidth()/2), (int)(height/2) -  Window.getClientHeight()/2);
-		
-		
+
+
 	}
 
 
@@ -123,7 +119,7 @@ public class DragPanel extends FlowPanel {
 
 		mainDragOffsetTop = Window.getScrollTop();
 		mainDragOffsetY = y;
-		
+
 		this.addStyleName("movy");
 
 	}
@@ -133,7 +129,7 @@ public class DragPanel extends FlowPanel {
 
 		mainDragOffsetX = -1;
 		mainDragOffsetY = -1;
-		
+
 		this.removeStyleName("movy");
 
 	}
