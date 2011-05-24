@@ -46,7 +46,7 @@
       <arg value="war"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
-      <arg value="com.algebraweb.editor.AlgebraEditor""/>
+      <arg value="com.algebraweb.editor.AlgebraEditor"/>
     </java>
   </target>
 
