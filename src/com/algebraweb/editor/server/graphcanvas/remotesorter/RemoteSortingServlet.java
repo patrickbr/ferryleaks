@@ -24,14 +24,17 @@ public class RemoteSortingServlet extends RemoteServiceServlet implements Remote
 	}
 
 	@Override
-	public HashMap<Integer, Coordinate> doSort(ArrayList<RawNode> nodes,ArrayList<RawEdge> edges) {
+	public HashMap<Integer, Coordinate> doSort(String sorter,ArrayList<RawNode> nodes,ArrayList<RawEdge> edges) {
 		
 		
 		
 		//for testing purposes
 		
-				
 		RemoteSorter cs = new DotSorter();
+		
+		if (sorter.equals("dot")) cs = new DotSorter();
+		if (sorter.equals("circle")) cs = new CircleSorter();
+		if (sorter.equals("inline")) cs = new InlineSorter();
 		
 		return cs.getCoordinateHashMap(nodes, edges);
 

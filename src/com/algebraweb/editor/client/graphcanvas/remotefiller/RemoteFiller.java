@@ -3,7 +3,6 @@ package com.algebraweb.editor.client.graphcanvas.remotefiller;
 import java.util.ArrayList;
 
 
-import com.algebraweb.editor.client.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.google.gwt.core.client.GWT;
@@ -33,7 +32,7 @@ public class RemoteFiller {
 	public void init(GraphCanvasRemoteFillingMachine m) {
 	
 		
-		commServ.getRawEdges(1, edgeCallback);
+		
 		commServ.getRawNodes(1, nodeCallback);
 		
 		this.m=m;
@@ -72,6 +71,7 @@ public class RemoteFiller {
 
 			RemoteFiller.this.nodes = result;
 			state++;
+			commServ.getRawEdges(1, edgeCallback);
 			
 			if (state == 2) RemoteFiller.this.m.fillWith(RemoteFiller.this.nodes, RemoteFiller.this.edges);
 			

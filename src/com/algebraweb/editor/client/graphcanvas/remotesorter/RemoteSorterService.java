@@ -16,7 +16,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 public interface RemoteSorterService extends RemoteService{
 	
 	
-	public HashMap<Integer,Coordinate> doSort(ArrayList<RawNode> nodes,ArrayList<RawEdge> edges);
+	public HashMap<Integer,Coordinate> doSort(String sorter,ArrayList<RawNode> nodes,ArrayList<RawEdge> edges);
 	
 
 }

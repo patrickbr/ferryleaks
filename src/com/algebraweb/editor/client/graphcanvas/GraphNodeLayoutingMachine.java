@@ -63,19 +63,56 @@ public class GraphNodeLayoutingMachine {
 			public void onComplete() {
 				
 				Iterator<GraphNode> a = GraphNodeLayoutingMachine.this.nodes.iterator();
+				
+				int width=0;
+				int height=0;
+				
+				int negW=0;
+				int negH=0;
+				
+				while(a.hasNext()) {
+					
+					GraphNode current = a.next();
+					
+					if (current.getX() < negW) {
+						negW = (int)current.getX();
+					}
+					if (current.getY() < negW) {
+						negH = (int)current.getY();
+					}
+					
+					if (current.getX() + Math.abs(negW) > width) width =  Math.abs(negW) + (int) current.getX();
+					if (current.getY() + Math.abs(negH) > height) height =  Math.abs(negH) + (int) current.getY();
+					
+				}
+				
+				int newH = Window.getClientHeight()-30;
+				int newW = Window.getClientWidth()-30;
+			
+				
+				if (height/gnm.getCanvas().getScale() > newH) newH= (int)(height/gnm.getCanvas().getScale());
+				if (width/gnm.getCanvas().getScale() > newW) newW= (int)(width/gnm.getCanvas().getScale());
+				
+				gnm.getCanvas().setSize(newW,newH);
 
+				/**
 				offsetX =(gnm.getCanvas().getWidth()/2) - (Window.getClientWidth()/2);
 				offsetY =(gnm.getCanvas().getHeight()/2) - (Window.getClientHeight()/2);
 					
 				offsetX = (int)(gnm.getCanvas().getScale() * offsetX);
 				offsetY = (int)(gnm.getCanvas().getScale() * offsetY);
 				
+				**/
+				
+				offsetX=0;
+				offsetY=0;
+				
+				a = GraphNodeLayoutingMachine.this.nodes.iterator();
+				
+				
 				while(a.hasNext()) {
 
 					GraphNode current = a.next();
-					
-				
-
 					gnm.animateTo(current,current.getX()+offsetX, current.getY()+offsetY);
 
 				}

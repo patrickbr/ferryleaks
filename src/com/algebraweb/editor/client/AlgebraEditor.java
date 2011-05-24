@@ -3,6 +3,7 @@ package com.algebraweb.editor.client;
 import com.algebraweb.editor.client.graphcanvas.DragPanel;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 
@@ -20,17 +21,18 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 				
-		GraphCanvas graphCanvas = new GraphCanvas(1800,1600);
+		GraphCanvas graphCanvas = new GraphCanvas(Window.getClientWidth()-30,Window.getClientHeight()-30);
 		
 		DragPanel d = new DragPanel();
 		
 		d.add(graphCanvas);
 		
-		RootPanel.get().add(d);
-		RootPanel.get().add(new ControllPanel(300,300,graphCanvas));
+		RootPanel.get("editor").add(d);
+		RootPanel.get("editor").add(new ControllPanel(300,300,graphCanvas));
 		
 		d.center(graphCanvas.getWidth(), graphCanvas.getHeight());
-				
-	
+			
+		graphCanvas.lock();
+		graphCanvas.unLock();
 	}
 }

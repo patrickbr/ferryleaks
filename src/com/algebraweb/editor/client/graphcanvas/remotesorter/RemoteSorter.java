@@ -20,13 +20,15 @@ public class RemoteSorter implements GraphSorter {
 	private RemoteSorterServiceAsync commServ;
 	private ArrayList<GraphNode> nodes;
 	private ArrayList<GraphEdge> edges;
+	
+	private String sorter;
 
-	public RemoteSorter() {
+	public RemoteSorter(String sorter) {
 
 
 		commServ = (RemoteSorterServiceAsync) GWT.create(RemoteSorterService.class);
 
-
+		this.sorter=sorter;
 
 	}
 
@@ -68,7 +70,7 @@ public class RemoteSorter implements GraphSorter {
 		//
 
 
-		commServ.doSort(rawNodeList,rawEdgeList, sortedCallback(cb));
+		commServ.doSort(sorter,rawNodeList,rawEdgeList, sortedCallback(cb));
 
 
 	}
@@ -86,6 +88,7 @@ public class RemoteSorter implements GraphSorter {
 			current.setX(tuples.get(current.getId()).getX());
 			current.setY(tuples.get(current.getId()).getY());
 
+			
 		}
 
 		cb.onComplete();

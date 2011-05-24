@@ -12,6 +12,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface RemoteSorterServiceAsync {
 		
-	public void doSort(ArrayList<RawNode> nodes, ArrayList<RawEdge> edges,  AsyncCallback<HashMap<Integer,Coordinate>> callback);
+	public void doSort(String sorter,ArrayList<RawNode> nodes, ArrayList<RawEdge> edges,  AsyncCallback<HashMap<Integer,Coordinate>> callback);
 
 }

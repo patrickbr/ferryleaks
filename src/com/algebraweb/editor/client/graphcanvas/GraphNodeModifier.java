@@ -117,6 +117,7 @@ public class GraphNodeModifier {
 		newAttrs.put("stroke-width", new JSONNumber(2));
 
 		n.getShape().animate(newAttrs, 300);
+	
 
 		Iterator<GraphEdge> i = n.getEdgesTo().iterator();
 		Iterator<GraphEdge> j = n.getEdgesFrom().iterator();

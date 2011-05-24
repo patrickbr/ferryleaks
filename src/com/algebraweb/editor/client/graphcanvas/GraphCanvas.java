@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.apache.xalan.trace.SelectionEvent;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -15,6 +16,7 @@ import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.hydro4ge.raphaelgwt.client.Raphael;
 
 /**
@@ -33,8 +35,7 @@ public class GraphCanvas extends Raphael  {
 	private int mouseY = 0;
 	private double scale = 1;
 	
-	private int uWidth = 0;
-	private int uHeight=0;
+	
 	
 	private int oldWidth=0;
 	private int oldHeight=0;
@@ -63,10 +64,6 @@ public class GraphCanvas extends Raphael  {
 		this.height=height;
 		this.width=width;
 		
-		this.uWidth = width;
-		this.uHeight= height;
-
-
 		gnm = new GraphNodeModifier(this);
 		gem = new GraphEdgeModifier(this);
 	}
@@ -135,9 +132,10 @@ public class GraphCanvas extends Raphael  {
 
 		this.height=y;
 		this.width=x;
-		updateZoom();
 		this.overlay().setSize(width, height);
-
+		this.setWidth(x + "px");
+		this.setHeight(y + "px");
+		updateZoom();
 	}
 
 	/**
@@ -241,14 +239,14 @@ public class GraphCanvas extends Raphael  {
 		
 		updateZoom();
 		
-		if ((oldScrollX+ (oldWidth -(width * scale))/2 == 0) || (oldScrollY + (oldScrollY + (oldHeight -(height * scale))/2) == 0)) {
+		if ((oldScrollX+ (oldWidth -(width * scale))/2 <= 0) || (oldScrollY + (oldScrollY + (oldHeight -(height * scale))/2) <= 0)) {
 			this.oldWidth = (int)(width * scale);
 			this.oldHeight = (int)(height * scale);
 		
 		
 		}
 		
-		Window.scrollTo((int)(oldScrollX + (oldWidth -(width * scale))/2), (int)(oldScrollY + (oldHeight -(height * scale))/2));
+		//Window.scrollTo((int)(oldScrollX + (oldWidth -(width * scale))/2), (int)(oldScrollY + (oldHeight -(height * scale))/2));
 		
 		
 
@@ -458,6 +456,21 @@ public class GraphCanvas extends Raphael  {
 		
 		Window.scrollTo((int)((x) - (Window.getClientWidth()/2)),(int)((y) - (Window.getClientHeight()/2)));
 		
+	}
+	
+	
+	public void lock() {
+		
+		
+		RootPanel.get("deck").getElement().getStyle().setDisplay(Display.BLOCK);
+		
+	}
+	
+	public void unLock() {
+			
+			
+		RootPanel.get("deck").getElement().getStyle().setDisplay(Display.NONE);
+			
 	}
 	
 	/**

@@ -7,14 +7,14 @@ import com.algebraweb.editor.client.RawNode;
 public class RandomFiller implements GraphCanvasFiller {
 	
 	
-	private int howManyNodes = 150;
+	private int howManyNodes = 80;
 	private int count=0;
 	private int edgeCount =0;
 
 	@Override
 	public boolean hasNextEdge() {
 		
-		return (edgeCount < 260);
+		return (edgeCount < 100);
 	}
 
 	@Override
@@ -32,11 +32,15 @@ public class RandomFiller implements GraphCanvasFiller {
 		
 		if (toid != fromid) {
 			edgeCount++;
+			
+			System.out.println("edge!");
 			return new RawEdge(toid,fromid);
+			
 				
 		}else{
 			return nextEdge();
 		}
+	
 	}
 
 	@Override
@@ -57,7 +61,7 @@ public class RandomFiller implements GraphCanvasFiller {
 	public void init() {
 		
 		
-		howManyNodes = 150;
+		howManyNodes = 80;
 		count=0;
 	    edgeCount =0;
 		

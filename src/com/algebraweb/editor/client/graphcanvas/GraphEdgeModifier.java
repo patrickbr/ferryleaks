@@ -31,7 +31,7 @@ public class GraphEdgeModifier {
 		JSONObject newAttrs = new JSONObject();
 		newAttrs.put("stroke-width", new JSONNumber(2));
 		e.getEdgePath().animate(newAttrs, 300);
-
+		e.getArrowPath().animate(newAttrs, 300);
 	}
 
 	protected void setNotSelected(GraphEdge e) {
@@ -39,7 +39,7 @@ public class GraphEdgeModifier {
 		JSONObject newAttrs = new JSONObject();
 		newAttrs.put("stroke-width", new JSONNumber(1));
 		e.getEdgePath().animate(newAttrs, 300);
-
+		e.getArrowPath().animate(newAttrs, 300);
 	}
 
 	protected void show(GraphEdge e) {
@@ -217,13 +217,14 @@ public class GraphEdgeModifier {
 		}
 		
 		e.getArrowPath().attr("path",arrowPath);
+		e.getArrowPath().attr("stroke-width","1");
 
 		switch(e.getToPosition()) {
 		
 			case 0: angle = 90;break; //oben
-			case 1: angle = 270;break;
-			case 2: angle = 0;break;
-			case 3: angle = 180;break; 
+			case 1: angle = 270;break; //unten
+			case 2: angle = 0;break; //left
+			case 3: angle = 180;break; //right
 		
 		}
 

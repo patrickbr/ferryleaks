@@ -2,8 +2,7 @@ package com.algebraweb.editor.client;
 
 
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
-import com.algebraweb.editor.client.graphcanvas.InlineSorter;
-import com.algebraweb.editor.client.graphcanvas.SimpleSorter;
+import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 import com.google.gwt.dom.client.Style;
@@ -50,38 +49,39 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.sort(new RemoteSorter());
+				c.sort(new RemoteSorter("dot"));
 				
 			}});
 		
 		
-		this.add(sortB,140,60);
+		this.add(sortB,40,100);
 		
-	Button sortBB = new Button("Sort simple");
+		Button sortC = new Button("Sort as a circle");
 		
-		sortBB.addClickHandler(new ClickHandler() {
+		sortC.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.sort(new SimpleSorter());
+				c.sort(new RemoteSorter("circle"));
 				
 			}});
 		
 		
-		this.add(sortBB,60,60);
+		this.add(sortC,40,130);
 		
-	Button sortBBB = new Button("Sort simple");
+		
+	Button sortBBB = new Button("Sort inline");
 		
 		sortBBB.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.sort(new InlineSorter());
+				c.sort(new RemoteSorter("inline"));
 				
 			}});
 		
 		
-		this.add(sortBBB,260,60);
+		this.add(sortBBB,40,70);
 		
 		
 	Button sortBBBB = new Button("Delete selected");
@@ -108,10 +108,10 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 		
 		
-		this.add(sortBBBBB,160,260);
+		this.add(sortBBBBB,260,230);
 		
 		
-	Button sortBBBBBB = new Button("Zoom in");
+	Button sortBBBBBB = new Button("+");
 		
 		sortBBBBBB.addClickHandler(new ClickHandler() {
 
@@ -122,9 +122,9 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 		
 		
-		this.add(sortBBBBBB,20,220);
+		this.add(sortBBBBBB,60,220);
 		
-Button sortBBBBBBB = new Button("Zoom out");
+Button sortBBBBBBB = new Button("-");
 		
 		sortBBBBBBB.addClickHandler(new ClickHandler() {
 
@@ -135,7 +135,7 @@ Button sortBBBBBBB = new Button("Zoom out");
 			}});
 		
 		
-		this.add(sortBBBBBBB,20,260);
+		this.add(sortBBBBBBB,40,220);
 		
 
 		this.setStylePrimaryName("controllpanel");

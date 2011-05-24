@@ -3,7 +3,6 @@ package com.algebraweb.editor.client.graphcanvas;
 
 import java.util.ArrayList;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.hydro4ge.raphaelgwt.client.Raphael.Rect;
