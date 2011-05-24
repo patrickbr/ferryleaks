@@ -7,9 +7,7 @@ import java.util.Iterator;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.graphcanvas.GraphEdge;
-import com.algebraweb.editor.client.graphcanvas.GraphNode;
-import com.sun.corba.se.impl.orbutil.graph.Graph;
+
 
 
 /**

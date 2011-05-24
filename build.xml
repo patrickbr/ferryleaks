@@ -60,7 +60,7 @@
       </classpath>
       <jvmarg value="-Xmx256M"/>
       <arg value="-startupUrl"/>
-      <arg value="test.html"/>
+      <arg value="AlgebraEditor.html"/>
       <arg line="-war"/>
       <arg value="war"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
@@ -141,7 +141,7 @@ Test targets suppressed because -junit argument was not specified when running w
   <target name="build" depends="gwtc" description="Build this project" />
 
   <target name="war" depends="build" description="Create a war file">
-    <zip destfile="test.war" basedir="war"/>
+    <zip destfile="AlgebraEditor.war" basedir="war"/>
   </target>
 
   <target name="clean" description="Cleans this project">
