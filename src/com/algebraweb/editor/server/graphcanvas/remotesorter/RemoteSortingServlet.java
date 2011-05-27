@@ -9,6 +9,7 @@ import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorterService;
+import com.algebraweb.editor.server.graphcanvas.remotesorter.dotsorter.DotSorter;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class RemoteSortingServlet extends RemoteServiceServlet implements RemoteSorterService  {

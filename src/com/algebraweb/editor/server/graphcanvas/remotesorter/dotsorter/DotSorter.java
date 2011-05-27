@@ -1,4 +1,4 @@
-package com.algebraweb.editor.server.graphcanvas.remotesorter;
+package com.algebraweb.editor.server.graphcanvas.remotesorter.dotsorter;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -15,6 +15,7 @@ import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
+import com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSorter;
 
 public class DotSorter implements RemoteSorter {
 
@@ -111,8 +112,6 @@ public class DotSorter implements RemoteSorter {
 				}
 
 				ret.put(id, subRet);
-
-
 
 			}
 
