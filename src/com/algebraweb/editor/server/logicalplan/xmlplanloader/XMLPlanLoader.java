@@ -30,8 +30,10 @@ public class XMLPlanLoader {
 		HashMap<String,NodeScheme> nodeSchemes = new HashMap<String,NodeScheme>();
 
 		if (context.getAttribute("nodeSchemes") == null) {
+			
+			System.out.println(context.getRealPath("/"));
 
-			NodeSchemeLoader l = new NodeSchemeLoader("testscheme.xml");
+			NodeSchemeLoader l = new NodeSchemeLoader(context.getRealPath("/") + "testscheme.xml");
 
 
 			Iterator<NodeScheme> i = l.parse().iterator();
