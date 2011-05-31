@@ -147,6 +147,7 @@ Button sortBBBBBBB = new Button("-");
 		SingleUploader defaultUploader = new SingleUploader();
 		defaultUploader.setAutoSubmit(true);
 		defaultUploader.setWidth("160px");
+	    defaultUploader.getFileInput().setLength(20);
 		this.add(new HTML("Upload XML File:"),40,170);
 		
 				
@@ -252,7 +253,7 @@ Button sortBBBBBBB = new Button("-");
 		GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
 		
 			
-		f.fill(new RemoteFiller());
+		f.fill(new RemoteFiller("random"));
 		
 		
 			
@@ -265,7 +266,10 @@ Button sortBBBBBBB = new Button("-");
 		    public void onFinish(IUploader uploader) {
 		      if (uploader.getStatus() == Status.SUCCESS) {
 
-		    	  makeTest();
+		    		GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
+		    		
+					
+		    		f.fill(new RemoteFiller("xml"));
 		   
 		      }
 		    }

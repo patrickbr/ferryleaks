@@ -6,7 +6,7 @@
 
 	<properties>
 	
-		<property name="color">0x346654</property>
+		<property name="color">0xeeeeee</property>
 
 	</properties>
 
@@ -31,7 +31,7 @@
 
 	<properties>
 	
-		<property name="color">0x346654</property>
+		<property name="color">0xc0c0c0</property>
 
 	</properties>
 
@@ -92,5 +92,398 @@
 	</schema>
 
 </nodeschema>
+
+<nodeschema kind="rank">
+
+	<properties>
+	
+		<property name="color">0xff3333</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+		<gointo xmlob="schema" howoften="?">
+
+			<val xmlob="col" name="col" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">types</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+						
+			</val>
+			
+			<val xmlob="column" name="column" howoften="+">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">function</field>
+					<field type="int">position</field>
+					<field type="string">direction</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+						
+			</val>
+			
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+
+				<val xmlob="value" name="value" howoften="*">
+
+				<fields>
+					<field type="datatype">type</field>
+				</fields>
+				</val>
+							
+				
+			</val>
+
+		</gointo>
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+
+
+
+<nodeschema kind="distinct">
+
+	<properties>
+	
+		<property name="color">0xffa500</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+		<gointo xmlob="schema" howoften="?">
+
+			<val xmlob="col" name="col" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">types</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+<nodeschema kind="difference">
+
+	<properties>
+	
+		<property name="color">0xffa500</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+		<gointo xmlob="schema" howoften="?">
+
+			<val xmlob="col" name="col" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">types</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+<nodeschema kind="intersect">
+
+	<properties>
+	
+		<property name="color">0xffa500</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+		<gointo xmlob="schema" howoften="?">
+
+			<val xmlob="col" name="col" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">types</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+<nodeschema kind="union">
+
+	<properties>
+	
+		<property name="color">0xffa500</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+		<gointo xmlob="schema" howoften="?">
+
+			<val xmlob="col" name="col" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">types</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+<nodeschema kind="rowid">
+
+	<properties>
+	
+		<property name="color">0xff9999</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+		<gointo xmlob="schema" howoften="?">
+
+			<val xmlob="col" name="col" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">types</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+		
+		<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="col" howoften="1">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+<nodeschema kind="select">
+
+	<properties>
+	
+		<property name="color">0x00dddd</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+		<gointo xmlob="schema" howoften="?">
+
+			<val xmlob="col" name="col" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">types</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+		
+		<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
 
 </nodescheme_bundle>

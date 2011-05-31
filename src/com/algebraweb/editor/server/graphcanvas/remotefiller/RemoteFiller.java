@@ -32,13 +32,16 @@ public class RemoteFiller extends RemoteServiceServlet implements RemoteFillingS
 	
 	
 	@Override
-	public ArrayList<RawNode> getRawNodes() {
+	public ArrayList<RawNode> getRawNodes(String fillingMachine) {
 				
 		HttpSession session = this.getThreadLocalRequest().getSession(true);
 		
 		ArrayList<RawNode> ns = new ArrayList<RawNode>();
 		
-		filler = new XMLPlanFiller(session,this.getServletContext());
+		if (fillingMachine.equals("xml")) filler = new XMLPlanFiller(session,this.getServletContext());
+		
+		if (fillingMachine.equals("random")) filler = new RandomFiller();
+		
 		
 		filler.init();
 

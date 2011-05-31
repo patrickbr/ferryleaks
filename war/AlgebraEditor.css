@@ -71,3 +71,69 @@ font-size:14px;
 cursor:pointer;	
 
 }
+
+.cancel {
+	
+	width:16px;
+	height:16px;
+	background-image:url(cancel.png);
+	margin-top:6px;
+}
+
+.filename {
+	margin-top:6px;
+	margin-left:5px;
+	
+}
+
+.prgbar-back {
+	
+	position:relative;
+	padding-left:10px;
+	padding-right:10px;
+	
+}
+            
+ .upld-status {
+ 
+ 	height:29px;
+ 
+ }
+
+.prgbar-msg {
+	
+	margin-left:20px;
+	 position:absolute;
+	 top:6px;
+	 left:0px;
+	 color:#222;
+	
+}
+
+.status {
+	
+	 
+	 margin-top:6px;
+	 margin-left:20px;
+	 padding-right:5px;
+	 white-space:nowrap;
+}
+
+.prgbar-done {
+
+	 background-color:#bcbcff;
+	 margin-left:10px;
+	 height:25px;
+	 position:absolute;
+	 top:2px;
+	 left:0px;
+
+}
+
+.gwt-PopupPanel {
+
+	border:dotted 2px black !important;
+background-color:#EFEFEF !important;
+
+
+}

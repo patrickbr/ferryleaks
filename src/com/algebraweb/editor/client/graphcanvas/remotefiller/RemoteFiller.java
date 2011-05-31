@@ -21,9 +21,11 @@ public class RemoteFiller {
 	
 	private RemoteFillingServiceAsync commServ = (RemoteFillingServiceAsync) GWT.create(RemoteFillingService.class);
 	
+	private String filler;
 	
-	public RemoteFiller() {
+	public RemoteFiller(String filler) {
 		
+		this.filler=filler;
 				
 	}
 	
@@ -31,7 +33,7 @@ public class RemoteFiller {
 	
 		
 		
-		commServ.getRawNodes(nodeCallback);
+		commServ.getRawNodes(filler,nodeCallback);
 		
 		this.m=m;
 		
