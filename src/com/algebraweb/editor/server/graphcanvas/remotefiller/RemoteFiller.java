@@ -2,9 +2,13 @@ package com.algebraweb.editor.server.graphcanvas.remotefiller;
 
 import java.util.ArrayList;
 
-import com.algebraweb.editor.client.RawEdge;
+import javax.servlet.http.HttpSession;
+
+
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
+import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
+import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanLoader;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class RemoteFiller extends RemoteServiceServlet implements RemoteFillingService {
@@ -18,36 +22,23 @@ public class RemoteFiller extends RemoteServiceServlet implements RemoteFillingS
 	
 	
 	// for testing...
-	private GraphCanvasFiller filler = new RandomFiller();
+	private GraphCanvasFiller filler;
 	
 	
 	public RemoteFiller() {
-		
-		
-		
-	}
-
-	@Override
-	public ArrayList<RawEdge> getRawEdges(int graphId) {
-
-		ArrayList<RawEdge> es = new ArrayList<RawEdge>();
-		
 				
-		while (filler.hasNextEdge()) {
-			
-			es.add(filler.nextEdge());
-			
-		}
-
-		return es;
-
+		
 	}
 	
 	
 	@Override
-	public ArrayList<RawNode> getRawNodes(int graphId) {
+	public ArrayList<RawNode> getRawNodes() {
+				
+		HttpSession session = this.getThreadLocalRequest().getSession(true);
 		
 		ArrayList<RawNode> ns = new ArrayList<RawNode>();
+		
+		filler = new XMLPlanFiller(session,this.getServletContext());
 		
 		filler.init();
 
@@ -60,5 +51,7 @@ public class RemoteFiller extends RemoteServiceServlet implements RemoteFillingS
 		return ns;
 
 	}
+
+
 
 }

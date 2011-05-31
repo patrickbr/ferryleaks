@@ -2,6 +2,7 @@ package com.algebraweb.editor.client;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 
@@ -18,6 +19,8 @@ public class RawNode implements Serializable  {
 	
 	private int width;
 	private int height;
+	
+	private ArrayList<Integer> edgesTo = new ArrayList<Integer>();
 	
 	
 	public RawNode(int nid, String text, int color, int width, int height) {
@@ -82,6 +85,10 @@ public class RawNode implements Serializable  {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+	
+	public ArrayList<Integer> getEdgesToList() {
+		return edgesTo;
 	}
 	
 	

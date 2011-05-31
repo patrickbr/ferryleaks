@@ -3,7 +3,6 @@ package com.algebraweb.editor.server.graphcanvas.remotesorter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
@@ -25,7 +24,7 @@ public class RemoteSortingServlet extends RemoteServiceServlet implements Remote
 	}
 
 	@Override
-	public HashMap<Integer, Coordinate> doSort(String sorter,ArrayList<RawNode> nodes,ArrayList<RawEdge> edges) {
+	public HashMap<Integer, Coordinate> doSort(String sorter,ArrayList<RawNode> nodes) {
 		
 		
 		
@@ -37,7 +36,7 @@ public class RemoteSortingServlet extends RemoteServiceServlet implements Remote
 		if (sorter.equals("circle")) cs = new CircleSorter();
 		if (sorter.equals("inline")) cs = new InlineSorter();
 		
-		return cs.getCoordinateHashMap(nodes, edges);
+		return cs.getCoordinateHashMap(nodes);
 
 		
 		

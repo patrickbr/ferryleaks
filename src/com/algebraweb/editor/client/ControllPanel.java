@@ -1,10 +1,16 @@
 package com.algebraweb.editor.client;
 
 
+import gwtupload.client.IUploader;
+import gwtupload.client.MultiUploader;
+import gwtupload.client.SingleUploader;
+import gwtupload.client.IUploadStatus.Status;
+
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,6 +24,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 
 
 /**
@@ -137,6 +144,18 @@ Button sortBBBBBBB = new Button("-");
 		
 		this.add(sortBBBBBBB,40,220);
 		
+		SingleUploader defaultUploader = new SingleUploader();
+		defaultUploader.setAutoSubmit(true);
+		defaultUploader.setWidth("160px");
+		this.add(new HTML("Upload XML File:"),40,170);
+		
+				
+	    this.add(defaultUploader,40,190);
+
+	   
+	    defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+
+		
 
 		this.setStylePrimaryName("controllpanel");
 
@@ -193,6 +212,9 @@ Button sortBBBBBBB = new Button("-");
 			}
 
 		}, MouseDownEvent.getType());
+		
+		
+		
 
 	}
 
@@ -236,6 +258,18 @@ Button sortBBBBBBB = new Button("-");
 			
 		
 	}
+
+	
+	
+	  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+		    public void onFinish(IUploader uploader) {
+		      if (uploader.getStatus() == Status.SUCCESS) {
+
+		    	  makeTest();
+		   
+		      }
+		    }
+		  };
 
 
 

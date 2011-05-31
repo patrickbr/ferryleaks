@@ -30,5 +30,27 @@
   <welcome-file-list>
     <welcome-file>AlgebraEditor.html</welcome-file>
   </welcome-file-list>
+  
+    <context-param>
+    <!-- max size of the upload request -->
+    <param-name>maxSize</param-name>
+    <param-value>3145728</param-value>
+  </context-param>
+  <context-param>
+    <!-- Useful in development mode to slow down the uploads in fast networks.
+         Put the number of milliseconds to sleep in each block received in the server.
+         false or 0, means don't use slow uploads  -->
+    <param-name>slowUploads</param-name>
+    <param-value>200</param-value>
+  </context-param>
+
+ <servlet>
+    <servlet-name>uploadServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>*.gupld</url-pattern>
+  </servlet-mapping>
 
 </web-app>

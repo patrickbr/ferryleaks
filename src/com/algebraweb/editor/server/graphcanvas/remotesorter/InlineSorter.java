@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 
 
 public class InlineSorter implements RemoteSorter {
 	
-	public HashMap<Integer,Coordinate> getCoordinateHashMap(ArrayList<RawNode> nodes,ArrayList<RawEdge> edges) {
+	public HashMap<Integer,Coordinate> getCoordinateHashMap(ArrayList<RawNode> nodes) {
 
 		Iterator<RawNode> i = nodes.iterator();
 

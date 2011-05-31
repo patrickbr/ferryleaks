@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
@@ -48,29 +47,25 @@ public class RemoteSorter implements GraphSorter {
 		while (i.hasNext()) {
 
 			GraphNode c= i.next();
+			
+			RawNode nNode = new RawNode(c.getId(),c.getTextString(),c.getColor(),c.getWidth(),c.getHeight());
 
-			rawNodeList.add(new RawNode(c.getId(),c.getTextString(),c.getColor(),c.getWidth(),c.getHeight()));
+			Iterator<GraphEdge> u = c.getEdgesFrom().iterator();
+			
+			while (u.hasNext()) {
+				
+				GraphEdge current = u.next();
+				
+				nNode.getEdgesToList().add(current.getTo().getId());
+				
+			}
+			
 
-
+			rawNodeList.add(nNode);
 		}
 
-		ArrayList<RawEdge> rawEdgeList = new ArrayList<RawEdge>();
 
-		Iterator<GraphEdge> j = edges.iterator();
-
-		while (j.hasNext()) {
-
-			GraphEdge c= j.next();
-
-			rawEdgeList.add(new RawEdge(c.getFrom().getId(),c.getTo().getId()));
-
-
-		}
-
-		//
-
-
-		commServ.doSort(sorter,rawNodeList,rawEdgeList, sortedCallback(cb));
+		commServ.doSort(sorter,rawNodeList, sortedCallback(cb));
 
 
 	}

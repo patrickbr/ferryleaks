@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nodescheme_bundle>
+
+<nodeschema kind="__standard">
+
+	<properties>
+	
+		<property name="color">0x346654</property>
+
+	</properties>
+
+
+	<schema>	
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+<nodeschema kind="table">
+
+	<properties>
+	
+		<property name="color">0x346654</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+		<gointo xmlob="schema" howoften="?">
+
+			<val xmlob="col" name="col" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="string">types</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="column" howoften="*">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+
+				<val xmlob="value" name="value" howoften="*">
+
+				<fields>
+					<field type="datatype">type</field>
+				</fields>
+				</val>
+							
+				
+			</val>
+
+		</gointo>
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+</nodescheme_bundle>

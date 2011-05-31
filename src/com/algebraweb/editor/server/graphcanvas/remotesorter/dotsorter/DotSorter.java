@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.algebraweb.editor.client.RawEdge;
+
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
@@ -21,10 +21,10 @@ public class DotSorter implements RemoteSorter {
 
 	@Override
 	public HashMap<Integer, Coordinate> getCoordinateHashMap(
-			ArrayList<RawNode> nodes, ArrayList<RawEdge> edges) {
+			ArrayList<RawNode> nodes) {
 
 
-		HashMap<String,HashMap<String,String>> map = getDot(getDotCode(nodes,edges));
+		HashMap<String,HashMap<String,String>> map = getDot(getDotCode(nodes));
 
 		HashMap<Integer, Coordinate> ret = new HashMap<Integer, Coordinate>();
 
@@ -132,10 +132,10 @@ public class DotSorter implements RemoteSorter {
 
 	}
 
-	private String getDotCode(ArrayList<RawNode> nodes,ArrayList<RawEdge> edges) {
+	private String getDotCode(ArrayList<RawNode> nodes) {
 
 
-		String ret = "digraph sort_graph {\n graph [rankdir=\"BT\"];";
+		String ret = "digraph sort_graph {\n graph [];";
 
 		Iterator<RawNode> i = nodes.iterator();
 
@@ -147,11 +147,18 @@ public class DotSorter implements RemoteSorter {
 
 		ret +="\n\n";
 
-		Iterator<RawEdge> j = edges.iterator();
+		Iterator<RawNode> j = nodes.iterator();
 
 		while (j.hasNext()) {
 
-			ret += getDotEdgeString(j.next()) + "\n";
+			RawNode current = j.next();
+
+			Iterator<Integer> it = current.getEdgesToList().iterator();
+
+			while (it.hasNext()) {
+				
+				ret += getDotEdgeString(current.getNid(), it.next()) + "\n";
+			}
 
 		}
 
@@ -182,9 +189,11 @@ public class DotSorter implements RemoteSorter {
 	}
 
 
-	private String getDotEdgeString(RawEdge e) {
-
-		return "n_" + e.getFrom() + " -> n_" + e.getTo() + ";";
+	private String getDotEdgeString(int from, int to) {
+		
+	
+		System.out.println("n_" + from + " -> n_" + to + ";");
+		return "n_" + from + " -> n_" + to + ";";
 
 
 	}
