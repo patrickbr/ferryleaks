@@ -1,14 +1,18 @@
 package com.algebraweb.editor.server.logicalplan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Property;
 
 
 
-public class QueryPlan {
+public class QueryPlan implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2371425529625584530L;
 	int id;
 	ArrayList<Property> properties = new ArrayList<Property>();
 	ArrayList<PlanNode> plan = new ArrayList<PlanNode>();

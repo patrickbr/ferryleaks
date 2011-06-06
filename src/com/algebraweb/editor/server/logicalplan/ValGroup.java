@@ -3,10 +3,14 @@ package com.algebraweb.editor.server.logicalplan;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Property;
 
 
 public class ValGroup implements NodeContent{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4630462466854800864L;
 
 	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
 

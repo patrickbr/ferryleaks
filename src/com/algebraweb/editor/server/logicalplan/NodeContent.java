@@ -1,9 +1,10 @@
 package com.algebraweb.editor.server.logicalplan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-public interface NodeContent {
+
+public interface NodeContent extends Serializable {
 
 	public String getName();
 

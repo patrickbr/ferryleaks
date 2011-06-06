@@ -1,13 +1,17 @@
 package com.algebraweb.editor.server.logicalplan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Property;
 
-public class PlanNode {
+public class PlanNode implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1765471707304843471L;
 	//TODO: schema
 	
 	ArrayList<NodeContent> content = new ArrayList<NodeContent>();

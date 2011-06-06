@@ -52,7 +52,7 @@ public class RandomFiller implements GraphCanvasFiller {
 	    
 	    System.out.println(Integer.toHexString(c));
 			
-		RawNode n = new RawNode(count, "Node #" + count, c,(int)(40+Math.random()*60),(int)(10 + Math.random() * 20));
+		RawNode n = new RawNode(count, "Node #" + count, c,(int)(60+Math.random()*60),(int)(20 + Math.random() * 20));
 		
 		n.getEdgesToList().add(new RawEdge(getTo(n.getNid()),n.getNid()));
 		

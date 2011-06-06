@@ -1,13 +1,18 @@
 package com.algebraweb.editor.server.logicalplan;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
 public class ContentVal implements NodeContent {
 	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -168461026763593678L;
+
 	
 	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
 	
