@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
@@ -19,7 +20,7 @@ public class RemoteSorter implements GraphSorter {
 	private RemoteSorterServiceAsync commServ;
 	private ArrayList<GraphNode> nodes;
 	private ArrayList<GraphEdge> edges;
-	
+
 	private String sorter;
 
 	public RemoteSorter(String sorter) {
@@ -47,33 +48,39 @@ public class RemoteSorter implements GraphSorter {
 		while (i.hasNext()) {
 
 			GraphNode c= i.next();
-			
+
 			RawNode nNode = new RawNode(c.getId(),c.getTextString(),c.getColor(),c.getWidth(),c.getHeight());
 
 			Iterator<GraphEdge> u = c.getEdgesFrom().iterator();
-			
+
 			while (u.hasNext()) {
-				
+
 				GraphEdge current = u.next();
-				
-				nNode.getEdgesToList().add(current.getTo().getId());
-				
+
+				nNode.getEdgesToList().add(new RawEdge(current.getTo().getId(), current.getFrom().getId()));
+
 			}
-			
 
 			rawNodeList.add(nNode);
 		}
 
-
 		commServ.doSort(sorter,rawNodeList, sortedCallback(cb));
-
 
 	}
 
 
 	private void processPositionTuples(HashMap<Integer,Coordinate> tuples, GraphManipulationCallback cb) {
 
+		
 
+		writePositionTuplesToGraphNodes(tuples,nodes);
+		cb.onComplete();
+
+	}
+
+
+	public void writePositionTuplesToGraphNodes(HashMap<Integer, Coordinate> tuples, ArrayList<GraphNode> nodes) {
+		
 		Iterator<GraphNode> i = nodes.iterator();
 
 		while (i.hasNext()) {
@@ -83,12 +90,9 @@ public class RemoteSorter implements GraphSorter {
 			current.setX(tuples.get(current.getId()).getX());
 			current.setY(tuples.get(current.getId()).getY());
 
-			
+			Iterator<GraphEdge> ei = current.getEdgesFrom().iterator();
+
 		}
-
-		cb.onComplete();
-
-
 	}
 
 

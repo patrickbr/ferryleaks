@@ -93,7 +93,8 @@ public class GraphEdgeModifier {
 
 
 	protected void snakeOut(GraphEdge e) {
-
+		
+			
 		if (!e.isSnakedIn()) return;
 		e.setSnakedIn(false);
 		e.getEdgePath().attr("path", e.getEdgePathSmallString());
@@ -101,12 +102,14 @@ public class GraphEdgeModifier {
 		JSONObject attrs = new JSONObject();
 		attrs.put("path", new JSONString(e.getEdgePathString()));
 		e.getEdgePath().animate(attrs,600,snakeCallbackBuilder(e));
+		
+		
 
 	}
 
 
 	protected void snakeIn(GraphEdge e) {
-
+		
 		if (e.isSnakedIn()) return;
 		e.setSnakedIn(true);
 		hideArrow(e);
@@ -114,6 +117,7 @@ public class GraphEdgeModifier {
 		JSONObject attrs = new JSONObject();
 		attrs.put("path", new JSONString(e.getEdgePathSmallString()));
 		e.getEdgePath().animate(attrs,600,snakeInCallbackBuilder(e));
+		
 	}
 
 
@@ -320,6 +324,7 @@ public class GraphEdgeModifier {
 
 
 	protected void update(GraphEdge e, boolean quiet) {
+		
 		makeConnection(e, e.getFrom(),e.getTo(), quiet);
 
 	}

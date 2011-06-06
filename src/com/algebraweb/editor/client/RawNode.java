@@ -20,7 +20,7 @@ public class RawNode implements Serializable  {
 	private int width;
 	private int height;
 	
-	private ArrayList<Integer> edgesTo = new ArrayList<Integer>();
+	private ArrayList<RawEdge> edgesTo = new ArrayList<RawEdge>();
 	
 	
 	public RawNode(int nid, String text, int color, int width, int height) {
@@ -87,7 +87,7 @@ public class RawNode implements Serializable  {
 		this.height = height;
 	}
 	
-	public ArrayList<Integer> getEdgesToList() {
+	public ArrayList<RawEdge> getEdgesToList() {
 		return edgesTo;
 	}
 	

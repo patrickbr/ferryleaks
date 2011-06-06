@@ -14,8 +14,6 @@ public class RemoteFiller {
 	
 	
 	private ArrayList<RawNode> nodes;
-
-	private int state=0;
 	
 	private GraphCanvasRemoteFillingMachine m;
 	
@@ -30,16 +28,12 @@ public class RemoteFiller {
 	}
 	
 	public void init(GraphCanvasRemoteFillingMachine m) {
-	
-		
-		
+			
 		commServ.getRawNodes(filler,nodeCallback);
-		
 		this.m=m;
 		
 	}
 	
-
 	
 	private AsyncCallback<ArrayList<RawNode>> nodeCallback = new AsyncCallback<ArrayList<RawNode>>() {
 

@@ -1,6 +1,7 @@
 package com.algebraweb.editor.server.graphcanvas.remotefiller;
 
 
+import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 
 
@@ -53,7 +54,7 @@ public class RandomFiller implements GraphCanvasFiller {
 			
 		RawNode n = new RawNode(count, "Node #" + count, c,(int)(70+Math.random()*100),(int)(20 + Math.random() * 40));
 		
-		n.getEdgesToList().add(getTo(n.getNid()));
+		n.getEdgesToList().add(new RawEdge(getTo(n.getNid()),n.getNid()));
 		
 		return n;
 	

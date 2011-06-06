@@ -1,139 +1,156 @@
 package com.algebraweb.editor.server.graphcanvas.remotesorter.dotsorter;
 
+
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.xml.sax.SAXException;
+
+
+import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSorter;
+
+/**
+ * A simple dot-sorter using the SVG/XML output of dot
+ * @author Patrick Brosi
+ *
+ */
 
 public class DotSorter implements RemoteSorter {
 
+	
+	/**
+	 * Returns a HashMap containing node-IDs as keys and Node-Coordinates as value
+	 * @param nodes
+	 * @return
+	 */
 	@Override
 	public HashMap<Integer, Coordinate> getCoordinateHashMap(
 			ArrayList<RawNode> nodes) {
-
-
-		HashMap<String,HashMap<String,String>> map = getDot(getDotCode(nodes));
-
+		
+		
 		HashMap<Integer, Coordinate> ret = new HashMap<Integer, Coordinate>();
+	
+		Document doc = getDotXml(getDotCode(nodes));
+		Element graphEl= getNodeByTitle("sort_graph",doc.getDocumentElement());
 
 		Iterator<RawNode> i = nodes.iterator();
 
-		while (i.hasNext()) {
+		String transforms[] = graphEl.getAttribute("transform").split("\\)");
 
+		double offsetX=0;
+		double offsetY=0;
+
+		for (String transform : transforms) {
+
+			transform = transform.trim();
+
+			if (transform.split("\\(")[0].equals("translate")) {
+				offsetX = Double.parseDouble(transform.split("\\(")[1].split(" ")[0]);
+				offsetY = Double.parseDouble(transform.split("\\(")[1].split(" ")[1]);
+			}			
+		}
+
+		while (i.hasNext()) {
+		
 			RawNode c = i.next();
 
+			Element coresNode = getNodeByTitle("n_" + c.getNid(),((Element)doc.getElementsByTagName("svg").item(0)));
 
-			double x = Double.parseDouble(map.get("n_" + c.getNid()).get("pos").split(",")[0]);
-			double y = Double.parseDouble(map.get("n_" + c.getNid()).get("pos").split(",")[1]);
+			Element nodeRect = ((Element)coresNode.getElementsByTagName("polygon").item(0));
 
-			double height = Double.parseDouble(map.get("graph").get("bb").split(",")[3]);
+			double x = offsetX + Double.parseDouble(nodeRect.getAttribute("points").trim().split(" ")[1].split(",")[0]);
+			double y = offsetY + Double.parseDouble(nodeRect.getAttribute("points").trim().split(" ")[1].split(",")[1]);
 
-			ret.put(c.getNid(),new Coordinate(x-c.getWidth()/2,(height-y)-c.getHeight()/2));
+			Coordinate cord = new Coordinate(x,y);
+
+			ret.put(c.getNid(), cord);
 
 		}
 
-
 		return ret;
 	}
+	
+	/**
+	 * returns an XML-Document containing dot's generated SVG
+	 * @param dotSource
+	 * @return
+	 */
 
-
-
-	private HashMap<String,HashMap<String,String>> getDot(String dotSource) {
-
-		HashMap<String,HashMap<String,String>> ret = new HashMap<String,HashMap<String,String>>();
-
+	private Document getDotXml(String dotSource) {
 
 		Runtime rt = Runtime.getRuntime();
 
-		String dot_path = "/usr/bin/dot";
+		String dot_path = "dot";
 
-		String[] args = {dot_path};
+		//we want svg output
+		String[] args = {dot_path, "-Tsvg"};
 
 		try {
+
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	
+			//disable validating using an external DTD, since dot's XML is a bit buggy
+			//see http://xerces.apache.org/xerces2-j/features.html
+			dbf.setValidating(false);
+			dbf.setFeature("http://xml.org/sax/features/external-general-entities",false);
+			dbf.setFeature("http://xml.org/sax/features/external-parameter-entities",false);
+			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+			
+			DocumentBuilder db = dbf.newDocumentBuilder();
+		
 			Process p = rt.exec(args);
 
-			BufferedReader stdInput = new BufferedReader(new 
-					InputStreamReader(p.getInputStream()));
-
-			BufferedReader stdError = new BufferedReader(new 
-					InputStreamReader(p.getErrorStream()));
-
 			BufferedOutputStream b = new BufferedOutputStream(p.getOutputStream());
-
-
 			OutputStreamWriter w = new OutputStreamWriter(b);
 
+			//write the code to dot
 			w.write(dotSource);
 			w.close();
-
-
-			String s;
-			String retStr="";
-
-			while ((s = stdInput.readLine()) != null) {
-
-				System.out.println(s);
-				retStr+=s;
-
-			}
-
-			retStr = retStr.split("\\{")[1].split("\\}")[0];
-
-			String[] lines = retStr.split(";");
-
-			for(String line : lines) {
-
-
-				String id =line.trim().split("\\[")[0].trim();
-				String vals = line.trim().split("\\[")[1].trim();
-
-				vals = vals.substring(0, vals.length()-2);
-
-				String[] values = vals.split(", ");
-
-				HashMap<String,String> subRet = new HashMap<String,String>();
-
-				for(String v : values) {
-
-					subRet.put(v.split("=")[0].trim(), v.split("=")[1].trim().replaceAll("\"", ""));
-
-				}
-
-				ret.put(id, subRet);
-
-			}
-
-
-			while ((s = stdError.readLine()) != null) {
-				System.out.println(s);
-			}
-
-			return ret;
+	
+			Document doc = db.parse(p.getInputStream());
+		
+			return doc;
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 
 
 		return null;
 
 	}
+	
+	/**
+	 * Returns a string containing the dot-code of the graph specified in nodes
+	 * @param nodes
+	 * @return
+	 */
 
 	private String getDotCode(ArrayList<RawNode> nodes) {
-
 
 		String ret = "digraph sort_graph {\n graph [];";
 
@@ -146,38 +163,33 @@ public class DotSorter implements RemoteSorter {
 		}
 
 		ret +="\n\n";
-
 		Iterator<RawNode> j = nodes.iterator();
 
 		while (j.hasNext()) {
 
 			RawNode current = j.next();
-
-			Iterator<Integer> it = current.getEdgesToList().iterator();
+			Iterator<RawEdge> it = current.getEdgesToList().iterator();
 
 			while (it.hasNext()) {
-				
-				ret += getDotEdgeString(current.getNid(), it.next()) + "\n";
+
+				ret += getDotEdgeString(current.getNid(), it.next().getTo()) + "\n";
 			}
-
 		}
-
-
 
 		ret +="}";
 		return ret;
-
-
-
 	}
 
-
+	/**
+	 * Returns the dot code for a given RawNode 
+	 * @param n
+	 * @return
+	 */
 
 	private String getDotNodeString(RawNode n) {
 
 		double width = ((double)n.getWidth()) / 55; 
 		double height = ((double)n.getHeight()) / 55;
-
 
 		String ret ="";
 
@@ -187,18 +199,46 @@ public class DotSorter implements RemoteSorter {
 		return ret;	
 
 	}
-
+	
+	/**
+	 * Returns the dot code for an edge (from,to)
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 
 	private String getDotEdgeString(int from, int to) {
-		
-	
+
 		System.out.println("n_" + from + " -> n_" + to + ";");
 		return "n_" + from + " -> n_" + to + ";";
 
-
 	}
 
+	/**
+	 * returns a node by it's nested title-Tag.
+	 * @param title
+	 * @param root
+	 * @return
+	 */
+	
+	private Element getNodeByTitle(String title, Element root) {
 
+		System.out.println("Getting node for node " + title);
 
+		NodeList nodes = root.getElementsByTagName("g");
+
+		for (int i=0;i<nodes.getLength();i++) {
+
+			if (!(nodes.item(i) instanceof Text)) {
+
+				if (((Element)nodes.item(i)).getElementsByTagName("title").item(0).getFirstChild().getNodeValue().equals(title)) {
+
+					return (Element) nodes.item(i);
+
+				}
+			}	
+		}
+		return null;
+	}
 
 }

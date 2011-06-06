@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
+import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.DragPanel;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
+import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 
 public class GraphCanvasRemoteFillingMachine {
 
@@ -45,21 +47,23 @@ public class GraphCanvasRemoteFillingMachine {
 
 			RawNode current = ne.next();
 
-			Iterator<Integer> nf = current.getEdgesToList().iterator();
+			Iterator<RawEdge> nf = current.getEdgesToList().iterator();
 
 			while (nf.hasNext()) {
 
-				c.createEdge(c.getGraphNodeById(current.getNid()), c.getGraphNodeById(nf.next()),true);
+				c.createEdge(c.getGraphNodeById(current.getNid()), c.getGraphNodeById(nf.next().getTo()),true);
 
 
 			}
 
 		}
 
-		//c.sort(new SimpleSorter());
-		c.showEdges();
-
 		((DragPanel)c.getParent()).center(c.getWidth(),c.getHeight());
+				
+		//automatically sort...
+		c.sort(new RemoteSorter("dot"));
+	
+
 	}
 
 

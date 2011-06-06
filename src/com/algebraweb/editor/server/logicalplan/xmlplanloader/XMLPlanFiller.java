@@ -7,6 +7,7 @@ import java.util.Iterator;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.server.graphcanvas.remotefiller.GraphCanvasFiller;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.ContentVal;
@@ -80,7 +81,7 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 			
 			for (NodeContent e : edges) {
 				
-				temp.getEdgesToList().add(Integer.parseInt(((ContentVal)e).getAttributes().get("to")));
+				temp.getEdgesToList().add(new RawEdge(Integer.parseInt(((ContentVal)e).getAttributes().get("to")),temp.getNid()));
 				
 			}
 			
