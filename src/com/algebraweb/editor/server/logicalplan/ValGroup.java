@@ -1,4 +1,4 @@
-package com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser;
+package com.algebraweb.editor.server.logicalplan;
 
 import java.util.ArrayList;
 import java.util.Iterator;

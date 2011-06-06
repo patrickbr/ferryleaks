@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.hydro4ge.raphaelgwt.client.Raphael;
@@ -34,9 +35,15 @@ public class GraphCanvas extends Raphael  {
 	private int mouseX = 0;
 	private int mouseY = 0;
 	private double scale = 1;
-	
-	
-	
+
+	private Timer popupDelay;
+
+	private boolean mouseOverNode = false;
+
+	private NodePopup popup = new NodePopup();
+
+
+	private static LoadingMessagePopUp loadingMessagePopUp = new LoadingMessagePopUp();
 	private int oldWidth=0;
 	private int oldHeight=0;
 	private int oldScrollX=0;
@@ -63,7 +70,7 @@ public class GraphCanvas extends Raphael  {
 
 		this.height=height;
 		this.width=width;
-		
+
 		gnm = new GraphNodeModifier(this);
 		gem = new GraphEdgeModifier(this);
 	}
@@ -92,6 +99,16 @@ public class GraphCanvas extends Raphael  {
 		return gnm;
 	}
 
+	public NodePopup getPopup() {
+		return popup;
+	}
+
+
+	public void setPopup(NodePopup popup) {
+		this.popup = popup;
+	}
+
+
 	/**
 	 * Return the GragEdgeModifier of this canvas
 	 */
@@ -119,6 +136,15 @@ public class GraphCanvas extends Raphael  {
 	public GraphNode getSelectedNode() {
 
 		return selected;
+	}
+
+	public boolean isMouseOverNode() {
+		return mouseOverNode;
+	}
+
+
+	public void setMouseOverNode(boolean mouseOverNode) {
+		this.mouseOverNode = mouseOverNode;
 	}
 
 
@@ -177,7 +203,16 @@ public class GraphCanvas extends Raphael  {
 
 				GraphCanvas.this.mouseX = event.getRelativeX(GraphCanvas.this.getElement());
 				GraphCanvas.this.mouseY = event.getRelativeY(GraphCanvas.this.getElement());
-				
+
+
+
+				if (popup.getNodeId() > -1 && !mouseOverNode(event.getClientX(), event.getClientY(), popup.getNodeId())) {
+					popup.hide();
+
+				}
+
+				if (popupDelay != null && !mouseOverNode(event.getClientX(), event.getClientY())) popupDelay.cancel();
+
 				if (GraphCanvas.this.dragNode != null) {
 					DOM.eventGetCurrentEvent().preventDefault();
 					double x = scale * (event.getRelativeX(GraphCanvas.this.getElement())-dragOffsetX);
@@ -218,57 +253,57 @@ public class GraphCanvas extends Raphael  {
 	 * Zoom to percent
 	 * @param percent
 	 */
-	
+
 
 
 	public void zoom (double percent) {
-		
+
 		if (percent < 5) percent = 5;
 
 		this.oldScrollX = Window.getScrollLeft();
 		this.oldScrollY = Window.getScrollTop();
-	
-		
+
+
 		this.oldWidth =(int)( width * scale);
 		this.oldHeight =(int)( height * scale);
-		
-		
+
+
 		scale =100/(percent);
-		
-				
-		
+
+
+
 		updateZoom();
-		
+
 		if ((oldScrollX+ (oldWidth -(width * scale))/2 <= 0) || (oldScrollY + (oldScrollY + (oldHeight -(height * scale))/2) <= 0)) {
 			this.oldWidth = (int)(width * scale);
 			this.oldHeight = (int)(height * scale);
-		
-		
-		}
-		
-		//Window.scrollTo((int)(oldScrollX + (oldWidth -(width * scale))/2), (int)(oldScrollY + (oldHeight -(height * scale))/2));
-		
-		
 
-		
-		
+
+		}
+
+		//Window.scrollTo((int)(oldScrollX + (oldWidth -(width * scale))/2), (int)(oldScrollY + (oldHeight -(height * scale))/2));
+
+
+
+
+
 	}
 
 
 	private void updateZoom() {
-		
+
 		Iterator<GraphNode> i = nodes.iterator();
-		
+
 		while (i.hasNext()) {
 			GraphNode current = i.next();
 			gnm.checkDimension(current, current.getX(), current.getY());
 		}
-		
+
 		this.getElement().getFirstChildElement().setAttribute("viewBox", "0 0 " + (int)(this.width * scale) + " " +  (int)(this.height * scale));
 
-		
-		
-		
+
+
+
 	}
 
 	/**
@@ -342,13 +377,13 @@ public class GraphCanvas extends Raphael  {
 
 	}
 
-	
+
 
 	public GraphNode addNode(int id,int color,int width, int height,String text) {
 
 		int x = (int)(this.width * this.getScale()) / 2;
 		int y = (int)(this.height * this.getScale()) / 2;
-		
+
 		return this.addNode(id,color,x,y,width,height,text);
 
 	}
@@ -450,29 +485,107 @@ public class GraphCanvas extends Raphael  {
 		}
 
 	}
-	
-	
+
+
 	public void centerAt(int x,int y) {
-		
+
 		Window.scrollTo((int)((x) - (Window.getClientWidth()/2)),(int)((y) - (Window.getClientHeight()/2)));
-		
+
 	}
-	
-	
+
+
 	public void lock() {
-		
-		
+
+
 		RootPanel.get("deck").getElement().getStyle().setDisplay(Display.BLOCK);
-		
+
 	}
-	
+
 	public void unLock() {
-			
-			
+
+
 		RootPanel.get("deck").getElement().getStyle().setDisplay(Display.NONE);
-			
+
 	}
-	
+
+	public void openPopUp(final int x, final int y, final int nodeid, int delay) {
+
+
+		if ((getPopup().getNodeId() != nodeid) &&
+				!getPopup().isShowing()) {
+
+			if (popupDelay != null) popupDelay.cancel();
+
+			popupDelay = new Timer() {
+
+				@Override
+				public void run() {
+
+					popup.setNodeId(nodeid);
+					getPopup().showAt( x + 5, y + 5);
+
+
+				}
+			};
+
+			popupDelay.schedule(delay);
+		}
+	}
+
+
+	private boolean mouseOverNode(int mouseX, int mouseY, int nodeid) {
+
+
+
+		int x = (int)((Window.getScrollLeft() + mouseX));
+		int y = (int)((Window.getScrollTop() + mouseY));
+
+		GraphNode current = this.getGraphNodeById(nodeid);
+
+		return ((x*getScale() >= current.getX() && x*getScale() <= current.getX() + current.getWidth() + 4 ) &&
+				y*getScale() >= current.getY() && y*getScale() <= current.getY() + current.getHeight() + 4);		
+
+
+	}
+
+	private boolean mouseOverNode(int mouseX, int mouseY) {
+
+
+		int x = (int)((Window.getScrollLeft() + mouseX));
+		int y = (int)((Window.getScrollTop() + mouseY));
+
+
+		Iterator<GraphNode> i = nodes.iterator();
+
+		while (i.hasNext()) {
+
+			GraphNode current =i.next();
+
+			if ((x*getScale() >= current.getX() && x*getScale() <= current.getX() + current.getWidth() + 4 ) &&
+					y*getScale() >= current.getY() && y*getScale() <= current.getY() + current.getHeight() + 4) {
+				return true;
+			}
+
+		}
+		return false;
+	}
+
+	public static void showLoading(String msg) {
+
+
+		loadingMessagePopUp.show(msg);
+		
+
+	}
+
+	public static void hideLoading() {
+
+		loadingMessagePopUp.hide();
+
+	}
+
+
+
 	/**
 	 * We need this to prevent a text selection while dragging around nodes.
 	 * 
@@ -481,7 +594,7 @@ public class GraphCanvas extends Raphael  {
 	 */
 
 	protected native static void preventTextSelection(Element el, boolean disable)/*-{
-		
+
 	    if (disable) {
 	        el.ondrag = function () { return false; };
 	        el.onselectstart = function () { return false; };
@@ -489,7 +602,7 @@ public class GraphCanvas extends Raphael  {
 	        el.ondrag = null;
 	        el.onselectstart = null;
 	    }
-	    
+
 	}-*/;
 
 

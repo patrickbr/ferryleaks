@@ -56,11 +56,15 @@ public class GraphNodeLayoutingMachine {
 		//TODO: lock screen, show something like "sorting"...
 		
 
+		GraphCanvas.showLoading("Layouting...");
+		
+
 		sorter.doSort(nodes,edges, new GraphManipulationCallback() {
 
 			@Override
 			public void onComplete() {
 				
+				GraphCanvas.hideLoading();
 				layout(GraphNodeLayoutingMachine.this.nodes);
 							
 			}

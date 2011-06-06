@@ -16,6 +16,11 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import com.algebraweb.editor.server.logicalplan.ContentVal;
+import com.algebraweb.editor.server.logicalplan.NodeContent;
+import com.algebraweb.editor.server.logicalplan.PlanNode;
+import com.algebraweb.editor.server.logicalplan.QueryPlan;
+import com.algebraweb.editor.server.logicalplan.ValGroup;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Field;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.GoAble;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.GoInto;

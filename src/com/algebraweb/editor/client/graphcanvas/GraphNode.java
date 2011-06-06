@@ -3,8 +3,15 @@ package com.algebraweb.editor.client.graphcanvas;
 
 import java.util.ArrayList;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.hydro4ge.raphaelgwt.client.Raphael.Rect;
 import com.hydro4ge.raphaelgwt.client.Raphael.Shape;
 import com.hydro4ge.raphaelgwt.client.Raphael.Text;
@@ -22,6 +29,7 @@ public class GraphNode {
 	private GraphCanvas c;
 	private ArrayList<GraphEdge> edgesTo = new ArrayList<GraphEdge>();
 	private ArrayList<GraphEdge> edgesFrom = new ArrayList<GraphEdge>();
+	
 	
 	private String textString;
 
@@ -59,6 +67,7 @@ public class GraphNode {
 		this.text.attr("text-anchor","left");
 
 		text.getElement().setAttribute("class", "node-text");
+		
 		rect.getElement().setAttribute("r", "");
 		
 		
@@ -69,6 +78,20 @@ public class GraphNode {
 		rect.attr("stroke", "#555");
 		text.attr("fill", "#000");
 
+		
+		MouseMoveHandler mouseMoveH = new MouseMoveHandler() {
+
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				
+								
+				GraphNode.this.c.openPopUp(Window.getScrollLeft() + event.getClientX(), Window.getScrollTop() + event.getClientY(),GraphNode.this.getId(),400);
+				
+				
+			}
+
+		};
+		
 		
 
 		MouseDownHandler mouseDownH = new MouseDownHandler() {
@@ -87,19 +110,10 @@ public class GraphNode {
 
 				double rx;
 				double ry;
-
-				//if (event.getSource().equals(text)) {
-
-				//	rx=event.getRelativeX(GraphNode.this.rect.getElement());
-				//	ry=event.getRelativeY(GraphNode.this.rect.getElement());
-
-				//}else{
-					//rx=event.getX();
-					//ry=event.getY();
-					
-					rx=event.getRelativeX(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()* GraphNode.this.getX()) ;
-					ry=event.getRelativeY(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()*GraphNode.this.getY()) ;
-				//}
+				
+				rx=event.getRelativeX(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()* GraphNode.this.getX()) ;
+				ry=event.getRelativeY(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()*GraphNode.this.getY()) ;
+				
 				
 				
 				
@@ -110,9 +124,15 @@ public class GraphNode {
 
 		};
 
+		text.sinkEvents(Event.MOUSEEVENTS);
+		
+		
 		getShape().addDomHandler(mouseDownH, MouseDownEvent.getType());
 		text.addDomHandler(mouseDownH, MouseDownEvent.getType());
-
+		getShape().addDomHandler(mouseMoveH, MouseMoveEvent.getType());
+		text.addDomHandler(mouseMoveH, MouseMoveEvent.getType());
+		
+		
 	}
 
 	public int getColor() {

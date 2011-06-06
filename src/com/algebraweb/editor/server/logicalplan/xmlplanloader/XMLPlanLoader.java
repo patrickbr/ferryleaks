@@ -9,11 +9,11 @@ import javax.servlet.ServletContext;
 
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.server.graphcanvas.remotefiller.GraphCanvasFiller;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.ContentVal;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.NodeContent;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanNode;
+import com.algebraweb.editor.server.logicalplan.ContentVal;
+import com.algebraweb.editor.server.logicalplan.NodeContent;
+import com.algebraweb.editor.server.logicalplan.PlanNode;
+import com.algebraweb.editor.server.logicalplan.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeScheme;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
 

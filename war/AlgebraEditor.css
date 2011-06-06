@@ -67,7 +67,7 @@ cursor:pointer;
 
 .node-text tspan {
 
-font-size:14px;
+font-size:13px;
 cursor:pointer;	
 
 }
@@ -132,8 +132,49 @@ cursor:pointer;
 
 .gwt-PopupPanel {
 
-	border:dotted 2px black !important;
+	border:dotted 1px black !important;
 background-color:#EFEFEF !important;
 
 
 }
+
+.nodePopUp {
+
+	border:solid 1px #feff82 !important;
+	background-color:#feffb1 !important;
+	opacity:0.9;
+
+}
+
+.loadingWrap {
+	
+	width:160px;
+	height:60px;	
+	padding-top:35px;
+	padding-left:20px;
+	
+}
+
+.loadingPopUp {
+	
+	opacity:0.9;
+	border:dotted 1px black !important;
+	
+}
+
+.loadingImg {
+	
+	float:left;
+	margin-right:20px;
+	
+	}
+	
+	
+.loadingmsg {
+	
+	margin-top:5px;
+	font-size:14px;
+	
+}
+	
+

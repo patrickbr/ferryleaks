@@ -58,17 +58,21 @@ public class GraphCanvasRemoteFillingMachine {
 
 		}
 
-		((DragPanel)c.getParent()).center(c.getWidth(),c.getHeight());
+		//((DragPanel)c.getParent()).center(c.getWidth(),c.getHeight());
+		
+		GraphCanvas.hideLoading();
 				
 		//automatically sort...
 		c.sort(new RemoteSorter("dot"));
 	
+		
 
 	}
 
 
 	public void fill(RemoteFiller filler) {
 
+		GraphCanvas.showLoading("Loading...");
 		filler.init(this);
 
 
