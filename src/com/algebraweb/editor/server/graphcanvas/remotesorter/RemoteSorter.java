@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.graphcanvas.GraphEdge;
+
 
 public interface RemoteSorter {
 	

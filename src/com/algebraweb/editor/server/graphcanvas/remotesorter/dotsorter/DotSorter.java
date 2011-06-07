@@ -209,7 +209,6 @@ public class DotSorter implements RemoteSorter {
 
 	private String getDotEdgeString(int from, int to) {
 
-		System.out.println("n_" + from + " -> n_" + to + ";");
 		return "n_" + from + " -> n_" + to + ";";
 
 	}
@@ -222,8 +221,6 @@ public class DotSorter implements RemoteSorter {
 	 */
 	
 	private Element getNodeByTitle(String title, Element root) {
-
-		System.out.println("Getting node for node " + title);
 
 		NodeList nodes = root.getElementsByTagName("g");
 

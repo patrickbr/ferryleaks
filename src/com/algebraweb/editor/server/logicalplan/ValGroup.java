@@ -48,13 +48,13 @@ public class ValGroup implements NodeContent{
 		this.name = name;
 	}
 	
+	//TODO: experimental
+	
 	public String toString() {
 		
 		String ret = "{VALGROUP '" + name + "' childs:";
-		
 		Iterator<NodeContent> i = childs.iterator();
-		
-		
+				
 		while (i.hasNext()) {
 			
 			ret+=i.next().toString();
@@ -78,7 +78,6 @@ public class ValGroup implements NodeContent{
 		}
 		
 		NodeContent[] ret = new NodeContent[0];
-			
 		return temp.toArray(ret);	
 				
 	}

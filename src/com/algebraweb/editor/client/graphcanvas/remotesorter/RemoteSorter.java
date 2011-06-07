@@ -7,7 +7,6 @@ import java.util.Iterator;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;

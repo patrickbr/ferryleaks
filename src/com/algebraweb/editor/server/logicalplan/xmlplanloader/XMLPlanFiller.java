@@ -15,7 +15,6 @@ import com.algebraweb.editor.server.logicalplan.NodeContent;
 import com.algebraweb.editor.server.logicalplan.PlanNode;
 import com.algebraweb.editor.server.logicalplan.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeScheme;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
 
 public class XMLPlanFiller implements GraphCanvasFiller{
 	
@@ -45,30 +44,24 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		return it.hasNext();
 	}
 
-
-
 	@Override
 	public void init() {
 		
 		QueryPlan qp = (QueryPlan) session.getAttribute("queryPlan");
-		
 		it = getRawNodes(qp).iterator();
+		
 	}
-
-
 
 	@Override
 	public RawNode nextNode() {
 		// TODO Auto-generated method stub
 		return it.next();
 	}
-	
-	
+		
 	public ArrayList<RawNode> getRawNodes(QueryPlan qp) {
 		
 		
 		ArrayList<RawNode> rawNodes = new ArrayList<RawNode>();
-		
 		Iterator<PlanNode> it = qp.getPlan().iterator();
 				
 		while (it.hasNext()) {

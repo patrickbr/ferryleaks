@@ -3,8 +3,6 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.xalan.trace.SelectionEvent;
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -32,8 +30,7 @@ public class GraphCanvas extends Raphael  {
 	private GraphNode dragNode = null;
 	private int dragOffsetX = 0;
 	private int dragOffsetY = 0;
-	private int mouseX = 0;
-	private int mouseY = 0;
+
 	private double scale = 1;
 
 	private Timer popupDelay;
@@ -200,11 +197,6 @@ public class GraphCanvas extends Raphael  {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-
-				GraphCanvas.this.mouseX = event.getRelativeX(GraphCanvas.this.getElement());
-				GraphCanvas.this.mouseY = event.getRelativeY(GraphCanvas.this.getElement());
-
-
 
 				if (popup.getNodeId() > -1 && !mouseOverNode(event.getClientX(), event.getClientY(), popup.getNodeId())) {
 					popup.hide();

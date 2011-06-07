@@ -14,6 +14,11 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+/**
+ * The node scheme loader and parser
+ * @author patrick
+ *
+ */
 
 public class NodeSchemeLoader {
 
@@ -22,14 +27,14 @@ public class NodeSchemeLoader {
 
 	public NodeSchemeLoader(String file) {
 
-
 		this.file = new File(file);
+		System.out.println("Initializing NodeSchemeLoader...");
 
 	}
 
-
 	public ArrayList<NodeScheme> parse() {
 
+		System.out.println("Parsing schemes...");
 		ArrayList<NodeScheme> ret = new ArrayList<NodeScheme>();
 
 		try{
@@ -67,10 +72,12 @@ public class NodeSchemeLoader {
 
 
 	private NodeScheme parseSchema(Element nodeschema) {
+	
 		NodeScheme ret;
 		NodeList childs = nodeschema.getElementsByTagName("schema").item(0).getChildNodes();
 
-
+		System.out.println("found scheme for type '" + nodeschema.getAttribute("kind") + "'");
+		
 		ret = new NodeScheme(nodeschema.getAttribute("kind"));
 
 	    Element properties = (Element) nodeschema.getElementsByTagName("properties").item(0);
@@ -91,17 +98,11 @@ public class NodeSchemeLoader {
 				Element e = (Element) childs.item(i);
 			
 				if (e.getTagName().equals("gointo")) {
-					
-					System.out.println("parsin gointo...");
-
 					ret.addToSchema(goInto(e));
-
 				}
 
 				if (e.getNodeName().equals("val")) {
-
 					ret.addToSchema(parseVal(e));
-
 				}
 
 			}

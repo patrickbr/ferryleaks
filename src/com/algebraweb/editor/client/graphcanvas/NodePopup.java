@@ -29,13 +29,11 @@ public class NodePopup extends PopupPanel {
     
     public void showAt(int x, int y) {
     	
-    	  this.nodeid=nodeid;
     	  super.setPopupPosition(x, y);
     	  super.clear();
     	  super.add(new Label("This is node #" + nodeid));
     	  super.show();
-    	
-    	
+    	    	
     }
     
     @Override

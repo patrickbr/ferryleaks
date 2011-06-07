@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanLoader;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class RemoteFiller extends RemoteServiceServlet implements RemoteFillingService {

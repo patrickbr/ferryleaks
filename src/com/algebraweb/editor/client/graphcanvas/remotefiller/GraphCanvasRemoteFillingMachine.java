@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
-import com.algebraweb.editor.client.graphcanvas.DragPanel;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 

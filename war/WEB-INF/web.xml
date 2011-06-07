@@ -25,6 +25,16 @@
     <url-pattern>/algebraeditor/sorter</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>PlanModelCommunicationServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.logicalplan.communication.PlanModelCommunicationServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>PlanModelCommunicationServlet</servlet-name>
+    <url-pattern>/algebraeditor/manipulation</url-pattern>
+  </servlet-mapping>
+  
 
   <!-- Default page to serve -->
   <welcome-file-list>

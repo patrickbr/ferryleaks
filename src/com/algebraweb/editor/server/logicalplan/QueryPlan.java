@@ -38,8 +38,7 @@ public class QueryPlan implements Serializable {
 	
 	
 	public String toString() {
-		
-		
+				
 		String ret = "";
 		
 		Iterator<PlanNode> i = plan.iterator();

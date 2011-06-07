@@ -15,10 +15,8 @@ public class InlineSorter implements RemoteSorter {
 		Iterator<RawNode> i = nodes.iterator();
 
 		RawNode current;
-
 	
 		HashMap<Integer,Coordinate> ret = new HashMap<Integer,Coordinate>();
-
 
 		int x=30;
 		int y=30;

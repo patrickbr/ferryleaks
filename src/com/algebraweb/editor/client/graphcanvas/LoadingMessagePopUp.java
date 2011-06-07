@@ -13,8 +13,7 @@ public class LoadingMessagePopUp extends PopupPanel {
 	private FlowPanel p = new FlowPanel();
 	
 	public LoadingMessagePopUp() {
-		
-				
+						
 		super();
 		//super.setAnimationEnabled(true);
 
@@ -31,20 +30,14 @@ public class LoadingMessagePopUp extends PopupPanel {
 	 
 		super.addStyleName("loadingPopUp");
 		super.setModal(true);
-	
-		
-		
+			
 	}
 		
 	public void show(String msg) {
-		
-		
+				
 		
 		l.addStyleName("loadingmsg");
 		l.setText(msg);
-		
-	    
-		
 		super.center();
 		
 	}

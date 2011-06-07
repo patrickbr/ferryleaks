@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.graphcanvas.GraphEdge;
-import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorterService;
 import com.algebraweb.editor.server.graphcanvas.remotesorter.dotsorter.DotSorter;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -25,11 +23,7 @@ public class RemoteSortingServlet extends RemoteServiceServlet implements Remote
 
 	@Override
 	public HashMap<Integer, Coordinate> doSort(String sorter,ArrayList<RawNode> nodes) {
-		
-		
-		
-		//for testing purposes
-		
+			
 		RemoteSorter cs = new DotSorter();
 		
 		if (sorter.equals("dot")) cs = new DotSorter();
@@ -38,8 +32,7 @@ public class RemoteSortingServlet extends RemoteServiceServlet implements Remote
 		
 		return cs.getCoordinateHashMap(nodes);
 
-		
-		
+				
 	}
 
 }
