@@ -51,6 +51,27 @@ public class QueryPlan implements Serializable {
 		
 		return ret;
 	}
+	
+	public PlanNode getPlanNodeById(int id) {
+		
+		
+		Iterator<PlanNode> i = plan.iterator();
+		
+		while (i.hasNext()) {
+			
+			
+			PlanNode current = i.next();
+			
+			if (current.getId() == id) return current;
+			
+			
+		}
+		
+		
+		return null;
+		
+		
+	}
  	
 	
 

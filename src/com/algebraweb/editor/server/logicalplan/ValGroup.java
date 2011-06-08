@@ -1,11 +1,19 @@
 package com.algebraweb.editor.server.logicalplan;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * A group of node values with no own parameters. On editing 
+ * a node, the corresponding GoInto will be presented by an
+ * own tab in the editor window and this group will be filled
+ * with the values provided there.
+ * @author Patrick Brosi
+ *
+ */
 
-
-public class ValGroup implements NodeContent{
+public class ValGroup implements NodeContent, ContentNode{
 
 	/**
 	 * 
@@ -14,9 +22,9 @@ public class ValGroup implements NodeContent{
 
 	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
 
-	ArrayList<Property> attributes = new ArrayList<Property>();
+	private PropertyMap attributes = new PropertyMap();
 
-	String name;
+	private String name;
 	
 	public ValGroup(String name) {
 		
@@ -24,7 +32,7 @@ public class ValGroup implements NodeContent{
 				
 	}
 
-	public ArrayList<NodeContent> getChilds() {
+	public ArrayList<NodeContent> getContent() {
 		return childs;
 	}
 
@@ -32,11 +40,13 @@ public class ValGroup implements NodeContent{
 		this.childs = childs;
 	}
 
-	public ArrayList<Property> getAttributes() {
+	@Override
+	public PropertyMap getAttributes() {
 		return attributes;
 	}
 
-	public void setAttributes(ArrayList<Property> attributes) {
+	@Override
+	public void setAttributes(PropertyMap attributes) {
 		this.attributes = attributes;
 	}
 
@@ -64,7 +74,7 @@ public class ValGroup implements NodeContent{
 		return ret + "}";
 	}
 	
-	public NodeContent[] getValuesByName(String name) {
+	public ArrayList<NodeContent> getValuesByInternalName(String name) {
 		
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
 				
@@ -74,12 +84,15 @@ public class ValGroup implements NodeContent{
 			
 			NodeContent c = i.next();
 			if (c.getName().equals(name)) temp.add(c);
+			
+			temp.addAll(c.getValuesByInternalName(name));
 					
 		}
 		
-		NodeContent[] ret = new NodeContent[0];
-		return temp.toArray(ret);	
+		return temp;
 				
 	}
+
+
 
 }

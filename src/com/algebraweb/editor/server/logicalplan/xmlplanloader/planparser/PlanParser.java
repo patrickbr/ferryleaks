@@ -19,8 +19,12 @@ import org.xml.sax.SAXException;
 import com.algebraweb.editor.server.logicalplan.ContentVal;
 import com.algebraweb.editor.server.logicalplan.NodeContent;
 import com.algebraweb.editor.server.logicalplan.PlanNode;
+import com.algebraweb.editor.server.logicalplan.Property;
+import com.algebraweb.editor.server.logicalplan.PropertyValue;
 import com.algebraweb.editor.server.logicalplan.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.ValGroup;
+import com.algebraweb.editor.server.logicalplan.validation.Validator;
+import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedColumnsValidator;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Field;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.GoAble;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.GoInto;
@@ -32,8 +36,8 @@ import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Value
 public class PlanParser {
 
 
-	File file;
-	HashMap<String,NodeScheme> schemes;
+	private File file;
+	private HashMap<String,NodeScheme> schemes;
 
 	public PlanParser(HashMap<String,NodeScheme> schemes, String file) {
 
@@ -60,7 +64,7 @@ public class PlanParser {
 
 			ret = new QueryPlan(0);
 
-			ret.setPlan(parseNodes((Element)planNodes));
+			ret.setPlan(parseNodes((Element)planNodes,ret));
 
 
 
@@ -69,14 +73,25 @@ public class PlanParser {
 
 			e.printStackTrace();
 		}
+				
+		Iterator<Property> i = ret.getPlanNodeById(4).getReferencableColumnsFromValues().iterator();
 
+		System.out.println("Referencable columns:");
+		
+		while (i.hasNext()) {
+			System.out.println(i.next().getPropertyVal().getVal());
+		}
+		
+		Validator v = new ReferencedColumnsValidator();
+		
+		v.validate(ret.getPlanNodeById(4));
 
 		return ret;
 
 	}
 
 
-	public ArrayList<PlanNode> parseNodes(Element parent) {
+	public ArrayList<PlanNode> parseNodes(Element parent, QueryPlan mother) {
 
 		NodeList nodes = parent.getChildNodes();
 
@@ -87,16 +102,18 @@ public class PlanParser {
 			if (!(nodes.item(i) instanceof Text)) {
 
 				Element el = (Element) nodes.item(i);
-	
+
 
 				PlanNode newNode = new PlanNode(
 						Integer.parseInt(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()),
-						nodes.item(i).getAttributes().getNamedItem("kind").getNodeValue()
+						nodes.item(i).getAttributes().getNamedItem("kind").getNodeValue(),
+						getScheme(nodes.item(i).getAttributes().getNamedItem("kind").getNodeValue()),
+						mother
 						
 				);
-							
 
-				fillNode(newNode,el);
+
+				fillNode(newNode,el);				
 				planNodes.add(newNode);
 
 			}
@@ -111,8 +128,6 @@ public class PlanParser {
 	private void fillNode(PlanNode n, Element nodeEl) {
 
 		NodeScheme s = getScheme(n.getKind());
-		
-		
 
 		ArrayList<GoAble> schema = s.getSchema();
 		n.setContent(gurr(nodeEl, n.getContent(), schema));
@@ -143,19 +158,22 @@ public class PlanParser {
 				Field current = i.next();
 
 				String name = current.getVal();
+				String type = current.getType();
+
+				System.out.println(type);
+
 				String value = e.getAttribute(name);
 
-				((ContentVal)retEl).getAttributes().put(name, value);
+				((ContentVal)retEl).getAttributes().put(new Property(name,value, type));
 
 			}
-
 
 
 		}
 
 		ArrayList<GoAble> schema = g.getSchema();
 
-		gurr(e, retEl.getChilds(), schema);
+		gurr(e, retEl.getContent(), schema);
 		return retEl;
 
 	}
@@ -180,14 +198,13 @@ public class PlanParser {
 
 			if (((GoInto) next).getHowOften().equals("?")) {
 
-				NodeList childs=e.getElementsByTagName(next.getXmlObject());
+				ArrayList<Element> childs=getElementsByScheme(e,next);
 
-				if (childs.getLength() > 1) throw new RuntimeException("Expected one or no element(s) of type '" +
-						next.getXmlObject() + "' in " + file.getName());
+				if (childs.size() > 1) throw new RuntimeException(getErrorMsg("one or no",next,file));
 
-				if (childs.getLength() == 1) {
+				if (childs.size() == 1) {
 					retEl.add(parseGoAble((GoInto) next,
-							(Element) e.getElementsByTagName(next.getXmlObject()).item(0)));
+							childs.get(0)));
 				}
 
 
@@ -195,24 +212,23 @@ public class PlanParser {
 
 			if (((GoInto) next).getHowOften().matches("\\{[0-9]+,[0-9]+\\}")) {
 
-		
+
 
 				String howOften = ((GoInto) next).getHowOften();
 
 				int min = Integer.parseInt(howOften.split(",")[0].replaceAll("\\{", ""));
 				int max = Integer.parseInt(howOften.split(",")[1].replaceAll("\\}", ""));
 
-				NodeList childs=e.getElementsByTagName(next.getXmlObject());
+				ArrayList<Element> childs=getElementsByScheme(e,next);
 
-				if (childs.getLength() > max || childs.getLength() < min ) {
-					throw new RuntimeException("Expected a minum of " + min + " and a maxium of " + max + " element(s) of type '" +
-							next.getXmlObject() + "' in " + file.getName());
+				if (childs.size() > max || childs.size() < min ) {
+					throw new RuntimeException(getErrorMsg("a minimum of " + min + " and a maximum of " + max,next,file));
 				}else{
 
-					for (int i=0;i<childs.getLength();i++) {
+					for (int i=0;i<childs.size();i++) {
 
 						retEl.add(parseGoAble((GoInto) next,
-								(Element) e.getElementsByTagName(next.getXmlObject()).item(i)));
+								childs.get(i)));
 					}
 
 				}
@@ -222,57 +238,55 @@ public class PlanParser {
 
 			if (((GoInto) next).getHowOften().matches("\\{,[0-9]+\\}")) {
 
-		
+
 
 				String howOften = ((GoInto) next).getHowOften();
-			
+
 				int max = Integer.parseInt(howOften.split(",")[1].replaceAll("\\}", ""));
 
-				NodeList childs=e.getElementsByTagName(next.getXmlObject());
+				ArrayList<Element> childs=getElementsByScheme(e,next);
 
-				if (childs.getLength() > max) {
-					throw new RuntimeException("Expected a maxium of " + max + " element(s) of type '" +
-							next.getXmlObject() + "' in " + file.getName());
+				if (childs.size() > max) {
+					throw new RuntimeException(getErrorMsg("a maximum of " + max,next,file));
 				}else{
 
-					for (int i=0;i<childs.getLength();i++) {
+					for (int i=0;i<childs.size();i++) {
 
 						retEl.add(parseGoAble((GoInto) next,
-								(Element) e.getElementsByTagName(next.getXmlObject()).item(i)));
+								childs.get(i)));
 					}
 
 				}
 
 
 			}
-			
+
 			if (((GoInto) next).getHowOften().matches("\\{[0-9]+,\\}")) {
 
 
 				String howOften = ((GoInto) next).getHowOften();
 
 				int min = Integer.parseInt(howOften.split(",")[0].replaceAll("\\{", ""));
-				
 
-				NodeList childs=e.getElementsByTagName(next.getXmlObject());
 
-				if ( childs.getLength() < min ) {
-					throw new RuntimeException("Expected a minum of " + min + " element(s) of type '" +
-							next.getXmlObject() + "' in " + file.getName());
+				ArrayList<Element> childs=getElementsByScheme(e,next);
+
+				if ( childs.size() < min ) {
+					throw new RuntimeException(getErrorMsg("a minumum of " + min,next,file));
 				}else{
 
-					for (int i=0;i<childs.getLength();i++) {
+					for (int i=0;i<childs.size();i++) {
 
 						retEl.add(parseGoAble((GoInto) next,
-								(Element) e.getElementsByTagName(next.getXmlObject()).item(i)));
+								childs.get(i)));
 					}
 
 				}
 
 
 			}
-			
-	
+
+
 
 
 			if (((GoInto) next).getHowOften().equals("*") ||
@@ -288,35 +302,84 @@ public class PlanParser {
 
 
 
+
+
+	private ArrayList<Element> getElementsByScheme(Element parent, GoAble g) {
+
+
+
+		ArrayList<Element> retList = new ArrayList<Element>();
+		NodeList matchingTags = parent.getElementsByTagName(g.getXmlObject());
+
+
+		for (int a=0;a<matchingTags.getLength();a++) {
+
+			Element el = (Element) matchingTags.item(a);
+
+			if (g instanceof Value) {
+
+				ArrayList<Field> fields = ((Value)g).getFields();
+				Iterator<Field> i = fields.iterator();
+
+				boolean fail = false;
+
+				while (i.hasNext()) {
+
+					Field current = i.next();
+					String att = current.getVal();
+
+					if ((!el.hasAttribute(att)) ||
+							(current.hasMustBe() && !current.getMust_be().equals(el.getAttribute(att)))){
+
+						fail=true;
+
+					}					
+				}
+
+				if (!fail) retList.add(el);
+
+
+			} else {
+
+				retList.add(el);
+
+			}
+
+		}
+
+
+		return retList;
+	}
+
+
+
 	private void parseNumericCount(Element e, ArrayList<NodeContent> retEl,
 			GoAble next, int howOften) {
-		NodeList childs=e.getElementsByTagName(next.getXmlObject());
+		ArrayList<Element> childs=getElementsByScheme(e,next);
 
-		if (childs.getLength() < howOften) throw new RuntimeException("Expected "+ howOften +" element(s) of type '" +
-				next.getXmlObject() + "'" + "' in " + file.getName());
+		if (childs.size() < howOften) throw new RuntimeException(getErrorMsg(howOften + "",next,file));
 
 		for (int i=0;i<howOften;i++) {
 
 			retEl.add(parseGoAble((GoInto) next,
-					(Element) e.getElementsByTagName(next.getXmlObject()).item(i)));
+					childs.get(i)));
 
 		}
 	}
 
 
 
-	private void parseStarPlus(Element e, ArrayList<NodeContent> retEl, GoAble GoAble) {
-		NodeList els = e.getElementsByTagName(GoAble.getXmlObject());
+	private void parseStarPlus(Element e, ArrayList<NodeContent> retEl, GoAble goAble) {
+		ArrayList<Element> childs=getElementsByScheme(e,goAble);;
 
-		for (int i=0;i<els.getLength();i++) {
+		for (int i=0;i<childs.size();i++) {
 
-			retEl.add(parseGoAble((GoInto) GoAble,
-					(Element) els.item(i)));
+			retEl.add(parseGoAble((GoInto) goAble,
+					childs.get(i)));
 		}
 
-		if (((GoInto) GoAble).getHowOften().equals("+") && els.getLength() == 0) {
-			throw new RuntimeException("Expected at least 1 element of type '" +
-					GoAble.getXmlObject() + "'" + "' in " + file.getName());
+		if (((GoInto) goAble).getHowOften().equals("+") && childs.size() == 0) {
+			throw new RuntimeException(getErrorMsg("at least 1",goAble,file));
 		}
 	}
 
@@ -330,14 +393,14 @@ public class PlanParser {
 		NodeScheme s = schemes.get(type);
 
 		if (s==null && type != "__standard") {
-			 System.out.println("Warning: Could not find scheme for node type '" + type + "'. Falling " +
-				"back to standard scheme!");
-		    return getScheme("__standard");
+			System.out.println("Warning: Could not find scheme for node type '" + type + "'. Falling " +
+			"back to standard scheme!");
+			return getScheme("__standard");
 		}else if (s==null && type == "__standard") {
-			
-			 System.out.println("Warning: Could not find a standard scheme! Falling back...");
-			 s=new NodeScheme("___empty");
-			
+
+			System.out.println("Warning: Could not find a standard scheme! Falling back...");
+			s=new NodeScheme("___empty");
+
 		}
 
 		return s;
@@ -365,6 +428,36 @@ public class PlanParser {
 		return (a.matches("[0-9]+"));
 
 
+	}
+
+
+	private String getErrorMsg(String howMany, GoAble g, File f) {
+
+		String ret = "Expected " + howMany + " element(s) of type '" + g.getXmlObject() + "'";
+
+		if (g instanceof Value) {
+
+			ret += " with fields";
+
+			Iterator<Field> it =  ((Value)g).getFields().iterator();
+
+			while (it.hasNext()) {
+
+				Field current = it.next();
+				ret += " " + current.getVal();
+
+				if (current.getMust_be() != null) ret += " = " + current.getMust_be();
+
+				ret += ",";
+			}
+
+			if (ret.endsWith(",")) ret = ret.substring(0, ret.length()-1);
+
+		}
+
+		ret += " in " + f.getName();
+
+		return ret;
 	}
 
 

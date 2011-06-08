@@ -3,6 +3,7 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 
 
@@ -53,9 +54,8 @@ public class GraphNodeLayoutingMachine {
 		}		
 		
 		
-		//TODO: lock screen, show something like "sorting"...
 		
-
+		GWT.log("Layouting...");
 		GraphCanvas.showLoading("Layouting...");
 		
 

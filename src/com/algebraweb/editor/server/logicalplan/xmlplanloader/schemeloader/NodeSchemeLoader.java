@@ -101,7 +101,7 @@ public class NodeSchemeLoader {
 					ret.addToSchema(goInto(e));
 				}
 
-				if (e.getNodeName().equals("val")) {
+				if (e.getTagName().equals("val")) {
 					ret.addToSchema(parseVal(e));
 				}
 
@@ -159,9 +159,15 @@ public class NodeSchemeLoader {
 		NodeList fieldList = fields.getElementsByTagName("field");
 
 		for (int i=0;i<fieldList.getLength();i++) {
+			
+			Field f = new Field(fieldList.item(i).getAttributes().getNamedItem("type").getNodeValue(),
+					getTextValue((Element)fieldList.item(i)));
+			
+			if (((Element)fieldList.item(i)).hasAttribute("must_be")) {
+				f.setMust_be(fieldList.item(i).getAttributes().getNamedItem("must_be").getNodeValue());
+			}
 
-			v.addField(new Field(fieldList.item(i).getAttributes().getNamedItem("type").getNodeValue(),
-					getTextValue((Element)fieldList.item(i))));
+			v.addField(f);
 
 		}
 

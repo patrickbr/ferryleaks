@@ -2,16 +2,16 @@ package com.algebraweb.editor.server.logicalplan;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
-public interface NodeContent extends Serializable {
+public interface NodeContent extends ContentNode {
 
 	public String getName();
 
 	public void setName(String name);
 	
-	public ArrayList<NodeContent> getChilds();
-	
-	public NodeContent[] getValuesByName(String name);
-	
+	public PropertyMap getAttributes();
+
+	public void setAttributes(PropertyMap attributes);
 }

@@ -1,10 +1,13 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
@@ -50,14 +53,17 @@ public class XMLPlanUploadServlet extends UploadAction{
 					receivedFiles.put(item.getFieldName(), file);
 					receivedContentTypes.put(item.getFieldName(), item.getContentType());
 
+					
 					//parse the plan, store it into the session...
 					HttpSession session = request.getSession(true);
 					XMLPlanLoader planLoader = new XMLPlanLoader();
 					session.setAttribute("queryPlan",  planLoader.parsePlan(file.getAbsolutePath(),this.getServletContext()));
-
+					
+					System.out.println( item.getName());
+					response = item.getName();
 					
 				} catch (Exception e) {
-					e.printStackTrace();
+					throw new UploadActionException(e);
 				}
 			}
 		}
@@ -68,6 +74,8 @@ public class XMLPlanUploadServlet extends UploadAction{
 		//TODO: responses
 		return response;
 	}
+
+
 
 
 

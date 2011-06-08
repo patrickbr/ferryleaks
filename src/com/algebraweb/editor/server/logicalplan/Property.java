@@ -2,18 +2,26 @@ package com.algebraweb.editor.server.logicalplan;
 
 import java.util.ArrayList;
 
+
 public class Property {
-	
+
 	String propertyName;
-	String propertyVal;
-	
+	PropertyValue propertyVal;
+
 	ArrayList<Property> properties = new ArrayList<Property>();
-	
-	public Property(String name, String value) {
-		
+
+	public Property(String name, PropertyValue value) {
+
 		this.propertyName = name;
 		this.propertyVal = value;
-		
+
+	}
+
+	public Property(String name, String value, String type) {
+
+		this.propertyName = name;
+		this.propertyVal = new PropertyValue(value,type);
+
 	}
 
 	public String getPropertyName() {
@@ -24,18 +32,18 @@ public class Property {
 		this.propertyName = propertyName;
 	}
 
-	public String getPropertyVal() {
+	public PropertyValue getPropertyVal() {
 		return propertyVal;
 	}
 
-	public void setPropertyVal(String propertyVal) {
+	public void setPropertyVal(PropertyValue propertyVal) {
 		this.propertyVal = propertyVal;
 	}
-	
+
 	public ArrayList<Property> getProperties() {
 		return properties;
 	}
-	
-	
+
+
 
 }

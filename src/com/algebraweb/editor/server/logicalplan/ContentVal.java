@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-public class ContentVal implements NodeContent {
+public class ContentVal implements NodeContent, ContentNode {
 	
 	
 	/**
@@ -16,7 +16,7 @@ public class ContentVal implements NodeContent {
 	
 	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
 	
-	HashMap<String,String> attributes = new HashMap<String,String>();
+	PropertyMap attributes = new PropertyMap();
 	
 	String name;
 	String value;
@@ -30,7 +30,7 @@ public class ContentVal implements NodeContent {
 	}
 
 
-	public ArrayList<NodeContent> getChilds() {
+	public ArrayList<NodeContent> getContent() {
 		return childs;
 	}
 
@@ -40,12 +40,12 @@ public class ContentVal implements NodeContent {
 	}
 
 
-	public HashMap<String,String> getAttributes() {
+	public PropertyMap getAttributes() {
 		return attributes;
 	}
 
 
-	public void setAttributes(HashMap<String,String> attributes) {
+	public void setAttributes(PropertyMap attributes) {
 		this.attributes = attributes;
 	}
 
@@ -100,7 +100,7 @@ public class ContentVal implements NodeContent {
 		return ret+"]";
 	}
 	
-	public NodeContent[] getValuesByName(String name) {
+	public ArrayList<NodeContent> getValuesByInternalName(String name) {
 		
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
 				
@@ -110,13 +110,15 @@ public class ContentVal implements NodeContent {
 			
 			NodeContent c = i.next();
 			if (c.getName().equals(name)) temp.add(c);
+			
+			temp.addAll(c.getValuesByInternalName(name));
 					
 		}
 		
-		NodeContent[] ret = new NodeContent[0];
-			
-		return temp.toArray(ret);	
+		return temp;
 				
 	}
+
+
 	
 }
