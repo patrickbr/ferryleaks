@@ -30,7 +30,7 @@ public class XMLPlanLoader {
 		if (context.getAttribute("nodeSchemes") == null) {
 			
 			//TODO: make this configurable
-			NodeSchemeLoader l = new NodeSchemeLoader(context.getRealPath("/") + "testscheme.xml");
+			NodeSchemeLoader l = new NodeSchemeLoader(context.getRealPath("/schemes"));
 
 			Iterator<NodeScheme> i = l.parse().iterator();
 

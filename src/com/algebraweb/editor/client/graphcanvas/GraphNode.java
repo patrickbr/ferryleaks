@@ -2,6 +2,7 @@ package com.algebraweb.editor.client.graphcanvas;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -27,6 +28,7 @@ public class GraphNode {
 	private ArrayList<GraphEdge> edgesTo = new ArrayList<GraphEdge>();
 	private ArrayList<GraphEdge> edgesFrom = new ArrayList<GraphEdge>();
 	
+	private HashMap<String,ConnectedShape> connectedShapes = new HashMap<String,ConnectedShape>();
 	
 	private String textString;
 
@@ -138,6 +140,10 @@ public class GraphNode {
 
 	public void setColor(int color) {
 		this.color = color;
+	}
+	
+	public HashMap<String, ConnectedShape> getConnectedShapes() {
+		return connectedShapes;
 	}
 
 	public int getId() {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nodeschema kind="distinct">
+
+	<properties>
+	
+		<property name="color">0xffa500</property>
+
+	</properties>
+
+
+	<schema>
+	
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>

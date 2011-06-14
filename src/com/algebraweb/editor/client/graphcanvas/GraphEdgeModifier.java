@@ -20,7 +20,7 @@ public class GraphEdgeModifier {
 
 	private GraphCanvas c;
 
-	protected GraphEdgeModifier(GraphCanvas c) {
+	public GraphEdgeModifier(GraphCanvas c) {
 
 		this.c=c;
 

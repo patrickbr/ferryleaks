@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodescheme_bundle>
+<nodeschema kind="rank">
+
+	<properties>
+	
+		<property name="color">0xff3333</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+
+		<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="true">new</field>
+			
+				</fields>
+						
+			</val>
+			
+			<val xmlob="column" name="column" howoften="+">
+
+				<fields>
+
+					<field type="__COLUMN">name</field>
+					<field type="string">function</field>
+					<field type="int">position</field>
+					<field type="string">direction</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+						
+			</val>
+			
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+
+				<val xmlob="value" name="value" howoften="*">
+
+				<fields>
+					<field type="datatype">type</field>
+				</fields>
+				</val>
+							
+				
+			</val>
+
+		</gointo>
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+
+<nodeschema kind="rowrank">
+
+	<properties>
+	
+		<property name="color">0xff3333</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+
+		<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="true">new</field>
+			
+				</fields>
+						
+			</val>
+			
+			<val xmlob="column" name="column" howoften="+">
+
+				<fields>
+
+					<field type="__COLUMN">name</field>
+					<field type="string">function</field>
+					<field type="int">position</field>
+					<field type="string">direction</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+						
+			</val>
+			
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="string">name</field>
+					<field type="boolean">new</field>
+			
+				</fields>
+
+				<val xmlob="value" name="value" howoften="*">
+
+				<fields>
+					<field type="datatype">type</field>
+				</fields>
+				</val>
+							
+				
+			</val>
+
+		</gointo>
+		
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>
+</nodescheme_bundle>

@@ -14,6 +14,7 @@ import com.algebraweb.editor.server.logicalplan.ContentVal;
 import com.algebraweb.editor.server.logicalplan.NodeContent;
 import com.algebraweb.editor.server.logicalplan.PlanNode;
 import com.algebraweb.editor.server.logicalplan.QueryPlan;
+import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeScheme;
 
 public class XMLPlanFiller implements GraphCanvasFiller{
@@ -47,8 +48,11 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 	@Override
 	public void init() {
 		
-		QueryPlan qp = (QueryPlan) session.getAttribute("queryPlan");
-		it = getRawNodes(qp).iterator();
+		QueryPlanBundle qps = (QueryPlanBundle) session.getAttribute("queryPlans");
+		
+		//TODO: make this workable for planids
+		
+		it = getRawNodes(qps.getPlan(0)).iterator();
 		
 	}
 

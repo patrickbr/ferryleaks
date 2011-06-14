@@ -14,4 +14,6 @@ public interface NodeContent extends ContentNode {
 	public PropertyMap getAttributes();
 
 	public void setAttributes(PropertyMap attributes);
+	
+	public boolean removeContent(NodeContent c);
 }

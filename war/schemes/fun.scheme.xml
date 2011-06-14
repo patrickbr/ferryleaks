@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nodeschema kind="fun">
+
+	<properties>
+	
+		<property name="color">0x3600ff</property>
+	
+	</properties>
+
+
+	<schema>
+	
+	
+	  	<gointo xmlob="content" howoften="1">
+	  	
+	  	    <val xmlob="column" name="column" howoften="1">
+	  	    
+	  	    	<fields>
+	  	    
+	  	    		<field type="function">name</field>
+	  	    	</fields>
+	  	    
+	  	    </val>
+	  	    
+	  	    <val xmlob="column" name="column" howoften="1">
+	  	    
+	  	    	<fields>
+	  	    		<field type="__COLUMN_NEW">name</field>
+	  	   	 		<field type="boolean" must_be="true">new</field>
+	  	    	</fields>
+	  	    
+	  	    </val>
+
+			<val xmlob="column" name="column" howoften="*">
+
+				<fields>
+
+					<field type="__COLUMN">name</field>
+					<field type="boolean" must_be="false">new</field>
+					<field type="natural">position</field>
+					
+			
+				</fields>
+						
+			</val>
+	
+
+		
+
+		</gointo>
+	
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>

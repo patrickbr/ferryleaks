@@ -49,6 +49,30 @@ public class PlanNode implements Serializable,ContentNode {
 		this.scheme = scheme;
 	}
 
+	
+	
+
+	public boolean deleteChild(int nid) {
+
+
+		Iterator<NodeContent> it =  getValuesByInternalName("edgeto").iterator();
+
+		while (it.hasNext()) {
+
+			NodeContent current = it.next();
+		
+			if (Integer.parseInt(current.getAttributes().get("to").getVal()) == nid) {
+
+				System.out.println("gurra");
+				if (removeContent(current)) System.out.println("gurri");;
+				return true;	
+
+			}
+		}
+
+		return false;
+	}
+
 
 	public ArrayList<PlanNode> getChilds() {
 
@@ -90,7 +114,7 @@ public class PlanNode implements Serializable,ContentNode {
 	public void setKind(String kind) {
 		this.kind = kind;
 	}
-	
+
 
 	public ArrayList<NodeContent> getValuesByInternalName(String name) {
 
@@ -102,39 +126,85 @@ public class PlanNode implements Serializable,ContentNode {
 
 			NodeContent c = i.next();
 			if (c.getName().equals(name)) temp.add(c);
-			
+
 			//go into child
 			temp.addAll(c.getValuesByInternalName(name));
-			
+
 		}
 
 		return temp;
 
 	}
+	
+	
+	public boolean removeContent(NodeContent con) {
 
+
+		Iterator<NodeContent> i = content.iterator();
+
+		while (i.hasNext()) {
+
+			NodeContent c = i.next();
+			if (c == con) {
+				i.remove();
+				return true;
+			}
+			
+			if (c.removeContent(con)) return true;
+			
+		}
+
+		
+		return false;
+
+	}
+	
+
+	public ArrayList<Property> getReferencableColumnsWithoutAdded() {
+
+		ArrayList<Property> ret = new ArrayList<Property>();
+
+
+
+
+
+		Iterator<PlanNode> i = this.getChilds().iterator();
+
+		while (i.hasNext()) {
+
+			ArrayList<Property> gurr = i.next().getReferencableColumnsFromValues();
+
+			ret.addAll(gurr);
+
+		}
+
+
+		return ret;
+
+	}
+
+	public boolean resetsColumns() {
+
+
+		return (this.getScheme().getProperties().containsKey("reset_columns") &&
+				this.getScheme().getProperties().get("reset_columns").equals("true"));
+
+	}
 
 	public ArrayList<Property> getReferencableColumnsFromValues() {
 
 		ArrayList<Property> ret = new ArrayList<Property>();
 
+		if (!resetsColumns()) {
 
-		if (!(this.getScheme().getProperties().containsKey("reset_columns") &&
-				this.getScheme().getProperties().get("reset_columns").equals("true"))) {
+			ret.addAll(getReferencableColumnsWithoutAdded());
+
+			ret.removeAll(getRemovedColumns());
 
 
-			Iterator<PlanNode> i = this.getChilds().iterator();
-
-			while (i.hasNext()) {
-
-				ret.addAll(i.next().getReferencableColumnsFromValues());
-
-			}
 		}
 
-
-		ret.removeAll(getRemovedColumns());
 		ret.addAll(getAddedColumns());
-		
 
 		return ret;
 

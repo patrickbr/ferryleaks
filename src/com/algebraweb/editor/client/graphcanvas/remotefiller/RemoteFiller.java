@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 
 import com.algebraweb.editor.client.RawNode;
+import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -17,6 +18,8 @@ public class RemoteFiller {
 	
 	private GraphCanvasRemoteFillingMachine m;
 	
+	GraphManipulationCallback cb;
+	
 	private RemoteFillingServiceAsync commServ = (RemoteFillingServiceAsync) GWT.create(RemoteFillingService.class);
 	
 	private String filler;
@@ -24,13 +27,15 @@ public class RemoteFiller {
 	public RemoteFiller(String filler) {
 		
 		this.filler=filler;
+		
 				
 	}
 	
-	public void init(GraphCanvasRemoteFillingMachine m) {
+	public void init(GraphCanvasRemoteFillingMachine m, GraphManipulationCallback cb) {
 			
 		commServ.getRawNodes(filler,nodeCallback);
 		this.m=m;
+		this.cb=cb;
 		
 	}
 	
@@ -47,7 +52,7 @@ public class RemoteFiller {
 
 			RemoteFiller.this.nodes = result;
 		    RemoteFiller.this.m.fillWith(RemoteFiller.this.nodes);
-			
+			if (RemoteFiller.this.cb!= null) RemoteFiller.this.cb.onComplete();
 				
 		}
 

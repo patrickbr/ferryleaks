@@ -1,5 +1,8 @@
 package com.algebraweb.editor.client;
 
+import java.util.ArrayList;
+
+import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class RemoteManipulationMessage implements IsSerializable{
@@ -7,17 +10,26 @@ public class RemoteManipulationMessage implements IsSerializable{
 	
 	private int returnCode;
 	private String message;
+	private ValidationResult validationResult;
+	
+	private ArrayList<Integer> nodesAffected = new ArrayList<Integer>();
+	
+	private String action;
 	
 	
-	public RemoteManipulationMessage() {
+	public RemoteManipulationMessage(String action, int returnCode, String message, ValidationResult res) {
+		
+		this.returnCode=returnCode;
+		this.action=action;
+		this.message=message;
+		this.validationResult = res;
+		
 		
 	}
 	
-	public RemoteManipulationMessage(int returnCode, String message) {
+	public RemoteManipulationMessage() {
 		
-		this.returnCode = returnCode;
-		this.message = message;
-				
+	
 	}
 
 	public int getReturnCode() {
@@ -35,7 +47,27 @@ public class RemoteManipulationMessage implements IsSerializable{
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
+
+	public ValidationResult getValidationResult() {
+		return validationResult;
+	}
+
+	public void setValidationResult(ValidationResult validationResult) {
+		this.validationResult = validationResult;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public ArrayList<Integer> getNodesAffected() {
+		return nodesAffected;
+	}
+
+		
 
 }

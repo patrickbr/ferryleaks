@@ -32,7 +32,7 @@
   
   <servlet-mapping>
     <servlet-name>PlanModelCommunicationServlet</servlet-name>
-    <url-pattern>/algebraeditor/manipulation</url-pattern>
+    <url-pattern>/algebraeditor/manipulate</url-pattern>
   </servlet-mapping>
   
 

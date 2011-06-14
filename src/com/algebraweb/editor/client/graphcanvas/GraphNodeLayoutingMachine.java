@@ -118,8 +118,8 @@ public class GraphNodeLayoutingMachine {
 		
 		**/
 		
-		offsetX=0;
-		offsetY=0;
+		offsetX=50;
+		offsetY=50;
 		
 		a = GraphNodeLayoutingMachine.this.nodes.iterator();
 		

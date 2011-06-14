@@ -37,7 +37,7 @@ public class GraphCanvas extends Raphael  {
 
 	private boolean mouseOverNode = false;
 
-	private NodePopup popup = new NodePopup();
+	private NodePopup popup;
 
 
 	private static LoadingMessagePopUp loadingMessagePopUp = new LoadingMessagePopUp();
@@ -68,9 +68,33 @@ public class GraphCanvas extends Raphael  {
 		this.height=height;
 		this.width=width;
 
-		gnm = new GraphNodeModifier(this);
-		gem = new GraphEdgeModifier(this);
 	}
+
+
+
+
+
+
+
+	public void setGraphNodeModifier(GraphNodeModifier gnm) {
+		this.gnm = gnm;
+	}
+
+
+
+
+	public GraphEdgeModifier getGem() {
+		return gem;
+	}
+
+
+
+
+	public void setGraphEdgeModifier(GraphEdgeModifier gem) {
+		this.gem = gem;
+	}
+
+
 
 
 	/**
@@ -203,7 +227,7 @@ public class GraphCanvas extends Raphael  {
 
 				}
 
-				if (popupDelay != null && !mouseOverNode(event.getClientX(), event.getClientY())) popupDelay.cancel();
+				if (popup!= null && popupDelay != null && !mouseOverNode(event.getClientX(), event.getClientY())) popupDelay.cancel();
 
 				if (GraphCanvas.this.dragNode != null) {
 					DOM.eventGetCurrentEvent().preventDefault();
@@ -566,13 +590,31 @@ public class GraphCanvas extends Raphael  {
 
 
 		loadingMessagePopUp.show(msg);
-		
+
 
 	}
 
 	public static void hideLoading() {
 
 		loadingMessagePopUp.hide();
+
+	}
+
+	public Rect rectFactory(double x, double y, double w, double h) {
+
+		return new Rect(x, y, w, h);
+
+	}
+
+	public Text textFactory(double x, double y, String text) {
+
+		return new Text(x, y, text);
+
+	}
+
+	public void hangShapeOntoNode(String identifier, ConnectedShape s, int nid) {
+
+		gnm.connectShapeToNode(identifier, s, this.getGraphNodeById(nid));
 
 	}
 

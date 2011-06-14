@@ -38,6 +38,7 @@ public class PlanParser {
 
 	private File file;
 	private HashMap<String,NodeScheme> schemes;
+	private String currentSchema = "";
 
 	public PlanParser(HashMap<String,NodeScheme> schemes, String file) {
 
@@ -82,10 +83,6 @@ public class PlanParser {
 			System.out.println(i.next().getPropertyVal().getVal());
 		}
 		
-		Validator v = new ReferencedColumnsValidator();
-		
-		v.validate(ret.getPlanNodeById(4));
-
 		return ret;
 
 	}
@@ -128,6 +125,7 @@ public class PlanParser {
 	private void fillNode(PlanNode n, Element nodeEl) {
 
 		NodeScheme s = getScheme(n.getKind());
+		currentSchema = n.getKind();
 
 		ArrayList<GoAble> schema = s.getSchema();
 		n.setContent(gurr(nodeEl, n.getContent(), schema));
@@ -455,7 +453,7 @@ public class PlanParser {
 
 		}
 
-		ret += " in " + f.getName();
+		ret += " for node type '" + currentSchema + "' in "  + f.getName();
 
 		return ret;
 	}

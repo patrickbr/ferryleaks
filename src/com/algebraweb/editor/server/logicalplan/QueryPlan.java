@@ -36,6 +36,11 @@ public class QueryPlan implements Serializable {
 		this.plan = plan;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	
+	
 	
 	public String toString() {
 				
@@ -66,11 +71,9 @@ public class QueryPlan implements Serializable {
 			
 			
 		}
-		
-		
+				
 		return null;
-		
-		
+				
 	}
  	
 	

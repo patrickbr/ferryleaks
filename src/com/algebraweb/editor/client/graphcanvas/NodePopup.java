@@ -9,29 +9,28 @@ public class NodePopup extends PopupPanel {
 	private int nodeid = -1;
 
     public NodePopup() {
-      // PopupPanel's constructor takes 'auto-hide' as its boolean parameter.
-      // If this is set, the panel closes itself automatically when the user
-      // clicks outside of it.
      
       super(true);
       
       super.addStyleName("nodePopUp");
      
       super.setAnimationEnabled(true);
-      super.setPixelSize(100, 160);
+   
    
 
-
-      // PopupPanel is a SimplePanel, so you have to set it's widget property to
-      // whatever you want its contents to be.
+    }
     
+    protected void render() {
+    	
+    	
+    	
     }
     
     public void showAt(int x, int y) {
     	
+          super.clear();
+    	  render();
     	  super.setPopupPosition(x, y);
-    	  super.clear();
-    	  super.add(new Label("This is node #" + nodeid));
     	  super.show();
     	    	
     }

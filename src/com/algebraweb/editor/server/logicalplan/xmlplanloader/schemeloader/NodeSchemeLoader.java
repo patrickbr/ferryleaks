@@ -1,5 +1,6 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -37,32 +38,38 @@ public class NodeSchemeLoader {
 		System.out.println("Parsing schemes...");
 		ArrayList<NodeScheme> ret = new ArrayList<NodeScheme>();
 
-		try{
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(file);
-			
-			Element bundle = (Element) doc.getElementsByTagName("nodescheme_bundle").item(0);
-				
-			NodeList nodeschemas;
-					
-			if (bundle != null) {
-				nodeschemas = bundle.getElementsByTagName("nodeschema");
-			}else{
-				nodeschemas = doc.getElementsByTagName("nodeschema");
-			}
+		File[] files = file.listFiles(new SchemeFileFilter());
 
-			
-			for (int i =0;i<nodeschemas.getLength();i++) {
-				
+		for (File file : files) {
+
+			try{
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				Document doc = db.parse(file);
+
+				Element bundle = (Element) doc.getElementsByTagName("nodescheme_bundle").item(0);
+
+				NodeList nodeschemas;
+
+				if (bundle != null) {
+					nodeschemas = bundle.getElementsByTagName("nodeschema");
+				}else{
+					nodeschemas = doc.getElementsByTagName("nodeschema");
+				}
+
+
+				for (int i =0;i<nodeschemas.getLength();i++) {
+
 					ret.add(parseSchema((Element) nodeschemas.item(i)));
-								
+
+				}
+
+			}catch(IOException e) {e.printStackTrace();}
+			catch(SAXException e) {e.printStackTrace();} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
-		}catch(IOException e) {e.printStackTrace();}
-		catch(SAXException e) {e.printStackTrace();} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 
@@ -72,31 +79,31 @@ public class NodeSchemeLoader {
 
 
 	private NodeScheme parseSchema(Element nodeschema) {
-	
+
 		NodeScheme ret;
 		NodeList childs = nodeschema.getElementsByTagName("schema").item(0).getChildNodes();
 
 		System.out.println("found scheme for type '" + nodeschema.getAttribute("kind") + "'");
-		
+
 		ret = new NodeScheme(nodeschema.getAttribute("kind"));
 
-	    Element properties = (Element) nodeschema.getElementsByTagName("properties").item(0);
-	    
-	    for (int i=0;i< properties.getElementsByTagName("property").getLength();i++) {
-	    	
-	    	Node current =  properties.getElementsByTagName("property").item(i);
-	    	
-	    	ret.getProperties().put(current.getAttributes().getNamedItem("name").getNodeValue(),
-	    			current.getFirstChild().getNodeValue());
-	    		    	
-	    }
+		Element properties = (Element) nodeschema.getElementsByTagName("properties").item(0);
+
+		for (int i=0;i< properties.getElementsByTagName("property").getLength();i++) {
+
+			Node current =  properties.getElementsByTagName("property").item(i);
+
+			ret.getProperties().put(current.getAttributes().getNamedItem("name").getNodeValue(),
+					current.getFirstChild().getNodeValue());
+
+		}
 
 		for (int i=0;i<childs.getLength();i++) {
 
 			if (!(childs.item(i) instanceof Text)) {
 
 				Element e = (Element) childs.item(i);
-			
+
 				if (e.getTagName().equals("gointo")) {
 					ret.addToSchema(goInto(e));
 				}
@@ -153,16 +160,16 @@ public class NodeSchemeLoader {
 	public void loadFields(Element e,Value v) {
 
 		Element fields = (Element) e.getElementsByTagName("fields").item(0);
-		
+
 		if (fields ==null) return;
 
 		NodeList fieldList = fields.getElementsByTagName("field");
 
 		for (int i=0;i<fieldList.getLength();i++) {
-			
+
 			Field f = new Field(fieldList.item(i).getAttributes().getNamedItem("type").getNodeValue(),
 					getTextValue((Element)fieldList.item(i)));
-			
+
 			if (((Element)fieldList.item(i)).hasAttribute("must_be")) {
 				f.setMust_be(fieldList.item(i).getAttributes().getNamedItem("must_be").getNodeValue());
 			}
@@ -205,7 +212,7 @@ public class NodeSchemeLoader {
 
 		return ret;
 	}
-	
+
 	private String getTextValue(Element el) {
 
 		NodeList childs = el.getChildNodes();
@@ -217,6 +224,19 @@ public class NodeSchemeLoader {
 		}
 
 		return "";
+
+	}
+
+
+	private class SchemeFileFilter implements FileFilter
+	{
+
+		public boolean accept(File file)
+		{
+
+			return (file.getName().toLowerCase().endsWith(".scheme.xml"));
+
+		}
 
 	}
 

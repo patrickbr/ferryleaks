@@ -92,6 +92,28 @@ public class ValGroup implements NodeContent, ContentNode{
 		return temp;
 				
 	}
+	
+	public boolean removeContent(NodeContent con) {
+
+
+		Iterator<NodeContent> i = childs.iterator();
+
+		while (i.hasNext()) {
+
+			NodeContent c = i.next();
+			if (c == con) {
+				i.remove();
+				return true;
+			}
+
+			//go into child
+			return c.removeContent(con);
+
+		}
+
+		return false;
+
+	}
 
 
 

@@ -1,13 +1,26 @@
-package com.algebraweb.editor.server.logicalplan.validation;
+package com.algebraweb.editor.client.validation;
 
-public class ValidationError {
+import java.io.Serializable;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 
+public class ValidationError implements IsSerializable {
+
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1855604011450094810L;
 	private int nodeId;
 	private String errorMsg;
 
 
+	public ValidationError() {
+		
+	}
 
 	public ValidationError(int nodeId, String errorMsg) {
 

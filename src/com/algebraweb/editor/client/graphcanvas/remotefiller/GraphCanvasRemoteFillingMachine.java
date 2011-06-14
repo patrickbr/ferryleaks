@@ -7,6 +7,7 @@ import java.util.Iterator;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
+import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 
 public class GraphCanvasRemoteFillingMachine {
@@ -57,8 +58,7 @@ public class GraphCanvasRemoteFillingMachine {
 
 		}
 
-		//((DragPanel)c.getParent()).center(c.getWidth(),c.getHeight());
-		
+	
 		GraphCanvas.hideLoading();
 				
 		//automatically sort...
@@ -69,10 +69,10 @@ public class GraphCanvasRemoteFillingMachine {
 	}
 
 
-	public void fill(RemoteFiller filler) {
+	public void fill(RemoteFiller filler, GraphManipulationCallback cb) {
 
 		GraphCanvas.showLoading("Loading...");
-		filler.init(this);
+		filler.init(this,cb);
 
 
 	}

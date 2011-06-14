@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nodeschema kind="eqjoin">
+
+	<properties>
+	
+		<property name="color">0x00ff00</property>
+	
+	</properties>
+
+
+	<schema>
+	
+	
+	  	<gointo xmlob="content" howoften="1">
+	  	
+	  	    <val xmlob="column" name="column" howoften="1">
+	  	    
+	  	      <fields>
+	  	    
+	  	    	<field type="__COLUMN">name</field>
+	  	    	<field type="boolean" must_be="false">new</field>
+	  	    	<field type="integer" must_be="1">position</field>
+	  	    	
+	  	      </fields>
+	  	    
+	  	    </val>
+	  	    
+	  	     <val xmlob="column" name="column" howoften="1">
+	  	    
+	  	      <fields>
+	  	    
+	  	    	<field type="__COLUMN">name</field>
+	  	    	<field type="boolean" must_be="false">new</field>
+	  	    	<field type="integer" must_be="2">position</field>
+	  	    	
+	  	      </fields>
+	  	    
+	  	    </val>
+	  	    
+	  	    
+	  	   	
+
+		
+
+		</gointo>
+	
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 
+import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
+
 import gwtupload.server.UploadAction;
 import gwtupload.server.exceptions.UploadActionException;
 
@@ -57,8 +59,13 @@ public class XMLPlanUploadServlet extends UploadAction{
 					//parse the plan, store it into the session...
 					HttpSession session = request.getSession(true);
 					XMLPlanLoader planLoader = new XMLPlanLoader();
-					session.setAttribute("queryPlan",  planLoader.parsePlan(file.getAbsolutePath(),this.getServletContext()));
+				
 					
+					QueryPlanBundle sessionBundle = new QueryPlanBundle();
+					
+					sessionBundle.addPlan(planLoader.parsePlan(file.getAbsolutePath(),this.getServletContext()));
+					session.setAttribute("queryPlans",sessionBundle);
+								
 					System.out.println( item.getName());
 					response = item.getName();
 					

@@ -6,10 +6,16 @@ import gwtupload.client.MultiUploader;
 import gwtupload.client.SingleUploader;
 import gwtupload.client.IUploadStatus.Status;
 
+import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
+import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
+import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
+import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
+import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
+import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
@@ -25,7 +31,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
-
+import com.hydro4ge.raphaelgwt.client.Raphael.Text;
 
 /**
  * A panel with some testing buttons. Highly experimental.
@@ -43,13 +49,17 @@ public class ControllPanel extends AbsolutePanel{
 	private String awaitingFileUpload;
 	private boolean dragging=false;
 
-	private GraphCanvas c;
-
-	public ControllPanel(int width, int height,GraphCanvas g) {
+	private LogicalCanvas c;
+	PlanModelManipulator m;
+	RemoteManipulationServiceAsync rmsa;
+	
+	public ControllPanel(int width, int height,LogicalCanvas g,RemoteManipulationServiceAsync rmsa) {
 
 		super();
 
 		this.c=g;
+		this.rmsa = rmsa;
+		this.m= new PlanModelManipulator(c,rmsa);
 
 		Button sortB = new Button("Sort using dot");
 
@@ -98,7 +108,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.deleteNode(c.getSelectedNode());
+				m.deleteNode(c.getSelectedNode().getId(), 0);
 
 			}});
 
@@ -144,6 +154,23 @@ public class ControllPanel extends AbsolutePanel{
 
 
 		this.add(sortBBBBBBB,40,220);
+		
+		
+		
+		Button validate = new Button("Revalidate");
+
+		validate.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				
+				m.validate(0);
+
+			}});
+
+
+		this.add(validate,40,260);
 
 		SingleUploader defaultUploader = new SingleUploader();
 		defaultUploader.setAutoSubmit(true);
@@ -254,7 +281,7 @@ public class ControllPanel extends AbsolutePanel{
 		GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
 
 
-		f.fill(new RemoteFiller("random"));
+		f.fill(new RemoteFiller("random"),null);
 
 
 
@@ -272,8 +299,15 @@ public class ControllPanel extends AbsolutePanel{
 					GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
 
 					ControllPanel.this.awaitingFileUpload = "";
-					GWT.log("finished");
-					f.fill(new RemoteFiller("xml"));
+					f.fill(new RemoteFiller("xml"), new GraphManipulationCallback() {
+						
+						@Override
+						public void onComplete() {
+							m.validate(0);
+							
+						}
+					});
+					
 				}
 
 			}

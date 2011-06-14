@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nodeschema kind="serialize relation">
+
+	<properties>
+	
+		<property name="color">0xc0c0c0</property>
+		
+	</properties>
+
+
+	<schema>
+	
+	
+	  	<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="__COLUMN">name</field>
+					<field type="boolean" must_be="false">new</field>
+					<field type="string" must_be="iter">function</field>
+							
+				</fields>
+						
+			</val>
+			
+			<val xmlob="column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="__COLUMN">name</field>
+					<field type="boolean" must_be="false">new</field>
+					<field type="string" must_be="pos">function</field>
+							
+				</fields>
+						
+			</val>
+			
+			<val xmlob="column" name="column" howoften="*">
+
+				<fields>
+
+					<field type="__COLUMN">name</field>
+					<field type="boolean" must_be="false">new</field>
+					<field type="string" must_be="item">function</field>
+					
+				</fields>
+						
+			</val>
+
+		
+
+		</gointo>
+	
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>

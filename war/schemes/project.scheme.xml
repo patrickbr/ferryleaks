@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nodeschema kind="project">
+
+	<properties>
+	
+		<property name="color">0xeeeeee</property>
+		<property name="reset_columns">true</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+	  	<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="column" howoften="*">
+
+				<fields>
+
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="true">new</field>
+					<field type="__COLUMN">old_name</field>
+					
+			
+				</fields>
+						
+			</val>
+			<val xmlob="column" name="column" howoften="*">
+
+				<fields>
+
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="false">new</field>
+					
+				</fields>
+						
+			</val>
+
+		
+
+		</gointo>
+	
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		
+				<fields>
+
+					<field type="int">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>

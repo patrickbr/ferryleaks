@@ -176,5 +176,49 @@ padding:20px !important;
 	font-size:14px;
 	
 }
+
+.logicalplan-node-errormark-text tspan {
+	
+	font-size:35px;
+	font-weight:bold;
+}
+
+.nodeinfo-block {
+	
+	font-size:11px;
+	font-style:italic;	
+	padding-top:10px;
+	
+}
+
+.nodeinfo-block h4{
+	
+	display:inline;
+	margin-right:10px;
+	font-size:11px;
+	font-style:normal;
+	
+	
+}
+
+.nodeinfo-error {
+	
+
+	font-weight:bold;
+	color:red;
+	margin-bottom:10px;
+		
+	
+}
+
+
+.nodeinfo-error-item {
+	
+
+	margin-bottom:5px;
+		
+	
+}
+	
 	
 
