@@ -9,10 +9,14 @@ import com.algebraweb.editor.client.RemoteManipulationMessage;
 import com.algebraweb.editor.client.RemoteManipulationService;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
+import com.algebraweb.editor.server.logicalplan.ContentNode;
+import com.algebraweb.editor.server.logicalplan.ContentVal;
+import com.algebraweb.editor.server.logicalplan.NodeContent;
 import com.algebraweb.editor.server.logicalplan.PlanNode;
 import com.algebraweb.editor.server.logicalplan.Property;
 import com.algebraweb.editor.server.logicalplan.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.server.logicalplan.ValGroup;
 import com.algebraweb.editor.server.logicalplan.validation.ValidationMachine;
 import com.algebraweb.editor.server.logicalplan.validation.validators.AbandondedNodeValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedColumnsValidator;
@@ -207,10 +211,68 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		}
 
 		ret+="</div>";
+		
+		
+		ret +=getNodeContentList(nodeToWork);
 
 
 		return ret;
 
+	}
+	
+	
+	private String getNodeContentList(ContentNode n) {
+		
+		
+		String ret="";
+		
+			
+		if (n instanceof ValGroup) {
+			
+			ret +="<li class='nodeinfo-valgroup'><span class='valgroupname'>" + ((ValGroup)n).getName() + "</span>";
+		}
+		
+		if (n instanceof ContentVal) {
+			
+			ret +="<li class='nodeinfo-nodecontent'><span class='contentname'>" + ((NodeContent)n).getName() + "</span><div class='content-attrs'><ul>";
+			
+			Iterator<Property> it = ((ContentVal)n).getAttributes().properties().iterator();
+			
+			while (it.hasNext()) {
+				
+				Property current = it.next();
+				
+				ret+="<li>" + current.getPropertyName() + "=" + current.getPropertyVal().getVal() + "</li>";
+				
+			}
+			ret +="</ul>";
+			ret +="</div>";
+			
+		}
+		
+		
+		ret +="<ul class='nodecontentinfo-ul'>";
+		
+		
+		Iterator<NodeContent> i = n.getContent().iterator();
+		
+		while (i.hasNext()) {
+			
+			ret += getNodeContentList(i.next());
+			
+		}
+			
+			
+		ret +="</ul>";
+		
+		
+		ret +="</li>";
+		
+		
+		
+		return ret;
+		
+		
 	}
 
 

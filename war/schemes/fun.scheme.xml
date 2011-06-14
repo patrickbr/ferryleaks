@@ -14,7 +14,7 @@
 	
 	  	<gointo xmlob="content" howoften="1">
 	  	
-	  	    <val xmlob="column" name="column" howoften="1">
+	  	    <val xmlob="kind" name="kind" howoften="1">
 	  	    
 	  	    	<fields>
 	  	    

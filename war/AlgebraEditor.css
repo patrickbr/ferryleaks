@@ -219,6 +219,49 @@ padding:20px !important;
 		
 	
 }
+
+.nodecontentinfo-ul {
+	
+	font-size:11px;
+	padding-left:0px;	
+	
+}
+
+.nodecontentinfo-ul li{
+	
+	font-size:11px;
+	list-style:none;
+	
+}
+
+
+.nodecontentinfo-ul .nodecontentinfo-ul{
+	
+	font-size:11px;
+	padding-left:30px;	
+	
+}
+
+.content-attrs li {
+
+	font-style:italic;
+	list-style:circle !important;	
+	
+}
+
+.contentname,.valgroupname {
+	
+	font-weight:bold;
+	}
+	
+
+
+.nodecontentinfo-ul .nodecontentinfo-ul li{
+	
+	font-size:11px;
+	list-style:square;
+	
+}
 	
 	
 
