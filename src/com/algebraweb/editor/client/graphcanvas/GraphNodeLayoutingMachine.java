@@ -130,8 +130,8 @@ public class GraphNodeLayoutingMachine {
 			gnm.animateTo(current,current.getX()+offsetX, current.getY()+offsetY);
 
 		}
-		
-		((DragPanel)gnm.getCanvas().getParent()).center(gnm.getCanvas().getWidth(),gnm.getCanvas().getHeight());
+		((DragPanel)gnm.getCanvas().getParent()).scrollToUpperLeft();
+		//((DragPanel)gnm.getCanvas().getParent()).center(gnm.getCanvas().getWidth(),gnm.getCanvas().getHeight());
 	}
 	
 

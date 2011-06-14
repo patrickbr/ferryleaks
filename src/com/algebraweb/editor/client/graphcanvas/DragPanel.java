@@ -1,6 +1,8 @@
 package com.algebraweb.editor.client.graphcanvas;
 
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -106,6 +108,12 @@ public class DragPanel extends FlowPanel {
 
 
 	}
+	
+	public void scrollToUpperLeft() {
+		
+		scrollTo(0,0);
+		
+	}
 
 
 
@@ -119,8 +127,7 @@ public class DragPanel extends FlowPanel {
 		mainDragOffsetTop = Window.getScrollTop();
 		mainDragOffsetY = y;
 
-		this.addStyleName("movy");
-
+		
 	}
 
 
@@ -129,8 +136,7 @@ public class DragPanel extends FlowPanel {
 		mainDragOffsetX = -1;
 		mainDragOffsetY = -1;
 
-		this.removeStyleName("movy");
-
+		
 	}
 
 

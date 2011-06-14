@@ -18,6 +18,7 @@ import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -198,8 +199,7 @@ public class ControllPanel extends AbsolutePanel{
 			public void onMouseUp(MouseUpEvent event) {
 
 				ControllPanel.this.dragging = false;
-				c.removeStyleName("movy");
-				removeStyleName("movy");
+
 			}
 
 
@@ -233,8 +233,9 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
 
-				ControllPanel.this.c.addStyleName("movy");
-				ControllPanel.this.addStyleName("movy");
+
+				
+
 				dragStart(event.getX(), event.getY());
 
 
