@@ -74,7 +74,7 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 			
 			RawNode temp = new RawNode(current.getId(), current.getKind(), 0xCCCCCC, 130, 25);
 			
-			NodeContent[] edges = current.getValuesByInternalName("edgeto").toArray(new NodeContent[0]);
+			NodeContent[] edges = current.getAllContentWithInternalName("edge").toArray(new NodeContent[0]);
 			
 			for (NodeContent e : edges) {
 				

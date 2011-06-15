@@ -9,11 +9,11 @@ public interface NodeContent extends ContentNode {
 
 	public String getName();
 
-	public void setName(String name);
-	
 	public PropertyMap getAttributes();
 
 	public void setAttributes(PropertyMap attributes);
 	
 	public boolean removeContent(NodeContent c);
+	
+	public String getInternalName();
 }

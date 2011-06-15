@@ -45,7 +45,8 @@ public class Value extends GoInto{
 	public boolean hasFields() {
 		return fields.size()>0;
 	}
-		
+	
+			
 	public String toString() {
 		
 		String ret =  "{VAL: name=" + valName + " howOften=" + super.howOften + " XMLob:" + super.xmlObject + " childs:(";

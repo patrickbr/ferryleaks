@@ -18,7 +18,7 @@
 	  	    
 	  	      <fields>
 	  	    
-	  	    	<field type="__COLUMN">name</field>
+	  	    	<field type="__COLUMN{1}">name</field>
 	  	    	<field type="boolean" must_be="false">new</field>
 	  	    	<field type="integer" must_be="1">position</field>
 	  	    	
@@ -30,7 +30,7 @@
 	  	    
 	  	      <fields>
 	  	    
-	  	    	<field type="__COLUMN">name</field>
+	  	    	<field type="__COLUMN{2}">name</field>
 	  	    	<field type="boolean" must_be="false">new</field>
 	  	    	<field type="integer" must_be="2">position</field>
 	  	    	
@@ -45,7 +45,7 @@
 
 		</gointo>
 	
-		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		<val xmlob="edge" name="edgeto" howoften="2">
 		
 				<fields>
 

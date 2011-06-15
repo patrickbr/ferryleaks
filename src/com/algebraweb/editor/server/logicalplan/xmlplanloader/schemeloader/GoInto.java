@@ -66,5 +66,10 @@ public class GoInto implements GoAble {
 		
 	}
 
+	@Override
+	public String getInternalName() {
+		return xmlObject;
+	}
 
+	
 }

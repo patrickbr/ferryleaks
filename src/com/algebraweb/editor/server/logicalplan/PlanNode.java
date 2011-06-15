@@ -55,7 +55,7 @@ public class PlanNode implements Serializable,ContentNode {
 	public boolean deleteChild(int nid) {
 
 
-		Iterator<NodeContent> it =  getValuesByInternalName("edgeto").iterator();
+		Iterator<NodeContent> it =  getAllContentWithInternalName("edge").iterator();
 
 		while (it.hasNext()) {
 
@@ -63,7 +63,6 @@ public class PlanNode implements Serializable,ContentNode {
 		
 			if (Integer.parseInt(current.getAttributes().get("to").getVal()) == nid) {
 
-				System.out.println("gurra");
 				if (removeContent(current)) System.out.println("gurri");;
 				return true;	
 
@@ -78,7 +77,7 @@ public class PlanNode implements Serializable,ContentNode {
 
 		ArrayList<PlanNode> ret = new ArrayList<PlanNode>();
 
-		NodeContent[] edges = getValuesByInternalName("edgeto").toArray(new NodeContent[0]);
+		NodeContent[] edges = getAllContentWithInternalName("edge").toArray(new NodeContent[0]);
 
 		for (NodeContent edge : edges) {
 			ret.add(myPlan.getPlanNodeById(Integer.parseInt(edge.getAttributes().get("to").getVal())));
@@ -116,7 +115,7 @@ public class PlanNode implements Serializable,ContentNode {
 	}
 
 
-	public ArrayList<NodeContent> getValuesByInternalName(String name) {
+	public ArrayList<NodeContent> getAllContentWithInternalName(String name) {
 
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
 
@@ -125,10 +124,10 @@ public class PlanNode implements Serializable,ContentNode {
 		while (i.hasNext()) {
 
 			NodeContent c = i.next();
-			if (c.getName().equals(name)) temp.add(c);
+			if (c.getInternalName().equals(name)) temp.add(c);
 
 			//go into child
-			temp.addAll(c.getValuesByInternalName(name));
+			temp.addAll(c.getAllContentWithInternalName(name));
 
 		}
 
@@ -163,9 +162,6 @@ public class PlanNode implements Serializable,ContentNode {
 	public ArrayList<Property> getReferencableColumnsWithoutAdded() {
 
 		ArrayList<Property> ret = new ArrayList<Property>();
-
-
-
 
 
 		Iterator<PlanNode> i = this.getChilds().iterator();
@@ -226,7 +222,10 @@ public class PlanNode implements Serializable,ContentNode {
 
 			for (String type : types) {
 
-				if (current.getPropertyVal().getType().equals(type)) ret.add(current);
+				if (current.getPropertyVal().getType().matches(type)) {
+		
+					ret.add(current);
+				}
 
 			}
 		}
@@ -245,7 +244,7 @@ public class PlanNode implements Serializable,ContentNode {
 
 	public ArrayList<Property> getReferencedColumns() {
 
-		String[] types = {"__COLUMN","__COLUMN_REMOVE"};
+		String[] types = {"__COLUMN[\\{]?[0-9]*[\\}]?","__COLUMN_REMOVE"};
 
 		ArrayList<Property> ret = new ArrayList<Property>();
 
@@ -308,6 +307,22 @@ public class PlanNode implements Serializable,ContentNode {
 		}
 
 		return ret+"]}";
+	}
+
+	@Override
+	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
+		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
+
+		Iterator<NodeContent> i = content.iterator();
+
+		while (i.hasNext()) {
+
+			NodeContent c = i.next();
+			if (c.getInternalName().equals(name)) temp.add(c);
+
+		}
+
+		return temp;
 	}
 
 }

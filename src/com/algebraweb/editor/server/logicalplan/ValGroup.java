@@ -25,10 +25,14 @@ public class ValGroup implements NodeContent, ContentNode{
 	private PropertyMap attributes = new PropertyMap();
 
 	private String name;
+	private String internalName;
 	
 	public ValGroup(String name) {
 		
 		this.name=name;
+		
+		//TODO: this should be different in the future
+		this.internalName = name;
 				
 	}
 
@@ -54,9 +58,6 @@ public class ValGroup implements NodeContent, ContentNode{
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	//TODO: experimental
 	
@@ -74,7 +75,7 @@ public class ValGroup implements NodeContent, ContentNode{
 		return ret + "}";
 	}
 	
-	public ArrayList<NodeContent> getValuesByInternalName(String name) {
+	public ArrayList<NodeContent> getAllContentWithInternalName(String name) {
 		
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
 				
@@ -83,9 +84,9 @@ public class ValGroup implements NodeContent, ContentNode{
 		while (i.hasNext()) {
 			
 			NodeContent c = i.next();
-			if (c.getName().equals(name)) temp.add(c);
+			if (c.getInternalName().equals(name)) temp.add(c);
 			
-			temp.addAll(c.getValuesByInternalName(name));
+			temp.addAll(c.getAllContentWithInternalName(name));
 					
 		}
 		
@@ -113,6 +114,28 @@ public class ValGroup implements NodeContent, ContentNode{
 
 		return false;
 
+	}
+
+	@Override
+	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
+		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
+		
+		Iterator<NodeContent> i = childs.iterator();
+				
+		while (i.hasNext()) {
+			
+			NodeContent c = i.next();
+			if (c.getInternalName().equals(name)) temp.add(c);
+								
+		}
+		
+		return temp;
+	}
+
+	@Override
+	public String getInternalName() {
+		
+		return internalName;
 	}
 
 

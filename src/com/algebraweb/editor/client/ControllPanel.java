@@ -320,8 +320,11 @@ public class ControllPanel extends AbsolutePanel{
 		@Override
 		public void onStart(IUploader uploader) {
 
-			GWT.log("gurr:" + uploader.getFileName());
-			ControllPanel.this.awaitingFileUpload = uploader.getFileName();
+			GWT.log("gurr:" + uploader.getFileInput().getFilename());
+			
+			
+			String file = uploader.getFileName();
+			ControllPanel.this.awaitingFileUpload = file;
 
 
 

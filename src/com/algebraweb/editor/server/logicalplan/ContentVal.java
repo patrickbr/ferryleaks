@@ -21,11 +21,13 @@ public class ContentVal implements NodeContent, ContentNode {
 	String name;
 	String value;
 
+	String internalName;
 
-	public ContentVal(String name,String value) {
+	public ContentVal(String name, String internalName,String value) {
 		
 		this.name=name;
 		this.value=value;
+		this.internalName = internalName;
 		
 	}
 
@@ -53,12 +55,6 @@ public class ContentVal implements NodeContent, ContentNode {
 	public String getName() {
 		return name;
 	}
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 
 	public String getValue() {
 		return value;
@@ -100,7 +96,7 @@ public class ContentVal implements NodeContent, ContentNode {
 		return ret+"]";
 	}
 	
-	public ArrayList<NodeContent> getValuesByInternalName(String name) {
+	public ArrayList<NodeContent> getAllContentWithInternalName(String name) {
 		
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
 				
@@ -109,9 +105,9 @@ public class ContentVal implements NodeContent, ContentNode {
 		while (i.hasNext()) {
 			
 			NodeContent c = i.next();
-			if (c.getName().equals(name)) temp.add(c);
+			if (c.getInternalName().equals(name)) temp.add(c);
 			
-			temp.addAll(c.getValuesByInternalName(name));
+			temp.addAll(c.getAllContentWithInternalName(name));
 					
 		}
 		
@@ -139,6 +135,30 @@ public class ContentVal implements NodeContent, ContentNode {
 
 		return false;
 
+	}
+
+
+	@Override
+	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
+		
+		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
+		
+		Iterator<NodeContent> i = childs.iterator();
+				
+		while (i.hasNext()) {
+			
+			NodeContent c = i.next();
+			if (c.getInternalName().equals(name)) temp.add(c);
+						
+		}
+		
+		return temp;
+	}
+
+
+	@Override
+	public String getInternalName() {
+		return internalName;
 	}
 
 

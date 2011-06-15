@@ -19,7 +19,9 @@ import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.server.logicalplan.ValGroup;
 import com.algebraweb.editor.server.logicalplan.validation.ValidationMachine;
 import com.algebraweb.editor.server.logicalplan.validation.validators.AbandondedNodeValidator;
+import com.algebraweb.editor.server.logicalplan.validation.validators.GrammarValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedColumnsValidator;
+import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -45,6 +47,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		
 		vm.addValidator(new ReferencedColumnsValidator());
 		vm.addValidator(new AbandondedNodeValidator());
+		vm.addValidator(new GrammarValidator());
 
 	}
 

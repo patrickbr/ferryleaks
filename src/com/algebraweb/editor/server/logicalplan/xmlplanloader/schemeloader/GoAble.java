@@ -7,5 +7,7 @@ public interface GoAble {
 	public ArrayList<GoAble> getSchema();
 	public boolean hasChilds();
 	public String getXmlObject();
+	public String getInternalName();
+	public String getHowOften();
 
 }

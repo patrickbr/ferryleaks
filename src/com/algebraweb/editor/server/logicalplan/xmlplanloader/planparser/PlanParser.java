@@ -16,6 +16,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import com.algebraweb.editor.client.validation.ValidationError;
+import com.algebraweb.editor.client.validation.ValidationResult;
+import com.algebraweb.editor.server.logicalplan.ContentNode;
 import com.algebraweb.editor.server.logicalplan.ContentVal;
 import com.algebraweb.editor.server.logicalplan.NodeContent;
 import com.algebraweb.editor.server.logicalplan.PlanNode;
@@ -38,17 +41,19 @@ public class PlanParser {
 
 	private File file;
 	private HashMap<String,NodeScheme> schemes;
-	private String currentSchema = "";
+
 
 	public PlanParser(HashMap<String,NodeScheme> schemes, String file) {
 
 		this.schemes=schemes;
-
 		this.file = new File(file);
 
 	}
 
+	public PlanParser() {
 
+
+	}
 
 	public QueryPlan parse() {
 
@@ -74,15 +79,9 @@ public class PlanParser {
 
 			e.printStackTrace();
 		}
-				
+
 		Iterator<Property> i = ret.getPlanNodeById(4).getReferencableColumnsFromValues().iterator();
 
-		System.out.println("Referencable columns:");
-		
-		while (i.hasNext()) {
-			System.out.println(i.next().getPropertyVal().getVal());
-		}
-		
 		return ret;
 
 	}
@@ -106,7 +105,7 @@ public class PlanParser {
 						nodes.item(i).getAttributes().getNamedItem("kind").getNodeValue(),
 						getScheme(nodes.item(i).getAttributes().getNamedItem("kind").getNodeValue()),
 						mother
-						
+
 				);
 
 
@@ -125,7 +124,6 @@ public class PlanParser {
 	private void fillNode(PlanNode n, Element nodeEl) {
 
 		NodeScheme s = getScheme(n.getKind());
-		currentSchema = n.getKind();
 
 		ArrayList<GoAble> schema = s.getSchema();
 		n.setContent(gurr(nodeEl, n.getContent(), schema));
@@ -144,8 +142,7 @@ public class PlanParser {
 
 		if (g instanceof Value) {
 
-			retEl = new ContentVal(((Value)g).getValName(),getTextValue(e));
-
+			retEl = new ContentVal(((Value)g).getValName(),((Value)g).getXmlObject(),getTextValue(e));
 
 			ArrayList<Field> fields = ((Value)g).getFields();
 
@@ -165,8 +162,6 @@ public class PlanParser {
 				((ContentVal)retEl).getAttributes().put(new Property(name,value, type));
 
 			}
-
-
 		}
 
 		ArrayList<GoAble> schema = g.getSchema();
@@ -175,7 +170,6 @@ public class PlanParser {
 		return retEl;
 
 	}
-
 
 
 	private ArrayList<NodeContent> gurr(Element e, ArrayList<NodeContent> retEl,
@@ -188,29 +182,22 @@ public class PlanParser {
 			GoAble next = it.next();
 
 			if (isInteger(((GoInto) next).getHowOften())) {
-
 				int howOften = Integer.parseInt(((GoInto) next).getHowOften());
 				parseNumericCount(e, retEl, next, howOften);
-
 			}
 
 			if (((GoInto) next).getHowOften().equals("?")) {
 
 				ArrayList<Element> childs=getElementsByScheme(e,next);
 
-				if (childs.size() > 1) throw new RuntimeException(getErrorMsg("one or no",next,file));
+				for (int i=0;i<childs.size();i++) {
 
-				if (childs.size() == 1) {
 					retEl.add(parseGoAble((GoInto) next,
-							childs.get(0)));
+							childs.get(i)));
 				}
-
-
 			}
 
 			if (((GoInto) next).getHowOften().matches("\\{[0-9]+,[0-9]+\\}")) {
-
-
 
 				String howOften = ((GoInto) next).getHowOften();
 
@@ -219,44 +206,28 @@ public class PlanParser {
 
 				ArrayList<Element> childs=getElementsByScheme(e,next);
 
-				if (childs.size() > max || childs.size() < min ) {
-					throw new RuntimeException(getErrorMsg("a minimum of " + min + " and a maximum of " + max,next,file));
-				}else{
+				for (int i=0;i<childs.size();i++) {
 
-					for (int i=0;i<childs.size();i++) {
-
-						retEl.add(parseGoAble((GoInto) next,
-								childs.get(i)));
-					}
-
+					retEl.add(parseGoAble((GoInto) next,
+							childs.get(i)));
 				}
-
 
 			}
 
 			if (((GoInto) next).getHowOften().matches("\\{,[0-9]+\\}")) {
-
-
 
 				String howOften = ((GoInto) next).getHowOften();
 
 				int max = Integer.parseInt(howOften.split(",")[1].replaceAll("\\}", ""));
 
 				ArrayList<Element> childs=getElementsByScheme(e,next);
+				
+				for (int i=0;i<childs.size();i++) {
 
-				if (childs.size() > max) {
-					throw new RuntimeException(getErrorMsg("a maximum of " + max,next,file));
-				}else{
-
-					for (int i=0;i<childs.size();i++) {
-
-						retEl.add(parseGoAble((GoInto) next,
-								childs.get(i)));
-					}
-
+					retEl.add(parseGoAble((GoInto) next,
+							childs.get(i)));
 				}
-
-
+				
 			}
 
 			if (((GoInto) next).getHowOften().matches("\\{[0-9]+,\\}")) {
@@ -269,23 +240,13 @@ public class PlanParser {
 
 				ArrayList<Element> childs=getElementsByScheme(e,next);
 
-				if ( childs.size() < min ) {
-					throw new RuntimeException(getErrorMsg("a minumum of " + min,next,file));
-				}else{
+				for (int i=0;i<childs.size();i++) {
 
-					for (int i=0;i<childs.size();i++) {
-
-						retEl.add(parseGoAble((GoInto) next,
-								childs.get(i)));
-					}
-
+					retEl.add(parseGoAble((GoInto) next,
+							childs.get(i)));
 				}
-
-
+			
 			}
-
-
-
 
 			if (((GoInto) next).getHowOften().equals("*") ||
 					((GoInto) next).getHowOften().equals("+")) {
@@ -355,9 +316,9 @@ public class PlanParser {
 			GoAble next, int howOften) {
 		ArrayList<Element> childs=getElementsByScheme(e,next);
 
-		if (childs.size() < howOften) throw new RuntimeException(getErrorMsg(howOften + "",next,file));
+		//if (childs.size() < howOften) throw new RuntimeException(getErrorMsg(howOften + "",next));
 
-		for (int i=0;i<howOften;i++) {
+		for (int i=0;i<childs.size();i++) {
 
 			retEl.add(parseGoAble((GoInto) next,
 					childs.get(i)));
@@ -376,9 +337,9 @@ public class PlanParser {
 					childs.get(i)));
 		}
 
-		if (((GoInto) goAble).getHowOften().equals("+") && childs.size() == 0) {
-			throw new RuntimeException(getErrorMsg("at least 1",goAble,file));
-		}
+		//if (((GoInto) goAble).getHowOften().equals("+") && childs.size() == 0) {
+		//	throw new RuntimeException(getErrorMsg("at least 1",goAble));
+		//}
 	}
 
 
@@ -427,37 +388,5 @@ public class PlanParser {
 
 
 	}
-
-
-	private String getErrorMsg(String howMany, GoAble g, File f) {
-
-		String ret = "Expected " + howMany + " element(s) of type '" + g.getXmlObject() + "'";
-
-		if (g instanceof Value) {
-
-			ret += " with fields";
-
-			Iterator<Field> it =  ((Value)g).getFields().iterator();
-
-			while (it.hasNext()) {
-
-				Field current = it.next();
-				ret += " " + current.getVal();
-
-				if (current.getMust_be() != null) ret += " = " + current.getMust_be();
-
-				ret += ",";
-			}
-
-			if (ret.endsWith(",")) ret = ret.substring(0, ret.length()-1);
-
-		}
-
-		ret += " for node type '" + currentSchema + "' in "  + f.getName();
-
-		return ret;
-	}
-
-
 
 }

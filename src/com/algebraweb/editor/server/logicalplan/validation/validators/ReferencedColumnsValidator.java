@@ -38,8 +38,22 @@ public class ReferencedColumnsValidator implements Validator {
 
 				if (!(containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
 
-					r.addError(new ValidationError(current.getId(),"Node referers to non existing column '" + currentCol.getPropertyVal().getVal() + "'"));
-					System.out.println("Node #" + current.getId() + " referers to non existing column '" + currentCol.getPropertyVal().getVal() + "'");
+					String errorMsg = "Node referers to non existing column '" + currentCol.getPropertyVal().getVal() + "'";
+
+					if (currentCol.getPropertyVal().getType().matches("__COLUMN\\{[0-9]*\\}")) {
+
+						int num = Integer.parseInt(currentCol.getPropertyVal().getType().split("\\{")[1].replaceAll("\\}", ""));
+
+						if (current.getChilds().size() > num-1) {
+							errorMsg += " expected in node #" + current.getChilds().get(num-1).getId() + " of type " + current.getChilds().get(num-1).getKind();
+						}else{
+							errorMsg += " expected in child node #" + num;
+						}
+
+					}
+
+
+					r.addError(new ValidationError(current.getId(),errorMsg));
 
 				}
 

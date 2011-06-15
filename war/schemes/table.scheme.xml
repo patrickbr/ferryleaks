@@ -35,7 +35,7 @@
 
 		</gointo>
 		
-		<val xmlob="edge" name="edgeto" howoften="{,2}">
+		<val xmlob="edge" name="edgeto" howoften="*">
 		
 				<fields>
 

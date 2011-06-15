@@ -21,7 +21,7 @@ public class LogicalNodePopup extends NodePopup{
 		super();
 		this.c=c;
 		this.rmsa=rmsa;
-		super.setWidth("200px");
+		super.setWidth("400px");
 		
 		
 	}
