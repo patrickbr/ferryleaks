@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
+import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.validation.ValidationError;
@@ -29,6 +30,9 @@ public interface RemoteManipulationServiceAsync {
 
 	void valideContentNodeGrammer(ContentNode c, ArrayList<GoAble> schema,
 			boolean stayFlat, AsyncCallback<ArrayList<ValidationError>> callback);
+
+	void getReferencableColumnsWithoutAdded(int nid, int pid,
+			AsyncCallback<ArrayList<Property>> callback);
 	
 	
 

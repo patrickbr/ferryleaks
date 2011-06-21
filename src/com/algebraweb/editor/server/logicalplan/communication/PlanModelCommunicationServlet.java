@@ -340,4 +340,17 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	
 	}
 
+
+	@Override
+	public ArrayList<Property> getReferencableColumnsWithoutAdded(int nid,
+			int pid) {
+		
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+		
+		return nodeToWork.getReferencableColumnsWithoutAdded();
+	}
+
 }

@@ -39,10 +39,6 @@
 	  	    </val>
 	  	    
 	  	    
-	  	   	
-
-		
-
 		</gointo>
 	
 		<val xmlob="edge" humanname="Childs" namefield="to" name="edgeto" howoften="2">

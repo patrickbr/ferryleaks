@@ -21,6 +21,7 @@ public class NodeEditTree extends Tree{
 
 	NodeTreeItem root;
 	private PlanNode p;
+	
 
 	public NodeEditTree() {
 

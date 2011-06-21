@@ -18,6 +18,10 @@ public class Property implements IsSerializable {
 		this.propertyVal = value;
 
 	}
+	
+	public Property() {
+		
+	}
 
 	public Property(String name, String value, String type) {
 

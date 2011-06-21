@@ -72,6 +72,7 @@ public class NodeEditDialog extends DialogBox{
 	    
 	
 	    p.add(tree);
+	    p.setSplitPosition("150px");
 	    
 	    tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 			
@@ -86,7 +87,7 @@ public class NodeEditDialog extends DialogBox{
 						
 					}else{
 						
-					PropertyEditPanel p = new PropertyEditPanel(((ContentNodeTreeItem)event.getSelectedItem()).getContentNode(),((ContentNodeTreeItem)event.getSelectedItem()).getScheme());
+					PropertyEditPanel p = new PropertyEditPanel(NodeEditDialog.this.manServ,((ContentNodeTreeItem)event.getSelectedItem()).getContentNode(),((ContentNodeTreeItem)event.getSelectedItem()).getScheme(),node);
 					panels.put(event.getSelectedItem(),p);
 					
 					NodeEditDialog.this.setEditWidget(p);
