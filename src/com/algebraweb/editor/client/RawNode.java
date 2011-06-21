@@ -37,6 +37,12 @@ public class RawNode implements Serializable  {
 		
 	}
 
+	public RawNode(int id) {
+		
+		this.nid=id;
+		
+	}
+
 
 	public int getNid() {
 		return nid;

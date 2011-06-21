@@ -12,7 +12,7 @@ public class RemoteManipulationMessage implements IsSerializable{
 	private String message;
 	private ValidationResult validationResult;
 	
-	private ArrayList<Integer> nodesAffected = new ArrayList<Integer>();
+	private ArrayList<RawNode> nodesAffected = new ArrayList<RawNode>();
 	
 	private String action;
 	
@@ -64,7 +64,7 @@ public class RemoteManipulationMessage implements IsSerializable{
 		this.action = action;
 	}
 
-	public ArrayList<Integer> getNodesAffected() {
+	public ArrayList<RawNode> getNodesAffected() {
 		return nodesAffected;
 	}
 

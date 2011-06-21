@@ -1,10 +1,17 @@
-package com.algebraweb.editor.server.logicalplan;
+package com.algebraweb.editor.client.node;
 
-public class PropertyValue {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class PropertyValue implements IsSerializable{
 	
 	
 	private String val;
 	private String type;
+	
+	public PropertyValue() {
+		
+	}
+	
 	public String getVal() {
 		return val;
 	}

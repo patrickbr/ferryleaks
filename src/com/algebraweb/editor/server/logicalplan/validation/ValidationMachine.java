@@ -3,12 +3,10 @@ package com.algebraweb.editor.server.logicalplan.validation;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.catalina.Session;
-
+import com.algebraweb.editor.client.node.PlanNode;
+import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
-import com.algebraweb.editor.server.logicalplan.PlanNode;
-import com.algebraweb.editor.server.logicalplan.QueryPlan;
 
 public class ValidationMachine {
 

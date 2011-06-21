@@ -1,5 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
+import java.util.Iterator;
+
 import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdgeModifier;
@@ -11,6 +13,7 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 
 public class LogicalCanvas extends GraphCanvas{
+
 
 
 
@@ -35,6 +38,31 @@ public class LogicalCanvas extends GraphCanvas{
 
 
 	}
+	
+	public void clearErroneous() {
+		
+		
+		Iterator<GraphNode> it = super.getNodes().iterator();
+		
+		while (it.hasNext()) {
+			
+			GraphNode current = it.next();
+			
+			if (current.getConnectedShapes().containsKey("__logicalplan_error")) {
+				
+				super.unHangShapeFromNode("__logicalplan_error", current.getId());
+				
+			}
+			
+			
+		}
+		
+		
+		
+		
+	}
+	
+
 	
 	
 	//TODO: DUMMY

@@ -21,7 +21,7 @@ public class GraphNodeModifier {
 		return c;
 	}
 
-	
+
 	public GraphNodeModifier(GraphCanvas c) {
 
 		this.c=c;
@@ -51,20 +51,20 @@ public class GraphNodeModifier {
 
 		n.getShape().animate(newAttrs,1000, "backIn",buildAnimationCallback(n));
 		n.getText().animate(newAttrsText,1000, "backIn");
-		
+
 		Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
-		
+
 		while (it.hasNext()) {
-			
+
 			ConnectedShape current = it.next();
-			
+
 			JSONObject newAttrsShape = new JSONObject();
 
 			newAttrsShape.put("x", new JSONNumber(x + current.getX()));
 			newAttrsShape.put("y", new JSONNumber(y + current.getY()));
-			
+
 			current.getShape().animate(newAttrsShape,1000, "backIn");
-			
+
 		}
 
 	}
@@ -98,17 +98,17 @@ public class GraphNodeModifier {
 		newAttrs.put("opacity", new JSONNumber(0));
 		n.getShape().animate(newAttrs,1000);
 		n.getText().animate(newAttrs,1000);
-		
+
 		Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
-		
+
 		while (it.hasNext()) {
-			
+
 			ConnectedShape current = it.next();
-			
+
 			current.getShape().animate(newAttrs,1000);
-			
+
 		}
-		
+
 	}
 
 	protected void hideEdges(GraphNode n) {
@@ -143,7 +143,7 @@ public class GraphNodeModifier {
 		newAttrs.put("stroke-width", new JSONNumber(2));
 
 		n.getShape().animate(newAttrs, 300);
-	
+
 
 		Iterator<GraphEdge> i = n.getEdgesTo().iterator();
 		Iterator<GraphEdge> j = n.getEdgesFrom().iterator();
@@ -193,19 +193,19 @@ public class GraphNodeModifier {
 
 			n.getText().attr("x", x + n.getWidth()/2);
 			n.getText().attr("y", y + n.getHeight()/2);
-			
-			
+
+
 			Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
-			
+
 			while (it.hasNext()) {
-				
+
 				ConnectedShape current = it.next();
-				
+
 				current.getShape().attr("x", x + current.getX());
 				current.getShape().attr("y", y + current.getY());
-				
+
 			}
-			
+
 
 			n.setX(x);
 			n.setY(y);
@@ -240,8 +240,8 @@ public class GraphNodeModifier {
 			return (int) n.getShape().getBBox().height();
 		}
 	}
-	
-	
+
+
 	protected int getOffset(GraphNode n,int orientation,GraphEdge e, boolean hasChanged, int oldOrientation, boolean forceall,boolean quiet) {
 
 		if (hasChanged) {
@@ -343,23 +343,31 @@ public class GraphNodeModifier {
 
 		n.getText().remove();
 		n.getShape().remove();
-		
+
 		Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
-		
+
 		while (it.hasNext()) {
-			
+
 			ConnectedShape current = it.next();
-			
+
 			current.getShape().remove();
-			
+
 		}
 	}
 
 	protected void connectShapeToNode(String identifier,ConnectedShape s, GraphNode n) {
-		
+
 		n.getConnectedShapes().put(identifier, s);
 		s.getShape().attr("x",n.getX() + s.getX());
 		s.getShape().attr("y",n.getY() + s.getY());		
+	}
+
+	protected void removeShapeFromNode(String identifier,GraphNode n) {
+
+		ConnectedShape s = n.getConnectedShapes().get(identifier);
+		s.getShape().remove();
+		n.getConnectedShapes().remove(identifier);
+		
 	}
 
 	public static MouseMoveHandler mouseMoveHandlerBuilder(final GraphNode n) {
@@ -369,18 +377,18 @@ public class GraphNodeModifier {
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 
-				DragPanel.preventDrag();
+				FullScreenDragPanel.preventDrag();
 
 				if (!n.aniLock()) {
 
 					JSONObject newAttrs = new JSONObject();
 
-					
-						newAttrs.put("stroke", new JSONString("#000"));
-				
 
-						n.getShape().animate(newAttrs, 100);
-				
+					newAttrs.put("stroke", new JSONString("#000"));
+
+
+					n.getShape().animate(newAttrs, 100);
+
 
 				}
 
@@ -396,7 +404,7 @@ public class GraphNodeModifier {
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 
-				DragPanel.unPreventDrag();
+				FullScreenDragPanel.unPreventDrag();
 
 				if (!n.aniLock()) {
 

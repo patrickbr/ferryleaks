@@ -1,12 +1,17 @@
-package com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader;
+package com.algebraweb.editor.client.scheme;
 
-public class Field {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Field implements IsSerializable{
 	
 	private String type;
 	private String val;
 	private String must_be;
 	private boolean hasMustBe = false;
 	
+	public Field() {
+		
+	}
 	
 	
 	public String getMust_be() {

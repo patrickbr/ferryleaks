@@ -3,6 +3,7 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -412,8 +413,43 @@ public class GraphCanvas extends Raphael  {
 
 	public void deleteNode(GraphNode n) {
 
-		ArrayList<GraphEdge> to = n.getEdgesTo();
+		clearEdgesTo(n);
+		clearEdgesFrom(n);
+		
+
+		gnm.dimOut(n);
+		gnm.kill(n);
+		nodes.remove(n);
+
+	}
+
+	public void clearEdgesFrom(GraphNode n) {
+
+
+
 		ArrayList<GraphEdge> from = n.getEdgesFrom();
+
+		Iterator<GraphEdge> it = from.iterator();
+		GraphEdge current;
+
+		while (it.hasNext()) {
+
+			current = it.next();			
+			gem.snakeIn(current);
+			gem.deleteFromTo(current);
+			this.edges.remove(current);
+			it.remove();
+
+		}
+
+	
+	}
+	
+	public void clearEdgesTo(GraphNode n) {
+
+
+		ArrayList<GraphEdge> to = n.getEdgesTo();
+	
 
 		Iterator<GraphEdge> it = to.iterator();
 		GraphEdge current;
@@ -424,23 +460,34 @@ public class GraphCanvas extends Raphael  {
 			gem.snakeIn(current);
 			gem.deleteFromFrom(current);
 			this.edges.remove(current);
+			it.remove();
 
 		}
 
-		it = from.iterator();
+	
+
+	}
+
+	public void removeEdge(GraphNode n,int to) {
+
+
+		ArrayList<GraphEdge> from = n.getEdgesFrom();
+
+
+		GraphEdge current;
+		Iterator<GraphEdge> it = from.iterator();
 
 		while (it.hasNext()) {
 
+
 			current = it.next();			
-			gem.snakeIn(current);
-			gem.deleteFromTo(current);
-			this.edges.remove(current);
+			if (current.getTo().getId() == to) {
+				gem.snakeIn(current);
+				gem.deleteFromTo(current);
+				this.edges.remove(current);
+			}
 
 		}	
-
-		gnm.dimOut(n);
-		gnm.kill(n);
-		nodes.remove(n);
 
 	}
 
@@ -615,6 +662,13 @@ public class GraphCanvas extends Raphael  {
 	public void hangShapeOntoNode(String identifier, ConnectedShape s, int nid) {
 
 		gnm.connectShapeToNode(identifier, s, this.getGraphNodeById(nid));
+
+	}
+
+	public void unHangShapeFromNode(String identifier, int nid) {
+
+
+		gnm.removeShapeFromNode(identifier,this.getGraphNodeById(nid));
 
 	}
 

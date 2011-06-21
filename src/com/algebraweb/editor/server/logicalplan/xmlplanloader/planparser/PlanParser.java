@@ -16,25 +16,30 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import com.algebraweb.editor.client.node.ContentNode;
+import com.algebraweb.editor.client.node.ContentVal;
+import com.algebraweb.editor.client.node.NodeContent;
+import com.algebraweb.editor.client.node.PlanNode;
+import com.algebraweb.editor.client.node.Property;
+import com.algebraweb.editor.client.node.PropertyValue;
+import com.algebraweb.editor.client.node.QueryPlan;
+import com.algebraweb.editor.client.node.ValGroup;
+import com.algebraweb.editor.client.scheme.Field;
+import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.GoInto;
+import com.algebraweb.editor.client.scheme.NodeScheme;
+import com.algebraweb.editor.client.scheme.Value;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
-import com.algebraweb.editor.server.logicalplan.ContentNode;
-import com.algebraweb.editor.server.logicalplan.ContentVal;
-import com.algebraweb.editor.server.logicalplan.NodeContent;
-import com.algebraweb.editor.server.logicalplan.PlanNode;
-import com.algebraweb.editor.server.logicalplan.Property;
-import com.algebraweb.editor.server.logicalplan.PropertyValue;
-import com.algebraweb.editor.server.logicalplan.QueryPlan;
-import com.algebraweb.editor.server.logicalplan.ValGroup;
 import com.algebraweb.editor.server.logicalplan.validation.Validator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedColumnsValidator;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Field;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.GoAble;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.GoInto;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeScheme;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Value;
 
-
+/**
+ * A parser for webferrys XML-format using the node schemes specified 
+ * in the documentation.
+ * @author patrick
+ *
+ */
 
 public class PlanParser {
 
@@ -50,12 +55,18 @@ public class PlanParser {
 
 	}
 
-	public PlanParser() {
-
-
-	}
-
+	/**
+	 * Parse the plan given to the constructor using the specified 
+	 * node schemes. Returns a filled QueryPlan containing all the plans
+	 * found in the file. Please note that <i>no validation</i> is going on
+	 * here. It is not garantueed that the QueryPlans returned here are valid
+	 * either in terms of grammatical or semantical correctness. 
+	 * @return
+	 */
 	public QueryPlan parse() {
+		
+		
+		//TODO: this should also work with plan bundles...
 
 		QueryPlan ret =null;
 

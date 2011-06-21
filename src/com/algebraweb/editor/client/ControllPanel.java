@@ -15,6 +15,7 @@ import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingServic
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
+import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -158,15 +159,15 @@ public class ControllPanel extends AbsolutePanel{
 		
 		
 		
-		Button validate = new Button("Revalidate");
+		Button validate = new Button("Edit");
 
 		validate.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				
-				
-				m.validate(0);
+				//TODO: planid is fix
+				new NodeEditDialog(m,ControllPanel.this.rmsa,c.getSelectedNode().getId(),0);
 
 			}});
 

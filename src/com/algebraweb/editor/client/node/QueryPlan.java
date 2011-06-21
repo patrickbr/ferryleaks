@@ -1,8 +1,9 @@
-package com.algebraweb.editor.server.logicalplan;
+package com.algebraweb.editor.client.node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 
 
 
@@ -13,7 +14,7 @@ public class QueryPlan implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2371425529625584530L;
-	int id;
+	int id = -1;
 	ArrayList<Property> properties = new ArrayList<Property>();
 	ArrayList<PlanNode> plan = new ArrayList<PlanNode>();
 	
@@ -21,6 +22,11 @@ public class QueryPlan implements Serializable {
 	public QueryPlan(int id) {
 		this.id=id;
 	}
+	
+	public QueryPlan() {
+		
+	}
+	
 	
 	
 	public ArrayList<Property> getProperties() {

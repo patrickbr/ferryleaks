@@ -1,19 +1,17 @@
 package com.algebraweb.editor.server.logicalplan.validation.validators;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.Iterator;
+
+
+import com.algebraweb.editor.client.node.PlanNode;
+import com.algebraweb.editor.client.node.Property;
 
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
-import com.algebraweb.editor.server.logicalplan.ContentVal;
-import com.algebraweb.editor.server.logicalplan.NodeContent;
-import com.algebraweb.editor.server.logicalplan.PlanNode;
-import com.algebraweb.editor.server.logicalplan.Property;
-import com.algebraweb.editor.server.logicalplan.PropertyValue;
-import com.algebraweb.editor.server.logicalplan.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.validation.Validator;
-import com.ibm.icu.impl.PropsVectors;
+
 
 public class ReferencedColumnsValidator implements Validator {
 
@@ -38,16 +36,16 @@ public class ReferencedColumnsValidator implements Validator {
 
 				if (!(containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
 
-					String errorMsg = "Node referers to non existing column '" + currentCol.getPropertyVal().getVal() + "'";
+					String errorMsg = "Node referers to non existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
 
 					if (currentCol.getPropertyVal().getType().matches("__COLUMN\\{[0-9]*\\}")) {
 
 						int num = Integer.parseInt(currentCol.getPropertyVal().getType().split("\\{")[1].replaceAll("\\}", ""));
 
 						if (current.getChilds().size() > num-1) {
-							errorMsg += " expected in node #" + current.getChilds().get(num-1).getId() + " of type " + current.getChilds().get(num-1).getKind();
+							errorMsg += " expected in node <span class='tt'>#" + current.getChilds().get(num-1).getId() + "</span> of type <span class='tt'>" + current.getChilds().get(num-1).getKind()+ "</span>";
 						}else{
-							errorMsg += " expected in child node #" + num;
+							errorMsg += " expected in child node <span class='tt'>#" + num + "</span>";
 						}
 
 					}

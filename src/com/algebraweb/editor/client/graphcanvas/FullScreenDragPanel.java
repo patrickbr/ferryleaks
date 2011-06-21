@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
  *
  */
 
-public class DragPanel extends FlowPanel {
+public class FullScreenDragPanel extends FlowPanel {
 
 
 	private int mainDragOffsetX = -1;
@@ -48,7 +48,7 @@ public class DragPanel extends FlowPanel {
 
 		@Override
 		public void onMouseUp(MouseUpEvent event) {
-			DragPanel.this.clearDrag();
+			FullScreenDragPanel.this.clearDrag();
 			dragPreventer = false;
 		}
 	};
@@ -57,7 +57,7 @@ public class DragPanel extends FlowPanel {
 
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
-			DragPanel.this.clearDrag();
+			FullScreenDragPanel.this.clearDrag();
 			dragPreventer = false;
 		}
 	};
@@ -81,7 +81,7 @@ public class DragPanel extends FlowPanel {
 
 				//we don't want the browser to start its own drag&drop
 				DOM.eventGetCurrentEvent().preventDefault();
-				DragPanel.this.scrollTo(mainDragOffsetLeft -(event.getScreenX() -mainDragOffsetX ) , mainDragOffsetTop -(event.getScreenY() -mainDragOffsetY ));
+				FullScreenDragPanel.this.scrollTo(mainDragOffsetLeft -(event.getScreenX() -mainDragOffsetX ) , mainDragOffsetTop -(event.getScreenY() -mainDragOffsetY ));
 			}
 		}
 	};

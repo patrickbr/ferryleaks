@@ -12,9 +12,9 @@
 	<schema>
 	
 	
-	  	<gointo xmlob="content" howoften="1">
+	  	<gointo xmlob="content" humanname="Columns to join" howoften="1">
 	  	
-	  	    <val xmlob="column" name="column" howoften="1">
+	  	    <val xmlob="column" namefield="name" humanname="Left column" name="column" howoften="1">
 	  	    
 	  	      <fields>
 	  	    
@@ -26,7 +26,7 @@
 	  	    
 	  	    </val>
 	  	    
-	  	     <val xmlob="column" name="column" howoften="1">
+	  	     <val xmlob="column" namefield="name" humanname="Right column" name="column" howoften="1">
 	  	    
 	  	      <fields>
 	  	    
@@ -45,7 +45,7 @@
 
 		</gointo>
 	
-		<val xmlob="edge" name="edgeto" howoften="2">
+		<val xmlob="edge" humanname="Childs" namefield="to" name="edgeto" howoften="2">
 		
 				<fields>
 

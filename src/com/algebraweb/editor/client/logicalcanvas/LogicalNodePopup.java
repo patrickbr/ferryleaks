@@ -38,7 +38,8 @@ public class LogicalNodePopup extends NodePopup{
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
+			LogicalNodePopup.this.clear();
+			LogicalNodePopup.this.add(new HTML("Error while obtaining node data..."));
 		}
 
 		@Override

@@ -1,4 +1,5 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -15,8 +16,18 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import com.algebraweb.editor.client.scheme.Field;
+import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.GoInto;
+import com.algebraweb.editor.client.scheme.NodeScheme;
+import com.algebraweb.editor.client.scheme.Value;
+
 /**
- * The node scheme loader and parser
+ * The node scheme loader and parser.  Node schemes have to
+ * be saved as single scheme files or as scheme bundles using
+ * the format specified in the * docs. Only filenames ending 
+ * with .scheme.xml will be parsed.
+ * 
  * @author patrick
  *
  */
@@ -25,17 +36,24 @@ public class NodeSchemeLoader {
 
 	File file;
 
+	/**
+	 * Initializes a NodeSchemeLoader. You can use a 
+	 * specific file or a whole directory here.
+	 * @param file
+	 */
 
 	public NodeSchemeLoader(String file) {
-
 		this.file = new File(file);
-		System.out.println("Initializing NodeSchemeLoader...");
-
 	}
 
+	/**
+	 * Start parsing. An ArrayList containing all NodeSchemes
+	 * found in the file/directory will be returned or an empty
+	 * ArrayList if no schemes could be found.
+	 * @return
+	 */
 	public ArrayList<NodeScheme> parse() {
 
-		System.out.println("Parsing schemes...");
 		ArrayList<NodeScheme> ret = new ArrayList<NodeScheme>();
 
 		File[] files = file.listFiles(new SchemeFileFilter());
@@ -57,7 +75,6 @@ public class NodeSchemeLoader {
 					nodeschemas = doc.getElementsByTagName("nodeschema");
 				}
 
-
 				for (int i =0;i<nodeschemas.getLength();i++) {
 
 					ret.add(parseSchema((Element) nodeschemas.item(i)));
@@ -72,11 +89,15 @@ public class NodeSchemeLoader {
 
 		}
 
-
 		return ret;
 
 	}
 
+	/**
+	 * Parses a single nodeschema out of a parent XML element
+	 * @param nodeschema
+	 * @return
+	 */
 
 	private NodeScheme parseSchema(Element nodeschema) {
 
@@ -100,58 +121,50 @@ public class NodeSchemeLoader {
 
 		for (int i=0;i<childs.getLength();i++) {
 
-			if (!(childs.item(i) instanceof Text)) {
+			if (isGoAbleXMLOb(childs.item(i))) {
 
 				Element e = (Element) childs.item(i);
 
-				if (e.getTagName().equals("gointo")) {
-					ret.addToSchema(goInto(e));
-				}
+				ret.addToSchema(parseSchemeXMLOb(e));
 
-				if (e.getTagName().equals("val")) {
-					ret.addToSchema(parseVal(e));
-				}
 
 			}
 		}
 		return ret;
 	}
 
-
-
-
-	private Value parseVal(Element e) {
+	private GoAble parseSchemeXMLOb(Element e) {
 
 		Node n = e;
 
 		String xmlOb = n.getAttributes().getNamedItem("xmlob").getNodeValue();
-		String name = n.getAttributes().getNamedItem("name").getNodeValue();
-		String howOften = n.getAttributes().getNamedItem("howoften").getNodeValue();
+		String name = n.getAttributes().getNamedItem("name") != null?n.getAttributes().getNamedItem("name").getNodeValue() : xmlOb;
+		String howOften = n.getAttributes().getNamedItem("howoften").getNodeValue() != null?n.getAttributes().getNamedItem("howoften").getNodeValue():"1";
+		String humanName = n.getAttributes().getNamedItem("humanname") != null?n.getAttributes().getNamedItem("humanname").getNodeValue():name;
+		String nameField = n.getAttributes().getNamedItem("namefield") != null?n.getAttributes().getNamedItem("namefield").getNodeValue():"";
 
-		Value ret = new Value(xmlOb,howOften,name);
+		
+		GoInto ret;
+		
+		if (e.getNodeName().equals("gointo")) {
+			ret = new GoInto(xmlOb,howOften,humanName);
+		}else{
+			ret = new Value(xmlOb,howOften,name, humanName,nameField);
+			loadFields(e,(Value)ret);
+		}
 
-		loadFields(e,ret);
+	
 
 
 		for (int i=0;i<e.getChildNodes().getLength();i++) {
 
-			if (!(e.getChildNodes().item(i) instanceof Text)) {
+			if (isGoAbleXMLOb(e.getChildNodes().item(i))) {
 
-				if (e.getChildNodes().item(i).getNodeName().equals("val")) {
+				ret.addChild(parseSchemeXMLOb((Element) e.getChildNodes().item(i)));
 
-					ret.addChild(parseVal((Element) e.getChildNodes().item(i)));
-
-				}
-
-				if (e.getChildNodes().item(i).getNodeName().equals("gointo")) {
-
-					ret.addChild(goInto((Element) e.getChildNodes().item(i)));
-
-				}
 			}
 
 		}
-
 
 		return ret;
 
@@ -159,7 +172,7 @@ public class NodeSchemeLoader {
 
 	public void loadFields(Element e,Value v) {
 
-		Element fields = (Element) e.getElementsByTagName("fields").item(0);
+		Element fields = getFirstDirectElementsByTagName("fields",e);
 
 		if (fields ==null) return;
 
@@ -180,38 +193,6 @@ public class NodeSchemeLoader {
 
 	}
 
-	private GoInto goInto(Element e) {
-
-		Node n = e;
-
-		String xmlOb = n.getAttributes().getNamedItem("xmlob").getNodeValue();
-		String howOften = n.getAttributes().getNamedItem("howoften").getNodeValue();
-
-		GoInto ret = new GoInto(xmlOb,howOften);
-
-		for (int i=0;i<e.getChildNodes().getLength();i++) {
-
-
-			if (!(e.getChildNodes().item(i) instanceof Text)) {
-
-				if (e.getChildNodes().item(i).getNodeName().equals("val")) {
-
-					ret.addChild(parseVal((Element) e.getChildNodes().item(i)));
-
-				}
-
-				if (e.getChildNodes().item(i).getNodeName().equals("gointo")) {
-
-					ret.addChild(goInto((Element) e.getChildNodes().item(i)));
-
-				}
-			}
-		}
-
-
-
-		return ret;
-	}
 
 	private String getTextValue(Element el) {
 
@@ -227,18 +208,44 @@ public class NodeSchemeLoader {
 
 	}
 
+	private boolean isGoAbleXMLOb(Node n) {
+
+		return (n.getNodeName().equals("val")) ||
+		(n.getNodeName().equals("gointo")); 
+
+	}
+
+
+	private Element getFirstDirectElementsByTagName(String t, Node e) {
+
+		ArrayList<Node> candidates = getDirectElementsByTagName(t,e);
+		if (candidates.size()>0) return (Element) candidates.get(0); else return null;
+
+	}
+
+	private ArrayList<Node> getDirectElementsByTagName(String t, Node e) {
+
+		NodeList n = e.getChildNodes();
+		ArrayList<Node> ret = new ArrayList<Node>();
+
+		for (int i=0;i<n.getLength();i++) {
+
+			if (n.item(i).getNodeName().equals(t)) {
+
+				ret.add(n.item(i));
+			}
+		}
+		return ret;
+	}
 
 	private class SchemeFileFilter implements FileFilter
 	{
 
 		public boolean accept(File file)
 		{
-
 			return (file.getName().toLowerCase().endsWith(".scheme.xml"));
-
 		}
 
 	}
-
 
 }

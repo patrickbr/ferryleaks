@@ -196,7 +196,7 @@ public class GraphEdgeModifier {
 
 		if (e.getEdgePath() == null) {
 			e.setEdgePath(c.new Path());
-			e.getEdgePath() .hide();
+			e.getEdgePath().hide();
 		}
 
 		e.setPathStringSmall("M" + e.getX1() + "," + e.getY1()) ;
@@ -236,6 +236,8 @@ public class GraphEdgeModifier {
 
 		JSONObject newAttrs = new JSONObject();
 		newAttrs.put("stroke-opacity", new JSONNumber(1));
+		
+		if (!quiet) snakeOut(e);
 
 	}
 

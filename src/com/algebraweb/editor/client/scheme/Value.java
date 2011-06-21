@@ -1,4 +1,4 @@
-package com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader;
+package com.algebraweb.editor.client.scheme;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,15 +9,34 @@ public class Value extends GoInto{
 	
 	
 	String valName;
+	String nameField = "";
 	
 	ArrayList<Field> fields = new ArrayList<Field>();
 	
+	
+	public Value() {
+		
+	}
+	
 
-	public Value(String xmlObject, String howOften, String valName) {
-		super(xmlObject, howOften);
+	public Value(String xmlObject, String howOften, String valName, String humanName,String nameField) {
+	
+		this(xmlObject, howOften, valName, humanName);
+		this.nameField=nameField;
+		
+	}
+	
+	public Value(String xmlObject, String howOften, String valName, String humanName) {
+		super(xmlObject, howOften,humanName);
 		this.valName=valName;
 	}
 	
+	
+	public String getNameField() {
+		
+		return nameField;
+		
+	}
 	
 	public void addField(Field f) {
 		this.fields.add(f);
@@ -36,7 +55,6 @@ public class Value extends GoInto{
 	public void setFields(ArrayList<Field> fields) {
 		this.fields = fields;
 	}
-
 
 	public ArrayList<Field> getFields() {
 		return fields;

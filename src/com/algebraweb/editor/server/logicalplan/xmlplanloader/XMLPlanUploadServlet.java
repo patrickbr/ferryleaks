@@ -70,7 +70,8 @@ public class XMLPlanUploadServlet extends UploadAction{
 					response = item.getName();
 					
 				} catch (Exception e) {
-					throw new UploadActionException(e);
+					e.printStackTrace();
+					//throw new UploadActionException(e);
 				}
 			}
 		}

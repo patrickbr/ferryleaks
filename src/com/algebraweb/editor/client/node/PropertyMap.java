@@ -1,4 +1,4 @@
-package com.algebraweb.editor.server.logicalplan;
+package com.algebraweb.editor.client.node;
 
 import java.util.ArrayList;
 import java.util.Collection;

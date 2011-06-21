@@ -3,9 +3,9 @@ package com.algebraweb.editor.server.logicalplan.validation.validators;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
-import com.algebraweb.editor.server.logicalplan.PlanNode;
 import com.algebraweb.editor.server.logicalplan.validation.Validator;
 
 public class AbandondedNodeValidator implements Validator {

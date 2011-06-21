@@ -1,9 +1,11 @@
-package com.algebraweb.editor.server.logicalplan;
+package com.algebraweb.editor.client.node;
 
 import java.util.ArrayList;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Property {
+
+public class Property implements IsSerializable {
 
 	String propertyName;
 	PropertyValue propertyVal;

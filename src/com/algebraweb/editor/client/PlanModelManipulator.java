@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
+import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
+import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.core.client.GWT;
@@ -52,15 +54,26 @@ public class PlanModelManipulator {
 
 	private void showValidation(ValidationResult r) {
 
+		c.clearErroneous();
+
 		Iterator<ValidationError> it = r.getErrors().iterator();
 
 		while(it.hasNext()) {
 			c.setErroneous(it.next().getNodeId());
 		}
 
-
 	}
 
+
+
+
+	public void updateNodeContent(int planid, PlanNode p) {
+
+
+		manServ.updatePlanNode(p.getId(), planid, p, manipulationCallback);
+
+
+	}
 
 
 	private AsyncCallback<ValidationResult> validationCallback = new AsyncCallback<ValidationResult>() {
@@ -97,32 +110,57 @@ public class PlanModelManipulator {
 
 
 			if (result.getReturnCode() == 1 ) {
-				
+
 				//success
 
 				if (result.getAction().equals("delete")) {
 
-					Iterator<Integer> it = result.getNodesAffected().iterator();
-					
+					Iterator<RawNode> it = result.getNodesAffected().iterator();
+
 					while(it.hasNext()) {
-						
-						c.deleteNode(c.getGraphNodeById(it.next()));
-											
+
+						c.deleteNode(c.getGraphNodeById(it.next().getNid()));
+
 					}
 
 				}
-				
-				if (result.getValidationResult().hasErrors()) {
-					
-					Iterator<ValidationError> it = result.getValidationResult().getErrors().iterator();
-					
-					while (it.hasNext()) {
+
+
+				if (result.getAction().equals("update")) {
+
+					Iterator<RawNode> it = result.getNodesAffected().iterator();
+
+					while(it.hasNext()) {
+
+						RawNode current = it.next();
+						c.clearEdgesFrom(c.getGraphNodeById(current.getNid()));
 						
-						c.setErroneous(it.next().getNodeId());
+						Iterator<RawEdge> i = current.getEdgesToList().iterator();
+						GraphNode from = c.getGraphNodeById(current.getNid());
 						
+						while(i.hasNext()) {
+							
+							GraphNode to = c.getGraphNodeById(i.next().getTo());
+							c.createEdge(from, to, false);
+							
+							
+						}
+						
+
 					}
+
 					
 					
+
+				}
+
+	
+
+
+				if (result.getValidationResult().hasErrors()) {
+
+					showValidation(result.getValidationResult());
+
 				}
 
 
@@ -130,7 +168,7 @@ public class PlanModelManipulator {
 
 			}
 
-	
+
 			if (result.getReturnCode() == 3) {
 
 				//fail

@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.graphcanvas;
 
 
+import com.google.gwt.core.client.GWT;
 import com.hydro4ge.raphaelgwt.client.Raphael.Path;
 
 
@@ -45,6 +46,7 @@ public class GraphEdge {
 
 		from.addEdgeFrom(this);
 		to.addEdgeTo(this);
+		GWT.log("gurr");
 		c.getGraphEdgeModifier().makeConnection(this,from,to,quiet);
 
 	}

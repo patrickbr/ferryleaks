@@ -1,14 +1,17 @@
-package com.algebraweb.editor.server.logicalplan;
+package com.algebraweb.editor.client.node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeScheme;
+import com.algebraweb.editor.client.scheme.Field;
+import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.NodeScheme;
+import com.algebraweb.editor.client.scheme.Value;
 
 
-public class PlanNode implements Serializable,ContentNode {
+public class PlanNode extends ContentNode {
 
 	/**
 	 * 
@@ -16,24 +19,16 @@ public class PlanNode implements Serializable,ContentNode {
 	private static final long serialVersionUID = 1765471707304843471L;
 
 
-	private ArrayList<NodeContent> content = new ArrayList<NodeContent>();
 	private PropertyMap properties = new PropertyMap();
 	private QueryPlan myPlan;
-	private NodeScheme scheme;
+
 
 	private int id;
 	private String kind;
-
-
-	public PlanNode(int id, String kind, NodeScheme scheme, QueryPlan myPlan) {
-
-		this.id=id;
-		this.kind=kind;
-		this.myPlan = myPlan;
-		this.scheme=scheme;
-
-	}	
-
+	
+	protected NodeScheme scheme;
+	
+	
 	/**
 	 * Returns the nodes general scheme as specified in the
 	 * scheme XML
@@ -48,9 +43,25 @@ public class PlanNode implements Serializable,ContentNode {
 	public void setScheme(NodeScheme scheme) {
 		this.scheme = scheme;
 	}
+		
 
-	
-	
+
+	public PlanNode(int id, String kind, NodeScheme scheme, QueryPlan myPlan) {
+
+		this.id=id;
+		this.kind=kind;
+		this.myPlan = myPlan;
+		this.scheme=scheme;
+
+	}	
+
+	public PlanNode() {
+
+	}	
+
+
+
+
 
 	public boolean deleteChild(int nid) {
 
@@ -60,7 +71,7 @@ public class PlanNode implements Serializable,ContentNode {
 		while (it.hasNext()) {
 
 			NodeContent current = it.next();
-		
+
 			if (Integer.parseInt(current.getAttributes().get("to").getVal()) == nid) {
 
 				if (removeContent(current)) System.out.println("gurri");;
@@ -87,7 +98,7 @@ public class PlanNode implements Serializable,ContentNode {
 	}
 
 	public ArrayList<NodeContent> getContent() {
-		return content;
+		return childs;
 	}
 
 	public PropertyMap getProperties() {
@@ -95,7 +106,7 @@ public class PlanNode implements Serializable,ContentNode {
 	}
 
 	public void setContent(ArrayList<NodeContent> content) {
-		this.content = content;
+		this.childs = content;
 	}
 
 	public int getId() {
@@ -113,13 +124,13 @@ public class PlanNode implements Serializable,ContentNode {
 	public void setKind(String kind) {
 		this.kind = kind;
 	}
-
+	/**
 
 	public ArrayList<NodeContent> getAllContentWithInternalName(String name) {
 
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
 
-		Iterator<NodeContent> i = content.iterator();
+		Iterator<NodeContent> i = childs.iterator();
 
 		while (i.hasNext()) {
 
@@ -134,12 +145,12 @@ public class PlanNode implements Serializable,ContentNode {
 		return temp;
 
 	}
-	
-	
+
+
 	public boolean removeContent(NodeContent con) {
 
 
-		Iterator<NodeContent> i = content.iterator();
+		Iterator<NodeContent> i = childs.iterator();
 
 		while (i.hasNext()) {
 
@@ -148,16 +159,17 @@ public class PlanNode implements Serializable,ContentNode {
 				i.remove();
 				return true;
 			}
-			
+
 			if (c.removeContent(con)) return true;
-			
+
 		}
 
-		
+
 		return false;
 
 	}
-	
+
+	 **/
 
 	public ArrayList<Property> getReferencableColumnsWithoutAdded() {
 
@@ -167,6 +179,7 @@ public class PlanNode implements Serializable,ContentNode {
 		Iterator<PlanNode> i = this.getChilds().iterator();
 
 		while (i.hasNext()) {
+
 
 			ArrayList<Property> gurr = i.next().getReferencableColumnsFromValues();
 
@@ -182,8 +195,8 @@ public class PlanNode implements Serializable,ContentNode {
 	public boolean resetsColumns() {
 
 
-		return (this.getScheme().getProperties().containsKey("reset_columns") &&
-				this.getScheme().getProperties().get("reset_columns").equals("true"));
+		return (((NodeScheme)this.getScheme()).getProperties().containsKey("reset_columns") &&
+		((NodeScheme)this.getScheme()).getProperties().get("reset_columns").equals("true"));
 
 	}
 
@@ -223,7 +236,7 @@ public class PlanNode implements Serializable,ContentNode {
 			for (String type : types) {
 
 				if (current.getPropertyVal().getType().matches(type)) {
-		
+
 					ret.add(current);
 				}
 
@@ -300,7 +313,7 @@ public class PlanNode implements Serializable,ContentNode {
 	public String toString() {
 
 		String ret= "{NODE: id=" + id + " kind:" + kind + " CONTENT:[";
-		Iterator<NodeContent> i = content.iterator();
+		Iterator<NodeContent> i = childs.iterator();
 
 		while (i.hasNext()) {
 			ret+=i.next().toString();
@@ -309,11 +322,11 @@ public class PlanNode implements Serializable,ContentNode {
 		return ret+"]}";
 	}
 
-	@Override
+
 	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
 
-		Iterator<NodeContent> i = content.iterator();
+		Iterator<NodeContent> i = childs.iterator();
 
 		while (i.hasNext()) {
 
@@ -323,6 +336,62 @@ public class PlanNode implements Serializable,ContentNode {
 		}
 
 		return temp;
+	}
+
+	/**
+	public ArrayList<NodeContent> getDirectNodeContentByScheme(GoAble g) {
+
+		ArrayList<NodeContent> res = new ArrayList<NodeContent>();
+
+
+		Iterator<NodeContent> it = getDirectContentWithInternalName(g.getXmlObject()).iterator();
+
+		while(it.hasNext()) {
+
+			NodeContent node = it.next();
+
+			if (g instanceof Value) {
+
+				boolean fail = false;
+
+				if (!(node instanceof ContentVal)) {
+					fail=true;
+				}else{
+
+					ContentVal nodeVal = (ContentVal) node;
+
+					ArrayList<Field> fields = ((Value)g).getFields();
+					Iterator<Field> i = fields.iterator();
+
+
+					while (i.hasNext()) {
+
+						Field current = i.next();
+						String att = current.getVal();
+
+						if ((!nodeVal.getAttributes().containsKey(att) ||
+								(current.hasMustBe() && !current.getMust_be().equals(nodeVal.getAttributes().get(att).getVal())))){
+
+							fail=true;
+
+						}					
+					}
+				}
+
+				if (!fail) res.add(node);
+
+			} else {
+				res.add(node);
+			}
+		}
+
+		return res;
+	}
+	 **/
+
+	@Override
+	public String getInternalName() {
+		return "node_" + id;
 	}
 
 }

@@ -1,11 +1,15 @@
-package com.algebraweb.editor.server.logicalplan;
+package com.algebraweb.editor.client.node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-public class ContentVal implements NodeContent, ContentNode {
+import com.algebraweb.editor.client.scheme.Field;
+import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.Value;
+
+public class ContentVal extends NodeContent {
 	
 	
 	/**
@@ -14,20 +18,20 @@ public class ContentVal implements NodeContent, ContentNode {
 	private static final long serialVersionUID = -168461026763593678L;
 
 	
-	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
-	
-	PropertyMap attributes = new PropertyMap();
-	
-	String name;
+
 	String value;
 
-	String internalName;
 
 	public ContentVal(String name, String internalName,String value) {
 		
 		this.name=name;
 		this.value=value;
 		this.internalName = internalName;
+		
+	}
+	
+	public ContentVal() {
+		
 		
 	}
 
@@ -42,19 +46,7 @@ public class ContentVal implements NodeContent, ContentNode {
 	}
 
 
-	public PropertyMap getAttributes() {
-		return attributes;
-	}
 
-
-	public void setAttributes(PropertyMap attributes) {
-		this.attributes = attributes;
-	}
-
-
-	public String getName() {
-		return name;
-	}
 
 	public String getValue() {
 		return value;
@@ -96,6 +88,7 @@ public class ContentVal implements NodeContent, ContentNode {
 		return ret+"]";
 	}
 	
+	/**
 	public ArrayList<NodeContent> getAllContentWithInternalName(String name) {
 		
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
@@ -114,7 +107,8 @@ public class ContentVal implements NodeContent, ContentNode {
 		return temp;
 				
 	}
-	
+	**/
+	/**
 	public boolean removeContent(NodeContent con) {
 
 
@@ -136,8 +130,9 @@ public class ContentVal implements NodeContent, ContentNode {
 		return false;
 
 	}
+**/
 
-
+	/**
 	@Override
 	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
 		
@@ -154,13 +149,63 @@ public class ContentVal implements NodeContent, ContentNode {
 		
 		return temp;
 	}
+	*/
 
 
 	@Override
 	public String getInternalName() {
 		return internalName;
 	}
-
-
 	
+	/**
+	public ArrayList<NodeContent> getDirectNodeContentByScheme(GoAble g) {
+
+		ArrayList<NodeContent> res = new ArrayList<NodeContent>();
+
+		//TODO: !!!!! maybe this should be flat!!
+		Iterator<NodeContent> it = getDirectContentWithInternalName(g.getXmlObject()).iterator();
+
+		while(it.hasNext()) {
+
+			NodeContent node = it.next();
+
+			if (g instanceof Value) {
+
+				boolean fail = false;
+
+				if (!(node instanceof ContentVal)) {
+					fail=true;
+				}else{
+
+					ContentVal nodeVal = (ContentVal) node;
+
+					ArrayList<Field> fields = ((Value)g).getFields();
+					Iterator<Field> i = fields.iterator();
+
+
+					while (i.hasNext()) {
+
+						Field current = i.next();
+						String att = current.getVal();
+
+						if ((!nodeVal.getAttributes().containsKey(att) ||
+								(current.hasMustBe() && !current.getMust_be().equals(nodeVal.getAttributes().get(att).getVal())))){
+
+							fail=true;
+
+						}					
+					}
+				}
+
+				if (!fail) res.add(node);
+
+			} else {
+				res.add(node);
+			}
+		}
+
+		return res;
+	}
+
+	*/
 }

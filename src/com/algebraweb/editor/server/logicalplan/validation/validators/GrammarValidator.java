@@ -3,29 +3,32 @@ package com.algebraweb.editor.server.logicalplan.validation.validators;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.node.ContentNode;
+import com.algebraweb.editor.client.node.NodeContent;
+import com.algebraweb.editor.client.node.PlanNode;
+import com.algebraweb.editor.client.scheme.Field;
+import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.NodeScheme;
+import com.algebraweb.editor.client.scheme.Value;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
-import com.algebraweb.editor.server.logicalplan.ContentNode;
-import com.algebraweb.editor.server.logicalplan.ContentVal;
-import com.algebraweb.editor.server.logicalplan.NodeContent;
-import com.algebraweb.editor.server.logicalplan.PlanNode;
 import com.algebraweb.editor.server.logicalplan.validation.Validator;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Field;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.GoAble;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeScheme;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.Value;
+
+/**
+ * A validator for the grammar specified in the *.scheme.xml files.
+ * @author patrick
+ *
+ */
 
 public class GrammarValidator implements Validator {
-
 
 
 	private String currentSchema = "";
 	private int currentNodeValidaded = -1;
 
-
 	private String getErrorMsg(String howMany, GoAble g) {
 
-		String ret = "Expected " + howMany + " element(s) of type '" + g.getXmlObject() + "'";
+		String ret = "Expected " + howMany + " element(s) of type <span class='tt'>" + g.getXmlObject() + "</span>";
 
 		if (g instanceof Value) {
 
@@ -36,18 +39,18 @@ public class GrammarValidator implements Validator {
 			while (it.hasNext()) {
 
 				Field current = it.next();
-				ret += " " + current.getVal();
+				ret += " <span class='tt'>" + current.getVal();
 
 				if (current.getMust_be() != null) ret += " = " + current.getMust_be();
 
-				ret += ",";
+				ret += "</span>,";
 			}
 
 			if (ret.endsWith(",")) ret = ret.substring(0, ret.length()-1);
 
 		}
 
-		ret += " for node type '" + currentSchema + "'";
+		ret += " for node type <span class='tt'>" + currentSchema + "</span>";
 
 		return ret;
 	}
@@ -66,7 +69,15 @@ public class GrammarValidator implements Validator {
 
 	}
 
-	private ArrayList<ValidationError> validateContentNode(ContentNode n, ArrayList<GoAble> g) {
+	public ArrayList<ValidationError> validateContentNode(ContentNode n, ArrayList<GoAble> g) {
+
+		return validateContentNode(n, g, false);
+
+
+	}
+
+
+	public ArrayList<ValidationError> validateContentNode(ContentNode n, ArrayList<GoAble> g, boolean stayFlat) {
 
 		ArrayList<ValidationError> res = new ArrayList<ValidationError>();
 
@@ -81,7 +92,7 @@ public class GrammarValidator implements Validator {
 
 			if (isInteger(howOften)) {
 
-				if (getNodeContentByScheme(current,n).size() < Integer.parseInt(howOften)) {
+				if (n.getDirectNodeContentByScheme(current).size() < Integer.parseInt(howOften)) {
 					res.add(new ValidationError(currentNodeValidaded, 
 							getErrorMsg("a number of " + howOften ,current)));
 				}
@@ -91,7 +102,7 @@ public class GrammarValidator implements Validator {
 			if (howOften.equals("?")) {
 
 
-				if (getNodeContentByScheme(current,n).size() >1) {
+				if (n.getDirectNodeContentByScheme(current).size() >1) {
 					res.add(new ValidationError(currentNodeValidaded, 
 							getErrorMsg("one or no",current)));
 				}
@@ -101,7 +112,7 @@ public class GrammarValidator implements Validator {
 
 			if (howOften.equals("+")) {
 
-				if (getNodeContentByScheme(current,n).size() <1) {
+				if (n.getDirectNodeContentByScheme(current).size() <1) {
 					res.add(new ValidationError(currentNodeValidaded, 
 							getErrorMsg("at least one",current)));
 				}
@@ -119,7 +130,7 @@ public class GrammarValidator implements Validator {
 				int min = Integer.parseInt(howOften.split(",")[0].replaceAll("\\{", ""));
 				int max = Integer.parseInt(howOften.split(",")[1].replaceAll("\\}", ""));
 
-				int size = getNodeContentByScheme(current,n).size();
+				int size = n.getDirectNodeContentByScheme(current).size();
 
 				if (size <min || size > max) {
 					res.add(new ValidationError(currentNodeValidaded, 
@@ -132,7 +143,7 @@ public class GrammarValidator implements Validator {
 
 				int max = Integer.parseInt(howOften.split(",")[1].replaceAll("\\}", ""));
 
-				int size = getNodeContentByScheme(current,n).size();
+				int size =n. getDirectNodeContentByScheme(current).size();
 
 				if (size > max) {
 					res.add(new ValidationError(currentNodeValidaded, 
@@ -146,7 +157,7 @@ public class GrammarValidator implements Validator {
 
 				int min = Integer.parseInt(howOften.split(",")[0].replaceAll("\\{", ""));
 
-				int size = getNodeContentByScheme(current,n).size();
+				int size = n.getDirectNodeContentByScheme(current).size();
 
 				if (size < min) {
 					res.add(new ValidationError(currentNodeValidaded, 
@@ -154,81 +165,28 @@ public class GrammarValidator implements Validator {
 				}
 
 			}
-			
-			Iterator<NodeContent> itt = getNodeContentByScheme(current,n).iterator();
 
-			while (itt.hasNext()) {
+			if (!stayFlat) {
 
-				res.addAll(validateContentNode(itt.next(),current.getSchema()));
+				Iterator<NodeContent> itt = n.getDirectNodeContentByScheme(current).iterator();
 
-			}
+				while (itt.hasNext()) {
 
+					res.addAll(validateContentNode(itt.next(),current.getSchema()));
 
-		}
-
-		return res;
-
-
-	}
-
-
-
-
-	/**
-	 * Gets all flat contents of a parent ContentNode fitting the given GoAble-schema g
-	 * @param g
-	 * @param c
-	 * @return
-	 */
-
-	private ArrayList<NodeContent> getNodeContentByScheme(GoAble g,ContentNode parent) {
-
-		ArrayList<NodeContent> res = new ArrayList<NodeContent>();
-
-
-		Iterator<NodeContent> it = parent.getAllContentWithInternalName(g.getXmlObject()).iterator();
-
-		while(it.hasNext()) {
-
-			NodeContent node = it.next();
-
-			if (g instanceof Value) {
-
-				boolean fail = false;
-
-				if (!(node instanceof ContentVal)) {
-					fail=true;
-				}else{
-
-					ContentVal nodeVal = (ContentVal) node;
-
-					ArrayList<Field> fields = ((Value)g).getFields();
-					Iterator<Field> i = fields.iterator();
-
-
-					while (i.hasNext()) {
-
-						Field current = i.next();
-						String att = current.getVal();
-
-						if ((!nodeVal.getAttributes().containsKey(att) ||
-								(current.hasMustBe() && !current.getMust_be().equals(nodeVal.getAttributes().get(att).getVal())))){
-
-							fail=true;
-
-						}					
-					}
 				}
-
-				if (!fail) res.add(node);
-
-			} else {
-				res.add(node);
 			}
+
+
 		}
 
 		return res;
+
+
 	}
+
+
+
 
 
 	private boolean isInteger(String a) {

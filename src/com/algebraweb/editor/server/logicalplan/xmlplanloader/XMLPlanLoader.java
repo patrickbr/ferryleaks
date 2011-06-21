@@ -7,9 +7,9 @@ import java.util.Iterator;
 import javax.servlet.ServletContext;
 
 
-import com.algebraweb.editor.server.logicalplan.QueryPlan;
+import com.algebraweb.editor.client.node.QueryPlan;
+import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
-import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeScheme;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
 
 public class XMLPlanLoader {

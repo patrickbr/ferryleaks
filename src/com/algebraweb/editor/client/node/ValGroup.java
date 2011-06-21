@@ -1,8 +1,12 @@
-package com.algebraweb.editor.server.logicalplan;
+package com.algebraweb.editor.client.node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import com.algebraweb.editor.client.scheme.Field;
+import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.Value;
 
 /**
  * A group of node values with no own parameters. On editing 
@@ -13,20 +17,16 @@ import java.util.Iterator;
  *
  */
 
-public class ValGroup implements NodeContent, ContentNode{
+public class ValGroup extends NodeContent {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4630462466854800864L;
 
-	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
-
-	private PropertyMap attributes = new PropertyMap();
-
-	private String name;
-	private String internalName;
 	
+
+		
 	public ValGroup(String name) {
 		
 		this.name=name;
@@ -34,6 +34,12 @@ public class ValGroup implements NodeContent, ContentNode{
 		//TODO: this should be different in the future
 		this.internalName = name;
 				
+	}
+	
+	public ValGroup() {
+		
+		
+		
 	}
 
 	public ArrayList<NodeContent> getContent() {
@@ -44,19 +50,6 @@ public class ValGroup implements NodeContent, ContentNode{
 		this.childs = childs;
 	}
 
-	@Override
-	public PropertyMap getAttributes() {
-		return attributes;
-	}
-
-	@Override
-	public void setAttributes(PropertyMap attributes) {
-		this.attributes = attributes;
-	}
-
-	public String getName() {
-		return name;
-	}
 
 	
 	//TODO: experimental
@@ -75,6 +68,7 @@ public class ValGroup implements NodeContent, ContentNode{
 		return ret + "}";
 	}
 	
+	/**
 	public ArrayList<NodeContent> getAllContentWithInternalName(String name) {
 		
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
@@ -93,7 +87,8 @@ public class ValGroup implements NodeContent, ContentNode{
 		return temp;
 				
 	}
-	
+	*/
+	/**
 	public boolean removeContent(NodeContent con) {
 
 
@@ -115,7 +110,9 @@ public class ValGroup implements NodeContent, ContentNode{
 		return false;
 
 	}
+	**/
 
+	/**
 	@Override
 	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
@@ -131,6 +128,7 @@ public class ValGroup implements NodeContent, ContentNode{
 		
 		return temp;
 	}
+	*/
 
 	@Override
 	public String getInternalName() {
@@ -138,6 +136,6 @@ public class ValGroup implements NodeContent, ContentNode{
 		return internalName;
 	}
 
-
+	
 
 }

@@ -1,6 +1,6 @@
 package com.algebraweb.editor.client;
 
-import com.algebraweb.editor.client.graphcanvas.DragPanel;
+import com.algebraweb.editor.client.graphcanvas.FullScreenDragPanel;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphEdgeModifier;
@@ -14,7 +14,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 
 /**
+ * The WebFerry
  * A Web Editor for the Table Algebra
+ * 
  * @author Patrick Brosi
  *
  */
@@ -38,7 +40,7 @@ public class AlgebraEditor implements EntryPoint {
 		lCanvas.setGraphNodeModifier(gnm);
 		lCanvas.setPopup(new LogicalNodePopup(lCanvas,rmsa));
 		
-		DragPanel d = new DragPanel();
+		FullScreenDragPanel d = new FullScreenDragPanel();
 		
 		d.add(lCanvas);
 		

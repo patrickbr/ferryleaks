@@ -1,26 +1,31 @@
 package com.algebraweb.editor.server.logicalplan.communication;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.RemoteManipulationMessage;
 import com.algebraweb.editor.client.RemoteManipulationService;
+import com.algebraweb.editor.client.node.ContentNode;
+import com.algebraweb.editor.client.node.ContentVal;
+import com.algebraweb.editor.client.node.NodeContent;
+import com.algebraweb.editor.client.node.PlanNode;
+import com.algebraweb.editor.client.node.Property;
+import com.algebraweb.editor.client.node.QueryPlan;
+import com.algebraweb.editor.client.node.ValGroup;
+import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
-import com.algebraweb.editor.server.logicalplan.ContentNode;
-import com.algebraweb.editor.server.logicalplan.ContentVal;
-import com.algebraweb.editor.server.logicalplan.NodeContent;
-import com.algebraweb.editor.server.logicalplan.PlanNode;
-import com.algebraweb.editor.server.logicalplan.Property;
-import com.algebraweb.editor.server.logicalplan.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
-import com.algebraweb.editor.server.logicalplan.ValGroup;
 import com.algebraweb.editor.server.logicalplan.validation.ValidationMachine;
 import com.algebraweb.editor.server.logicalplan.validation.validators.AbandondedNodeValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.GrammarValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedColumnsValidator;
+import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -39,15 +44,16 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	private ValidationMachine vm;
+	private GrammarValidator gv = new GrammarValidator();
 
 
 	public PlanModelCommunicationServlet() {
-		
+
 		vm = new ValidationMachine();
-		
+
 		vm.addValidator(new ReferencedColumnsValidator());
 		vm.addValidator(new AbandondedNodeValidator());
-		vm.addValidator(new GrammarValidator());
+		vm.addValidator(gv);
 
 	}
 
@@ -88,16 +94,16 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			ValidationResult res = getValidation(planid);
 
 			RemoteManipulationMessage rmm= new RemoteManipulationMessage("delete", 1, "", res);
-			
-			rmm.getNodesAffected().add(nid);
-			
+
+			rmm.getNodesAffected().add(new RawNode(nid));
+
 			return rmm;
-			
+
 		}else{
-			
+
 			return new RemoteManipulationMessage("delete", 3, "Node doesn't exists in plan", null);
 
-			
+
 		}
 
 	}
@@ -214,79 +220,124 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		}
 
 		ret+="</div>";
-		
-		
+
+
 		ret +=getNodeContentList(nodeToWork);
 
 
 		return ret;
 
 	}
-	
-	
+
+
 	private String getNodeContentList(ContentNode n) {
-		
-		
+
+
 		String ret="";
-		
-			
+
+
 		if (n instanceof ValGroup) {
-			
+
 			ret +="<li class='nodeinfo-valgroup'><span class='valgroupname'>" + ((ValGroup)n).getName() + "</span>";
 		}
-		
+
 		if (n instanceof ContentVal) {
-			
+
 			ret +="<li class='nodeinfo-nodecontent'><span class='contentname'>" + ((NodeContent)n).getName() + "</span><div class='content-attrs'><ul>";
-			
+
 			Iterator<Property> it = ((ContentVal)n).getAttributes().properties().iterator();
-			
+
 			while (it.hasNext()) {
-				
+
 				Property current = it.next();
-				
+
 				ret+="<li>" + current.getPropertyName() + "=" + current.getPropertyVal().getVal() + "</li>";
-				
+
 			}
 			ret +="</ul>";
 			ret +="</div>";
-			
+
 		}
-		
-		
+
+
 		ret +="<ul class='nodecontentinfo-ul'>";
-		
-		
+
+
 		Iterator<NodeContent> i = n.getContent().iterator();
-		
+
 		while (i.hasNext()) {
-			
+
 			ret += getNodeContentList(i.next());
-			
+
 		}
-			
-			
+
+
 		ret +="</ul>";
-		
-		
 		ret +="</li>";
-		
-		
-		
+
 		return ret;
-		
-		
+
+
 	}
 
 
+	@Override
+	public PlanNode getPlanNode(int nid, int pid) {
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+		
+		return nodeToWork;
+	}
 
 
+	@Override
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid, PlanNode p) {
+		// TODO update other things 
+		
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+		
+		
+		
+		
+		if (nodeToWork != null) {	
+			
+			nodeToWork.setContent(p.getContent());
+
+			System.out.println("Updated node #" + nid);
+			//deleted, revalidating...
+
+			ValidationResult res = getValidation(pid);
+						
+
+			RemoteManipulationMessage rmm= new RemoteManipulationMessage("update", 1, "", res);
+
+			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext());
+									
+			rmm.getNodesAffected().add(xmlpl.getRawNode(nodeToWork));
+
+			return rmm;
+
+		}else{
+
+			return new RemoteManipulationMessage("update", 3, "Node doesn't exists in plan", null);
 
 
+		}
+	
+	}
 
 
-
-
-
+	@Override
+	public ArrayList<ValidationError> valideContentNodeGrammer(ContentNode c,ArrayList<GoAble> schema,boolean stayFlat) {
+		
+		return gv.validateContentNode(c, schema,stayFlat);
+			 
+	
+	}
 
 }
