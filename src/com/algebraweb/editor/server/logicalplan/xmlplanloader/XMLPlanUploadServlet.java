@@ -20,9 +20,6 @@ import gwtupload.server.exceptions.UploadActionException;
 public class XMLPlanUploadServlet extends UploadAction{
 
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4992498870698384055L;
 	Hashtable<String, String> receivedContentTypes = new Hashtable<String, String>();
 	Hashtable<String, File> receivedFiles = new Hashtable<String, File>();

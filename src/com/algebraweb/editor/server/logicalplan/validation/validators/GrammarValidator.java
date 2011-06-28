@@ -16,7 +16,8 @@ import com.algebraweb.editor.server.logicalplan.validation.Validator;
 
 /**
  * A validator for the grammar specified in the *.scheme.xml files.
- * @author patrick
+ * 
+ * @author Patrick Brosi
  *
  */
 

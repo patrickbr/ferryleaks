@@ -19,9 +19,6 @@ import com.algebraweb.editor.client.node.QueryPlan;
 public class XMLNodePlanBuilder {
 
 
-
-
-
 	public XMLNodePlanBuilder() {
 
 

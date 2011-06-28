@@ -28,13 +28,13 @@ import com.algebraweb.editor.client.scheme.Value;
  * the format specified in the * docs. Only filenames ending 
  * with .scheme.xml will be parsed.
  * 
- * @author patrick
+ * @author Patrick Brosi
  *
  */
 
 public class NodeSchemeLoader {
 
-	File file;
+	private File file;
 
 	/**
 	 * Initializes a NodeSchemeLoader. You can use a 
@@ -81,6 +81,7 @@ public class NodeSchemeLoader {
 
 				}
 
+			//TODO
 			}catch(IOException e) {e.printStackTrace();}
 			catch(SAXException e) {e.printStackTrace();} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
@@ -103,8 +104,6 @@ public class NodeSchemeLoader {
 
 		NodeScheme ret;
 		NodeList childs = nodeschema.getElementsByTagName("schema").item(0).getChildNodes();
-
-		System.out.println("found scheme for type '" + nodeschema.getAttribute("kind") + "'");
 
 		ret = new NodeScheme(nodeschema.getAttribute("kind"));
 
@@ -143,7 +142,6 @@ public class NodeSchemeLoader {
 		String humanName = n.getAttributes().getNamedItem("humanname") != null?n.getAttributes().getNamedItem("humanname").getNodeValue():name;
 		String nameField = n.getAttributes().getNamedItem("namefield") != null?n.getAttributes().getNamedItem("namefield").getNodeValue():"";
 		boolean hasVals = Boolean.parseBoolean(n.getAttributes().getNamedItem("hasval") != null?n.getAttributes().getNamedItem("hasval").getNodeValue():"false");
-
 		
 		GoInto ret;
 		
@@ -153,16 +151,13 @@ public class NodeSchemeLoader {
 			ret = new Value(xmlOb,howOften,name, humanName,nameField,hasVals);
 			loadFields(e,(Value)ret);
 		}
-
 	
-
-
 		for (int i=0;i<e.getChildNodes().getLength();i++) {
 
 			if (isGoAbleXMLOb(e.getChildNodes().item(i))) {
 
 				ret.addChild(parseSchemeXMLOb((Element) e.getChildNodes().item(i)));
-
+		
 			}
 
 		}
@@ -241,7 +236,6 @@ public class NodeSchemeLoader {
 
 	private class SchemeFileFilter implements FileFilter
 	{
-
 		public boolean accept(File file)
 		{
 			return (file.getName().toLowerCase().endsWith(".scheme.xml"));
