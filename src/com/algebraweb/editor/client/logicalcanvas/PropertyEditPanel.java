@@ -12,9 +12,14 @@ import com.algebraweb.editor.client.scheme.Field;
 import com.algebraweb.editor.client.scheme.GoAble;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PropertyEditPanel extends Composite{
@@ -22,16 +27,19 @@ public class PropertyEditPanel extends Composite{
 
 	private NodeContent c;
 	private GoAble scheme;
-	private PlanNode nodeContext;
+	
+	private ContentNodeTreeItem treeItem;
+
 	protected RemoteManipulationServiceAsync manServ;
-	private VerticalPanel p = new VerticalPanel();
+	private FlowPanel p = new FlowPanel();
 	private ArrayList<PropertyEditField> fields = new ArrayList<PropertyEditField>();
 
-	public PropertyEditPanel( RemoteManipulationServiceAsync manServ,NodeContent c, GoAble scheme,PlanNode nodeContext) {
+	public PropertyEditPanel(ContentNodeTreeItem treeItem, RemoteManipulationServiceAsync manServ,NodeContent c, GoAble scheme,PlanNode nodeContext) {
 
 		this.c=c;
 		this.scheme=scheme;
-		this.nodeContext = nodeContext;
+		this.treeItem=treeItem;
+		
 		this.manServ=manServ;
 
 		HTML title= new HTML("Edit " + this.c.getInternalName());
@@ -41,6 +49,25 @@ public class PropertyEditPanel extends Composite{
 		p.addStyleName("content-edit-panel");
 
 		p.add(title);
+		
+		PushButton deleteButton = new PushButton("X");
+		
+		deleteButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				((LogicalSchemeTreeItem)PropertyEditPanel.this.treeItem.getParentItem()).deleteContent(PropertyEditPanel.this.treeItem);
+
+				
+			}
+			
+		});
+		
+		deleteButton.addStyleName("delete-button");
+		p.add(deleteButton);
+		
+		
 
 		if (this.scheme.hasFields()) {
 			Iterator<Field> it = scheme.getFields().iterator();
@@ -117,12 +144,13 @@ public class PropertyEditPanel extends Composite{
 
 
 	}
+	
 
 
 	private AsyncCallback<ArrayList<Property>> refColsLoadCallBack(final PropertyEditFieldGivenValues field,final PropertyValue pv) {
-	
-		
-		
+
+
+
 		return new AsyncCallback<ArrayList<Property>>() {
 
 
@@ -135,9 +163,9 @@ public class PropertyEditPanel extends Composite{
 			public void onSuccess(ArrayList<Property> result) {
 
 
-					field.setPossibleValues(result);
-					field.drawField();
-					field.bindToPropertyVal(pv);
+				field.setPossibleValues(result);
+				field.drawField();
+				field.bindToPropertyVal(pv);
 
 
 			}

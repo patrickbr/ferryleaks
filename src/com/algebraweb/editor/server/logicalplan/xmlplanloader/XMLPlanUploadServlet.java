@@ -66,8 +66,8 @@ public class XMLPlanUploadServlet extends UploadAction{
 					sessionBundle.addPlan(planLoader.parsePlan(file.getAbsolutePath(),this.getServletContext()));
 					session.setAttribute("queryPlans",sessionBundle);
 								
-					System.out.println( item.getName());
-					response = item.getName();
+					System.out.println( request.getParameter("myinfo"));
+					response = request.getParameter("myinfo");
 					
 				} catch (Exception e) {
 					e.printStackTrace();

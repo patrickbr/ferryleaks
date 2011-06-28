@@ -1,285 +1,532 @@
 /** Add css rules here for your application. */
+	/** Example rules used by the template application (remove for your app) */
+@font-face {
+	font-family: PTSans;
+	font-weight: bold;
+	src: url(PT_Sans-Caption-Web-Bold.ttf);
+}
 
+@font-face {
+	font-family: PTSans;
+	font-weight: normal;
+	src: url(PT_Sans-Caption-Web-Regular.ttf);
+}
 
-/** Example rules used by the template application (remove for your app) */
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+}
+
 h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+	font-size: 2em;
+	font-family: PTSansB, Verdana, Helvetica, Arial, sans-serif;
+	color: #777777;
+	margin: 40px 0px 70px;
+	text-align: center;
 }
 
 .tt {
-
-	font-family:monospace;
-	font-weight:normal;
-	
-		
+	font-family: monospace;
+	font-weight: normal;
 }
 
 .sendButton {
-  display: block;
-  font-size: 16pt;
+	display: block;
+	font-size: 16pt;
 }
 
 /** Most GWT widgets already have a style name defined */
-
-
 .dialogVPanel {
-  margin: 5px;
+	margin: 5px;
 }
 
 .serverResponseLabelError {
-  color: red;
+	color: red;
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
-  margin: 15px 6px 6px;
+	margin: 15px 6px 6px;
+}
+
+#ie6com {
+	display: none;
 }
 
 .canvas {
-
-border:solid red 1px;
-}
-
-
-.controllpanel {
-
-position:fixed;
-border:dotted 2px black;
-background-color:#EFEFEF;
-width:400px;
-height:300px;
-top:40px;
-left:40px;
-opacity:0.7;
-
+	border: solid red 1px;
 }
 
 .movy {
-
-cursor:move;
-
+	cursor: move;
 }
 
 .node {
-
-cursor:pointer;	
-
+	cursor: pointer;
 }
 
-
 .node-text tspan {
-
-font-size:13px;
-cursor:pointer;	
-
+	font-size: 13px;
+	cursor: pointer;
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
 }
 
 .cancel {
-	
-	width:16px;
-	height:16px;
-	background-image:url(cancel.png);
-	margin-top:6px;
+	width: 16px;
+	height: 16px;
+	background-image: url(cancel.png);
+	margin-top: 6px;
+	color:white;
 }
 
 .filename {
-	margin-top:6px;
-	margin-left:5px;
-	
+	margin-top: 6px;
+	margin-left: 5px;
+	color:white;
 }
 
 .prgbar-back {
-	
-	position:relative;
-	padding-left:10px;
-	padding-right:10px;
+	top:6px;
+	position: relative;
+	background-color:#AAA;
+	height:20px;
+	margin-left:10px;
+}
+
+.upld-status {
+	height: 29px;
+
+}
+
+.upld-status td{
 	
 }
-            
- .upld-status {
- 
- 	height:29px;
- 
- }
+
+.GWTUpld {
+
+	padding:15px;	
+	
+	
+}
 
 .prgbar-msg {
 	
-	margin-left:20px;
-	 position:absolute;
-	 top:6px;
-	 left:0px;
-	 color:#222;
-	
+	position:absolute;
+	top:0px;
+	left:20px;
+
 }
 
 .status {
-	
-	 
-	 margin-top:6px;
-	 margin-left:20px;
-	 padding-right:5px;
-	 white-space:nowrap;
+	margin-top: 6px;
+	margin-left: 20px;
+	padding-right: 5px;
+	white-space: nowrap;
+	color:white;
 }
 
 .prgbar-done {
-
-	 background-color:#bcbcff;
-	 margin-left:10px;
-	 height:25px;
-	 position:absolute;
-	 top:2px;
-	 left:0px;
-
-}
-
-.gwt-PopupPanel {
-
-	border:dotted 1px black !important;
-background-color:#EFEFEF !important;
-padding:20px !important;
-
-}
-
-.nodePopUp {
-
-	border:solid 1px #feff82 !important;
-	background-color:#feffb1 !important;
-	opacity:0.9;
-
+	background-color: #EEE;
+	margin-left: 0px;
+	height: 20px;
+	position:absolute;
+	top: 0px;
+	left: 0px;
 }
 
 .loadingWrap {
-	
-	width:160px;
-	height:60px;	
-	padding-top:35px;
-	padding-left:20px;
-	
-}
-
-.loadingPopUp {
-	
-	opacity:0.9;
-	border:dotted 1px black !important;
-	
+	width: 160px;
+	height: 60px;
+	padding-top: 35px;
+	padding-left: 20px;
 }
 
 .loadingImg {
-	
-	float:left;
-	margin-right:20px;
-	
-	}
-	
-	
+	float: left;
+	margin-right: 20px;
+}
+
 .loadingmsg {
-	
-	margin-top:5px;
-	font-size:14px;
-	
+	margin-top: 5px;
+	font-size: 14px;
 }
 
 .logicalplan-node-errormark-text tspan {
-	
-	font-size:35px;
-	font-weight:bold;
+	font-size: 35px;
+	font-weight: bold;
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
 }
 
 .nodeinfo-block {
-	
-	font-size:11px;
-	font-style:italic;	
-	padding-top:10px;
-	
+	font-size: 11px;
+	font-style: italic;
+	padding-top: 10px;
 }
 
-.nodeinfo-block h4{
-	
-	display:inline;
-	margin-right:10px;
-	font-size:11px;
-	font-style:normal;
-	
-	
+.nodeinfo-block h4 {
+	display: inline;
+	margin-right: 10px;
+	font-size: 11px;
+	font-style: normal;
 }
 
 .nodeinfo-error {
-	
-
-	font-weight:bold;
-	color:red;
-	margin-bottom:10px;
-		
-	
+	font-weight: bold;
+	color: red;
+	margin-bottom: 10px;
 }
 
-
 .nodeinfo-error-item {
-	
-
-	margin-bottom:5px;
-		
-	
+	margin-bottom: 5px;
 }
 
 .nodecontentinfo-ul {
-	
-	font-size:11px;
-	padding-left:0px;	
-	
+	font-size: 11px;
+	padding-left: 0px;
 }
 
-.nodecontentinfo-ul li{
-	
-	font-size:11px;
-	list-style:none;
-	
+.nodecontentinfo-ul li {
+	font-size: 11px;
+	list-style: none;
 }
 
-
-.nodecontentinfo-ul .nodecontentinfo-ul{
-	
-	font-size:11px;
-	padding-left:30px;	
-	
+.nodecontentinfo-ul .nodecontentinfo-ul {
+	font-size: 11px;
+	padding-left: 30px;
 }
 
 .content-attrs li {
-
-	font-style:italic;
-	list-style:circle !important;	
-	
+	font-style: italic;
+	list-style: circle !important;
 }
 
 .contentname,.valgroupname {
-	
-	font-weight:bold;
-	}
-	
-
-
-.nodecontentinfo-ul .nodecontentinfo-ul li{
-	
-	font-size:11px;
-	list-style:square;
-	
+	font-weight: bold;
 }
-	
-.content-edit-panel-title {
 
-	font-size:16px;
-	font-weight:bold;	
-	margin-bottom:15px;
+.nodecontentinfo-ul .nodecontentinfo-ul li {
+	font-size: 11px;
+	list-style: square;
+}
+
+.content-edit-panel-title {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 15px;
 }
 
 .content-edit-panel {
-
-	padding-left:15px;	
-	
+	padding-left: 15px;
 }
-	
 
+.field-loading {
+	height: 40px;
+	background-image: url(loader_small.gif);
+	background-repeat: no-repeat;
+	background-position: bottom left;
+}
+
+.controllpanel,#bugferrylogo {
+	background-color: #444;
+	opacity: 0.8;
+	color: white;
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+}
+
+.controllpanel {
+	background-color: #666;
+	position: fixed;
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	border-bottom-right-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-moz-border-radius-topright: 10px;
+	border-top-right-radius: 10px;
+	width: 60px;
+	top: 80px;
+	left: 0px;
+	z-index: 200;
+}
+
+#bugferrylogo {
+	-webkit-border-bottom-right-radius: 20px;
+	-moz-border-radius-bottomright: 20px;
+	border-bottom-right-radius: 20px;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	padding-left: 60px;
+	padding-right: 30px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	font-weight: bold;
+	font-size: 25px;
+	background-image: url(webferry.png);
+	background-position: 10px -1px;
+	background-repeat: no-repeat;
+}
+
+.gwt-StackLayoutPanel .gwt-StackLayoutPanelHeader {
+	font-weight: normal;
+}
+
+.gwt-StackLayoutPanel
+div.gwt-StackLayoutPanelHeader {
+	background: #333;
+	border: none;
+	border-bottom: solid 1px #666;
+}
+
+.gwt-StackLayoutPanel
+div.gwt-StackLayoutPanelHeader.first {
+	-webkit-border-top-right-radius: 10px;
+	-moz-border-radius-topright: 10px;
+	border-top-right-radius: 10px;
+}
+
+.gwt-StackLayoutPanel
+div.gwt-StackLayoutPanelHeader.last.selected {
+	-webkit-border-bottom-right-radius: 0px;
+	-moz-border-radius-bottomright: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+.gwt-StackLayoutPanel {
+	border: none;
+}
+
+.gwt-StackLayoutPanel
+div.gwt-StackLayoutPanelHeader.last {
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	border-bottom-right-radius: 10px;
+	border: none;
+}
+
+.gwt-StackLayoutPanel
+div.gwt-StackLayoutPanelContent {
+	background: transparent;
+	border: none;
+}
+
+.gwt-DialogBox .dialogTopLeft {
+	background-image: none;
+}
+
+.gwt-DialogBox .dialogMiddleLeft {
+	background-image: none;
+}
+
+.gwt-DialogBox .dialogBottomLeft {
+	background-image: none;
+}
+
+.gwt-DialogBox .dialogTopRight {
+	background-image: none;
+}
+
+.gwt-DialogBox .dialogMiddleRight {
+	background-image: none;
+}
+
+.gwt-DialogBox .dialogBottomCenter {
+	background-image: none;
+}
+
+.gwt-DialogBox .dialogBottomRight {
+	background-image: none;
+}
+
+.gwt-DialogBox .Caption {
+	font-size: 25px;
+	background-image: none;
+	background: transparent;
+	border: none;
+	color: white;
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+	padding-left: 0px;
+}
+
+.gwt-PopupPanel,.loadingPopUp {
+	color: white;
+}
+
+.gwt-DialogBox,.gwt-PopupPanel,.loadingPopUp {
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+	border: solid black 0px;
+	-webkit-border-top-right-radius: 20px;
+	-moz-border-radius-topright: 20px;
+	border-top-right-radius: 20px;
+	-webkit-border-bottom-left-radius: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	border-bottom-left-radius: 20px;
+	padding: 5px;
+	padding-top: 0px;
+	background-color: #666;
+}
+
+.gwt-DialogBox .dialogMiddleCenter {
+	background-color: #F8F8F8;
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+}
+
+table td,table {
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+}
+
+.gwt-Tree,.gwt-Tree td,table .gwt-Tree td,.gwt-Tree table td {
+	font-size: 12px;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+	background-color: #666;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-right-radius: 5px;
+	padding: 1px 6px;
+	background-color: #AAA;
+	color: white;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+	background-color: #666;
+}
+
+.gwt-TabLayoutPanelContentContainer {
+	border-color: #888;
+	border-width: 1px 0xp
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+	font-weight: normal;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent {
+	border-color: #888;
+}
+
+.gwt-SplitLayoutPanel-HDragger {
+	background: url("images/splitPanelThumb.png") no-repeat scroll center
+		center #AAA;
+}
+
+.gwt-PopupPanelGlass {
+	background-color: #555;
+}
+
+.sourceedit {
+	height: 100%;
+	width: 100%;
+	border: none;
+	resize: none;
+}
+
+.controllpanel-button {
+	margin-bottom: 6px;
+	margin-top: 6px;
+	margin-left: 5px;
+}
+
+.gwt-Button,.gwt-PushButton-up,.gwt-PushButton-up-disabled,.gwt-PushButton-down,.gwt-PushButton-down-hovering,.gwt-PushButton-down-disabled
+	{
+	border-top: solid #CCC 1px;
+	border-left: solid #CCC 1px;
+	border-bottom: solid #999 1px;
+	border-right: solid #999 1px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #BBB;
+	background-image: none;
+}
+
+.gwt-Button:hover {
+	background-color: #fffaae;
+	border-top: solid #fffae8 1px;
+	border-left: solid #fffae8 1px;
+	border-bottom: solid #d6d292 1px;
+	border-right: solid #d6d292 1px;
+}
+
+.gwt-Button:active {
+	background-color: #fffaae;
+	border-bottom: solid #fffae8 1px;
+	border-right: solid #fffae8 1px;
+	border-top: solid #d6d292 1px;
+	border-left: solid #d6d292 1px;
+}
+
+.gwt-PushButton-down-hovering:hover {
+	border-top: solid #fffae8 1px;
+	border-left: solid #fffae8 1px;
+	border-bottom: solid #d6d292 1px;
+	border-right: solid #d6d292 1px;
+	background-color: #fffaae;
+}
+
+.gwt-PushButton-down {
+	border-bottom: solid #CCC 1px;
+	border-right: solid #CCC 1px;
+	border-top: solid #999 1px;
+	border-left: solid #999 1px;
+}
+
+.controllbutton-delete {
+	background-image: url(icons_black.png);
+	background-position: -313px -28px;
+}
+
+.controllbutton-edit {
+	background-image: url(icons_black.png);
+	background-position: -249px -59px;
+}
+
+.controllbutton-sort-dot {
+	background-image: url(icons_black.png);
+	background-position: -250px 4px;
+}
+
+.controllbutton-xml {
+	background-image: url(icons_black.png);
+	background-position: -188px -188px;
+}
+
+.controllbutton-xml-down {
+	background-image: url(icons_black.png);
+	background-position: -152px -188px;
+}
+
+.controllbutton-download-plan {
+	background-image: url(icons_black.png);
+	background-position: -250px -188px;
+}
+
+.controllbutton-add {
+	background-image: url(icons_black.png);
+	background-position: -93px 4px;
+}
+
+
+#impressum {
+	position: fixed;
+	right: 5px;
+	top: 0px;
+	text-align: right;
+	font-size: 11px;
+	color: #BBB;
+}
+
+.gwt-StackLayoutPanelHeader:hover {
+	background-color: red;
+}
+
+.nodePopUp {
+	border: solid 1px #feff82 !important;
+	background-color: #feffb1 !important;
+	opacity: 0.9;
+	color: black;
+}

@@ -1,0 +1,25 @@
+#bugferrylogo {
+  position: absolute;
+  left:0px;
+  top:0px;
+
+
+}
+
+.controllpanel {
+	
+  position: absolute;
+  left:0px;
+  top:0px;
+  left: expression( ( 0 + ( ignoreMe2 = document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft ) ) + 'px' );
+  top: expression( ( 80 + ( ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop ) ) + 'px' );
+}
+
+#ie6com {
+
+	display:block;
+	position:absolute;
+	top:0px;
+	left:300px;	
+	
+}

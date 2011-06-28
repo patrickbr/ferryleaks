@@ -142,6 +142,7 @@ public class NodeSchemeLoader {
 		String howOften = n.getAttributes().getNamedItem("howoften").getNodeValue() != null?n.getAttributes().getNamedItem("howoften").getNodeValue():"1";
 		String humanName = n.getAttributes().getNamedItem("humanname") != null?n.getAttributes().getNamedItem("humanname").getNodeValue():name;
 		String nameField = n.getAttributes().getNamedItem("namefield") != null?n.getAttributes().getNamedItem("namefield").getNodeValue():"";
+		boolean hasVals = Boolean.parseBoolean(n.getAttributes().getNamedItem("hasval") != null?n.getAttributes().getNamedItem("hasval").getNodeValue():"false");
 
 		
 		GoInto ret;
@@ -149,7 +150,7 @@ public class NodeSchemeLoader {
 		if (e.getNodeName().equals("gointo")) {
 			ret = new GoInto(xmlOb,howOften,humanName);
 		}else{
-			ret = new Value(xmlOb,howOften,name, humanName,nameField);
+			ret = new Value(xmlOb,howOften,name, humanName,nameField,hasVals);
 			loadFields(e,(Value)ret);
 		}
 

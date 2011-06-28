@@ -42,7 +42,7 @@
 		
 				<fields>
 
-					<field type="int">to</field>
+					<field type="__NID">to</field>
 							
 				</fields>
 				

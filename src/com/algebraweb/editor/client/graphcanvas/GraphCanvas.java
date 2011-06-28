@@ -3,9 +3,11 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -13,6 +15,8 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -49,20 +53,23 @@ public class GraphCanvas extends Raphael  {
 
 	private GraphNodeModifier gnm;
 	private GraphEdgeModifier gem;
-
+	private boolean invertArrows = false;
 	private GraphNode selected = null;
 
 
 	private int height;
 	private int width;
 
+	protected int marginTop =0;
+	protected int marginLeft =0;
 
 	private ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();
 	private ArrayList<GraphEdge> edges = new ArrayList<GraphEdge>();
 
-	public GraphCanvas(int width, int height) {
+	public GraphCanvas(int width, int height,boolean invertArrows) {
 
 		super(width, height);
+		this.invertArrows=invertArrows;
 
 		preventTextSelection(this.getElement(),true);
 
@@ -71,10 +78,29 @@ public class GraphCanvas extends Raphael  {
 
 	}
 
+	public void setMargin(int x, int y) {
+
+		marginTop=y;
+		marginLeft=x;
+
+		this.getElement().getStyle().setMarginLeft(x, Unit.PX);
+		this.getElement().getStyle().setMarginTop(y, Unit.PX);
+	}
+
+	public void setPadding(int x, int y) {
+
+		marginTop=y;
+		marginLeft=x;
+
+		this.getElement().getStyle().setPaddingLeft(x, Unit.PX);
+		this.getElement().getStyle().setPaddingTop(y, Unit.PX);
+	}
 
 
 
-
+	protected boolean isInvertArrows() {
+		return invertArrows;
+	}
 
 
 	public void setGraphNodeModifier(GraphNodeModifier gnm) {
@@ -228,7 +254,10 @@ public class GraphCanvas extends Raphael  {
 
 				}
 
-				if (popup!= null && popupDelay != null && !mouseOverNode(event.getClientX(), event.getClientY())) popupDelay.cancel();
+				if (popup!= null && popupDelay != null && !mouseOverNode(event.getClientX(), event.getClientY())) {
+
+					popupDelay.cancel();
+				}
 
 				if (GraphCanvas.this.dragNode != null) {
 					DOM.eventGetCurrentEvent().preventDefault();
@@ -415,7 +444,7 @@ public class GraphCanvas extends Raphael  {
 
 		clearEdgesTo(n);
 		clearEdgesFrom(n);
-		
+
 
 		gnm.dimOut(n);
 		gnm.kill(n);
@@ -442,14 +471,14 @@ public class GraphCanvas extends Raphael  {
 
 		}
 
-	
+
 	}
-	
+
 	public void clearEdgesTo(GraphNode n) {
 
 
 		ArrayList<GraphEdge> to = n.getEdgesTo();
-	
+
 
 		Iterator<GraphEdge> it = to.iterator();
 		GraphEdge current;
@@ -464,7 +493,7 @@ public class GraphCanvas extends Raphael  {
 
 		}
 
-	
+
 
 	}
 
@@ -483,8 +512,10 @@ public class GraphCanvas extends Raphael  {
 			current = it.next();			
 			if (current.getTo().getId() == to) {
 				gem.snakeIn(current);
-				gem.deleteFromTo(current);
+				//gem.deleteFromTo(current);
+				//gem.deleteFromFrom(current);
 				this.edges.remove(current);
+				//it.remove();
 			}
 
 		}	
@@ -557,19 +588,6 @@ public class GraphCanvas extends Raphael  {
 	}
 
 
-	public void lock() {
-
-
-		RootPanel.get("deck").getElement().getStyle().setDisplay(Display.BLOCK);
-
-	}
-
-	public void unLock() {
-
-
-		RootPanel.get("deck").getElement().getStyle().setDisplay(Display.NONE);
-
-	}
 
 	public void openPopUp(final int x, final int y, final int nodeid, int delay) {
 
@@ -599,9 +617,8 @@ public class GraphCanvas extends Raphael  {
 	private boolean mouseOverNode(int mouseX, int mouseY, int nodeid) {
 
 
-
-		int x = (int)((Window.getScrollLeft() + mouseX));
-		int y = (int)((Window.getScrollTop() + mouseY));
+		int x = (int)((Window.getScrollLeft()-marginLeft + mouseX));
+		int y = (int)((Window.getScrollTop()  -marginTop+ mouseY));
 
 		GraphNode current = this.getGraphNodeById(nodeid);
 
@@ -614,8 +631,8 @@ public class GraphCanvas extends Raphael  {
 	private boolean mouseOverNode(int mouseX, int mouseY) {
 
 
-		int x = (int)((Window.getScrollLeft() + mouseX));
-		int y = (int)((Window.getScrollTop() + mouseY));
+		int x = (int)((Window.getScrollLeft() -marginLeft + mouseX));
+		int y = (int)((Window.getScrollTop() -marginTop + mouseY));
 
 
 		Iterator<GraphNode> i = nodes.iterator();
@@ -669,6 +686,41 @@ public class GraphCanvas extends Raphael  {
 
 
 		gnm.removeShapeFromNode(identifier,this.getGraphNodeById(nid));
+
+	}
+
+	public void setBlurred(boolean blurr) {
+
+		String browser = Window.Navigator.getUserAgent();
+		String browserVersion = Window.Navigator.getAppVersion();
+
+		RegExp p = RegExp.compile(("([0-9]+\\.?[0-9]*)"));
+
+		MatchResult m = p.exec(browserVersion);
+		double browserVer=0;
+
+
+		GWT.log(browserVersion);
+		if (m.getGroupCount()>1) {
+			browserVer=Double.parseDouble(m.getGroup(0));
+		}
+
+		if (browser.matches(".*[fF]irefox.*") && browserVer >= 3) {
+
+			if (blurr) {
+
+
+
+				this.getElement().getFirstChildElement().setAttribute("filter", "url(#Gaussian_Blur)");
+
+
+			}else{
+
+				this.getElement().getFirstChildElement().removeAttribute("filter");
+
+
+			}
+		}
 
 	}
 

@@ -47,6 +47,7 @@ public class LogicalNodePopup extends NodePopup{
 
 			LogicalNodePopup.this.clear();
 			LogicalNodePopup.this.add(new HTML(result));
+			correctPosition();
 
 		}
 

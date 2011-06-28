@@ -23,7 +23,7 @@
 			
 				</fields>
 
-				<val xmlob="value" name="value" howoften="*">
+				<val xmlob="value" hasval="true" name="value" howoften="*">
 
 				<fields>
 					<field type="datatype">type</field>
@@ -39,7 +39,7 @@
 		
 				<fields>
 
-					<field type="int">to</field>
+					<field type="__NID">to</field>
 							
 				</fields>
 				

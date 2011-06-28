@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<nodeschema kind="aggr">
+
+	<properties>
+	
+		<property name="color">0xeeeeee</property>
+
+	</properties>
+
+
+	<schema>
+	
+	
+	  	<gointo xmlob="content" humanname="Aggregate" howoften="1">
+
+			<val xmlob="column" namefield="name" humanname="Partition column" name="column" howoften="?">
+
+				<fields>
+
+					<field type="__COLUMN">name</field>
+					<field type="boolean" must_be="false">new</field>
+					<field type="string" must_be="partition">function</field>
+			
+				</fields>
+								
+			</val>
+			<val xmlob="aggregate" namefield="kind" humanname="Functions" name="aggregate" howoften="+">
+
+				<fields>
+
+					<field type="string">kind</field>
+						
+				</fields>
+				
+				<val xmlob="column" namefield="name" humanname="Result Column" name="column" howoften="1">
+
+					<fields>
+
+						<field type="__COLUMN_NEW">name</field>
+						<field type="boolean" must_be="true">new</field>
+							
+					</fields>
+
+				</val>
+				
+				<val xmlob="column" namefield="name" humanname="Aggr. item" name="column" howoften="?">
+
+					<fields>
+
+						<field type="__COLUMN">name</field>
+						<field type="boolean" must_be="false">new</field>
+						<field type="string" must_be="item">function</field>
+							
+					</fields>
+
+				</val>
+
+			</val>
+
+		
+
+		</gointo>
+	
+		<val xmlob="edge" humanname="Childs" namefield="to" name="edgeto" howoften="1">
+		
+				<fields>
+
+					<field type="__NID">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>

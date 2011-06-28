@@ -54,6 +54,13 @@ public class PlanParser {
 		this.file = new File(file);
 
 	}
+	
+	public PlanParser(HashMap<String,NodeScheme> schemes) {
+
+		this.schemes=schemes;
+
+
+	}
 
 	/**
 	 * Parse the plan given to the constructor using the specified 
@@ -82,7 +89,9 @@ public class PlanParser {
 			ret = new QueryPlan(0);
 
 			ret.setPlan(parseNodes((Element)planNodes,ret));
-
+			
+			//TODO: not secure :(
+			ret.setRoot(ret.getPlan().get(ret.getPlan().size()-1));
 
 
 		}catch(IOException e) {e.printStackTrace();}
@@ -110,17 +119,7 @@ public class PlanParser {
 
 				Element el = (Element) nodes.item(i);
 
-
-				PlanNode newNode = new PlanNode(
-						Integer.parseInt(nodes.item(i).getAttributes().getNamedItem("id").getNodeValue()),
-						nodes.item(i).getAttributes().getNamedItem("kind").getNodeValue(),
-						getScheme(nodes.item(i).getAttributes().getNamedItem("kind").getNodeValue()),
-						mother
-
-				);
-
-
-				fillNode(newNode,el);				
+				PlanNode newNode = parseNode(mother, el);				
 				planNodes.add(newNode);
 
 			}
@@ -129,6 +128,21 @@ public class PlanParser {
 
 		return planNodes;
 
+	}
+
+	public PlanNode parseNode(QueryPlan mother, Element el) {
+		
+		
+		PlanNode newNode = new PlanNode(
+				Integer.parseInt(el.getAttributes().getNamedItem("id").getNodeValue()),
+				el.getAttributes().getNamedItem("kind").getNodeValue(),
+				getScheme(el.getAttributes().getNamedItem("kind").getNodeValue()),
+				mother
+
+		);
+		fillNode(newNode,el);
+		return newNode;
+		
 	}
 
 

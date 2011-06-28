@@ -1,14 +1,29 @@
 package com.algebraweb.editor.server.logicalplan.communication;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.jdom.Element;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
+import org.w3c.css.sac.InputSource;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.RemoteManipulationMessage;
 import com.algebraweb.editor.client.RemoteManipulationService;
+import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -25,6 +40,7 @@ import com.algebraweb.editor.server.logicalplan.validation.ValidationMachine;
 import com.algebraweb.editor.server.logicalplan.validation.validators.AbandondedNodeValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.GrammarValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedColumnsValidator;
+import com.algebraweb.editor.server.logicalplan.xmlbuilder.XMLNodePlanBuilder;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -45,6 +61,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	private ValidationMachine vm;
 	private GrammarValidator gv = new GrammarValidator();
+	private XMLNodePlanBuilder npb = new XMLNodePlanBuilder();
 
 
 	public PlanModelCommunicationServlet() {
@@ -287,37 +304,73 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-		
+
 		return nodeToWork;
 	}
 
 
 	@Override
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml) {
+
+		System.out.println("Trying to save " + xml);
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+
+		PlanParser p = new PlanParser((HashMap<String,NodeScheme>)getServletContext().getAttribute("nodeSchemes"));
+
+
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+
+			InputStream s = new ByteArrayInputStream(xml.getBytes());
+
+			Document doc;
+
+			doc = db.parse(s);
+			PlanNode newNode = p.parseNode(planToWork, (org.w3c.dom.Element)doc.getElementsByTagName("node").item(0));
+			return updatePlanNode(nid,pid,newNode);
+
+		} catch (SAXException e) {
+			return new RemoteManipulationMessage("", 3, "Error while parsing XML: " + e.getMessage(), null);
+		} catch (IOException e) {
+			return new RemoteManipulationMessage("", 3, "Error while parsing XML: " +e.getMessage(), null);
+		} catch (ParserConfigurationException e) {
+			return new RemoteManipulationMessage("", 3, "Error while parsing XML: " +e.getMessage(), null);
+		}
+
+
+
+
+	}
+
+	@Override
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid, PlanNode p) {
 		// TODO update other things 
-		
+
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-		
-		
-		
-		
+
+
+
+
 		if (nodeToWork != null) {	
-			
+
 			nodeToWork.setContent(p.getContent());
 
 			System.out.println("Updated node #" + nid);
 			//deleted, revalidating...
 
 			ValidationResult res = getValidation(pid);
-						
+
 
 			RemoteManipulationMessage rmm= new RemoteManipulationMessage("update", 1, "", res);
 
 			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext());
-									
+
 			rmm.getNodesAffected().add(xmlpl.getRawNode(nodeToWork));
 
 			return rmm;
@@ -328,29 +381,116 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 		}
-	
+
 	}
 
 
 	@Override
 	public ArrayList<ValidationError> valideContentNodeGrammer(ContentNode c,ArrayList<GoAble> schema,boolean stayFlat) {
-		
+
 		return gv.validateContentNode(c, schema,stayFlat);
-			 
-	
+
+
 	}
 
 
 	@Override
 	public ArrayList<Property> getReferencableColumnsWithoutAdded(int nid,
 			int pid) {
-		
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+
+		return nodeToWork.getReferencableColumnsWithoutAdded();
+	}
+
+
+	@Override
+	public String getXMLFromContentNode(ContentNode c) {
+		Element e =  npb.getXMLElementFromContentNode(c);
+
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		return outputter.outputString(e);
+
+	}
+
+	@Override
+	public String getXMLFromPlanNode(int pid, int nid) {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+
+		Element e = npb.getXMLElementFromContentNode(nodeToWork);
+
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		return outputter.outputString(e);
+
+	}
+
+
+	@Override
+	public String getXMLLogicalPlanFromRootNode(int pid, int nid) {
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 		
-		return nodeToWork.getReferencableColumnsWithoutAdded();
+		Element e = npb.getNodePlan(0, nodeToWork);
+
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		return outputter.outputString(e);
+	}
+
+
+	@Override
+	public RemoteManipulationMessage addNode(int pid,String nodeType, int x, int y) {
+		
+		HttpServletRequest request = this.getThreadLocalRequest();
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		
+		
+	
+		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
+		
+		if (schemes.containsKey(nodeType)) {
+		
+		if (planToWork != null) {	
+
+			PlanNode newNode = planToWork.addNode(schemes.get(nodeType));
+			
+			
+		
+			ValidationResult res = getValidation(0);
+
+			RemoteManipulationMessage rmm= new RemoteManipulationMessage("add", 1, "", res);
+
+			HashMap<Integer,Coordinate> coords = new HashMap<Integer,Coordinate>();
+			coords.put(newNode.getId(), new Coordinate(x,y));
+			
+			rmm.setCoordinates(coords);
+			
+			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext());
+
+			rmm.getNodesAffected().add(xmlpl.getRawNode(newNode));
+
+			return rmm;
+
+		}else{
+
+			return new RemoteManipulationMessage("update", 3, "Plan doesn't exist in session", null);
+
+
+		}}else{
+			
+			return new RemoteManipulationMessage("update", 3, "Scheme for type " + nodeType + " not found.", null);
+
+			
+			
+		}
 	}
 
 }

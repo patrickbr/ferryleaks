@@ -4,6 +4,7 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -83,7 +84,7 @@ public class GraphNode {
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 				
-								
+					
 				GraphNode.this.c.openPopUp(Window.getScrollLeft() + event.getClientX(), Window.getScrollTop() + event.getClientY(),GraphNode.this.getId(),400);
 				
 				

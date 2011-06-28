@@ -21,6 +21,8 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public RemoteManipulationMessage deleteNode(int nid, int planid);
 	
+	public RemoteManipulationMessage addNode(int planid,String nodeType, int x, int y);
+	
 	public ValidationResult getValidation(int planid);
 	
 	public String getNodeInformationHTML(int nid, int planid);
@@ -31,6 +33,14 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid,PlanNode p);
 	
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid,String xml);
+	
 	public ArrayList<ValidationError> valideContentNodeGrammer(ContentNode c,ArrayList<GoAble> schema, boolean stayFlat); 
 
+	public String getXMLFromContentNode(ContentNode c);
+	
+	public String getXMLFromPlanNode(int pid, int nid);
+	
+	public String getXMLLogicalPlanFromRootNode(int pid, int nid);
+	
 }

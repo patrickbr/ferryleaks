@@ -10,6 +10,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Widget;
 
 public class PropertyEditFieldGivenValues extends PropertyEditField {
 
@@ -24,6 +25,7 @@ public class PropertyEditFieldGivenValues extends PropertyEditField {
 
 		lb = new ListBox();
 		lb.addClickHandler(c);
+
 		
 	}
 
@@ -33,11 +35,17 @@ public class PropertyEditFieldGivenValues extends PropertyEditField {
 		drawField();
 
 	}
+	
+	protected Widget getInputElement() {
+		
+		return lb;
+		
+	}
 
 	@Override
 	public void drawField() {
 
-
+		p.removeStyleName("field-loading");
 		super.p.add(lb);
 
 		Iterator<Property> it = possibleValues.iterator();

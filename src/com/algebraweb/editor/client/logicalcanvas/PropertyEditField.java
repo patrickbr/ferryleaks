@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
 public class PropertyEditField extends Composite{
 	
@@ -27,6 +28,9 @@ public class PropertyEditField extends Composite{
 		p.add(fieldTitle);
 		
 		fieldContent = new TextBox();
+		
+		p.addStyleName("field-loading");
+		
 	
 		initWidget(p);
 		
@@ -34,7 +38,7 @@ public class PropertyEditField extends Composite{
 	
 	public void drawField() {
 		
-		
+		p.removeStyleName("field-loading");
 		fieldContent.addStyleName("content-edit-field-textbox");
 		p.add(fieldContent);
 		
@@ -44,15 +48,21 @@ public class PropertyEditField extends Composite{
 		
 		if (erroneous) {
 			
-			p.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-			p.getElement().getStyle().setBorderWidth(1, Unit.PX);
-			p.getElement().getStyle().setBorderColor("red");
+			getInputElement().getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+			getInputElement().getElement().getStyle().setBorderWidth(1, Unit.PX);
+			getInputElement().getElement().getStyle().setBorderColor("red");
 			
 		}else{
 			
-			p.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+			getInputElement().getElement().getStyle().setBorderStyle(BorderStyle.NONE);
 				
 		}
+		
+	}
+	
+	protected Widget getInputElement() {
+		
+		return fieldContent;
 		
 	}
 		
@@ -76,6 +86,7 @@ public class PropertyEditField extends Composite{
 	public void bindToPropertyVal(PropertyValue pv) {
 		
 		this.pv=pv;
+		
 		fieldContent.setText(pv.getVal());
 		
 		

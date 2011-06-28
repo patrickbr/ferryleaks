@@ -2,6 +2,8 @@ package com.algebraweb.editor.client.graphcanvas;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -88,7 +90,8 @@ public class GraphNodeModifier {
 
 		n.getEdgesTo().remove(e);
 		n.getEdgesFrom().remove(e);
-		getOffset(n,e.getOrientation(),null,false,-1,true,false);
+	    getOffset(n,e.getOrientationFrom(),null,false,-1,true,false);
+	    getOffset(n,e.getOrientation(),null,false,-1,true,false);
 
 	}
 
@@ -255,10 +258,10 @@ public class GraphNodeModifier {
 		ArrayList<GraphEdge> edges = getEdgesByOrientation(orientation,n.getEdgesTo());
 		ArrayList<GraphEdge> edgesF = getEdgesByOrientationFrom(orientation,n.getEdgesFrom());
 
-		int length = edges.size();
-		if (edgesF.size() > 0) {
-			length++;
-		}
+		int length = edges.size() + edgesF.size();
+		//if (edgesF.size() > 0) {
+		//	length++;
+		//}
 
 		Iterator<GraphEdge> i = edges.iterator();
 		Iterator<GraphEdge> a = edgesF.iterator();
@@ -281,6 +284,7 @@ public class GraphNodeModifier {
 			c++;
 
 		}
+		
 
 		while (a.hasNext()) {
 
@@ -293,9 +297,13 @@ public class GraphNodeModifier {
 
 				ret = step * c;
 			}
+			
+			c++;
 
 
 		}
+		
+		GWT.log(Integer.toString(c));
 
 		return ret;
 

@@ -35,6 +35,18 @@
     <url-pattern>/algebraeditor/manipulate</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>FileServerServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.fileserver.FileServerServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>FileServerServlet</servlet-name>
+    <url-pattern>/algebraeditor/fileserver</url-pattern>
+  </servlet-mapping>
+  
+  
+  
 
   <!-- Default page to serve -->
   <welcome-file-list>

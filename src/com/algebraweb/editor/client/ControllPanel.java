@@ -4,6 +4,7 @@ package com.algebraweb.editor.client;
 import gwtupload.client.IUploader;
 import gwtupload.client.MultiUploader;
 import gwtupload.client.SingleUploader;
+import gwtupload.client.Uploader;
 import gwtupload.client.IUploadStatus.Status;
 
 import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
@@ -20,7 +21,9 @@ import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -29,10 +32,20 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.StackLayoutPanel;
+import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.hydro4ge.raphaelgwt.client.Raphael.Text;
 
 /**
@@ -52,20 +65,100 @@ public class ControllPanel extends AbsolutePanel{
 	private boolean dragging=false;
 
 	private LogicalCanvas c;
-	PlanModelManipulator m;
-	RemoteManipulationServiceAsync rmsa;
-	
-	public ControllPanel(int width, int height,LogicalCanvas g,RemoteManipulationServiceAsync rmsa) {
+	private PlanModelManipulator m;
+	private RemoteManipulationServiceAsync rmsa;
+
+	public ControllPanel(PlanModelManipulator man,int width, int height,LogicalCanvas g,RemoteManipulationServiceAsync rmsa) {
 
 		super();
 
+		this.m=man;
 		this.c=g;
 		this.rmsa = rmsa;
-		this.m= new PlanModelManipulator(c,rmsa);
+		
 
-		Button sortB = new Button("Sort using dot");
+		LayoutPanel l = new LayoutPanel();
+		l.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
-		sortB.addClickHandler(new ClickHandler() {
+		l.setHeight("500px");
+		NumberedStackLayoutPanel p = new NumberedStackLayoutPanel(Unit.PX);
+	
+	
+
+		FlowPanel editPanel = new FlowPanel();
+		
+		ControllPanelButton addNodeButton = new ControllPanelButton("Add new node","add");
+
+		addNodeButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				c.enterNodeAddingMode("attach");
+
+			}});
+
+		editPanel.add(addNodeButton);
+
+		ControllPanelButton delete = new ControllPanelButton("Delete selected nod","delete");
+
+		delete.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				m.deleteNode(c.getSelectedNode().getId(), 0);
+
+			}});
+
+		editPanel.add(delete);
+
+		ControllPanelButton edit = new ControllPanelButton("Edit selected node","edit");
+
+		edit.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				//TODO: planid is fix
+				new NodeEditDialog(m,ControllPanel.this.rmsa,c.getSelectedNode().getId(),0);
+
+			}});
+
+		editPanel.add(edit);
+		
+		ControllPanelButton xml = new ControllPanelButton("Get XML for selected node","xml");
+
+		xml.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				ControllPanel.this.rmsa.getXMLFromPlanNode(0,c.getSelectedNode().getId(), xmlCb);
+			}});
+
+		editPanel.add(xml);
+		
+		ControllPanelButton xmlPlan = new ControllPanelButton("Get XML plan beginning with selected node","xml-down");
+
+		xmlPlan.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(0,c.getSelectedNode().getId(), xmlCb);
+			}});
+
+		editPanel.add(xmlPlan);
+
+
+
+		p.add(editPanel,"Edit",30);
+
+
+		FlowPanel sortPanel = new FlowPanel();
+
+		ControllPanelButton dotSort = new ControllPanelButton("Sort with dot","sort-dot");
+
+		dotSort.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -74,9 +167,9 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 
-		this.add(sortB,40,100);
+		sortPanel.add(dotSort);
 
-		Button sortC = new Button("Sort as a circle");
+		ControllPanelButton sortC = new ControllPanelButton("circle","sort-circle");
 
 		sortC.addClickHandler(new ClickHandler() {
 
@@ -86,11 +179,10 @@ public class ControllPanel extends AbsolutePanel{
 
 			}});
 
+		sortPanel.add(sortC);
 
-		this.add(sortC,40,130);
 
-
-		Button sortBBB = new Button("Sort inline");
+		ControllPanelButton sortBBB = new ControllPanelButton("line","sort-line");
 
 		sortBBB.addClickHandler(new ClickHandler() {
 
@@ -100,24 +192,13 @@ public class ControllPanel extends AbsolutePanel{
 
 			}});
 
-
-		this.add(sortBBB,40,70);
-
-
-		Button sortBBBB = new Button("Delete selected");
-
-		sortBBBB.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				m.deleteNode(c.getSelectedNode().getId(), 0);
-
-			}});
+		sortPanel.add(sortBBB);
 
 
-		this.add(sortBBBB,260,260);
+		p.add(sortPanel,"Sort",30);
 
-		Button sortBBBBB = new Button("Load testnodes");
+
+		ControllPanelButton sortBBBBB = new ControllPanelButton("Load testnodes","testnodes");
 
 		sortBBBBB.addClickHandler(new ClickHandler() {
 
@@ -126,10 +207,21 @@ public class ControllPanel extends AbsolutePanel{
 				makeTest();
 
 			}});
+		
+		ControllPanelButton downloadPlan = new ControllPanelButton("Download plan","download-plan");
+
+		downloadPlan.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				GraphCanvas.showLoading("Preparing file...");
+				Window.open(GWT.getModuleBaseURL() + "fileserver?pid=0" , "_self", "");
+				GraphCanvas.hideLoading();
+
+			}});
 
 
-		this.add(sortBBBBB,260,230);
-
+		
 
 		Button sortBBBBBB = new Button("+");
 
@@ -142,7 +234,6 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 
-		this.add(sortBBBBBB,60,220);
 
 		Button sortBBBBBBB = new Button("-");
 
@@ -155,125 +246,45 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 
-		this.add(sortBBBBBBB,40,220);
-		
-		
-		
-		Button validate = new Button("Edit");
-
-		validate.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				
-				//TODO: planid is fix
-				new NodeEditDialog(m,ControllPanel.this.rmsa,c.getSelectedNode().getId(),0);
-
-			}});
 
 
-		this.add(validate,40,260);
+
+
 
 		SingleUploader defaultUploader = new SingleUploader();
 		defaultUploader.setAutoSubmit(true);
 		defaultUploader.setWidth("160px");
 		defaultUploader.getFileInput().setLength(20);
-		this.add(new HTML("Upload XML File:"),40,170);
-
-
-		this.add(defaultUploader,40,190);
+		
+		FlowPanel ioPanel = new FlowPanel();
+		
+		ioPanel.add(defaultUploader);
+		ioPanel.add(sortBBBBB );
+		ioPanel.add(downloadPlan);
+		
+		p.add(ioPanel,"I/O",30);
 
 
 		defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
 		defaultUploader.addOnStartUploadHandler(onStartUploaderHandler);
 
+		Uploader.setStatusInterval(100);
 
 		this.setStylePrimaryName("controllpanel");
 
 		this.getElement().getStyle().setPosition(Position.FIXED);
 
 
+		l.add(p);
+		this.add(l);
 
-		addDomHandler(new MouseUpHandler() {
-
-			@Override
-			public void onMouseUp(MouseUpEvent event) {
-
-				ControllPanel.this.dragging = false;
-
-			}
-
-
-		}, MouseUpEvent.getType());
-
-
-		MouseMoveHandler mm=new MouseMoveHandler() {
-
-			@Override
-			public void onMouseMove(MouseMoveEvent event) {
-
-				if (ControllPanel.this.dragging) {
-					ControllPanel.this.doDrag(event.getClientX(), event.getClientY());
-				}
-
-			}
-
-
-		};	
-
-		addDomHandler(mm,MouseMoveEvent.getType());
-
-		c.addDomHandler(mm,MouseMoveEvent.getType());
-
-
-
-
-
-		addDomHandler(new MouseDownHandler() {
-
-			@Override
-			public void onMouseDown(MouseDownEvent event) {
-
-
-				
-
-				dragStart(event.getX(), event.getY());
-
-
-			}
-
-		}, MouseDownEvent.getType());
 
 
 
 
 	}
 
-	public void doDrag(int x, int y) {
 
-		x=x - dragOffsetX;
-		y=y - dragOffsetY;
-
-		if (x<0) x=0;
-		if (y<0) y=0;
-
-		if (x+this.getOffsetWidth() > Window.getClientWidth()) x= Window.getClientWidth() -this.getOffsetWidth(); 
-		if (y+this.getOffsetHeight() > Window.getClientHeight()) y= Window.getClientHeight() -this.getOffsetHeight(); 
-
-
-		this.getElement().getStyle().setLeft(x, Style.Unit.PX);
-		this.getElement().getStyle().setTop(y, Style.Unit.PX);
-
-	}
-
-
-	private void dragStart(int x,int y) {
-
-		dragOffsetX = x;
-		dragOffsetY =y;
-		dragging=true;
-
-	}
 
 
 
@@ -302,14 +313,14 @@ public class ControllPanel extends AbsolutePanel{
 
 					ControllPanel.this.awaitingFileUpload = "";
 					f.fill(new RemoteFiller("xml"), new GraphManipulationCallback() {
-						
+
 						@Override
 						public void onComplete() {
 							m.validate(0);
-							
+
 						}
 					});
-					
+
 				}
 
 			}
@@ -320,20 +331,38 @@ public class ControllPanel extends AbsolutePanel{
 
 		@Override
 		public void onStart(IUploader uploader) {
-
-			GWT.log("gurr:" + uploader.getFileInput().getFilename());
+	
+			ControllPanel.this.awaitingFileUpload = Long.toString(System.currentTimeMillis());
 			
+			String servPath = uploader.getServletPath().split("\\?")[0];
 			
-			String file = uploader.getFileName();
-			ControllPanel.this.awaitingFileUpload = file;
-
-
+			GWT.log(servPath);
+			uploader.setServletPath(servPath+ "?myinfo=" + awaitingFileUpload);
 
 		}
 
 
 	};
 
+	
+	
+	private AsyncCallback<String> xmlCb = new AsyncCallback<String>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onSuccess(String result) {
+
+
+			Window.alert(result);
+
+
+		}
+
+	};
 
 
 }

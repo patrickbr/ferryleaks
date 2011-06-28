@@ -25,7 +25,7 @@ public interface RemoteManipulationServiceAsync {
 
 	void getPlanNode(int nid, int pid, AsyncCallback<PlanNode> callback);
 
-	void updatePlanNode(int nid, int pid, PlanNode p,
+	void updatePlanNode(int nid, int pid, String xml,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
 	void valideContentNodeGrammer(ContentNode c, ArrayList<GoAble> schema,
@@ -33,6 +33,19 @@ public interface RemoteManipulationServiceAsync {
 
 	void getReferencableColumnsWithoutAdded(int nid, int pid,
 			AsyncCallback<ArrayList<Property>> callback);
+
+	void getXMLFromContentNode(ContentNode c, AsyncCallback<String> callback);
+
+	void getXMLFromPlanNode(int pid, int nid, AsyncCallback<String> callback);
+
+	void updatePlanNode(int nid, int pid, PlanNode p,
+			AsyncCallback<RemoteManipulationMessage> callback);
+
+	void getXMLLogicalPlanFromRootNode(int pid, int nid,
+			AsyncCallback<String> callback);
+
+	void addNode(int planid, String nodeType, int x, int y,
+			AsyncCallback<RemoteManipulationMessage> callback);
 	
 	
 

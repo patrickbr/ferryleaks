@@ -3,6 +3,8 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -51,7 +53,7 @@ public class GraphEdgeModifier {
 	protected void hide(GraphEdge e) {
 
 		e.getEdgePath().hide();
-
+	
 	}
 
 
@@ -93,8 +95,8 @@ public class GraphEdgeModifier {
 
 
 	protected void snakeOut(GraphEdge e) {
-		
-			
+
+
 		if (!e.isSnakedIn()) return;
 		e.setSnakedIn(false);
 		e.getEdgePath().attr("path", e.getEdgePathSmallString());
@@ -102,14 +104,14 @@ public class GraphEdgeModifier {
 		JSONObject attrs = new JSONObject();
 		attrs.put("path", new JSONString(e.getEdgePathString()));
 		e.getEdgePath().animate(attrs,600,snakeCallbackBuilder(e));
-		
-		
+
+
 
 	}
 
 
 	protected void snakeIn(GraphEdge e) {
-		
+
 		if (e.isSnakedIn()) return;
 		e.setSnakedIn(true);
 		hideArrow(e);
@@ -117,7 +119,7 @@ public class GraphEdgeModifier {
 		JSONObject attrs = new JSONObject();
 		attrs.put("path", new JSONString(e.getEdgePathSmallString()));
 		e.getEdgePath().animate(attrs,600,snakeInCallbackBuilder(e));
-		
+
 	}
 
 
@@ -156,17 +158,30 @@ public class GraphEdgeModifier {
 		double toX = to.getX();
 		double toY = to.getY();
 
+		int offSetTo=0;
+		int offSetFrom=0;
+
+		if (!c.isInvertArrows()) {
+
+			offSetTo=e.getArrowSize();
+
+		}else{
+
+			offSetFrom=e.getArrowSize();
+
+		}
+
 		Coordinate[] p = e.getP();
 
-		p[0] = new Coordinate(fromX  + e.getOffsetFrom(),fromY - 1);
-		p[1] = new Coordinate(fromX  + e.getOffsetFrom(),fromY + fromHeight + 1);
-		p[2] = new Coordinate(fromX  - 1,fromY + e.getOffsetFrom());
-		p[3] = new Coordinate(fromX  + from.getWidth() + 1,fromY + e.getOffsetFrom());
-		
-		p[4] = new Coordinate(toX  + e.getOffset(),toY - 1-(e.getArrowSize()));
-		p[5] = new Coordinate(toX  + e.getOffset(),toY + toHeight + 1 + (e.getArrowSize()));
-		p[6] = new Coordinate(toX  - 1 - (e.getArrowSize()),toY+ e.getOffset());
-		p[7] = new Coordinate(toX  + toWidth + 1 + (e.getArrowSize()),toY + e.getOffset());
+		p[0] = new Coordinate(fromX  + e.getOffsetFrom(),fromY - 1-offSetFrom);
+		p[1] = new Coordinate(fromX  + e.getOffsetFrom(),fromY + fromHeight + 1+offSetFrom);
+		p[2] = new Coordinate(fromX  - 1-offSetFrom,fromY + e.getOffsetFrom());
+		p[3] = new Coordinate(fromX  + from.getWidth() + 1+offSetFrom,fromY + e.getOffsetFrom());
+
+		p[4] = new Coordinate(toX  + e.getOffset(),toY - 1-(offSetTo));
+		p[5] = new Coordinate(toX  + e.getOffset(),toY + toHeight + 1 + (offSetTo));
+		p[6] = new Coordinate(toX  - 1 - (offSetTo),toY+ e.getOffset());
+		p[7] = new Coordinate(toX  + toWidth + 1 + (offSetTo),toY + e.getOffset());
 
 		e.setP(p);
 
@@ -194,12 +209,17 @@ public class GraphEdgeModifier {
 
 	protected void drawEdge(GraphEdge e,boolean quiet) {
 
+
 		if (e.getEdgePath() == null) {
 			e.setEdgePath(c.new Path());
 			e.getEdgePath().hide();
 		}
 
-		e.setPathStringSmall("M" + e.getX1() + "," + e.getY1()) ;
+		if (c.isInvertArrows()) {
+			e.setPathStringSmall("M" + e.getX4() + "," + e.getY4()) ;
+		}else{
+			e.setPathStringSmall("M" + e.getX1() + "," + e.getY1()) ;
+		}
 
 		e.setEdgePathString("M" + e.getX1() + "," + e.getY1() + "C" + e.getX2() + "," + e.getY2() + "," + e.getX3() + "," + e.getY3() + "," + e.getX4() + "," + e.getY4());
 
@@ -210,34 +230,58 @@ public class GraphEdgeModifier {
 		double[] xA = {e.getX4(), e.getX4(), e.getX4()+e.getArrowSize(),e.getX4()-e.getArrowSize()};
 		double[] yA = {e.getY4()+e.getArrowSize() ,e.getY4()-e.getArrowSize(), e.getY4(), e.getY4()};
 
+		double[] xB = {e.getX1(), e.getX1(), e.getX1()+e.getArrowSize(),e.getX1()-e.getArrowSize()};
+		double[] yB = {e.getY1()+e.getArrowSize() ,e.getY1()-e.getArrowSize(), e.getY1(), e.getY1()};
+
+
+
 		double angle = Math.atan2(e.getX3()-xA[e.getToPosition()],yA[e.getToPosition()]-e.getY3());
 		angle = ((angle / (2 * Math.PI)) * 360);
 
-		String arrowPath = "M" + xA[e.getToPosition()] + "," + yA[e.getToPosition()] + "," + (xA[e.getToPosition()] - e.getArrowSize()) + "," + (yA[e.getToPosition()] - e.getArrowSize()) + " L" + (xA[e.getToPosition()] - e.getArrowSize()) + "," + (yA[e.getToPosition()] + e.getArrowSize()) + " L" + xA[e.getToPosition()] + "," + yA[e.getToPosition()];
+		String arrowPath;
+		int toSwitch;
+
+		if (!c.isInvertArrows()) {
+			toSwitch = e.getToPosition();
+			arrowPath = "M" + xA[e.getToPosition()] + "," + yA[e.getToPosition()] + "," + (xA[e.getToPosition()] - e.getArrowSize()) + "," + (yA[e.getToPosition()] - e.getArrowSize()) + " L" + (xA[e.getToPosition()] - e.getArrowSize()) + "," + (yA[e.getToPosition()] + e.getArrowSize()) + " L" + xA[e.getToPosition()] + "," + yA[e.getToPosition()];
+		}else{
+			toSwitch = e.getFromPosition();
+			arrowPath = "M" + xB[e.getFromPosition()] + "," + yB[e.getFromPosition()] + "," + (xB[e.getFromPosition()] - e.getArrowSize()) + "," + (yB[e.getFromPosition()] - e.getArrowSize()) + " L" + (xB[e.getFromPosition()] - e.getArrowSize()) + "," + (yB[e.getFromPosition()] + e.getArrowSize()) + " L" + xB[e.getFromPosition()] + "," + yB[e.getFromPosition()];
+
+		}
 
 		if (e.getArrowPath() ==null) {
 			e.setArrowPath(c.new Path());
 			e.getArrowPath().hide();
 		}
-		
+
 		e.getArrowPath().attr("path",arrowPath);
 		e.getArrowPath().attr("stroke-width","1");
 
-		switch(e.getToPosition()) {
-		
-			case 0: angle = 90;break; //oben
-			case 1: angle = 270;break; //unten
-			case 2: angle = 0;break; //left
-			case 3: angle = 180;break; //right
-		
+
+
+
+		switch(toSwitch) {
+
+		case 0: angle = 90;break; //oben
+		case 1: angle = 270;break; //unten
+		case 2: angle = 0;break; //left
+		case 3: angle = 180;break; //right
+
 		}
 
-		e.getArrowPath().rotate(angle,xA[e.getToPosition()],yA[e.getToPosition()]);
+		if (!c.isInvertArrows()) {
+			e.getArrowPath().rotate(angle,xA[e.getToPosition()],yA[e.getToPosition()]);
+		}else{
+			e.getArrowPath().rotate(angle,xB[e.getFromPosition()],yB[e.getFromPosition()]);
+		}
 
 		JSONObject newAttrs = new JSONObject();
 		newAttrs.put("stroke-opacity", new JSONNumber(1));
-		
-		if (!quiet) snakeOut(e);
+
+		if (!quiet) {
+			snakeOut(e);
+		}
 
 	}
 
@@ -256,19 +300,33 @@ public class GraphEdgeModifier {
 		double toX = to.getX();
 		double toY = to.getY();
 
+		int offSetTo=0;
+		int offSetFrom=0;
+
+		if (!c.isInvertArrows()) {
+
+			offSetTo=e.getArrowSize();
+
+		}else{
+
+			offSetFrom=e.getArrowSize();
+
+		}
+
 		//generate the path the connection will be drawn along
 
-		p[0] = new Coordinate(fromX + fromWidth / 2,fromY - 1);
-		p[1] = new Coordinate(fromX + fromWidth / 2,fromY + fromHeight + 1);
-		p[2] = new Coordinate(fromX - 1,fromY + fromHeight/ 2);
-		p[3] = new Coordinate(fromX + fromWidth + 1,fromY + fromHeight / 2);
-		p[4] = new Coordinate(toX + toWidth  / 2,toY - 1-e.getArrowSize());
-		p[5] = new Coordinate(toX + toWidth  / 2,toY + toHeight + 1 + e.getArrowSize());
-		p[6] = new Coordinate(toX - 1 - e.getArrowSize(),toY + toHeight / 2);
-		p[7] = new Coordinate(toX + toWidth  + 1 + e.getArrowSize(),toY + toHeight / 2);
+		p[0] = new Coordinate(fromX + fromWidth / 2,fromY - 1 - offSetFrom);
+		p[1] = new Coordinate(fromX + fromWidth / 2,fromY + fromHeight + 1 + offSetFrom);
+		p[2] = new Coordinate(fromX - 1 - offSetFrom,fromY + fromHeight/ 2);
+		p[3] = new Coordinate(fromX + fromWidth + 1 + offSetFrom,fromY + fromHeight / 2);
+
+		p[4] = new Coordinate(toX + toWidth  / 2,toY - 1-offSetTo);
+		p[5] = new Coordinate(toX + toWidth  / 2,toY + toHeight + 1 + offSetTo);
+		p[6] = new Coordinate(toX - 1 - offSetTo,toY + toHeight / 2);
+		p[7] = new Coordinate(toX + toWidth  + 1 + offSetTo,toY + toHeight / 2);
 
 
-		
+
 		e.setP(p);
 
 		HashMap<Integer,Coordinate> d = new HashMap<Integer,Coordinate>();
@@ -277,16 +335,16 @@ public class GraphEdgeModifier {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 4; j < 8; j++) {
 				double dx = Math.abs(p[i].getX() - p[j].getX() );
-				double dy = Math.abs(p[i].getY()-e.getArrowSize() - p[j].getY());
-				
-				//TODO: arrow angle on overlapping nodes
-				
+				double dy = Math.abs(p[i].getY()-offSetTo - p[j].getY());
+
+
+
 				if ((i == j - 4) || 
-						(((i != 3 && j != 6) || p[i].getX()-e.getArrowSize()  < p[j].getX()+e.getArrowSize()) 
-								
-								&& ((i != 2 && j != 7) || p[i].getX()+e.getArrowSize() > p[j].getX()-e.getArrowSize()) 
-								&& ((i != 0 && j != 5) || p[i].getY()-e.getArrowSize()  > p[j].getY() +e.getArrowSize()) 
-								&& ((i != 1 && j != 4) || p[i].getY()+e.getArrowSize() < p[j].getY()-e.getArrowSize()))) {
+						(((i != 3 && j != 6) || p[i].getX()-offSetTo  < p[j].getX()+offSetTo) 
+
+								&& ((i != 2 && j != 7) || p[i].getX()+offSetTo > p[j].getX()-offSetTo) 
+								&& ((i != 0 && j != 5) || p[i].getY()-offSetTo  > p[j].getY() +offSetTo) 
+								&& ((i != 1 && j != 4) || p[i].getY()+offSetTo < p[j].getY()-offSetTo))) {
 					dis.add((int) (dx + dy));
 
 					d.put(dis.get(dis.size() - 1), new Coordinate(i, j));
@@ -300,6 +358,9 @@ public class GraphEdgeModifier {
 			res = new Coordinate(0,4);
 		} else {
 			res = d.get(getSmallestVal(dis));
+
+			//TODO: if tree!!!
+			res = new Coordinate(1,res.getY());
 		}
 
 		return res;
@@ -326,7 +387,7 @@ public class GraphEdgeModifier {
 
 
 	protected void update(GraphEdge e, boolean quiet) {
-		
+
 		makeConnection(e, e.getFrom(),e.getTo(), quiet);
 
 	}

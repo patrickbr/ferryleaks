@@ -1,7 +1,9 @@
 package com.algebraweb.editor.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -13,6 +15,7 @@ public class RemoteManipulationMessage implements IsSerializable{
 	private ValidationResult validationResult;
 	
 	private ArrayList<RawNode> nodesAffected = new ArrayList<RawNode>();
+	private HashMap<Integer,Coordinate> coordinates = new HashMap<Integer,Coordinate>();
 	
 	private String action;
 	
@@ -35,9 +38,20 @@ public class RemoteManipulationMessage implements IsSerializable{
 	public int getReturnCode() {
 		return returnCode;
 	}
+	
 
 	public void setReturnCode(int returnCode) {
 		this.returnCode = returnCode;
+	}
+	
+	
+
+	public HashMap<Integer, Coordinate> getCoordinates() {
+		return coordinates;
+	}
+
+	public void setCoordinates(HashMap<Integer, Coordinate> coordinates) {
+		this.coordinates = coordinates;
 	}
 
 	public String getMessage() {
@@ -67,6 +81,8 @@ public class RemoteManipulationMessage implements IsSerializable{
 	public ArrayList<RawNode> getNodesAffected() {
 		return nodesAffected;
 	}
+	
+
 
 		
 

@@ -19,7 +19,7 @@ public class ContentVal extends NodeContent {
 
 	
 
-	String value;
+	private String value;
 
 
 	public ContentVal(String name, String internalName,String value) {

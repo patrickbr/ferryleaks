@@ -2,6 +2,7 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.PlanModelManipulator;
 import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdgeModifier;
@@ -10,17 +11,69 @@ import com.algebraweb.editor.client.graphcanvas.GraphNodeModifier;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 
 public class LogicalCanvas extends GraphCanvas{
+	
+	
+	
+	private int state = 0;
+	private PlanModelManipulator m;
+	private String addingModeNodeType;
 
 
 
 
+	public LogicalCanvas(PlanModelManipulator m,int width, int height) {
+		super(width, height,true);
+		
+		this.m=m;
+		m.setCanvas(this);
+		
+		super.addDomHandler(new MouseMoveHandler() {
 
-	public LogicalCanvas(int width, int height) {
-		super(width, height);
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				
+				
+				
+				
+			}
+			
+		},MouseMoveEvent.getType());
+		
+		
+		super.addDomHandler(new MouseUpHandler() {
+
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+				
+				
+				if (state == 1) {
+					
+					state = 0;
+					
+					int x=-marginLeft+(int)(getScale() * (event.getRelativeX(LogicalCanvas.super.getElement())));
+					int y=-marginTop+(int)(getScale() * (event.getRelativeY(LogicalCanvas.super.getElement())));
+					//TODO: pid
+					
+					LogicalCanvas.this.m.addNode(0, addingModeNodeType, x,y);
+					
+				}
+				
+				
+			}
+
+		}, MouseUpEvent.getType());
+		
+		
 	}
+	
+	
+	
 
 
 	public void setErroneous(int nid) {
@@ -63,6 +116,16 @@ public class LogicalCanvas extends GraphCanvas{
 	}
 	
 
+	public void enterNodeAddingMode(String addingModeNodeType) {
+		
+		
+		state=1;
+		this.addingModeNodeType= addingModeNodeType;
+		
+		
+		
+		
+	}
 	
 	
 	//TODO: DUMMY

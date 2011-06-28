@@ -9,13 +9,14 @@ import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.LogicalNodePopup;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 
 /**
- * The WebFerry
- * A Web Editor for the Table Algebra
+ * the bugFerry
+ * A Web-Based Debugging Editor for the Table Algebra
  * 
  * @author Patrick Brosi
  *
@@ -29,9 +30,14 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		
+	
+		
 		RemoteManipulationServiceAsync rmsa = (RemoteManipulationServiceAsync) GWT.create(RemoteManipulationService.class);
 
-		LogicalCanvas lCanvas = new LogicalCanvas(Window.getClientWidth()-30,Window.getClientHeight()-30);
+		PlanModelManipulator m = new PlanModelManipulator(rmsa);
+		
+		
+		LogicalCanvas lCanvas = new LogicalCanvas(m,Window.getClientWidth()-30,Window.getClientHeight()-30);
 		
 		GraphNodeModifier gnm = new GraphNodeModifier(lCanvas);
 		GraphEdgeModifier gem = new GraphEdgeModifier(lCanvas);
@@ -39,19 +45,23 @@ public class AlgebraEditor implements EntryPoint {
 		lCanvas.setGraphEdgeModifier(gem);
 		lCanvas.setGraphNodeModifier(gnm);
 		lCanvas.setPopup(new LogicalNodePopup(lCanvas,rmsa));
+		lCanvas.setPadding(60, 45);
+
+
 		
 		FullScreenDragPanel d = new FullScreenDragPanel();
+	
+	
 		
 		d.add(lCanvas);
 		
 		
 		
 		RootPanel.get("editor").add(d);
-		RootPanel.get("editor").add(new ControllPanel(300,300,lCanvas,rmsa));
+		RootPanel.get("editor").add(new ControllPanel(m,300,300,lCanvas,rmsa));
 		
 		d.center(lCanvas.getWidth(), lCanvas.getHeight());
 			
-		lCanvas.lock();
-		lCanvas.unLock();
+
 	}
 }

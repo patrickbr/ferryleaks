@@ -152,7 +152,7 @@ public class DotSorter implements RemoteSorter {
 
 	private String getDotCode(ArrayList<RawNode> nodes) {
 
-		String ret = "digraph sort_graph {\n graph [];";
+		String ret = "digraph sort_graph {\n graph [ordering=out];";
 
 		Iterator<RawNode> i = nodes.iterator();
 
