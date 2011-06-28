@@ -5,12 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-
-import org.xml.sax.SAXException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Text;
@@ -21,7 +15,6 @@ import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.node.QueryPlan;
-import com.sun.xml.internal.messaging.saaj.soap.impl.ElementFactory;
 
 public class XMLNodePlanBuilder {
 
