@@ -510,6 +510,22 @@ table td,table {
 	background-position: -93px 4px;
 }
 
+.controllbutton-upload {
+	background-image: url(icons_black.png);
+	background-position: -317px -188px;
+}
+
+.controllbutton-sort-line {
+	background-image: url(icons_black.png);
+	background-position: -61px -222px;
+}
+
+.controllbutton-sort-circle {
+	background-image: url(icons_black.png);
+	background-position: -60px -190px;
+}
+
+
 
 #impressum {
 	position: fixed;

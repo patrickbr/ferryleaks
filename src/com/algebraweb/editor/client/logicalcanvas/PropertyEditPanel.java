@@ -50,7 +50,7 @@ public class PropertyEditPanel extends Composite{
 
 		p.add(title);
 		
-		PushButton deleteButton = new PushButton("X");
+		Button deleteButton = new Button("X");
 		
 		deleteButton.addClickHandler(new ClickHandler() {
 

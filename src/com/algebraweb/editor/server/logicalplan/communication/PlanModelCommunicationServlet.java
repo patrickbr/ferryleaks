@@ -493,4 +493,15 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		}
 	}
 
+
+	@Override
+	public String[] getNodeTypes() {
+		
+		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
+		
+		return schemes.keySet().toArray(new String[0]);
+		
+		
+	}
+
 }

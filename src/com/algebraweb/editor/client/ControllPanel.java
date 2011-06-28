@@ -61,8 +61,9 @@ public class ControllPanel extends AbsolutePanel{
 
 	private int dragOffsetX;
 	private int dragOffsetY;
-	private String awaitingFileUpload;
+
 	private boolean dragging=false;
+	final UploadDialog d;
 
 	private LogicalCanvas c;
 	private PlanModelManipulator m;
@@ -93,7 +94,8 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.enterNodeAddingMode("attach");
+				ControllPanel.this.rmsa.getNodeTypes(nodeTypesCb);
+				
 
 			}});
 
@@ -198,15 +200,6 @@ public class ControllPanel extends AbsolutePanel{
 		p.add(sortPanel,"Sort",30);
 
 
-		ControllPanelButton sortBBBBB = new ControllPanelButton("Load testnodes","testnodes");
-
-		sortBBBBB.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				makeTest();
-
-			}});
 		
 		ControllPanelButton downloadPlan = new ControllPanelButton("Download plan","download-plan");
 
@@ -244,31 +237,38 @@ public class ControllPanel extends AbsolutePanel{
 				c.zoom(((1 / c.getScale()) * 100) - 10);
 
 			}});
+		
+		
+		d= new UploadDialog(this);
+		
+		
+
+
+		ControllPanelButton uploadButton = new ControllPanelButton("Upload XML plan", "upload");
+
+		uploadButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				d.center();
+				d.show();
+
+			}});
 
 
 
 
 
-
-
-		SingleUploader defaultUploader = new SingleUploader();
-		defaultUploader.setAutoSubmit(true);
-		defaultUploader.setWidth("160px");
-		defaultUploader.getFileInput().setLength(20);
+		
 		
 		FlowPanel ioPanel = new FlowPanel();
 		
-		ioPanel.add(defaultUploader);
-		ioPanel.add(sortBBBBB );
+		ioPanel.add(uploadButton);
 		ioPanel.add(downloadPlan);
 		
 		p.add(ioPanel,"I/O",30);
-
-
-		defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
-		defaultUploader.addOnStartUploadHandler(onStartUploaderHandler);
-
-		Uploader.setStatusInterval(100);
+		
 
 		this.setStylePrimaryName("controllpanel");
 
@@ -285,67 +285,19 @@ public class ControllPanel extends AbsolutePanel{
 	}
 
 
+	
 
+	
+	
+	public LogicalCanvas getC() {
+		return c;
+	}
 
-
-	private void makeTest() {
-
-
-		GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
-
-
-		f.fill(new RemoteFiller("random"),null);
-
-
-
-
+	public PlanModelManipulator getM() {
+		return m;
 	}
 
 
-
-	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
-		public void onFinish(IUploader uploader) {
-			if (uploader.getStatus() == Status.SUCCESS) {
-
-				if (ControllPanel.this.awaitingFileUpload.equals(uploader.getServerInfo().message)) {
-
-					GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
-
-					ControllPanel.this.awaitingFileUpload = "";
-					f.fill(new RemoteFiller("xml"), new GraphManipulationCallback() {
-
-						@Override
-						public void onComplete() {
-							m.validate(0);
-
-						}
-					});
-
-				}
-
-			}
-		}
-	};
-
-	private IUploader.OnStartUploaderHandler onStartUploaderHandler = new IUploader.OnStartUploaderHandler() {
-
-		@Override
-		public void onStart(IUploader uploader) {
-	
-			ControllPanel.this.awaitingFileUpload = Long.toString(System.currentTimeMillis());
-			
-			String servPath = uploader.getServletPath().split("\\?")[0];
-			
-			GWT.log(servPath);
-			uploader.setServletPath(servPath+ "?myinfo=" + awaitingFileUpload);
-
-		}
-
-
-	};
-
-	
-	
 	private AsyncCallback<String> xmlCb = new AsyncCallback<String>() {
 
 		@Override
@@ -358,6 +310,25 @@ public class ControllPanel extends AbsolutePanel{
 
 
 			Window.alert(result);
+
+
+		}
+
+	};
+	
+	
+	private AsyncCallback<String[]> nodeTypesCb = new AsyncCallback<String[]>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onSuccess(String[] result) {
+
+
+			new NodeTypeSelector(result, c);
 
 
 		}

@@ -46,6 +46,8 @@ public interface RemoteManipulationServiceAsync {
 
 	void addNode(int planid, String nodeType, int x, int y,
 			AsyncCallback<RemoteManipulationMessage> callback);
+
+	void getNodeTypes(AsyncCallback<String[]> callback);
 	
 	
 

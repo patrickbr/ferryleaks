@@ -43,4 +43,6 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public String getXMLLogicalPlanFromRootNode(int pid, int nid);
 	
+	public String[] getNodeTypes();
+	
 }

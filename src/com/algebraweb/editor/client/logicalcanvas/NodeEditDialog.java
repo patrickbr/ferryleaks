@@ -141,8 +141,8 @@ public class NodeEditDialog extends DialogBox{
 
 		t.add(nodeEditPanel,"Properties");
 
-		PushButton ok = new PushButton("Save");
-		PushButton cancel = new PushButton("cancel");
+		Button ok = new Button("Save");
+		Button cancel = new Button("cancel");
 		HorizontalPanel hh = new HorizontalPanel();
 
 		cancel.addClickHandler(new ClickHandler() {
@@ -167,6 +167,12 @@ public class NodeEditDialog extends DialogBox{
 		t.add(xmlEditPanel,"Source");
 		t.setSize("550px", "350px");
 
+		ok.getElement().getStyle().setMargin(10, Unit.PX);
+		cancel.getElement().getStyle().setMargin(10, Unit.PX);
+		cancel.getElement().getStyle().setMarginLeft(0, Unit.PX);
+		
+
+		
 		hh.add(ok);
 		hh.add(cancel);
 
