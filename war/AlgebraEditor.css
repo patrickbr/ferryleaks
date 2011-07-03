@@ -228,7 +228,7 @@ h1 {
 }
 
 .controllpanel,#bugferrylogo {
-	background-color: #444;
+	background-color: #222;
 	opacity: 0.8;
 	color: white;
 	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
@@ -237,12 +237,12 @@ h1 {
 .controllpanel {
 	background-color: #666;
 	position: fixed;
-	-webkit-border-bottom-right-radius: 10px;
-	-moz-border-radius-bottomright: 10px;
-	border-bottom-right-radius: 10px;
-	-webkit-border-top-right-radius: 10px;
-	-moz-border-radius-topright: 10px;
-	border-top-right-radius: 10px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	border-bottom-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-right-radius: 5px;
 	width: 60px;
 	top: 80px;
 	left: 0px;
@@ -250,9 +250,9 @@ h1 {
 }
 
 #bugferrylogo {
-	-webkit-border-bottom-right-radius: 20px;
-	-moz-border-radius-bottomright: 20px;
-	border-bottom-right-radius: 20px;
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	border-bottom-right-radius: 10px;
 	position: fixed;
 	left: 0px;
 	top: 0px;
@@ -273,7 +273,7 @@ h1 {
 
 .gwt-StackLayoutPanel
 div.gwt-StackLayoutPanelHeader {
-	background: #333;
+	background: #222;
 	border: none;
 	border-bottom: solid 1px #666;
 }

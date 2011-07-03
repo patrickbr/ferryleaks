@@ -48,6 +48,8 @@ public interface RemoteManipulationServiceAsync {
 			AsyncCallback<RemoteManipulationMessage> callback);
 
 	void getNodeTypes(AsyncCallback<String[]> callback);
+
+	void getSQLFromPlanNode(int pid, int nid, AsyncCallback<String> callback);
 	
 	
 

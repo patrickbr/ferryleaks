@@ -120,7 +120,6 @@ public class DotSorter implements RemoteSorter {
 			BufferedOutputStream b = new BufferedOutputStream(p.getOutputStream());
 			OutputStreamWriter w = new OutputStreamWriter(b);
 
-			//write the code to dot
 			w.write(dotSource);
 			w.close();
 	

@@ -150,6 +150,18 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		editPanel.add(xmlPlan);
+		
+		ControllPanelButton sqlB = new ControllPanelButton("Get SQL of subgraph","sql-down");
+
+		sqlB.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				ControllPanel.this.rmsa.getSQLFromPlanNode(0, c.getSelectedNode().getId(), sqlCb);
+			}});
+
+		editPanel.add(sqlB);
 
 
 
@@ -315,6 +327,26 @@ public class ControllPanel extends AbsolutePanel{
 		}
 
 	};
+	
+	
+	private AsyncCallback<String> sqlCb = new AsyncCallback<String>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onSuccess(String result) {
+
+
+			Window.alert(result);
+
+
+		}
+
+	};
+	
 	
 	
 	private AsyncCallback<String[]> nodeTypesCb = new AsyncCallback<String[]>() {

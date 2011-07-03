@@ -36,6 +36,7 @@ import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.server.logicalplan.sqlbuilder.PlanNodeSQLBuilder;
 import com.algebraweb.editor.server.logicalplan.validation.ValidationMachine;
 import com.algebraweb.editor.server.logicalplan.validation.validators.AbandondedNodeValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.GrammarValidator;
@@ -419,30 +420,41 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public String getXMLFromPlanNode(int pid, int nid) {
 
+	
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		return outputter.outputString(getDomXMLFromPlanNode(pid,nid));
+
+	}
+	
+	private Element getDomXMLFromPlanNode(int pid, int nid) {
+		
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-
-		Element e = npb.getXMLElementFromContentNode(nodeToWork);
-
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		return outputter.outputString(e);
-
+		
+		return npb.getXMLElementFromContentNode(nodeToWork);
+		
 	}
 
 
 	@Override
 	public String getXMLLogicalPlanFromRootNode(int pid, int nid) {
+		
+		Element e = getDomXMLLogicalPlanFromRootNode(pid, nid);
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		return outputter.outputString(e);
+	}
+
+
+	private Element getDomXMLLogicalPlanFromRootNode(int pid, int nid) {
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 		
 		Element e = npb.getNodePlan(0, nodeToWork);
-
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		return outputter.outputString(e);
+		return e;
 	}
 
 
@@ -502,6 +514,20 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return schemes.keySet().toArray(new String[0]);
 		
 		
+	}
+
+
+	@Override
+	public String getSQLFromPlanNode(int pid, int nid) {
+
+		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid);
+		
+		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder();
+		
+		return sqlB.getCompiledSQL(d).get(pid);
+		
+		
+
 	}
 
 }
