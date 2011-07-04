@@ -18,8 +18,7 @@ public class SqlResDialog extends DialogBox {
 		if (res.size()>0) {
 			Grid t = new Grid(res.size(),res.get(0).size());
 			
-			GWT.log("Column count: " + res.get(0).size());
-			GWT.log("Map count: " + res.get(0).keySet().size());
+			GWT.log("Row count: " + res.get(0).size());
 			
 			Iterator<HashMap<String,String>> it = res.iterator();
 			
@@ -31,16 +30,19 @@ public class SqlResDialog extends DialogBox {
 				HashMap<String,String> cur = it.next();
 			
 				Iterator<String> i = cur.keySet().iterator();
+				GWT.log("Column count: " +  cur.keySet().size());
+				
 				
 				while(i.hasNext()) {
 					
 					String curS = i.next();
-			
+					GWT.log(Integer.toString(col));
 					t.setHTML(row, col, cur.get(curS));
 					col++;
 					
 				}
 			
+				col=0;
 				row++;
 			
 				

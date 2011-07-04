@@ -71,17 +71,19 @@ public class ControllPanel extends AbsolutePanel{
 	private boolean dragging=false;
 	final UploadDialog d;
 
-	private LogicalCanvas c;
+
 	private PlanModelManipulator m;
+	private AlgebraEditor e;
 	private RemoteManipulationServiceAsync rmsa;
 
-	public ControllPanel(PlanModelManipulator man,int width, int height,LogicalCanvas g,RemoteManipulationServiceAsync rmsa) {
+	public ControllPanel(AlgebraEditor e,PlanModelManipulator man,int width, int height,RemoteManipulationServiceAsync rmsa) {
 
 		super();
 
 		this.m=man;
-		this.c=g;
+	
 		this.rmsa = rmsa;
+		this.e=e;
 
 
 		LayoutPanel l = new LayoutPanel();
@@ -113,7 +115,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				m.deleteNode(c.getSelectedNode().getId(), 0);
+				m.deleteNode(ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), ControllPanel.this.e.getActiveCanvas().getId());
 
 			}});
 
@@ -127,7 +129,7 @@ public class ControllPanel extends AbsolutePanel{
 			public void onClick(ClickEvent event) {
 
 				//TODO: planid is fix
-				new NodeEditDialog(m,ControllPanel.this.rmsa,c.getSelectedNode().getId(),0);
+				new NodeEditDialog(m,ControllPanel.this.rmsa,ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(),ControllPanel.this.e.getActiveCanvas().getId());
 
 			}});
 
@@ -140,7 +142,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.getXMLFromPlanNode(0,c.getSelectedNode().getId(), xmlCb);
+				ControllPanel.this.rmsa.getXMLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), xmlCb);
 			}});
 
 		editPanel.add(xml);
@@ -152,7 +154,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(0,c.getSelectedNode().getId(), xmlCb);
+				ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), xmlCb);
 			}});
 
 		editPanel.add(xmlPlan);
@@ -164,7 +166,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.getSQLFromPlanNode(0, c.getSelectedNode().getId(), sqlCb);
+				ControllPanel.this.rmsa.getSQLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), sqlCb);
 			}});
 
 		editPanel.add(sqlB);
@@ -176,7 +178,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.eval(0, c.getSelectedNode().getId(), evalCb);
+				ControllPanel.this.rmsa.eval(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), evalCb);
 			}});
 
 		editPanel.add(evalB);
@@ -196,7 +198,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.sort(new RemoteSorter("dot"));
+				ControllPanel.this.e.getActiveCanvas().sort(new RemoteSorter("dot"));
 
 			}});
 
@@ -209,7 +211,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.sort(new RemoteSorter("circle"));
+				ControllPanel.this.e.getActiveCanvas().sort(new RemoteSorter("circle"));
 
 			}});
 
@@ -222,7 +224,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.sort(new RemoteSorter("inline"));
+				ControllPanel.this.e.getActiveCanvas().sort(new RemoteSorter("inline"));
 
 			}});
 
@@ -254,7 +256,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.zoom(((1 / c.getScale()) * 100) + 10);
+				ControllPanel.this.e.getActiveCanvas().zoom(((1 / ControllPanel.this.e.getActiveCanvas().getScale()) * 100) + 10);
 
 			}});
 
@@ -266,12 +268,12 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				c.zoom(((1 / c.getScale()) * 100) - 10);
+				ControllPanel.this.e.getActiveCanvas().zoom(((1 / ControllPanel.this.e.getActiveCanvas().getScale()) * 100) - 10);
 
 			}});
 
 
-		d= new UploadDialog(this);
+		d= new UploadDialog(this,e);
 
 
 
@@ -322,7 +324,7 @@ public class ControllPanel extends AbsolutePanel{
 
 
 	public LogicalCanvas getC() {
-		return c;
+		return ControllPanel.this.e.getActiveCanvas();
 	}
 
 	public PlanModelManipulator getM() {
@@ -380,7 +382,7 @@ public class ControllPanel extends AbsolutePanel{
 		public void onSuccess(String[] result) {
 
 
-			new NodeTypeSelector(result, c);
+			new NodeTypeSelector(result, ControllPanel.this.e.getActiveCanvas());
 
 
 		}

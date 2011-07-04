@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 
 import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.client.scheme.NodeScheme;
+import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
 
@@ -22,7 +23,7 @@ public class XMLPlanLoader {
 	 * @return
 	 */
 
-	public QueryPlan parsePlan(String file,ServletContext context) {
+	public QueryPlanBundle parsePlans(String file,ServletContext context) {
 
 
 		HashMap<String,NodeScheme> nodeSchemes = new HashMap<String,NodeScheme>();
@@ -51,9 +52,9 @@ public class XMLPlanLoader {
 		}
 
 		PlanParser p = new PlanParser(nodeSchemes,file);
-		QueryPlan qp = p.parse();
+		QueryPlanBundle qpb = p.parse();
 
-		return qp;
+		return qpb;
 
 	}
 

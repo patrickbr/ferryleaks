@@ -39,7 +39,7 @@ public class GraphNodeModifier {
 
 		checkDimension(n,x, y);
 
-		update(n,true);
+		update(n,true,true);
 
 		JSONObject newAttrs = new JSONObject();
 
@@ -90,8 +90,8 @@ public class GraphNodeModifier {
 
 		n.getEdgesTo().remove(e);
 		n.getEdgesFrom().remove(e);
-	    getOffset(n,e.getOrientationFrom(),null,false,-1,true,false);
-	    getOffset(n,e.getOrientation(),null,false,-1,true,false);
+		getOffset(n,e.getOrientationFrom(),null,false,-1,true,false,false);
+		getOffset(n,e.getOrientation(),null,false,-1,true,false,false);
 
 	}
 
@@ -114,17 +114,18 @@ public class GraphNodeModifier {
 
 	}
 
-	protected void hideEdges(GraphNode n) {
+	protected void hideEdges(GraphNode n, boolean animated) {
 
 		Iterator<GraphEdge> j = n.getEdgesFrom().iterator();
-		while (j.hasNext()) c.getGraphEdgeModifier().snakeIn(j.next());
+		while (j.hasNext()) c.getGraphEdgeModifier().snakeIn(j.next(),animated);
 
 	}
 
-	protected void showEdges(GraphNode n) {
+	protected void showEdges(GraphNode n, boolean animated) {
+
 
 		Iterator<GraphEdge> j = n.getEdgesFrom().iterator();
-		while (j.hasNext()) c.getGraphEdgeModifier().snakeOut(j.next());
+		while (j.hasNext()) c.getGraphEdgeModifier().snakeOut(j.next(),animated);
 
 	}
 
@@ -173,13 +174,13 @@ public class GraphNodeModifier {
 	}
 
 
-	protected void update(GraphNode n,boolean quiet) {
+	protected void update(GraphNode n,boolean quiet,boolean animated) {
 
 		Iterator<GraphEdge> i = n.getEdgesTo().iterator();
 		Iterator<GraphEdge> j = n.getEdgesFrom().iterator();
 
-		while (i.hasNext()) c.getGraphEdgeModifier().update(i.next(),quiet);
-		while (j.hasNext()) c.getGraphEdgeModifier().update(j.next(),quiet);
+		while (i.hasNext()) c.getGraphEdgeModifier().update(i.next(),quiet,animated);
+		while (j.hasNext()) c.getGraphEdgeModifier().update(j.next(),quiet,animated);
 
 	}
 
@@ -213,7 +214,7 @@ public class GraphNodeModifier {
 			n.setX(x);
 			n.setY(y);
 
-			update(n,false);
+			update(n,false,false);
 		}
 	}
 
@@ -225,13 +226,13 @@ public class GraphNodeModifier {
 			public void onComplete() {
 				//update(n,true);
 				n.unsetAniLock();
-				showEdges(n);
+				showEdges(n,true);
 			}
 		};
 	}
 
 	protected int getOffset(GraphNode n, int orientation,GraphEdge e, boolean hasChanged, int oldOrientation) {
-		return getOffset(n, orientation,e, hasChanged, oldOrientation, false,false);	
+		return getOffset(n, orientation,e, hasChanged, oldOrientation, false,false,false);	
 	}
 
 
@@ -245,10 +246,10 @@ public class GraphNodeModifier {
 	}
 
 
-	protected int getOffset(GraphNode n,int orientation,GraphEdge e, boolean hasChanged, int oldOrientation, boolean forceall,boolean quiet) {
+	protected int getOffset(GraphNode n,int orientation,GraphEdge e, boolean hasChanged, int oldOrientation, boolean forceall,boolean quiet,boolean animated) {
 
 		if (hasChanged) {
-			getOffset(n, oldOrientation,null,false,-1,true,quiet);
+			getOffset(n, oldOrientation,null,false,-1,true,quiet,animated);
 		}
 
 		int ret = -1;
@@ -276,7 +277,7 @@ public class GraphNodeModifier {
 			current = i.next();
 
 			if (forceall || !current.equals(e)) {
-				this.c.getGraphEdgeModifier().updateOffset(current,step * c,quiet);
+				this.c.getGraphEdgeModifier().updateOffset(current,step * c,quiet,animated);
 
 			}else{
 				ret = step * c;
@@ -284,26 +285,25 @@ public class GraphNodeModifier {
 			c++;
 
 		}
-		
+
 
 		while (a.hasNext()) {
 
 			current = a.next();
 
 			if (forceall || !current.equals(e)) {
-				this.c.getGraphEdgeModifier().updateOffsetFrom(current,step * c,quiet);
+				this.c.getGraphEdgeModifier().updateOffsetFrom(current,step * c,quiet,animated);
 
 			}else{
 
 				ret = step * c;
 			}
-			
+
 			c++;
 
 
 		}
-		
-		GWT.log(Integer.toString(c));
+
 
 		return ret;
 
@@ -375,7 +375,7 @@ public class GraphNodeModifier {
 		ConnectedShape s = n.getConnectedShapes().get(identifier);
 		s.getShape().remove();
 		n.getConnectedShapes().remove(identifier);
-		
+
 	}
 
 	public static MouseMoveHandler mouseMoveHandlerBuilder(final GraphNode n) {
@@ -391,9 +391,7 @@ public class GraphNodeModifier {
 
 					JSONObject newAttrs = new JSONObject();
 
-
 					newAttrs.put("stroke", new JSONString("#000"));
-
 
 					n.getShape().animate(newAttrs, 100);
 

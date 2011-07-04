@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 
+import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 
 import gwtupload.server.UploadAction;
@@ -58,13 +60,18 @@ public class XMLPlanUploadServlet extends UploadAction{
 					XMLPlanLoader planLoader = new XMLPlanLoader();
 				
 					
-					QueryPlanBundle sessionBundle = new QueryPlanBundle();
-					
-					sessionBundle.addPlan(planLoader.parsePlan(file.getAbsolutePath(),this.getServletContext()));
+					QueryPlanBundle sessionBundle = planLoader.parsePlans(file.getAbsolutePath(),this.getServletContext());
 					session.setAttribute("queryPlans",sessionBundle);
 								
 					System.out.println( request.getParameter("myinfo"));
 					response = request.getParameter("myinfo");
+					response += "!";
+					
+					Iterator<Integer> it = sessionBundle.getPlans().keySet().iterator();
+					
+					while (it.hasNext()) {
+						response += it.next() + ":";
+					}
 					
 				} catch (Exception e) {
 					e.printStackTrace();

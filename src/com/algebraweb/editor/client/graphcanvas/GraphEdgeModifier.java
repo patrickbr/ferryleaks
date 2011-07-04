@@ -53,7 +53,7 @@ public class GraphEdgeModifier {
 	protected void hide(GraphEdge e) {
 
 		e.getEdgePath().hide();
-	
+
 	}
 
 
@@ -70,7 +70,7 @@ public class GraphEdgeModifier {
 	}
 
 
-	private AnimationCallback snakeInCallbackBuilder(final GraphEdge e) {
+	protected AnimationCallback snakeInCallbackBuilder(final GraphEdge e) {
 
 		return new AnimationCallback() {
 
@@ -82,7 +82,7 @@ public class GraphEdgeModifier {
 	}
 
 
-	private AnimationCallback snakeCallbackBuilder(final GraphEdge e) {
+	protected AnimationCallback snakeCallbackBuilder(final GraphEdge e) {
 
 		return new AnimationCallback() {
 
@@ -94,36 +94,54 @@ public class GraphEdgeModifier {
 	}
 
 
-	protected void snakeOut(GraphEdge e) {
+	protected void snakeOut(GraphEdge e,boolean animated) {
 
 
 		if (!e.isSnakedIn()) return;
 		e.setSnakedIn(false);
-		e.getEdgePath().attr("path", e.getEdgePathSmallString());
-		show(e);
-		JSONObject attrs = new JSONObject();
-		attrs.put("path", new JSONString(e.getEdgePathString()));
-		e.getEdgePath().animate(attrs,600,snakeCallbackBuilder(e));
+
+		if (animated) {
+			e.getEdgePath().attr("path", e.getEdgePathSmallString());
+			show(e);
+			JSONObject attrs = new JSONObject();
+			attrs.put("path", new JSONString(e.getEdgePathString()));
+			e.getEdgePath().animate(attrs,600,snakeCallbackBuilder(e));
+		}else{
+			show(e);
+			e.getEdgePath().attr("path", e.getEdgePathString());
+			snakeCallbackBuilder(e).onComplete();
+
+		}
 
 
 
 	}
 
 
-	protected void snakeIn(GraphEdge e) {
+	protected void snakeIn(GraphEdge e,boolean animated) {
 
 		if (e.isSnakedIn()) return;
 		e.setSnakedIn(true);
-		hideArrow(e);
-		e.getEdgePath().attr("path", e.getEdgePathString());
-		JSONObject attrs = new JSONObject();
-		attrs.put("path", new JSONString(e.getEdgePathSmallString()));
-		e.getEdgePath().animate(attrs,600,snakeInCallbackBuilder(e));
+
+		if (animated) {
+			hideArrow(e);
+			e.getEdgePath().attr("path", e.getEdgePathString());
+			JSONObject attrs = new JSONObject();
+			attrs.put("path", new JSONString(e.getEdgePathSmallString()));
+			e.getEdgePath().animate(attrs,600,snakeInCallbackBuilder(e));
+		}else{
+
+			hideArrow(e);
+			e.getEdgePath().attr("path", e.getEdgePathSmallString());
+			snakeInCallbackBuilder(e).onComplete();
+
+
+		}
 
 	}
 
 
-	protected void makeConnection(GraphEdge e, GraphNode from, GraphNode to, boolean quiet) {
+	protected void makeConnection(GraphEdge e, GraphNode from, GraphNode to, boolean quiet,boolean animated) {
 
 		Coordinate res = calcOrientation(e,from,to);
 
@@ -134,15 +152,15 @@ public class GraphEdgeModifier {
 		e.setFromPosition( (int) res.getX()); 
 
 		if (e.getOffset()==-1 || toPositionOld != e.getToPosition()) {
-			e.setOffset(c.getGraphNodeModifier().getOffset(to,e.getToPosition(),e,(toPositionOld != e.getToPosition() && e.getOffset()!=-1), toPositionOld,false,quiet));		
+			e.setOffset(c.getGraphNodeModifier().getOffset(to,e.getToPosition(),e,(toPositionOld != e.getToPosition() && e.getOffset()!=-1), toPositionOld,false,quiet,animated));		
 		}
 
 		if (e.getOffsetFrom()==-1 || fromPositionOld != e.getFromPosition()) {
-			e.setOffsetFrom(c.getGraphNodeModifier().getOffset(from,e.getFromPosition(),e,(fromPositionOld != e.getFromPosition() && e.getOffsetFrom()!=-1), fromPositionOld,false,quiet));		
+			e.setOffsetFrom(c.getGraphNodeModifier().getOffset(from,e.getFromPosition(),e,(fromPositionOld != e.getFromPosition() && e.getOffsetFrom()!=-1), fromPositionOld,false,quiet,animated));		
 		}
 
 		generatePath(e,from,to, e.getToPosition(),e.getFromPosition());
-		drawEdge(e,quiet);
+		drawEdge(e,quiet,animated);
 
 	}
 
@@ -207,7 +225,7 @@ public class GraphEdgeModifier {
 
 
 
-	protected void drawEdge(GraphEdge e,boolean quiet) {
+	protected void drawEdge(GraphEdge e,boolean quiet,boolean animated) {
 
 
 		if (e.getEdgePath() == null) {
@@ -280,7 +298,7 @@ public class GraphEdgeModifier {
 		newAttrs.put("stroke-opacity", new JSONNumber(1));
 
 		if (!quiet) {
-			snakeOut(e);
+			snakeOut(e,animated);
 		}
 
 	}
@@ -367,28 +385,27 @@ public class GraphEdgeModifier {
 	}
 
 
-	protected void updateOffset(GraphEdge e,int count,boolean quiet) {
+	protected void updateOffset(GraphEdge e,int count,boolean quiet,boolean animated) {
 
 		e.setOffset(count);
 
 		generatePath(e,e.getFrom(),e.getTo(), e.getToPosition(), e.getFromPosition());
-		drawEdge(e,quiet);
+		drawEdge(e,quiet,animated);
 
 	}
 
-	protected void updateOffsetFrom(GraphEdge e,int count, boolean quiet) {
+	protected void updateOffsetFrom(GraphEdge e,int count, boolean quiet,boolean animated) {
 
 		e.setOffsetFrom(count);
 
 		generatePath(e,e.getFrom(),e.getTo(), e.getToPosition(), e.getFromPosition());
-		drawEdge(e,quiet);
+		drawEdge(e,quiet,animated);
 
 	}
 
 
-	protected void update(GraphEdge e, boolean quiet) {
-
-		makeConnection(e, e.getFrom(),e.getTo(), quiet);
+	protected void update(GraphEdge e, boolean quiet,boolean animated) {
+		makeConnection(e, e.getFrom(),e.getTo(), quiet, animated);
 
 	}
 

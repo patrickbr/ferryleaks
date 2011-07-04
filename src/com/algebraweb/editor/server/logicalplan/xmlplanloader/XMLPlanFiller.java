@@ -23,10 +23,12 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 	private HttpSession session;
 	private ServletContext context;
 	private Iterator<RawNode> it;
+	private int id;
 
-	public XMLPlanFiller(HttpSession s, ServletContext context) {
+	public XMLPlanFiller(HttpSession s, ServletContext context, int id) {
 
 		this.session=s;
+		this.id=id;
 		this.context = context;
 
 	}
@@ -52,7 +54,7 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 
 		//TODO: make this workable for planids
 
-		it = getRawNodes(qps.getPlan(0)).iterator();
+		it = getRawNodes(qps.getPlan(id)).iterator();
 
 	}
 

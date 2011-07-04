@@ -10,7 +10,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 public interface RemoteFillingService extends RemoteService  {
 	
-	public ArrayList<RawNode> getRawNodes(String filler);
-
+	public ArrayList<RawNode> getRawNodes(String filler,String args);
 
 }

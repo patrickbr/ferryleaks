@@ -2,7 +2,11 @@ package com.algebraweb.editor.client.graphcanvas;
 
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -108,11 +112,30 @@ public class FullScreenDragPanel extends FlowPanel {
 
 
 	}
-	
+
+	public void hide() {
+
+		
+		super.getElement().getStyle().setVisibility(Visibility.HIDDEN);
+		super.getElement().getStyle().setWidth(1, Unit.PX);
+		super.getElement().getStyle().setHeight(1, Unit.PX);
+		super.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+
+	}
+
+	public void show() {
+		
+		super.getElement().getStyle().setVisibility(Visibility.VISIBLE);
+		super.getElement().getStyle().clearWidth();
+		super.getElement().getStyle().clearHeight();
+		super.getElement().getStyle().setOverflow(Overflow.VISIBLE);
+
+	}
+
 	public void scrollToUpperLeft() {
-		
+
 		scrollTo(0,0);
-		
+
 	}
 
 
@@ -127,7 +150,7 @@ public class FullScreenDragPanel extends FlowPanel {
 		mainDragOffsetTop = Window.getScrollTop();
 		mainDragOffsetY = y;
 
-		
+
 	}
 
 
@@ -136,7 +159,7 @@ public class FullScreenDragPanel extends FlowPanel {
 		mainDragOffsetX = -1;
 		mainDragOffsetY = -1;
 
-		
+
 	}
 
 

@@ -37,7 +37,7 @@ public class GraphEdge {
 	private String paths;
 
 
-	public GraphEdge(GraphCanvas c, GraphNode from, GraphNode to,boolean quiet) {
+	public GraphEdge(GraphCanvas c, GraphNode from, GraphNode to,boolean quiet,boolean animated) {
 
 		this.c =c;
 
@@ -46,8 +46,7 @@ public class GraphEdge {
 
 		from.addEdgeFrom(this);
 		to.addEdgeTo(this);
-		GWT.log("gurr");
-		c.getGraphEdgeModifier().makeConnection(this,from,to,quiet);
+		c.getGraphEdgeModifier().makeConnection(this,from,to,quiet,animated);
 
 	}
 

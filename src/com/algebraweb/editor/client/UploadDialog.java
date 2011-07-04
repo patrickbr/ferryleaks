@@ -8,11 +8,14 @@ import gwtupload.client.IUploadStatus.Status;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
+import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
+import com.algebraweb.editor.client.logicalcanvas.LogicalNodePopup;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -22,10 +25,11 @@ public class UploadDialog extends DialogBox {
 	
 	
 	private ControllPanel p;
+	private AlgebraEditor e;
 	private String awaitingFileUpload;
 	
 	
-	public UploadDialog(ControllPanel p) {
+	public UploadDialog(ControllPanel p,AlgebraEditor e) {
 		
 		
 		super();
@@ -35,6 +39,7 @@ public class UploadDialog extends DialogBox {
 		
 		super.setText("Upload XML plan");
 		this.p=p;
+		this.e=e;
 		
 		SingleUploader defaultUploader = new SingleUploader();
 		defaultUploader.setAutoSubmit(true);
@@ -78,19 +83,46 @@ public class UploadDialog extends DialogBox {
 			
 			if (uploader.getStatus() == Status.SUCCESS) {
 
-				if (awaitingFileUpload.equals(uploader.getServerInfo().message)) {
+				String msg = uploader.getServerInfo().message.split("!")[0];
+				String idstr = uploader.getServerInfo().message.split("!")[1];
+				
+				
+				GWT.log("Msg:" + msg + " Awaiting: " + awaitingFileUpload);
+				
+				if (awaitingFileUpload.equals(msg)) {
 
-					GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(p.getC());
+					GWT.log("received!");
+					
+					
+					String[] ids = idstr.split(":");
+					
+					e.clearCanvases();
+					
+					for (String sid : ids) {
+						
+						final int id = Integer.parseInt(sid);
+					
+						LogicalCanvas c = e.addCanvas(id);
+						//e.changeCanvas(c.getId());
+						
+						GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
 
-					awaitingFileUpload = "";
-					f.fill(new RemoteFiller("xml"), new GraphManipulationCallback() {
+						awaitingFileUpload = "";
+						f.fill(new RemoteFiller("xml",Integer.toString(id)), new GraphManipulationCallback() {
 
-						@Override
-						public void onComplete() {
-							p.getM().validate(0);
-							
-						}
-					});
+							@Override
+							public void onComplete() {
+								//p.getM().validate(id);
+								
+							}
+						});
+						
+						
+					}
+					
+					
+					
+			
 
 				}
 

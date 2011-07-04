@@ -50,6 +50,12 @@ public class QueryPlanBundle implements IsSerializable {
 	public QueryPlan getPlan(int id) {
 		return plans.get(id);
 	}
+	
+	
+	public HashMap<Integer,QueryPlan> getPlans() {
+		
+		return plans;
+	}
 
 
 }

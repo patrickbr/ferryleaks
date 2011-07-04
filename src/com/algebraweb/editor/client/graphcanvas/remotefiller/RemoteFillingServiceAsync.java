@@ -7,7 +7,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface RemoteFillingServiceAsync {
 	
-	public void getRawNodes(String filler,AsyncCallback<ArrayList<RawNode>> callback);
+	void getRawNodes(String filler, String args,
+			AsyncCallback<ArrayList<RawNode>> callback);
 
 
 }

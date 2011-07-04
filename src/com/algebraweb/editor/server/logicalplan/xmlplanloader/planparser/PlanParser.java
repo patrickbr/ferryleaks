@@ -27,6 +27,7 @@ import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.GoInto;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.scheme.Value;
+import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 
 /**
  * A parser for webferry's XML-format using the node schemes specified 
@@ -63,29 +64,34 @@ public class PlanParser {
 	 * either in terms of grammatical or semantical correctness. 
 	 * @return
 	 */
-	public QueryPlan parse() {
+	public QueryPlanBundle parse() {
 
 
 		//TODO: this should also work with plan bundles...
 
-		QueryPlan ret =null;
+		QueryPlanBundle ret =new QueryPlanBundle();
 
 		try{
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(file);
 
-			Element query_plan = (Element) doc.getElementsByTagName("query_plan").item(0);
+			NodeList plans =  doc.getElementsByTagName("query_plan");
 
-			NodeList planNodes = query_plan.getElementsByTagName("logical_query_plan").item(0).getChildNodes();
+			for (int i=0;i<plans.getLength();i++) {
+			
+				System.out.println(plans.item(i).getAttributes().getNamedItem("id").getNodeValue());
+				QueryPlan p = new QueryPlan(Integer.parseInt(plans.item(i).getAttributes().getNamedItem("id").getNodeValue()));
+				
+				NodeList planNodes = ((Element)plans.item(i)).getElementsByTagName("logical_query_plan").item(0).getChildNodes();
 
-			ret = new QueryPlan(0);
+				parseNodes((Element)planNodes,p);
 
-			parseNodes((Element)planNodes,ret);
-
-			//TODO: not reliable :(
-			ret.setRoot(ret.getPlan().get(ret.getPlan().size()-1));
-
+				//TODO: not reliable :(
+				p.setRoot(p.getPlan().get(p.getPlan().size()-1));
+				System.out.println("Parsed and adding plan #" + p.getId());
+				ret.addPlan(p);
+			}
 
 		}catch(IOException e) {e.printStackTrace();}
 		catch(SAXException e) {e.printStackTrace();} catch (ParserConfigurationException e) {
@@ -130,7 +136,7 @@ public class PlanParser {
 	 * @param el
 	 * @return
 	 */
-	
+
 	public PlanNode parseNode(QueryPlan mother, Element el) {
 
 		PlanNode newNode = new PlanNode(
@@ -144,7 +150,7 @@ public class PlanParser {
 		return newNode;
 
 	}
-	
+
 	/**
 	 * Fills an empty PlanNode with content and attributes
 	 * @param n
@@ -155,20 +161,20 @@ public class PlanParser {
 
 		NodeScheme s = getScheme(n.getKind());
 		ArrayList<GoAble> schema = s.getSchema();
-		
+
 		parseContent(nodeEl, n.getContent(), schema);
 
 	}
-	
+
 	/**
 	 * Parses an ArrayList of node contents
 	 * @param e
 	 * @param retEl
 	 * @param schema
 	 */
-	
+
 	private void parseContent(Element e, ArrayList<NodeContent> retEl, ArrayList<GoAble> schema) {
-		
+
 		Iterator<GoAble> it = schema.iterator();
 
 		while (it.hasNext()) {
@@ -184,14 +190,14 @@ public class PlanParser {
 		}
 
 	}
-		
+
 	/**
 	 * Parses an element e with respect to a GoAble scheme g
 	 * @param g
 	 * @param e
 	 * @return
 	 */
-	
+
 	private NodeContent parseGoAble(GoAble g,Element e) {
 
 		NodeContent retEl = null;
@@ -214,7 +220,7 @@ public class PlanParser {
 
 				String name = current.getVal();
 				String type = current.getType();
-			
+
 				String value = e.getAttribute(name);
 
 				((ContentVal)retEl).getAttributes().put(new Property(name,value, type));
@@ -275,8 +281,8 @@ public class PlanParser {
 		}
 		return retList;
 	}
-	
-	
+
+
 	//todo: should be somewhere central
 
 	public NodeScheme getScheme(String type) {

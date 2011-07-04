@@ -3,6 +3,8 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.jdt.internal.compiler.ast.ThisReference;
+
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -44,6 +46,8 @@ public class GraphCanvas extends Raphael  {
 
 	private NodePopup popup;
 
+	private boolean isHidden=true;
+
 
 	private static LoadingMessagePopUp loadingMessagePopUp = new LoadingMessagePopUp();
 	private int oldWidth=0;
@@ -69,6 +73,7 @@ public class GraphCanvas extends Raphael  {
 	public GraphCanvas(int width, int height,boolean invertArrows) {
 
 		super(width, height);
+
 		this.invertArrows=invertArrows;
 
 		preventTextSelection(this.getElement(),true);
@@ -77,6 +82,8 @@ public class GraphCanvas extends Raphael  {
 		this.width=width;
 
 	}
+
+
 
 	public void setMargin(int x, int y) {
 
@@ -102,25 +109,20 @@ public class GraphCanvas extends Raphael  {
 		return invertArrows;
 	}
 
-
-	public void setGraphNodeModifier(GraphNodeModifier gnm) {
-		this.gnm = gnm;
-	}
-
-
-
-
 	public GraphEdgeModifier getGem() {
 		return gem;
 	}
 
 
-
-
-	public void setGraphEdgeModifier(GraphEdgeModifier gem) {
-		this.gem = gem;
+	public boolean isHidden() {
+		return isHidden;
 	}
 
+
+
+	public void setHidden(boolean isHidden) {
+		this.isHidden = isHidden;
+	}
 
 
 
@@ -145,6 +147,14 @@ public class GraphCanvas extends Raphael  {
 
 	public GraphNodeModifier getGraphNodeModifier() {
 		return gnm;
+	}
+
+	public void setGraphNodeModifier(GraphNodeModifier gnm) {
+		this.gnm = gnm;
+	}
+
+	public void setGraphEdgeModifier(GraphEdgeModifier gem) {
+		this.gem = gem;
 	}
 
 	public NodePopup getPopup() {
@@ -372,7 +382,9 @@ public class GraphCanvas extends Raphael  {
 
 	public void createEdge(GraphNode from, GraphNode to, boolean quiet) {
 
-		this.edges.add(new GraphEdge(this,from,to,quiet));
+
+		this.edges.add(new GraphEdge(this,from,to,quiet, !this.isHidden()));
+
 	}
 
 
@@ -464,7 +476,7 @@ public class GraphCanvas extends Raphael  {
 		while (it.hasNext()) {
 
 			current = it.next();			
-			gem.snakeIn(current);
+			gem.snakeIn(current,!this.isHidden());
 			gem.deleteFromTo(current);
 			this.edges.remove(current);
 			it.remove();
@@ -486,7 +498,7 @@ public class GraphCanvas extends Raphael  {
 		while (it.hasNext()) {
 
 			current = it.next();			
-			gem.snakeIn(current);
+			gem.snakeIn(current,!this.isHidden());
 			gem.deleteFromFrom(current);
 			this.edges.remove(current);
 			it.remove();
@@ -511,7 +523,7 @@ public class GraphCanvas extends Raphael  {
 
 			current = it.next();			
 			if (current.getTo().getId() == to) {
-				gem.snakeIn(current);
+				gem.snakeIn(current,!this.isHidden());
 				//gem.deleteFromTo(current);
 				//gem.deleteFromFrom(current);
 				this.edges.remove(current);
@@ -538,7 +550,7 @@ public class GraphCanvas extends Raphael  {
 
 	public void sort(GraphSorter s) {
 
-		GraphNodeLayoutingMachine m = new GraphNodeLayoutingMachine(gnm);
+		GraphNodeLayoutingMachine m = new GraphNodeLayoutingMachine(this,gnm);
 		m.sortGraph(nodes,edges, s);
 
 	}
@@ -573,7 +585,7 @@ public class GraphCanvas extends Raphael  {
 
 		while(i.hasNext()) {
 
-			this.getGraphNodeModifier().showEdges(i.next());
+			this.getGraphNodeModifier().showEdges(i.next(),!this.isHidden());
 
 
 		}

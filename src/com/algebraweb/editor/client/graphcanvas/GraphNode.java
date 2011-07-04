@@ -114,10 +114,6 @@ public class GraphNode {
 				rx=event.getRelativeX(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()* GraphNode.this.getX()) ;
 				ry=event.getRelativeY(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()*GraphNode.this.getY()) ;
 				
-				
-				
-				
-				
 				GraphNode.this.setDragged(true);
 				GraphNode.this.c.registerDrag(GraphNode.this,(int)rx,(int)ry);
 			}

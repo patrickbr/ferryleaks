@@ -546,3 +546,14 @@ table td,table {
 	opacity: 0.9;
 	color: black;
 }
+
+.switcher {
+
+	top:0px;
+	left:250px;
+	height:30px;
+	background-color:#BBB;
+	width:600px;
+	
+
+}

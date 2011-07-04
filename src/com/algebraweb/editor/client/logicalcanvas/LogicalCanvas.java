@@ -21,24 +21,27 @@ public class LogicalCanvas extends GraphCanvas{
 	
 	
 	private int state = 0;
+	private int id;
 	private PlanModelManipulator m;
 	private String addingModeNodeType;
 
 
 
 
-	public LogicalCanvas(PlanModelManipulator m,int width, int height) {
+	public LogicalCanvas(int id,PlanModelManipulator m,int width, int height) {
 		super(width, height,true);
 		
+		this.id=id;
 		this.m=m;
 		m.setCanvas(this);
+		
+		
+
 		
 		super.addDomHandler(new MouseMoveHandler() {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-				
-				
 				
 				
 			}
@@ -60,7 +63,7 @@ public class LogicalCanvas extends GraphCanvas{
 					int y=-marginTop+(int)(getScale() * (event.getRelativeY(LogicalCanvas.super.getElement())));
 					//TODO: pid
 					
-					LogicalCanvas.this.m.addNode(0, addingModeNodeType, x,y);
+					LogicalCanvas.this.m.addNode(LogicalCanvas.this.getId(), addingModeNodeType, x,y);
 					
 				}
 				
@@ -74,6 +77,12 @@ public class LogicalCanvas extends GraphCanvas{
 	
 	
 	
+
+
+	public int getId() {
+		return id;
+	}
+
 
 
 	public void setErroneous(int nid) {
@@ -115,6 +124,8 @@ public class LogicalCanvas extends GraphCanvas{
 		
 	}
 	
+	
+		
 
 	public void enterNodeAddingMode(String addingModeNodeType) {
 		
@@ -128,14 +139,6 @@ public class LogicalCanvas extends GraphCanvas{
 	}
 	
 	
-	//TODO: DUMMY
-	public int getActivePlanId() {
-		
-		return 0;
-		
-		
-	}
-
 
 
 

@@ -374,7 +374,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 			RemoteManipulationMessage rmm= new RemoteManipulationMessage("update", 1, "", res);
 
-			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext());
+			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),pid);
 
 			rmm.getNodesAffected().add(xmlpl.getRawNode(nodeToWork));
 
@@ -457,7 +457,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 		
-		Element e = npb.getNodePlan(0, nodeToWork);
+		Element e = npb.getNodePlan(pid, nodeToWork);
 		return e;
 	}
 
@@ -489,7 +489,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			
 			rmm.setCoordinates(coords);
 			
-			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext());
+			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),pid);
 
 			rmm.getNodesAffected().add(xmlpl.getRawNode(newNode));
 
@@ -523,6 +523,8 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	@Override
 	public String getSQLFromPlanNode(int pid, int nid) {
+		
+		System.out.println("getting sql for plan #" + pid);
 
 		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid);
 		

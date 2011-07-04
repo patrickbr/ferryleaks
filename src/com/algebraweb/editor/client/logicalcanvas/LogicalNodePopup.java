@@ -30,7 +30,7 @@ public class LogicalNodePopup extends NodePopup{
 	protected void render() {
 		
 		super.add(new HTML("<img src='loading.gif'>"));
-		rmsa.getNodeInformationHTML(super.getNodeId(), c.getActivePlanId(), nodeInfoCallback);
+		rmsa.getNodeInformationHTML(super.getNodeId(), c.getId(), nodeInfoCallback);
 		
 	}
 	
