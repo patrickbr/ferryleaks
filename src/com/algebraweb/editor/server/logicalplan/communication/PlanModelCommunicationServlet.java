@@ -4,9 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
@@ -36,6 +39,7 @@ import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.server.logicalplan.evaluator.SqlEvaluator;
 import com.algebraweb.editor.server.logicalplan.sqlbuilder.PlanNodeSQLBuilder;
 import com.algebraweb.editor.server.logicalplan.validation.ValidationMachine;
 import com.algebraweb.editor.server.logicalplan.validation.validators.AbandondedNodeValidator;
@@ -527,6 +531,16 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return sqlB.getCompiledSQL(d).get(pid);
 		
 		
+
+	}
+
+
+	@Override
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid) {
+
+		SqlEvaluator eval = new SqlEvaluator();
+		
+		return eval.eval(getSQLFromPlanNode(pid,nid));
 
 	}
 

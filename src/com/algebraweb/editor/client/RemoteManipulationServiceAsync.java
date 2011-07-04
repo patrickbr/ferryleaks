@@ -1,7 +1,10 @@
 package com.algebraweb.editor.client;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -50,6 +53,9 @@ public interface RemoteManipulationServiceAsync {
 	void getNodeTypes(AsyncCallback<String[]> callback);
 
 	void getSQLFromPlanNode(int pid, int nid, AsyncCallback<String> callback);
+
+	void eval(int pid, int nid,
+			AsyncCallback<ArrayList<HashMap<String, String>>> callback);
 	
 	
 

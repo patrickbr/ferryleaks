@@ -1,7 +1,10 @@
 package com.algebraweb.editor.client;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -46,5 +49,7 @@ public interface RemoteManipulationService extends RemoteService {
 	public String getSQLFromPlanNode(int pid, int nid);
 	
 	public String[] getNodeTypes();
+	
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid);
 	
 }

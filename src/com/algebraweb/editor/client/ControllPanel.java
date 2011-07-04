@@ -1,6 +1,12 @@
 package com.algebraweb.editor.client;
 
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import gwtupload.client.IUploader;
 import gwtupload.client.MultiUploader;
 import gwtupload.client.SingleUploader;
@@ -76,18 +82,18 @@ public class ControllPanel extends AbsolutePanel{
 		this.m=man;
 		this.c=g;
 		this.rmsa = rmsa;
-		
+
 
 		LayoutPanel l = new LayoutPanel();
 		l.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
 		l.setHeight("500px");
 		NumberedStackLayoutPanel p = new NumberedStackLayoutPanel(Unit.PX);
-	
-	
+
+
 
 		FlowPanel editPanel = new FlowPanel();
-		
+
 		ControllPanelButton addNodeButton = new ControllPanelButton("Add new node","add");
 
 		addNodeButton.addClickHandler(new ClickHandler() {
@@ -95,7 +101,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				ControllPanel.this.rmsa.getNodeTypes(nodeTypesCb);
-				
+
 
 			}});
 
@@ -126,42 +132,56 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		editPanel.add(edit);
-		
+
 		ControllPanelButton xml = new ControllPanelButton("Get XML for selected node","xml");
 
 		xml.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				ControllPanel.this.rmsa.getXMLFromPlanNode(0,c.getSelectedNode().getId(), xmlCb);
 			}});
 
 		editPanel.add(xml);
-		
+
 		ControllPanelButton xmlPlan = new ControllPanelButton("Get XML plan beginning with selected node","xml-down");
 
 		xmlPlan.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(0,c.getSelectedNode().getId(), xmlCb);
 			}});
 
 		editPanel.add(xmlPlan);
-		
+
 		ControllPanelButton sqlB = new ControllPanelButton("Get SQL of subgraph","sql-down");
 
 		sqlB.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				ControllPanel.this.rmsa.getSQLFromPlanNode(0, c.getSelectedNode().getId(), sqlCb);
 			}});
 
 		editPanel.add(sqlB);
+
+		ControllPanelButton evalB = new ControllPanelButton("Evaluate node","eva");
+
+		evalB.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				ControllPanel.this.rmsa.eval(0, c.getSelectedNode().getId(), evalCb);
+			}});
+
+		editPanel.add(evalB);
+
+
 
 
 
@@ -212,7 +232,7 @@ public class ControllPanel extends AbsolutePanel{
 		p.add(sortPanel,"Sort",30);
 
 
-		
+
 		ControllPanelButton downloadPlan = new ControllPanelButton("Download plan","download-plan");
 
 		downloadPlan.addClickHandler(new ClickHandler() {
@@ -226,7 +246,7 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 
-		
+
 
 		Button sortBBBBBB = new Button("+");
 
@@ -249,11 +269,11 @@ public class ControllPanel extends AbsolutePanel{
 				c.zoom(((1 / c.getScale()) * 100) - 10);
 
 			}});
-		
-		
+
+
 		d= new UploadDialog(this);
-		
-		
+
+
 
 
 		ControllPanelButton uploadButton = new ControllPanelButton("Upload XML plan", "upload");
@@ -262,7 +282,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				d.center();
 				d.show();
 
@@ -272,15 +292,15 @@ public class ControllPanel extends AbsolutePanel{
 
 
 
-		
-		
+
+
 		FlowPanel ioPanel = new FlowPanel();
-		
+
 		ioPanel.add(uploadButton);
 		ioPanel.add(downloadPlan);
-		
+
 		p.add(ioPanel,"I/O",30);
-		
+
 
 		this.setStylePrimaryName("controllpanel");
 
@@ -297,10 +317,10 @@ public class ControllPanel extends AbsolutePanel{
 	}
 
 
-	
 
-	
-	
+
+
+
 	public LogicalCanvas getC() {
 		return c;
 	}
@@ -327,8 +347,8 @@ public class ControllPanel extends AbsolutePanel{
 		}
 
 	};
-	
-	
+
+
 	private AsyncCallback<String> sqlCb = new AsyncCallback<String>() {
 
 		@Override
@@ -346,9 +366,9 @@ public class ControllPanel extends AbsolutePanel{
 		}
 
 	};
-	
-	
-	
+
+
+
 	private AsyncCallback<String[]> nodeTypesCb = new AsyncCallback<String[]>() {
 
 		@Override
@@ -361,6 +381,24 @@ public class ControllPanel extends AbsolutePanel{
 
 
 			new NodeTypeSelector(result, c);
+
+
+		}
+
+	};
+
+	private  AsyncCallback<ArrayList<HashMap<String,String>>> evalCb = new  AsyncCallback<ArrayList<HashMap<String,String>>>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onSuccess(ArrayList<HashMap<String,String>> result) {
+
+
+			new SqlResDialog(result);
 
 
 		}
