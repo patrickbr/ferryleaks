@@ -16,6 +16,7 @@ body {
 	margin: 0px;
 	padding: 0px;
 	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+
 }
 
 h1 {
@@ -228,7 +229,7 @@ h1 {
 }
 
 .controllpanel,#bugferrylogo {
-	background-color: #222;
+	background-color: #111;
 	opacity: 0.8;
 	color: white;
 	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
@@ -265,6 +266,7 @@ h1 {
 	background-image: url(webferry.png);
 	background-position: 10px -1px;
 	background-repeat: no-repeat;
+	width:160px;
 }
 
 .gwt-StackLayoutPanel .gwt-StackLayoutPanelHeader {
@@ -273,7 +275,7 @@ h1 {
 
 .gwt-StackLayoutPanel
 div.gwt-StackLayoutPanelHeader {
-	background: #222;
+	background: #111;
 	border: none;
 	border-bottom: solid 1px #666;
 }
@@ -534,6 +536,7 @@ table td,table {
 	text-align: right;
 	font-size: 11px;
 	color: #BBB;
+	line-height:30px;
 }
 
 .gwt-StackLayoutPanelHeader:hover {
@@ -552,8 +555,78 @@ table td,table {
 	top:0px;
 	left:250px;
 	height:30px;
-	background-color:#BBB;
-	width:600px;
+	background-color:#111;
+	width:100%;
+	opacity:0.8;
+	padding-left:20px;
 	
 
+}
+
+body.hidden div {
+
+	display:none;
+
+}
+
+body.visible #loading, body.visible #loading #msg {
+	display: none;
+}
+
+body.hidden {
+
+	
+}
+
+body.visible {
+
+	background-color:#FAFAFA;	
+	
+}
+
+body.hidden #loading {
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 40px;
+	text-align: center;
+	color: white;
+	font-size: 20px;
+	top: 45%;
+	left: 0px;
+	line-height: 60px;
+}
+
+body.hidden #loading #msg {
+	display: inline;
+	background-image: url(loading-white.gif);
+	background-repeat: no-repeat;
+	padding-left: 50px;
+	padding-bottom: 30px;
+	padding-top: 3px;
+	color:black;
+}
+
+.res-cell {
+
+	padding:2px;
+	border:solid black 1px;	
+	text-align:right;
+	
+}
+
+.header-cell {
+	
+	font-style:italic;
+	color:#555;
+		
+	
+}
+
+.switcher button {
+	
+
+	height:25px;
+	font-size:11px;	
+	margin-right:5px;
 }

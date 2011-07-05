@@ -33,7 +33,7 @@ public class LogicalCanvas extends GraphCanvas{
 		
 		this.id=id;
 		this.m=m;
-		m.setCanvas(this);
+		
 		
 		
 

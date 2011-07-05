@@ -56,7 +56,10 @@ public interface RemoteManipulationServiceAsync {
 
 	void eval(int pid, int nid,
 			AsyncCallback<ArrayList<HashMap<String, String>>> callback);
-	
-	
+
+	void createNewPlan(AsyncCallback<Integer> callback);
+
+	void markAsRoot(int pid, int nid, AsyncCallback<Void> callback);
+		
 
 }

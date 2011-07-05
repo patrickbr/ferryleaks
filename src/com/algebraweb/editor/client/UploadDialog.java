@@ -96,14 +96,17 @@ public class UploadDialog extends DialogBox {
 					
 					String[] ids = idstr.split(":");
 					
+					GWT.log(idstr);
+					
 					e.clearCanvases();
 					
 					for (String sid : ids) {
-						
+						GWT.log("gurr...");
 						final int id = Integer.parseInt(sid);
 					
 						LogicalCanvas c = e.addCanvas(id);
-						//e.changeCanvas(c.getId());
+						
+						if (sid.equals(ids[0])) e.changeCanvas(Integer.parseInt(ids[0]));
 						
 						GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
 
@@ -112,7 +115,7 @@ public class UploadDialog extends DialogBox {
 
 							@Override
 							public void onComplete() {
-								//p.getM().validate(id);
+								p.getM().validate(id);
 								
 							}
 						});

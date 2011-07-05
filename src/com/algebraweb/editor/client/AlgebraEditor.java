@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.graphcanvas.FullScreenDragPanel;
@@ -14,6 +15,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 
 
@@ -47,6 +49,7 @@ public class AlgebraEditor implements EntryPoint {
 		rmsa = (RemoteManipulationServiceAsync) GWT.create(RemoteManipulationService.class);
 
 		m = new PlanModelManipulator(rmsa);
+		m.setEditor(this);
 
 		/*
 		LogicalCanvas lCanvas = new LogicalCanvas(0,m,Window.getClientWidth()-30,Window.getClientHeight()-30);
@@ -65,12 +68,33 @@ public class AlgebraEditor implements EntryPoint {
 
 
 		//d.center(lCanvas.getWidth(), lCanvas.getHeight());
-
+		
+		RootPanel.getBodyElement().removeClassName("hidden");
+		RootPanel.getBodyElement().addClassName("visible");
+		
+		GWT.log("loading empty plan...");
+		rmsa.createNewPlan(createCb);
+		
 
 	}
 	
 	
+	public LogicalCanvas getCanvas(int pid) {
+		
+		Iterator<LogicalCanvas> it = canvi.iterator();
 
+		while (it.hasNext()) {
+			
+			LogicalCanvas cur = it.next();
+			
+			if (cur.getId() == pid) return cur;
+			
+		}
+		
+		return null;
+		
+		
+	}
 
 	public LogicalCanvas addCanvas(int id) {
 
@@ -102,15 +126,17 @@ public class AlgebraEditor implements EntryPoint {
 
 		while (it.hasNext()) {
 			FullScreenDragPanel cur = it.next();
-			RootPanel.get("editor").remove(cur);
 			removeLogicalCanvas((LogicalCanvas) cur.getWidget(0));
+			cur.clear();
+			RootPanel.get("editor").remove(cur);
+			it.remove();
+			
 		}
 
 	}
 	
 	public void removeLogicalCanvas(LogicalCanvas c) {
 		
-		RootPanel.get("editor").remove(c);
 		s.removePlan(c.getId());
 		
 	}
@@ -133,12 +159,13 @@ public class AlgebraEditor implements EntryPoint {
 
 			if (((LogicalCanvas)cur.getWidget(0)).getId() != id) {
 				
-				
+				activeCanvas.setHidden(true);
 				cur.hide();
 
 			}else{
 
 				activeCanvas = ((LogicalCanvas)cur.getWidget(0));
+				activeCanvas.setHidden(false);
 				cur.show();
 			}
 
@@ -147,4 +174,23 @@ public class AlgebraEditor implements EntryPoint {
 
 
 	}
+	
+	private  AsyncCallback<Integer> createCb = new  AsyncCallback<Integer>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onSuccess(Integer result) {
+
+
+			addCanvas(result);
+			changeCanvas(result);
+
+
+		}
+
+	};
 }

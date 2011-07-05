@@ -13,6 +13,7 @@ public class RemoteManipulationMessage implements IsSerializable{
 	private int returnCode;
 	private String message;
 	private ValidationResult validationResult;
+	private int planid;
 	
 	private ArrayList<RawNode> nodesAffected = new ArrayList<RawNode>();
 	private HashMap<Integer,Coordinate> coordinates = new HashMap<Integer,Coordinate>();
@@ -20,8 +21,9 @@ public class RemoteManipulationMessage implements IsSerializable{
 	private String action;
 	
 	
-	public RemoteManipulationMessage(String action, int returnCode, String message, ValidationResult res) {
+	public RemoteManipulationMessage(int planid, String action, int returnCode, String message, ValidationResult res) {
 		
+		this.planid=planid;
 		this.returnCode=returnCode;
 		this.action=action;
 		this.message=message;
@@ -33,6 +35,12 @@ public class RemoteManipulationMessage implements IsSerializable{
 	public RemoteManipulationMessage() {
 		
 	
+	}
+
+	
+	
+	public int getPlanid() {
+		return planid;
 	}
 
 	public int getReturnCode() {

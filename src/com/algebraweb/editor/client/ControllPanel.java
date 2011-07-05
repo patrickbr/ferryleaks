@@ -146,6 +146,18 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		editPanel.add(xml);
+		
+		ControllPanelButton rootB = new ControllPanelButton("Mark as root","root");
+
+		rootB.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				ControllPanel.this.rmsa.markAsRoot(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), markAsRootCb);
+			}});
+
+		editPanel.add(rootB);
 
 		ControllPanelButton xmlPlan = new ControllPanelButton("Get XML plan beginning with selected node","xml-down");
 
@@ -158,6 +170,8 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		editPanel.add(xmlPlan);
+		
+		
 
 		ControllPanelButton sqlB = new ControllPanelButton("Get SQL of subgraph","sql-down");
 
@@ -403,6 +417,21 @@ public class ControllPanel extends AbsolutePanel{
 			new SqlResDialog(result);
 
 
+		}
+
+	};
+	
+	private  AsyncCallback<Void> markAsRootCb = new  AsyncCallback<Void>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void onSuccess(Void v) {
+
+		
 		}
 
 	};

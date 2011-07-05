@@ -34,7 +34,7 @@ public class PlanModelManipulator {
 
 
 	private RemoteManipulationServiceAsync manServ;
-	private LogicalCanvas c;
+	private AlgebraEditor e;
 
 
 	public PlanModelManipulator(RemoteManipulationServiceAsync manServ) {
@@ -44,8 +44,8 @@ public class PlanModelManipulator {
 
 	}
 
-	public void setCanvas(LogicalCanvas c) {
-		this.c=c;
+	public void setEditor(AlgebraEditor e) {
+		this.e=e;
 	}
 
 
@@ -77,12 +77,13 @@ public class PlanModelManipulator {
 
 	private void showValidation(ValidationResult r) {
 
-		c.clearErroneous();
+		e.getCanvas(r.getPlanid()).clearErroneous();
+
 
 		Iterator<ValidationError> it = r.getErrors().iterator();
 
 		while(it.hasNext()) {
-			c.setErroneous(it.next().getNodeId());
+			e.getCanvas(r.getPlanid()).setErroneous(it.next().getNodeId());
 		}
 
 	}
@@ -108,7 +109,7 @@ public class PlanModelManipulator {
 
 	public void blurr(boolean blur) {
 
-		c.setBlurred(blur);
+		e.getActiveCanvas().setBlurred(blur);
 
 	}
 
@@ -156,7 +157,7 @@ public class PlanModelManipulator {
 
 					while(it.hasNext()) {
 
-						c.deleteNode(c.getGraphNodeById(it.next().getNid()));
+						e.getCanvas(result.getPlanid()).deleteNode(e.getCanvas(result.getPlanid()).getGraphNodeById(it.next().getNid()));
 
 					}
 
@@ -170,20 +171,20 @@ public class PlanModelManipulator {
 					while(it.hasNext()) {
 
 						RawNode current = it.next();
-						c.clearEdgesFrom(c.getGraphNodeById(current.getNid()));
+						e.getCanvas(result.getPlanid()).clearEdgesFrom(e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid()));
 
 						Iterator<RawEdge> i = current.getEdgesToList().iterator();
-						GraphNode from = c.getGraphNodeById(current.getNid());
+						GraphNode from = e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid());
 
 						while(i.hasNext()) {
 
-							GraphNode to = c.getGraphNodeById(i.next().getTo());
-							c.createEdge(from, to, true);
+							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(i.next().getTo());
+							e.getCanvas(result.getPlanid()).createEdge(from, to, true);
 
 
 						}
 
-						c.showEdges();
+						e.getCanvas(result.getPlanid()).showEdges();
 
 					}
 
@@ -201,7 +202,7 @@ public class PlanModelManipulator {
 
 						RawNode current = it.next();
 
-						c.addNode(current.getNid(), current.getColor(), 
+						e.getCanvas(result.getPlanid()).addNode(current.getNid(), current.getColor(), 
 								(int)result.getCoordinates().get(current.getNid()).getX(), 
 								(int)result.getCoordinates().get(current.getNid()).getY(),
 								(int)current.getWidth(),

@@ -51,5 +51,10 @@ public interface RemoteManipulationService extends RemoteService {
 	public String[] getNodeTypes();
 	
 	public ArrayList<HashMap<String,String>> eval(int pid, int nid);
+
+	public Integer createNewPlan();
 	
+	public void markAsRoot(int pid, int nid);
+	
+
 }
