@@ -137,6 +137,7 @@ public class AlgebraEditor implements EntryPoint {
 	
 	public void removeLogicalCanvas(LogicalCanvas c) {
 		
+		canvi.remove(c);
 		s.removePlan(c.getId());
 		
 	}
