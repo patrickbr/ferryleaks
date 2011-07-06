@@ -51,27 +51,13 @@ public class AlgebraEditor implements EntryPoint {
 		m = new PlanModelManipulator(rmsa);
 		m.setEditor(this);
 
-		/*
-		LogicalCanvas lCanvas = new LogicalCanvas(0,m,Window.getClientWidth()-30,Window.getClientHeight()-30);
 
-		lCanvas.setPopup(new LogicalNodePopup(lCanvas,rmsa));
-		lCanvas.setPadding(60, 45);
-
-*/
 		s= new PlanSwitcher(this);
 		RootPanel.get("editor").add(new ControllPanel(this,m,300,300,rmsa));
 		RootPanel.get("editor").add(s);
 
 
-		//addCanvas(0);
-		//changeCanvas(0);
-
-
-		//d.center(lCanvas.getWidth(), lCanvas.getHeight());
-		
-		RootPanel.getBodyElement().removeClassName("hidden");
-		RootPanel.getBodyElement().addClassName("visible");
-		
+	
 		GWT.log("loading empty plan...");
 		rmsa.createNewPlan(createCb);
 		

@@ -104,10 +104,8 @@ public class GraphNode {
 							
 				GraphNode.this.c.getGraphNodeModifier().edgesToFront(GraphNode.this);
 
-				if (GraphNode.this.c.getSelectedNode() != null)	GraphNode.this.c.getGraphNodeModifier().setNotSelected(GraphNode.this.c.getSelectedNode());
 				GraphNode.this.c.setSelectedNode(GraphNode.this);
-				GraphNode.this.c.getGraphNodeModifier().setSelected(GraphNode.this);
-
+				
 				double rx;
 				double ry;
 				

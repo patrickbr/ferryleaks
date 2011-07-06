@@ -565,7 +565,7 @@ table td,table {
 
 body.hidden div {
 
-	display:none;
+	visibility:hidden;
 
 }
 

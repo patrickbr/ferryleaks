@@ -18,8 +18,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface RemoteManipulationServiceAsync {
 
-	void deleteNode(int nid, int planid, AsyncCallback<RemoteManipulationMessage> callback);
-
 	void getValidation(int planid, AsyncCallback<ValidationResult> callback);
 
 	void getNodeInformationHTML(int nid, int planid,
@@ -60,6 +58,9 @@ public interface RemoteManipulationServiceAsync {
 	void createNewPlan(AsyncCallback<Integer> callback);
 
 	void markAsRoot(int pid, int nid, AsyncCallback<Void> callback);
+
+	void deleteNodes(Integer[] nids, int planid,
+			AsyncCallback<RemoteManipulationMessage> callback);
 		
 
 }

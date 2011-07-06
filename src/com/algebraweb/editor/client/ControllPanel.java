@@ -89,7 +89,7 @@ public class ControllPanel extends AbsolutePanel{
 		LayoutPanel l = new LayoutPanel();
 		l.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
-		l.setHeight("500px");
+		l.setHeight("550px");
 		NumberedStackLayoutPanel p = new NumberedStackLayoutPanel(Unit.PX);
 
 
@@ -108,6 +108,20 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		editPanel.add(addNodeButton);
+		
+		
+		ControllPanelButton addEdgeButton = new ControllPanelButton("Add new edge","add-edge");
+
+		addEdgeButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				ControllPanel.this.e.getActiveCanvas().enterEdgeAddingMode();
+
+
+			}});
+
+		editPanel.add(addEdgeButton);
 
 		ControllPanelButton delete = new ControllPanelButton("Delete selected nod","delete");
 
@@ -115,7 +129,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				m.deleteNode(ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), ControllPanel.this.e.getActiveCanvas().getId());
+				m.deleteNode(ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0]), ControllPanel.this.e.getActiveCanvas().getId());
 
 			}});
 
@@ -129,7 +143,7 @@ public class ControllPanel extends AbsolutePanel{
 			public void onClick(ClickEvent event) {
 
 				//TODO: planid is fix
-				new NodeEditDialog(m,ControllPanel.this.rmsa,ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(),ControllPanel.this.e.getActiveCanvas().getId());
+				new NodeEditDialog(m,ControllPanel.this.rmsa,ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(),ControllPanel.this.e.getActiveCanvas().getId());
 
 			}});
 
@@ -142,7 +156,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.getXMLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), xmlCb);
+				ControllPanel.this.rmsa.getXMLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), xmlCb);
 			}});
 
 		editPanel.add(xml);
@@ -154,7 +168,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.markAsRoot(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), markAsRootCb);
+				ControllPanel.this.rmsa.markAsRoot(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), markAsRootCb);
 			}});
 
 		editPanel.add(rootB);
@@ -166,7 +180,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), xmlCb);
+				ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), xmlCb);
 			}});
 
 		editPanel.add(xmlPlan);
@@ -180,7 +194,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.getSQLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), sqlCb);
+				ControllPanel.this.rmsa.getSQLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), sqlCb);
 			}});
 
 		editPanel.add(sqlB);
@@ -192,7 +206,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.eval(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().getId(), evalCb);
+				ControllPanel.this.rmsa.eval(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), evalCb);
 			}});
 
 		editPanel.add(evalB);

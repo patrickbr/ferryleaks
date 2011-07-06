@@ -22,7 +22,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface RemoteManipulationService extends RemoteService {
 	
 	
-	public RemoteManipulationMessage deleteNode(int nid, int planid);
+	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid);
 	
 	public RemoteManipulationMessage addNode(int planid,String nodeType, int x, int y);
 	

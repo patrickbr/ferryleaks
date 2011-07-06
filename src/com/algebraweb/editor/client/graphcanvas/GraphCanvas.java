@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.graphcanvas;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.eclipse.jdt.internal.compiler.ast.ThisReference;
@@ -17,6 +18,7 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.DOM;
@@ -37,6 +39,8 @@ public class GraphCanvas extends Raphael  {
 	private GraphNode dragNode = null;
 	private int dragOffsetX = 0;
 	private int dragOffsetY = 0;
+	
+	private ArrayList<NodeSelectionHandler> selectionHandlers = new ArrayList<NodeSelectionHandler>();
 
 	private double scale = 1;
 
@@ -58,7 +62,7 @@ public class GraphCanvas extends Raphael  {
 	private GraphNodeModifier gnm;
 	private GraphEdgeModifier gem;
 	private boolean invertArrows = false;
-	private GraphNode selected = null;
+	private HashMap<Integer,GraphNode> selected = new HashMap<Integer,GraphNode>();
 
 
 	private int height;
@@ -175,14 +179,54 @@ public class GraphCanvas extends Raphael  {
 		return gem;
 	}
 
+	public void setSelectedNode(GraphNode n) {
+
+		ArrayList<GraphNode> t = new ArrayList<GraphNode>();
+		t.add(n);
+		setSelectedNodes(t);
+
+	}
+	
+	public void clearSelection() {
+		
+		
+		Iterator<GraphNode> it = selected.values().iterator();
+		
+		while(it.hasNext()) gnm.setNotSelected(it.next());
+		
+		selected.clear();
+		
+	}
+
 	/**
-	 * Set the GraphNode n selected
+	 * Set the GraphNodes nodes selected
 	 * @param n
 	 */
 
-	public void setSelectedNode(GraphNode n) {
+	public void setSelectedNodes(ArrayList<GraphNode> nodes) {
 
-		this.selected = n;
+		Iterator<GraphNode> it = nodes.iterator();
+	
+		clearSelection();
+		
+		while(it.hasNext()) {
+
+			GraphNode n = it.next();
+
+			this.selected.put(n.getId(), n);
+			getGraphNodeModifier().setSelected(n);
+
+		}
+		
+		
+		Iterator<NodeSelectionHandler> itH = selectionHandlers.iterator();
+		
+		
+		while (itH.hasNext()) {
+			
+			itH.next().isSelected(selected);
+			
+		}
 
 	}
 
@@ -191,7 +235,7 @@ public class GraphCanvas extends Raphael  {
 	 * @param n
 	 */
 
-	public GraphNode getSelectedNode() {
+	public HashMap<Integer,GraphNode> getSelectedNode() {
 
 		return selected;
 	}
@@ -734,6 +778,20 @@ public class GraphCanvas extends Raphael  {
 			}
 		}
 
+	}
+	
+	public boolean addNodeSelectionHandler(NodeSelectionHandler h) {
+		
+		
+		return this.selectionHandlers.add(h);
+		
+	}
+	
+	public boolean removeNodeSelectionHandler(NodeSelectionHandler h) {
+		
+		
+		return this.selectionHandlers.remove(h);
+		
 	}
 
 

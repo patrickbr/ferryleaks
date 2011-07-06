@@ -49,10 +49,10 @@ public class PlanModelManipulator {
 	}
 
 
-	public void deleteNode(int nid, int planid) {
+	public void deleteNode(Integer[] nids, int planid) {
 
 		GraphCanvas.showLoading("Deleting node...");
-		manServ.deleteNode(nid, planid, manipulationCallback);
+		manServ.deleteNodes(nids, planid, manipulationCallback);
 
 
 

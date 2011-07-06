@@ -82,52 +82,53 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public RemoteManipulationMessage deleteNode(int nid, int planid) {
+	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid) {
 
 
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 
-		if (nodeToWork == null) {
+		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid,"delete", 1, "", null);
+		
+		
+		for (int nid : nids) {
 
-			//node doesnt exist...
+			PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 
-			return new RemoteManipulationMessage(planid,"delete", 3, "Node doesn't exists in plan", null);
+			if (nodeToWork == null) return new RemoteManipulationMessage(planid,"delete", 3, "Node doesn't exists in plan", null);
 
 
-		}
+			Iterator<PlanNode> it = planToWork.getPlan().iterator();
 
-		Iterator<PlanNode> it = planToWork.getPlan().iterator();
+			while (it.hasNext()) {
 
-		while (it.hasNext()) {
+				PlanNode current = it.next();
 
-			PlanNode current = it.next();
+				current.deleteChild(nid);
 
-			current.deleteChild(nid);
+			}
 
-		}
+			if (planToWork.getPlan().remove(nodeToWork)) {	
 
-		if (planToWork.getPlan().remove(nodeToWork)) {	
+			
+				ret.getNodesAffected().add(new RawNode(nid));
 
-			System.out.println("Deleted node #" + nid);
-			//deleted, revalidating...
 
-			ValidationResult res = getValidation(planid);
+			}else{
 
-			RemoteManipulationMessage rmm= new RemoteManipulationMessage(planid,"delete", 1, "", res);
+				return new RemoteManipulationMessage(planid,"delete", 3, "Node doesn't exists in plan", null);
 
-			rmm.getNodesAffected().add(new RawNode(nid));
 
-			return rmm;
-
-		}else{
-
-			return new RemoteManipulationMessage(planid,"delete", 3, "Node doesn't exists in plan", null);
-
+			}
 
 		}
+		
+		ret.setValidationResult(getValidation(planid));
+		
+		return ret;
+		
+		
 
 	}
 
@@ -513,10 +514,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	@Override
 	public String[] getNodeTypes() {
-		
+
 		HashMap<String,NodeScheme> nodeSchemes;
 
-		
+
 		if (getServletContext().getAttribute("nodeSchemes") == null) {
 
 			//TODO: make this configurable
@@ -588,12 +589,12 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	@Override
 	public void markAsRoot(int pid, int nid) {
-		
+
 		HttpServletRequest request = this.getThreadLocalRequest();
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 
 		planToWork.setRoot(planToWork.getPlanNodeById(nid));
-		
+
 	}
 
 }
