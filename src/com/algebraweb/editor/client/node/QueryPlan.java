@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 
 
@@ -20,6 +21,7 @@ public class QueryPlan implements Serializable {
 	ArrayList<Property> properties = new ArrayList<Property>();
 	ArrayList<PlanNode> plan = new ArrayList<PlanNode>();
 	private PlanNode root;
+	private EvaluationContext evContext;
 
 
 	public PlanNode getRoot() {
@@ -66,6 +68,20 @@ public class QueryPlan implements Serializable {
 	}
 	
 	
+	/**
+	 * @return the evContext
+	 */
+	public EvaluationContext getEvContext() {
+		return evContext;
+	}
+
+	/**
+	 * @param evContext the evContext to set
+	 */
+	public void setEvContext(EvaluationContext evContext) {
+		this.evContext = evContext;
+	}
+
 	private int getFreeId() {
 		
 		Iterator<PlanNode> it = plan.iterator();

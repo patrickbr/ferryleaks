@@ -29,6 +29,14 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 public class AlgebraEditor implements EntryPoint {
 
+	private static String VERSION = "Alpha 5.6";
+	
+	private static String TITLE = "the bugFerry";
+	private static String AUTHOR = "Patrick Brosi";
+	private static String YEAR = "2011";
+	private static String FACILITY = "Universität Tübingen";
+	
+	
 
 	//TODO: this should be in an extra graph MultiEditor or sth like this
 
@@ -56,8 +64,11 @@ public class AlgebraEditor implements EntryPoint {
 		RootPanel.get("editor").add(new ControllPanel(this,m,300,300,rmsa));
 		RootPanel.get("editor").add(s);
 
-
-	
+		Window.setTitle(TITLE + " - " + VERSION);
+		RootPanel.get("impressum").getElement().setInnerHTML(TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " " + AUTHOR); 
+		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE); 
+		
+		
 		GWT.log("loading empty plan...");
 		rmsa.createNewPlan(createCb);
 		
@@ -153,6 +164,7 @@ public class AlgebraEditor implements EntryPoint {
 
 				activeCanvas = ((LogicalCanvas)cur.getWidget(0));
 				activeCanvas.setHidden(false);
+				s.setActive(id);
 				cur.show();
 			}
 
@@ -180,4 +192,12 @@ public class AlgebraEditor implements EntryPoint {
 		}
 
 	};
+	
+	
+	public static void setSubTitle(String s) {
+		
+
+		Window.setTitle(TITLE + " - " + VERSION + " - " + s);
+		
+	}
 }

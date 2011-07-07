@@ -21,6 +21,7 @@ import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
+import com.algebraweb.editor.client.logicalcanvas.EvaluationDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
 import com.algebraweb.editor.client.validation.ValidationResult;
@@ -76,7 +77,7 @@ public class ControllPanel extends AbsolutePanel{
 	private AlgebraEditor e;
 	private RemoteManipulationServiceAsync rmsa;
 
-	public ControllPanel(AlgebraEditor e,PlanModelManipulator man,int width, int height,RemoteManipulationServiceAsync rmsa) {
+	public ControllPanel(AlgebraEditor e,PlanModelManipulator man,int width, int height,final RemoteManipulationServiceAsync rmsa) {
 
 		super();
 
@@ -206,7 +207,8 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.eval(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), evalCb);
+				new EvaluationDialog(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0])[0],rmsa);
+				//ControllPanel.this.rmsa.eval(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), evalCb);
 			}});
 
 		editPanel.add(evalB);

@@ -14,26 +14,19 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
+import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+
 public class SqlEvaluator {
 
 	private static Connection conn = null;
 
-	// Hostname
 	private static String dbHost = "localhost";
-
-	// Port -- Standard: 3306
 	private static String dbPort = "5432";
-
-	// Datenbankname
 	private static String database = "bugferrytest";
-
-	// Datenbankuser
 	private static String dbUser = "bugferry";
-
-	// Datenbankpasswort
 	private static String dbPassword = "test";
 
-	public SqlEvaluator() {
+	public SqlEvaluator(EvaluationContext c) {
 		try {
 
 			Class.forName("org.postgresql.Driver");

@@ -70,6 +70,7 @@ public class PlanParser {
 		//TODO: this should also work with plan bundles...
 
 		QueryPlanBundle ret =new QueryPlanBundle();
+		EvaluationContextProvider ecp = new EvaluationContextProvider();
 
 		try{
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -90,6 +91,7 @@ public class PlanParser {
 				//TODO: not reliable :(
 				p.setRoot(p.getPlan().get(p.getPlan().size()-1));
 				System.out.println("Parsed and adding plan #" + p.getId());
+				ecp.fillEvaluationContext(p);
 				ret.addPlan(p);
 			}
 

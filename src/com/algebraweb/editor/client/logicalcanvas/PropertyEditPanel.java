@@ -29,14 +29,16 @@ public class PropertyEditPanel extends Composite{
 	private GoAble scheme;
 	
 	private ContentNodeTreeItem treeItem;
+	private int pid;
 
 	protected RemoteManipulationServiceAsync manServ;
 	private FlowPanel p = new FlowPanel();
 	private ArrayList<PropertyEditField> fields = new ArrayList<PropertyEditField>();
 
-	public PropertyEditPanel(ContentNodeTreeItem treeItem, RemoteManipulationServiceAsync manServ,NodeContent c, GoAble scheme,PlanNode nodeContext) {
+	public PropertyEditPanel(int pid, ContentNodeTreeItem treeItem, RemoteManipulationServiceAsync manServ,NodeContent c, GoAble scheme,PlanNode nodeContext) {
 
 		this.c=c;
+		this.pid=pid;
 		this.scheme=scheme;
 		this.treeItem=treeItem;
 		
@@ -94,8 +96,7 @@ public class PropertyEditPanel extends Composite{
 
 					f = new PropertyEditFieldGivenValues(current);
 
-					//TODO: planid!
-					manServ.getReferencableColumnsWithoutAdded(nodeContext.getId(), 0, refColsLoadCallBack((PropertyEditFieldGivenValues)f,pv));
+					manServ.getReferencableColumnsWithoutAdded(nodeContext.getId(), pid, refColsLoadCallBack((PropertyEditFieldGivenValues)f,pv));
 
 
 				}else{

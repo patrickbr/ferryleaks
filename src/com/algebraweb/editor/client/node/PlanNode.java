@@ -338,57 +338,7 @@ public class PlanNode extends ContentNode {
 		return temp;
 	}
 
-	/**
-	public ArrayList<NodeContent> getDirectNodeContentByScheme(GoAble g) {
-
-		ArrayList<NodeContent> res = new ArrayList<NodeContent>();
-
-
-		Iterator<NodeContent> it = getDirectContentWithInternalName(g.getXmlObject()).iterator();
-
-		while(it.hasNext()) {
-
-			NodeContent node = it.next();
-
-			if (g instanceof Value) {
-
-				boolean fail = false;
-
-				if (!(node instanceof ContentVal)) {
-					fail=true;
-				}else{
-
-					ContentVal nodeVal = (ContentVal) node;
-
-					ArrayList<Field> fields = ((Value)g).getFields();
-					Iterator<Field> i = fields.iterator();
-
-
-					while (i.hasNext()) {
-
-						Field current = i.next();
-						String att = current.getVal();
-
-						if ((!nodeVal.getAttributes().containsKey(att) ||
-								(current.hasMustBe() && !current.getMust_be().equals(nodeVal.getAttributes().get(att).getVal())))){
-
-							fail=true;
-
-						}					
-					}
-				}
-
-				if (!fail) res.add(node);
-
-			} else {
-				res.add(node);
-			}
-		}
-
-		return res;
-	}
-	 **/
-
+	
 	@Override
 	public String getInternalName() {
 		return "node_" + id;

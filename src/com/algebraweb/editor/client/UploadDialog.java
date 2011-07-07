@@ -22,25 +22,25 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class UploadDialog extends DialogBox {
-	
-	
+
+
 	private ControllPanel p;
 	private AlgebraEditor e;
 	private String awaitingFileUpload;
-	
-	
+
+
 	public UploadDialog(ControllPanel p,AlgebraEditor e) {
-		
-		
+
+
 		super();
 		super.setModal(false);
 		super.setAnimationEnabled(true);
 		super.setGlassEnabled(false);
-		
+
 		super.setText("Upload XML plan");
 		this.p=p;
 		this.e=e;
-		
+
 		SingleUploader defaultUploader = new SingleUploader();
 		defaultUploader.setAutoSubmit(true);
 		defaultUploader.setWidth("160px");
@@ -52,62 +52,54 @@ public class UploadDialog extends DialogBox {
 		defaultUploader.addOnStartUploadHandler(onStartUploaderHandler);
 
 		VerticalPanel v = new VerticalPanel();
-		
+
 		v.add(defaultUploader);
-		
+
 		Button cancelButton = new Button("Cancel");
-		
+
 		cancelButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				hide();
-				
+
 			}
-			
+
 		});
-		
+
 		v.add(cancelButton);
 		v.setCellHorizontalAlignment(cancelButton, HasHorizontalAlignment.ALIGN_RIGHT);
 		cancelButton.getElement().getStyle().setMargin(10, Unit.PX);
 		this.add(v);
-		
-	}
-	
 
-	
+	}
+
+
+
 	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
 		public void onFinish(IUploader uploader) {
-			
+
 			hide();
-			
+
 			if (uploader.getStatus() == Status.SUCCESS) {
 
 				String msg = uploader.getServerInfo().message.split("!")[0];
 				String idstr = uploader.getServerInfo().message.split("!")[1];
-				
-				
-				GWT.log("Msg:" + msg + " Awaiting: " + awaitingFileUpload);
-				
+
 				if (awaitingFileUpload.equals(msg)) {
 
-					GWT.log("received!");
-					
-					
+					AlgebraEditor.setSubTitle(uploader.getFileName());
 					String[] ids = idstr.split(":");
-					
-					GWT.log(idstr);
-					
 					e.clearCanvases();
-					
+
 					for (String sid : ids) {
-						GWT.log("gurr...");
+
 						final int id = Integer.parseInt(sid);
-					
+
 						LogicalCanvas c = e.addCanvas(id);
-						
+
 						if (sid.equals(ids[0])) e.changeCanvas(Integer.parseInt(ids[0]));
-						
+
 						GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
 
 						awaitingFileUpload = "";
@@ -116,19 +108,11 @@ public class UploadDialog extends DialogBox {
 							@Override
 							public void onComplete() {
 								p.getM().validate(id);
-								
+
 							}
 						});
-						
-						
 					}
-					
-					
-					
-			
-
 				}
-
 			}
 		}
 	};
@@ -137,11 +121,11 @@ public class UploadDialog extends DialogBox {
 
 		@Override
 		public void onStart(IUploader uploader) {
-	
+
 			awaitingFileUpload = Long.toString(System.currentTimeMillis());
-			
+
 			String servPath = uploader.getServletPath().split("\\?")[0];
-			
+
 			GWT.log(servPath);
 			setVisible(false);
 			uploader.setServletPath(servPath+ "?myinfo=" + awaitingFileUpload);

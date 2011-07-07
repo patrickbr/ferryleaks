@@ -13,56 +13,65 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.PushButton;
 
 public class PlanSwitcher extends AbsolutePanel{
-	
-	
+
+
 	private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
 	private AlgebraEditor editor;
 	private FlowPanel p = new FlowPanel();
+	private int active = -1;
 	
 	public PlanSwitcher(AlgebraEditor e) {
-		
+
 		super();
 		this.editor=e;
-		
+
 		this.setStylePrimaryName("switcher");
 
 		this.getElement().getStyle().setPosition(Position.FIXED);
-		
+
 		this.add(p);
-		
-		
-				
+
+
+
 	}
-	
+
 	public void addPlan(final int pid) {
-				
+
 		GWT.log("adding new plan");
 		Button newB = new Button();
 		buttons.put(pid,newB);
-		
+
 		newB.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				editor.changeCanvas(pid);
-				
+
 			}
-			
+
 		});
-		
+
 		newB.setText("Plan " +pid);
 		p.add(newB);
-		
-				
+
+
 	}
-	
+
 	public void removePlan(int pid) {
-		
+
 		p.remove(buttons.get(pid));
 		buttons.remove(pid);
-		
+
 	}
-	
+
+	public void setActive(int pid) {
+
+		if (active != -1) buttons.get(active).removeStyleName("active");
+		buttons.get(pid).addStyleName("active");
+		active=pid;
+
+	}
+
 
 }

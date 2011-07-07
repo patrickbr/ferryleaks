@@ -27,6 +27,7 @@ import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.RemoteManipulationMessage;
 import com.algebraweb.editor.client.RemoteManipulationService;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
+import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -140,9 +141,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToValidate = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
-
-
-		//TODO: NODE ID IS FIX
 
 		return vm.validate(planToValidate, planToValidate.getPlan());
 
@@ -560,9 +558,9 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public ArrayList<HashMap<String,String>> eval(int pid, int nid) {
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context) {
 
-		SqlEvaluator eval = new SqlEvaluator();
+		SqlEvaluator eval = new SqlEvaluator(context);
 
 		return eval.eval(getSQLFromPlanNode(pid,nid));
 
@@ -595,6 +593,18 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		planToWork.setRoot(planToWork.getPlanNodeById(nid));
 
+	}
+
+
+	@Override
+	public EvaluationContext getEvaluationContext(int pid, int nid) {
+		
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		
+		
+		return planToWork.getEvContext() ;
 	}
 
 }

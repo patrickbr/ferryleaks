@@ -65,7 +65,7 @@ public class NodeEditDialog extends DialogBox{
 	LayoutPanel v = new LayoutPanel();
 	LayoutPanel h = new LayoutPanel();
 
-	public NodeEditDialog(PlanModelManipulator pmm,RemoteManipulationServiceAsync manServ, int nid, int pid) {
+	public NodeEditDialog(PlanModelManipulator pmm,RemoteManipulationServiceAsync manServ, int nid, final int pid) {
 
 		super();
 		super.setAnimationEnabled(true);
@@ -101,7 +101,7 @@ public class NodeEditDialog extends DialogBox{
 
 					}else{
 
-						PropertyEditPanel p = new PropertyEditPanel((ContentNodeTreeItem)event.getSelectedItem(),NodeEditDialog.this.manServ,((ContentNodeTreeItem)event.getSelectedItem()).getContentNode(),((ContentNodeTreeItem)event.getSelectedItem()).getScheme(),node);
+						PropertyEditPanel p = new PropertyEditPanel(pid,(ContentNodeTreeItem)event.getSelectedItem(),NodeEditDialog.this.manServ,((ContentNodeTreeItem)event.getSelectedItem()).getContentNode(),((ContentNodeTreeItem)event.getSelectedItem()).getScheme(),node);
 						panels.put(event.getSelectedItem(),p);
 
 						NodeEditDialog.this.setEditWidget(p);

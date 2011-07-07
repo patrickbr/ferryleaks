@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
@@ -50,11 +51,13 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public String[] getNodeTypes();
 	
-	public ArrayList<HashMap<String,String>> eval(int pid, int nid);
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context);
 
 	public Integer createNewPlan();
 	
 	public void markAsRoot(int pid, int nid);
+	
+	public EvaluationContext getEvaluationContext(int pid, int nid);
 	
 
 }

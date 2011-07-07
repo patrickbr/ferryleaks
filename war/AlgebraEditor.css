@@ -16,7 +16,6 @@ body {
 	margin: 0px;
 	padding: 0px;
 	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
-
 }
 
 h1 {
@@ -78,45 +77,39 @@ h1 {
 	height: 16px;
 	background-image: url(cancel.png);
 	margin-top: 6px;
-	color:white;
+	color: white;
 }
 
 .filename {
 	margin-top: 6px;
 	margin-left: 5px;
-	color:white;
+	color: white;
 }
 
 .prgbar-back {
-	top:6px;
+	top: 6px;
 	position: relative;
-	background-color:#AAA;
-	height:20px;
-	margin-left:10px;
+	background-color: #AAA;
+	height: 20px;
+	margin-left: 10px;
 }
 
 .upld-status {
 	height: 29px;
-
 }
 
-.upld-status td{
+.upld-status td {
 	
 }
 
 .GWTUpld {
-
-	padding:15px;	
-	
-	
+	padding: 15px;
 }
 
 .prgbar-msg {
-	
-	position:absolute;
-	top:0px;
-	left:20px;
-
+	position: absolute;
+	top: 0px;
+	left: 20px;
 }
 
 .status {
@@ -124,14 +117,14 @@ h1 {
 	margin-left: 20px;
 	padding-right: 5px;
 	white-space: nowrap;
-	color:white;
+	color: white;
 }
 
 .prgbar-done {
 	background-color: #EEE;
 	margin-left: 0px;
 	height: 20px;
-	position:absolute;
+	position: absolute;
 	top: 0px;
 	left: 0px;
 }
@@ -266,7 +259,7 @@ h1 {
 	background-image: url(webferry.png);
 	background-position: 10px -1px;
 	background-repeat: no-repeat;
-	width:160px;
+	width: 160px;
 }
 
 .gwt-StackLayoutPanel .gwt-StackLayoutPanelHeader {
@@ -527,8 +520,6 @@ table td,table {
 	background-position: -60px -190px;
 }
 
-
-
 #impressum {
 	position: fixed;
 	right: 5px;
@@ -536,7 +527,7 @@ table td,table {
 	text-align: right;
 	font-size: 11px;
 	color: #BBB;
-	line-height:30px;
+	line-height: 30px;
 }
 
 .gwt-StackLayoutPanelHeader:hover {
@@ -551,37 +542,29 @@ table td,table {
 }
 
 .switcher {
-
-	top:0px;
-	left:250px;
-	height:30px;
-	background-color:#111;
-	width:100%;
-	opacity:0.8;
-	padding-left:20px;
-	
-
+	top: 0px;
+	left: 250px;
+	height: 30px;
+	background-color: #111;
+	width: 100%;
+	opacity: 0.8;
+	padding-left: 20px;
 }
 
 body.hidden div {
-
-	visibility:hidden;
-
+	visibility: hidden;
 }
 
-body.visible #loading, body.visible #loading #msg {
+body.visible #loading,body.visible #loading #msg {
 	display: none;
 }
 
 body.hidden {
-
 	
 }
 
 body.visible {
-
-	background-color:#FAFAFA;	
-	
+	background-color: #FAFAFA;
 }
 
 body.hidden #loading {
@@ -604,29 +587,67 @@ body.hidden #loading #msg {
 	padding-left: 50px;
 	padding-bottom: 30px;
 	padding-top: 3px;
-	color:black;
+	color: black;
 }
 
 .res-cell {
-
-	padding:2px;
-	border:solid black 1px;	
-	text-align:right;
-	
+	padding: 2px;
+	border: solid black 1px;
+	text-align: right;
 }
 
 .header-cell {
-	
-	font-style:italic;
-	color:#555;
-		
-	
+	font-style: italic;
+	color: #555;
 }
 
 .switcher button {
-	
+	-webkit-border--radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+	-webkit-border-top-right-radius: 9px;
+	-moz-border-radius-topright: 9px;
+	border-top-right-radius: 9px;
+	height: 22px;
+	font-size: 11px;
+	margin-right: 5px;
+	border: none;
+	position: relative;
+	top: 8px;
+	padding-right:10px;
+	padding-left:10px;
+	min-width:70px;
+	text-align:left;
+}
 
-	height:25px;
-	font-size:11px;	
-	margin-right:5px;
+.switcher button.active:hover {
+	
+	background-color:#FAFAFA;
+	
+}
+
+.switcher button.active {
+	
+	background-color:#FAFAFA;
+	
+}
+
+.switcher button:hover {
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+	-webkit-border-top-right-radius: 9px;
+	-moz-border-radius-topright: 9px;
+	border-top-right-radius: 9px;
+	font-size: 11px;
+	margin-right: 5px;
+	border: none;
+}
+
+
+.eval-item-columns-selected, .eval-item-columns-available .gwt-ListBox{
+
+	
+		width:200px;
+
 }

@@ -17,8 +17,8 @@ import com.algebraweb.editor.client.scheme.Value;
  */
 
 public abstract class ContentNode implements Serializable{
-	
-	
+
+
 	/**
 	 * 
 	 */
@@ -33,25 +33,25 @@ public abstract class ContentNode implements Serializable{
 	 * @return
 	 */
 	public ArrayList<NodeContent> getAllContentWithInternalName(String name) {
-		
+
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
-				
+
 		Iterator<NodeContent> i = childs.iterator();
-				
+
 		while (i.hasNext()) {
-			
+
 			NodeContent c = i.next();
 			if (c.getInternalName().equals(name)) temp.add(c);
-			
+
 			temp.addAll(c.getAllContentWithInternalName(name));
-					
+
 		}
-		
+
 		return temp;
-				
+
 	}
-	
-	
+
+
 	/**
 	 * Returns values in this ContentNode with a given
 	 * internal name (as specified in the scheme XML file)
@@ -60,29 +60,29 @@ public abstract class ContentNode implements Serializable{
 	 * @return
 	 */
 	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
-		
+
 		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
-		
+
 		Iterator<NodeContent> i = childs.iterator();
-				
+
 		while (i.hasNext()) {
-			
+
 			NodeContent c = i.next();
 			if (c.getInternalName().equals(name)) temp.add(c);
-						
+
 		}
-		
+
 		return temp;
 	}
-	
-	
+
+
 	public ArrayList<NodeContent> getDirectNodeContentByScheme(GoAble g) {
-		
-		
+
+
 
 		ArrayList<NodeContent> res = new ArrayList<NodeContent>();
 
-	
+
 		Iterator<NodeContent> it = getDirectContentWithInternalName(g.getXmlObject()).iterator();
 
 		while(it.hasNext()) {
@@ -149,14 +149,54 @@ public abstract class ContentNode implements Serializable{
 
 	}
 
-	
+
 	/**
 	 * returns the contents of this ContentNode
 	 * @return
 	 */
 	public abstract ArrayList<NodeContent> getContent();
-	
-	
+
+
 	public abstract String getInternalName();
+
+
+	public ArrayList<NodeContent> getContentWithAttributeValue(String attr, String value) {
+
+
+		ArrayList<NodeContent> ret = new ArrayList<NodeContent>();
+
+
+		if (this instanceof NodeContent) {
+
+			Iterator<String> itP = ((NodeContent)this).getAttributes().keySet().iterator();
+
+			while (itP.hasNext()) {
+				
+				String current = itP.next();
+				
+				
+				if (current.equals(attr) && ((NodeContent)this).getAttributes().get(current).getVal().equals(value)) {
+					
+					
+					ret.add(((NodeContent)this));
+					
+				}
+				
+			}
+
+		}
+		
+
+		Iterator<NodeContent> it = this.getContent().iterator();
+
+		while (it.hasNext()) {
+
+			ret.addAll(it.next().getContentWithAttributeValue(attr, value));
+
+		}
+
+
+		return ret;
+	}
 
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
@@ -52,7 +53,7 @@ public interface RemoteManipulationServiceAsync {
 
 	void getSQLFromPlanNode(int pid, int nid, AsyncCallback<String> callback);
 
-	void eval(int pid, int nid,
+	void eval(int pid, int nid, EvaluationContext context,
 			AsyncCallback<ArrayList<HashMap<String, String>>> callback);
 
 	void createNewPlan(AsyncCallback<Integer> callback);
@@ -61,6 +62,9 @@ public interface RemoteManipulationServiceAsync {
 
 	void deleteNodes(Integer[] nids, int planid,
 			AsyncCallback<RemoteManipulationMessage> callback);
+
+	void getEvaluationContext(int pid, int nid,
+			AsyncCallback<EvaluationContext> callback);
 		
 
 }
