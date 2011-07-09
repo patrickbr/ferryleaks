@@ -16,6 +16,7 @@ public class AvailableColumnsField extends Composite {
 	private AbsolutePanel p;
 	ListBox b = new ListBox();
 	private String projSel;
+	private String[] projDel;
 	private boolean received = false;
 
 	public AvailableColumnsField(int pid, int nid, RemoteManipulationServiceAsync manServ) {
@@ -29,7 +30,7 @@ public class AvailableColumnsField extends Composite {
 
 		this.initWidget(p);
 
-		manServ.getReferencableColumnsWithoutAdded(nid, pid, cb);
+		manServ.getReferencableColumns(nid, pid, cb);
 
 
 	}
@@ -44,22 +45,39 @@ public class AvailableColumnsField extends Composite {
 		}
 
 	}
+	
+	public void setProjectedDelete(String[] item) {
+
+		projDel = item;
+		if (received) {
+			
+			for (String s : item)
+			b.removeItem(selectStringItem(s));
+
+		}
+
+	}
 
 	/**
 	 * Selects the first occurrence of the item "item" in the listbox.
 	 * @param item
 	 */
 
-	private void selectStringItem(String item) {
+	private int selectStringItem(String item) {
 
 
 		for (int i=0;i<b.getItemCount();i++) {
 			
 			
-			if (b.getValue(i).equals(item)) b.setSelectedIndex(i);
+			if (b.getValue(i).equals(item)) {
+				b.setSelectedIndex(i);
+				return i;
+			}
 			
 			
 		}
+		
+		return -1;
 		
 
 	}
@@ -102,6 +120,10 @@ public class AvailableColumnsField extends Composite {
 
 			AvailableColumnsField.this.showResults(result);
 			selectStringItem(projSel);
+			
+			if (projDel != null)
+			for (String s : projDel)
+				b.removeItem(selectStringItem(s));
 			received=true;
 
 		}		

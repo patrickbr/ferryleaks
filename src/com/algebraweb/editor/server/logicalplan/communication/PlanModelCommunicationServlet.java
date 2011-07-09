@@ -46,6 +46,7 @@ import com.algebraweb.editor.server.logicalplan.validation.ValidationMachine;
 import com.algebraweb.editor.server.logicalplan.validation.validators.AbandondedNodeValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.GrammarValidator;
 import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedColumnsValidator;
+import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedNodesValidator;
 import com.algebraweb.editor.server.logicalplan.xmlbuilder.XMLNodePlanBuilder;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
@@ -78,6 +79,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		vm.addValidator(new ReferencedColumnsValidator());
 		vm.addValidator(new AbandondedNodeValidator());
 		vm.addValidator(gv);
+		vm.addValidator(new ReferencedNodesValidator());
 
 	}
 
@@ -443,21 +445,21 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public String getXMLLogicalPlanFromRootNode(int pid, int nid) {
+	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c) {
 
-		Element e = getDomXMLLogicalPlanFromRootNode(pid, nid);
+		Element e = getDomXMLLogicalPlanFromRootNode(pid, nid,c);
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 		return outputter.outputString(e);
 	}
 
 
-	private Element getDomXMLLogicalPlanFromRootNode(int pid, int nid) {
+	private Element getDomXMLLogicalPlanFromRootNode(int pid, int nid, EvaluationContext c) {
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 
-		Element e = npb.getNodePlan(pid, nodeToWork);
+		Element e = npb.getNodePlan(pid, nodeToWork,c);
 		return e;
 	}
 
@@ -542,11 +544,11 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public String getSQLFromPlanNode(int pid, int nid) {
+	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c) {
 
 		System.out.println("getting sql for plan #" + pid);
 
-		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid);
+		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid,c);
 
 		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder();
 
@@ -562,7 +564,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		SqlEvaluator eval = new SqlEvaluator(context);
 
-		return eval.eval(getSQLFromPlanNode(pid,nid));
+		return eval.eval(getSQLFromPlanNode(pid,nid,context));
 
 	}
 
@@ -605,6 +607,17 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		
 		
 		return planToWork.getEvContext() ;
+	}
+
+
+	@Override
+	public ArrayList<Property> getReferencableColumns(int nid, int pid) {
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+
+		return nodeToWork.getReferencableColumnsFromValues();
 	}
 
 }

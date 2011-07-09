@@ -1,5 +1,6 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
+import com.algebraweb.editor.client.node.Property;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class EvaluationContext implements IsSerializable {
@@ -18,6 +19,9 @@ public class EvaluationContext implements IsSerializable {
 	int iterColumnNat;
 	String sortColumnName;
 	String sortOrder;
+	String sortOrderColumnOn;
+	
+	String[] itemColumns;
 	
 	
 	public EvaluationContext() {
@@ -198,6 +202,38 @@ public class EvaluationContext implements IsSerializable {
 	 */
 	public void setSortOrder(String sortOrder) {
 		this.sortOrder = sortOrder;
+	}
+
+
+	/**
+	 * @return the itemColumns
+	 */
+	public String[] getItemColumns() {
+		return itemColumns;
+	}
+
+
+	/**
+	 * @param itemColumns the itemColumns to set
+	 */
+	public void setItemColumns(String[] itemColumns) {
+		this.itemColumns = itemColumns;
+	}
+
+
+	/**
+	 * @return the sortOrderColumnOn
+	 */
+	public String getSortOrderColumnOn() {
+		return sortOrderColumnOn;
+	}
+
+
+	/**
+	 * @param sortOrderColumnOn the sortOrderColumnOn to set
+	 */
+	public void setSortOrderColumnOn(String sortOrderColumnOn) {
+		this.sortOrderColumnOn = sortOrderColumnOn;
 	}
 	
 	

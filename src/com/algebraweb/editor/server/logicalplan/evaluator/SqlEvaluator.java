@@ -25,8 +25,14 @@ public class SqlEvaluator {
 	private static String database = "bugferrytest";
 	private static String dbUser = "bugferry";
 	private static String dbPassword = "test";
+	
+	private EvaluationContext c;
 
 	public SqlEvaluator(EvaluationContext c) {
+		
+		this.c=c;
+		
+		
 		try {
 
 			Class.forName("org.postgresql.Driver");

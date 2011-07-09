@@ -80,10 +80,10 @@ public class PlanParser {
 			NodeList plans =  doc.getElementsByTagName("query_plan");
 
 			for (int i=0;i<plans.getLength();i++) {
-			
+
 				System.out.println(plans.item(i).getAttributes().getNamedItem("id").getNodeValue());
 				QueryPlan p = new QueryPlan(Integer.parseInt(plans.item(i).getAttributes().getNamedItem("id").getNodeValue()));
-				
+
 				NodeList planNodes = ((Element)plans.item(i)).getElementsByTagName("logical_query_plan").item(0).getChildNodes();
 
 				parseNodes((Element)planNodes,p);
@@ -148,7 +148,7 @@ public class PlanParser {
 				mother
 
 		);
-		fillNode(newNode,el);
+		fillNode(newNode,el, mother, newNode);
 		return newNode;
 
 	}
@@ -159,12 +159,12 @@ public class PlanParser {
 	 * @param nodeEl
 	 */
 
-	private void fillNode(PlanNode n, Element nodeEl) {
+	private void fillNode(PlanNode n, Element nodeEl, QueryPlan mother, PlanNode node) {
 
 		NodeScheme s = getScheme(n.getKind());
 		ArrayList<GoAble> schema = s.getSchema();
 
-		parseContent(nodeEl, n.getContent(), schema);
+		parseContent(nodeEl, n.getContent(), schema, mother, node);
 
 	}
 
@@ -175,7 +175,7 @@ public class PlanParser {
 	 * @param schema
 	 */
 
-	private void parseContent(Element e, ArrayList<NodeContent> retEl, ArrayList<GoAble> schema) {
+	private void parseContent(Element e, ArrayList<NodeContent> retEl, ArrayList<GoAble> schema,QueryPlan mother, PlanNode node) {
 
 		Iterator<GoAble> it = schema.iterator();
 
@@ -187,7 +187,7 @@ public class PlanParser {
 
 			for (int i=0;i<childs.size();i++) {
 
-				retEl.add(parseGoAble((GoInto) next, childs.get(i)));
+				retEl.add(parseGoAble((GoInto) next, childs.get(i), mother, node));
 			}
 		}
 
@@ -200,7 +200,7 @@ public class PlanParser {
 	 * @return
 	 */
 
-	private NodeContent parseGoAble(GoAble g,Element e) {
+	private NodeContent parseGoAble(GoAble g,Element e,QueryPlan mother, PlanNode node) {
 
 		NodeContent retEl = null;
 
@@ -228,11 +228,23 @@ public class PlanParser {
 				((ContentVal)retEl).getAttributes().put(new Property(name,value, type));
 
 			}
+
+			// what if edge erroneous??
+			if (((Value)g).getInternalName().equals("edge")) {
+
+				int to = Integer.parseInt(((ContentVal)retEl).getAttributes().get("to").getVal());
+
+				PlanNode pn = mother.getPlanNodeById(to);
+				if (pn != null)
+				node.getChilds().add(mother.getPlanNodeById(to));
+				
+			}
+
 		}
 
 		ArrayList<GoAble> schema = g.getSchema();
 
-		parseContent(e, retEl.getContent(), schema);
+		parseContent(e, retEl.getContent(), schema, mother, node);
 		return retEl;
 
 	}

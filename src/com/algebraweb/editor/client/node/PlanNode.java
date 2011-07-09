@@ -20,13 +20,14 @@ public class PlanNode extends ContentNode {
 
 
 	private PropertyMap properties = new PropertyMap();
-	private QueryPlan myPlan;
+	private ArrayList<PlanNode> nodeChilds = new ArrayList<PlanNode>();
 
 
 	private int id;
 	private String kind;
 	
 	protected NodeScheme scheme;
+	private QueryPlan mother;
 	
 	
 	/**
@@ -46,11 +47,12 @@ public class PlanNode extends ContentNode {
 		
 
 
-	public PlanNode(int id, String kind, NodeScheme scheme, QueryPlan myPlan) {
+	public PlanNode(int id, String kind, NodeScheme scheme, QueryPlan mother) {
 
 		this.id=id;
 		this.kind=kind;
-		this.myPlan = myPlan;
+		this.mother=mother;
+		
 		this.scheme=scheme;
 
 	}	
@@ -60,12 +62,25 @@ public class PlanNode extends ContentNode {
 	}	
 
 
-
-
-
 	public boolean deleteChild(int nid) {
 
+		Iterator<PlanNode> it = nodeChilds.iterator();
+		
+		while(it.hasNext()) {
+			
+			PlanNode current = it.next();
+			
+			if (current.getId() == nid) {
+				
+				it.remove();
+				return true;
+				
+			}
+			
+		}
 
+		return false;
+		/**
 		Iterator<NodeContent> it =  getAllContentWithInternalName("edge").iterator();
 
 		while (it.hasNext()) {
@@ -81,11 +96,15 @@ public class PlanNode extends ContentNode {
 		}
 
 		return false;
+		*/
 	}
 
 
 	public ArrayList<PlanNode> getChilds() {
 
+		return nodeChilds;
+		
+		/**
 		ArrayList<PlanNode> ret = new ArrayList<PlanNode>();
 
 		NodeContent[] edges = getAllContentWithInternalName("edge").toArray(new NodeContent[0]);
@@ -95,6 +114,7 @@ public class PlanNode extends ContentNode {
 		}
 
 		return ret;
+		*/
 	}
 
 	public ArrayList<NodeContent> getContent() {
@@ -343,5 +363,15 @@ public class PlanNode extends ContentNode {
 	public String getInternalName() {
 		return "node_" + id;
 	}
+
+
+	/**
+	 * @return the mother
+	 */
+	public QueryPlan getMother() {
+		return mother;
+	}
+	
+	
 
 }

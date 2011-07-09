@@ -33,6 +33,8 @@ public interface RemoteManipulationService extends RemoteService {
 		
 	public PlanNode getPlanNode(int nid, int pid);
 	
+	public ArrayList<Property> getReferencableColumns(int nid, int pid);
+	
 	public ArrayList<Property> getReferencableColumnsWithoutAdded(int nid, int pid);
 	
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid,PlanNode p);
@@ -45,9 +47,9 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public String getXMLFromPlanNode(int pid, int nid);
 	
-	public String getXMLLogicalPlanFromRootNode(int pid, int nid);
+	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c);
 	
-	public String getSQLFromPlanNode(int pid, int nid);
+	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c);
 	
 	public String[] getNodeTypes();
 	

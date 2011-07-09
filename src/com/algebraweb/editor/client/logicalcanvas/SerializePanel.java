@@ -26,6 +26,7 @@ public class SerializePanel extends LayoutPanel {
 	private final TextBox valueTextBox;
 	private RadioButton userUseColumn;
 	private final AvailableColumnsField sortColumn;
+	private final AvailableColumnsField sortOnColumn;
 	private final ListBox preDefinedSortingListBox;
 	private RadioButton useSortColumnButton;
 
@@ -98,6 +99,11 @@ public class SerializePanel extends LayoutPanel {
 		preDefinedSortingListBox.addItem("DESCENDING");
 
 		serPanel.add(preDefinedSortingListBox);
+		
+		sortOnColumn = new AvailableColumnsField(pid, nid, manServ);
+		
+		serPanel.add(new Label("sort on:"));
+		serPanel.add(sortOnColumn);
 
 		useSortColumnButton = new RadioButton("sorting","Use column: ");
 
@@ -115,6 +121,7 @@ public class SerializePanel extends LayoutPanel {
 				if (event.getValue()) {
 					sortColumn.getWidget().setEnabled(false);
 					preDefinedSortingListBox.setEnabled(true);
+					sortOnColumn.getWidget().setEnabled(true);
 				}
 
 			}
@@ -128,6 +135,7 @@ public class SerializePanel extends LayoutPanel {
 				if (event.getValue()) {
 					sortColumn.getWidget().setEnabled(true);
 					preDefinedSortingListBox.setEnabled(false);
+					sortOnColumn.getWidget().setEnabled(false);
 				}
 
 			}
@@ -232,7 +240,15 @@ public class SerializePanel extends LayoutPanel {
 		c.setSortOrder(preDefinedSortingListBox.getValue(preDefinedSortingListBox.getSelectedIndex()));
 		c.setSortUseColumn(useSortColumnButton.getValue());
 
-
+		String[] itemCols = new String[columnsSelected.getItemCount()];
+		
+		for (int i=0;i<columnsSelected.getItemCount();i++) {
+			
+			itemCols[i] = columnsSelected.getItemText(i);
+			
+		}
+		
+		c.setItemColumns(itemCols);
 
 		return true;
 
@@ -260,6 +276,15 @@ public class SerializePanel extends LayoutPanel {
 		
 		useSortColumnButton.setValue(!c.isSortUseColumn(),true);
 		useSortColumnButton.setValue(c.isSortUseColumn(),true);
+		
+		for (String col : c.getItemColumns()) {
+			GWT.log(col);
+			columnsSelected.addItem(col);
+						
+		}
+		
+		columnsAvailable.setProjectedDelete(c.getItemColumns());
+		
 	}
 
 

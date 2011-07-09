@@ -9,6 +9,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Text;
 
+import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -26,12 +27,16 @@ public class XMLNodePlanBuilder {
 	}
 
 
-	public Element getNodePlan(int id, PlanNode rootNode) {
+	public Element getNodePlan(int id, PlanNode rootNode, EvaluationContext c) {
 
 		Element nodePlan = new Element("query_plan");
 		nodePlan.setAttribute("id", Integer.toString(id));
 		Element logicalPlan = new Element("logical_query_plan");
 		logicalPlan.setAttribute("unique_names", "true");
+		
+		SerializeRelationBuilder srb = new SerializeRelationBuilder(c);
+		
+		rootNode = srb.addSerializRelation(rootNode);
 
 		HashMap<Integer,Integer> repl = new HashMap<Integer,Integer>();//getNodeIdReplacements(rootNode,0);
 		
@@ -58,7 +63,7 @@ public class XMLNodePlanBuilder {
 		
 		Document d = new Document();
 		
-		d.addContent(getNodePlan(p.getId(),p.getRoot()));
+		d.addContent(getNodePlan(p.getId(),p.getRoot(),p.getEvContext()));
 		
 		return d;
 		

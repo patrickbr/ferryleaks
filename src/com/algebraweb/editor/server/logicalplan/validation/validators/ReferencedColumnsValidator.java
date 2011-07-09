@@ -57,6 +57,23 @@ public class ReferencedColumnsValidator implements Validator {
 
 
 			}
+			
+			ArrayList<Property> introCols = current.getAddedColumns();
+			Iterator<Property> itIntroCols = introCols.iterator();
+			
+			while (itIntroCols.hasNext()) {
+				
+				Property currentCol = itIntroCols.next();
+				
+				if ((!current.resetsColumns() && containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
+					
+					String errorMsg = "Node introduces already existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
+					r.addError(new ValidationError(current.getId(),errorMsg));
+				}
+				
+				
+				
+			}
 
 		}
 

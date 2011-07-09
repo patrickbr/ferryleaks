@@ -21,6 +21,8 @@ import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
+import com.algebraweb.editor.client.logicalcanvas.CreateSQLDialog;
+import com.algebraweb.editor.client.logicalcanvas.CreateXMLDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
@@ -180,8 +182,9 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-
-				ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), xmlCb);
+				new CreateXMLDialog(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0])[0],rmsa);
+				
+				//ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), xmlCb);
 			}});
 
 		editPanel.add(xmlPlan);
@@ -195,7 +198,8 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				ControllPanel.this.rmsa.getSQLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), sqlCb);
+				new CreateSQLDialog(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0])[0],rmsa);
+				//ControllPanel.this.rmsa.getSQLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), sqlCb);
 			}});
 
 		editPanel.add(sqlB);
@@ -380,24 +384,6 @@ public class ControllPanel extends AbsolutePanel{
 
 	};
 
-
-	private AsyncCallback<String> sqlCb = new AsyncCallback<String>() {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onSuccess(String result) {
-
-
-			Window.alert(result);
-
-
-		}
-
-	};
 
 
 

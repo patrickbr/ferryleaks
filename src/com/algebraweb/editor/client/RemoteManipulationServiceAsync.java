@@ -43,7 +43,7 @@ public interface RemoteManipulationServiceAsync {
 	void updatePlanNode(int nid, int pid, PlanNode p,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
-	void getXMLLogicalPlanFromRootNode(int pid, int nid,
+	void getXMLLogicalPlanFromRootNode(int pid, int nid, EvaluationContext c,
 			AsyncCallback<String> callback);
 
 	void addNode(int planid, String nodeType, int x, int y,
@@ -51,7 +51,8 @@ public interface RemoteManipulationServiceAsync {
 
 	void getNodeTypes(AsyncCallback<String[]> callback);
 
-	void getSQLFromPlanNode(int pid, int nid, AsyncCallback<String> callback);
+	void getSQLFromPlanNode(int pid, int nid, EvaluationContext c,
+			AsyncCallback<String> callback);
 
 	void eval(int pid, int nid, EvaluationContext context,
 			AsyncCallback<ArrayList<HashMap<String, String>>> callback);
@@ -65,6 +66,9 @@ public interface RemoteManipulationServiceAsync {
 
 	void getEvaluationContext(int pid, int nid,
 			AsyncCallback<EvaluationContext> callback);
+
+	void getReferencableColumns(int nid, int pid,
+			AsyncCallback<ArrayList<Property>> callback);
 		
 
 }

@@ -44,6 +44,7 @@
 
 					<field type="__COLUMN">name</field>
 					<field type="boolean" must_be="false">new</field>
+					<field type="integer">position</field>
 					<field type="string" must_be="item">function</field>
 					
 				</fields>

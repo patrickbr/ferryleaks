@@ -2,6 +2,7 @@ package com.algebraweb.editor.client.node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
@@ -60,14 +61,14 @@ public class QueryPlan implements Serializable {
 	}
 
 	public PlanNode addNode(NodeScheme s) {
-		
+
 		PlanNode n = new PlanNode(getFreeId(), s.getKind(), s, this);
 		plan.add(n);
 		return n;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * @return the evContext
 	 */
@@ -82,20 +83,24 @@ public class QueryPlan implements Serializable {
 		this.evContext = evContext;
 	}
 
-	private int getFreeId() {
-		
-		Iterator<PlanNode> it = plan.iterator();
-		
+	public int getFreeId() {
+
+		return getFreeId(new ArrayList<Integer>());
+
+	}
+
+	public int getFreeId(ArrayList<Integer> blackList) {
+
 		int current = 0;
-		
-		while (getPlanNodeById(current) != null) {
-			
+
+		while (blackList.contains(current) || getPlanNodeById(current) != null) {
+
 			current++;
-			
+
 		}
-		
+
 		return current;
-		
+
 	}
 
 	public String toString() {

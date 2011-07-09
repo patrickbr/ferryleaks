@@ -89,11 +89,11 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		
 		RawNode temp = new RawNode(current.getId(), current.getKind(), 0xCCCCCC, 130, 25);
 
-		NodeContent[] edges = current.getAllContentWithInternalName("edge").toArray(new NodeContent[0]);
+		Iterator<PlanNode> childs = current.getChilds().iterator();
 
-		for (NodeContent e : edges) {
+		while (childs.hasNext()) {
 
-			temp.getEdgesToList().add(new RawEdge(Integer.parseInt(((ContentVal)e).getAttributes().get("to").getVal()),temp.getNid()));
+			temp.getEdgesToList().add(new RawEdge(childs.next().getId(),temp.getNid()));
 
 		}
 
