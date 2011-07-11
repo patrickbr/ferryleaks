@@ -72,12 +72,15 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 
 		while (it.hasNext()) {
 
+
+
 			PlanNode current = it.next();
 
-			RawNode temp = getRawNode(current);
+			if (current != null) {
 
-
-			rawNodes.add(temp);
+				RawNode temp = getRawNode(current);
+				rawNodes.add(temp);
+			}
 		}
 
 		return rawNodes;
@@ -85,16 +88,30 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 	}
 
 	public RawNode getRawNode(PlanNode current) {
-		
-		
+
+
 		RawNode temp = new RawNode(current.getId(), current.getKind(), 0xCCCCCC, 130, 25);
 
+		temp.setFixedChildCount(current.getMaxChildCount());
+				
 		Iterator<PlanNode> childs = current.getChilds().iterator();
+		
+		int c=1;
 
 		while (childs.hasNext()) {
 
-			temp.getEdgesToList().add(new RawEdge(childs.next().getId(),temp.getNid()));
+			PlanNode cur = childs.next();
 
+			if (cur != null) {
+
+				RawEdge tempEdge= new RawEdge(cur.getId(),temp.getNid());
+				
+				tempEdge.setFixedParentPos(c);
+				temp.getEdgesToList().add(tempEdge);
+
+			}
+			
+			c++;
 		}
 
 		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>) context.getAttribute("nodeSchemes"); 
@@ -102,9 +119,9 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		if (getScheme(current.getKind(),schemes).getProperties().containsKey("color")) {
 			temp.setColor(Integer.parseInt((getScheme(current.getKind(),schemes).getProperties().get("color")).split("x")[1],16));
 		}
-		
+
 		return temp;
-		
+
 	}
 
 	private NodeScheme getScheme(String type,HashMap<String,NodeScheme> schemes) {

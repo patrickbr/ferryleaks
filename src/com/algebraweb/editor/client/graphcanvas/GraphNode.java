@@ -38,6 +38,8 @@ public class GraphNode {
 	private double x;
 	private double y;
 	private boolean aniLock=false;
+	
+	private int fixedChildCount=-1;
 
 	private boolean isDragged = false;
 	
@@ -217,5 +219,21 @@ public class GraphNode {
 	public void setDragged(boolean isDragged) {
 		this.isDragged = isDragged;
 	}
+
+	/**
+	 * @return the fixedChildCount
+	 */
+	public int getFixedChildCount() {
+		return fixedChildCount;
+	}
+
+	/**
+	 * @param fixedChildCount the fixedChildCount to set
+	 */
+	public void setFixedChildCount(int fixedChildCount) {
+		this.fixedChildCount = fixedChildCount;
+	}
+	
+	
 
 }

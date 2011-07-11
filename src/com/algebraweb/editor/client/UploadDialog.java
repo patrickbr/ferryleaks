@@ -5,6 +5,7 @@ import gwtupload.client.SingleUploader;
 import gwtupload.client.Uploader;
 import gwtupload.client.IUploadStatus.Status;
 
+import com.algebraweb.editor.client.graphcanvas.GraphCanvasErrorDialogBox;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
@@ -80,17 +81,25 @@ public class UploadDialog extends DialogBox {
 		public void onFinish(IUploader uploader) {
 
 			hide();
+			
+			if (uploader.getStatus() == Status.ERROR) {
+				
+				new GraphCanvasErrorDialogBox("Error while uploading. Please try again.");
+				
+			}
 
 			if (uploader.getStatus() == Status.SUCCESS) {
 
 				String msg = uploader.getServerInfo().message.split("!")[0];
 				String idstr = uploader.getServerInfo().message.split("!")[1];
 
+				
 				if (awaitingFileUpload.equals(msg)) {
 
 					AlgebraEditor.setSubTitle(uploader.getFileName());
 					String[] ids = idstr.split(":");
 					e.clearCanvases();
+				
 
 					for (String sid : ids) {
 

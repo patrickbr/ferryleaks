@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -27,6 +28,8 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public RemoteManipulationMessage addNode(int planid,String nodeType, int x, int y);
 	
+	public RemoteManipulationMessage addEdge(int planid,Coordinate fromTo, int pos);
+		
 	public ValidationResult getValidation(int planid);
 	
 	public String getNodeInformationHTML(int nid, int planid);
@@ -60,6 +63,8 @@ public interface RemoteManipulationService extends RemoteService {
 	public void markAsRoot(int pid, int nid);
 	
 	public EvaluationContext getEvaluationContext(int pid, int nid);
+
+	public RemoteManipulationMessage deleteEdge(Coordinate[] edges, int planid);
 	
 
 }

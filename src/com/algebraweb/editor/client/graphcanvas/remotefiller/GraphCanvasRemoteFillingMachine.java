@@ -9,6 +9,7 @@ import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
+import com.google.gwt.core.client.GWT;
 
 public class GraphCanvasRemoteFillingMachine {
 
@@ -39,7 +40,8 @@ public class GraphCanvasRemoteFillingMachine {
 		while (ni.hasNext()) {
 
 			RawNode current = ni.next();
-			c.addNode(current.getNid(),current.getColor(),current.getWidth(), current.getHeight(), current.getText());
+
+			c.addNode(current.getNid(),current.getColor(),current.getWidth(), current.getHeight(), current.getText(),current.getFixedChildCount());
 
 		}
 
@@ -51,20 +53,22 @@ public class GraphCanvasRemoteFillingMachine {
 
 			while (nf.hasNext()) {
 
-				c.createEdge(c.getGraphNodeById(current.getNid()), c.getGraphNodeById(nf.next().getTo()),true);
+				RawEdge cur = nf.next();
+
+				c.createEdge(c.getGraphNodeById(current.getNid()), c.getGraphNodeById(cur.getTo()),cur.getFixedParentPos(),true);
 
 
 			}
 
 		}
 
-	
+
 		GraphCanvas.hideLoading();
-				
+
 		//automatically sort...
 		c.sort(new RemoteSorter("dot"));
-	
-		
+
+
 
 	}
 

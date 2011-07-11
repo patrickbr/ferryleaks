@@ -28,6 +28,7 @@ import com.algebraweb.editor.client.RemoteManipulationMessage;
 import com.algebraweb.editor.client.RemoteManipulationService;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -93,8 +94,8 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
 
 		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid,"delete", 1, "", null);
-		
-		
+
+
 		for (int nid : nids) {
 
 			PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
@@ -107,31 +108,29 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			while (it.hasNext()) {
 
 				PlanNode current = it.next();
-
-				current.deleteChild(nid);
+				current.removeChild(nid);
 
 			}
 
 			if (planToWork.getPlan().remove(nodeToWork)) {	
 
-			
+
 				ret.getNodesAffected().add(new RawNode(nid));
 
 
 			}else{
 
-				return new RemoteManipulationMessage(planid,"delete", 3, "Node doesn't exists in plan", null);
-
+				throw new PlanManipulationException( "Node doesn't exists in plan");
 
 			}
 
 		}
-		
+
 		ret.setValidationResult(getValidation(planid));
-		
+
 		return ret;
-		
-		
+
+
 
 	}
 
@@ -174,9 +173,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 			}
 
-
 			ret +="</div>";
-
 
 		}
 
@@ -340,11 +337,13 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			return updatePlanNode(nid,pid,newNode);
 
 		} catch (SAXException e) {
-			return new RemoteManipulationMessage(pid, "", 3, "Error while parsing XML: " + e.getMessage(), null);
+			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
 		} catch (IOException e) {
-			return new RemoteManipulationMessage(pid, "", 3, "Error while parsing XML: " +e.getMessage(), null);
+			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
+
 		} catch (ParserConfigurationException e) {
-			return new RemoteManipulationMessage(pid, "", 3, "Error while parsing XML: " +e.getMessage(), null);
+			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
+
 		}
 
 
@@ -384,7 +383,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		}else{
 
-			return new RemoteManipulationMessage(pid,"update", 3, "Node doesn't exists in plan", null);
+			throw new PlanManipulationException("Node doesn't exists in plan");
 
 
 		}
@@ -480,9 +479,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 				PlanNode newNode = planToWork.addNode(schemes.get(nodeType));
 
-
-
-				ValidationResult res = getValidation(0);
+				ValidationResult res = getValidation(pid);
 
 				RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"add", 1, "", res);
 
@@ -499,14 +496,12 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 			}else{
 
-				return new RemoteManipulationMessage(pid, "update", 3, "Plan doesn't exist in session", null);
+				throw new PlanManipulationException("Plan doesn't exist in session");
 
 
 			}}else{
 
-				return new RemoteManipulationMessage(pid, "update", 3, "Scheme for type " + nodeType + " not found.", null);
-
-
+				throw new PlanManipulationException("Scheme for type " + nodeType + " not found.");
 
 			}
 	}
@@ -600,12 +595,12 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	@Override
 	public EvaluationContext getEvaluationContext(int pid, int nid) {
-		
+
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-		
-		
+
+
 		return planToWork.getEvContext() ;
 	}
 
@@ -618,6 +613,68 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 
 		return nodeToWork.getReferencableColumnsFromValues();
+	}
+
+
+	@Override
+	public RemoteManipulationMessage deleteEdge(Coordinate[] edges, int planid) {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
+
+		XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),planid);
+
+		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
+
+
+		for (Coordinate e : edges) {
+
+			int from = (int) e.getX();
+			int to = (int) e.getY();
+
+			PlanNode fromNode = planToWork.getPlanNodeById(from);
+
+			fromNode.removeChild(to);
+
+
+			ret.getNodesAffected().add(xmlpl.getRawNode(fromNode));
+
+
+
+		}
+
+
+		ret.setValidationResult(getValidation(planid));
+
+		return ret;
+	}
+
+
+	@Override
+	public RemoteManipulationMessage addEdge(int planid, Coordinate e, int pos) {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
+
+		XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),planid);
+
+		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
+
+		int from = (int) e.getX();
+		int to = (int) e.getY();
+		
+		PlanNode fromNode = planToWork.getPlanNodeById(from);
+		PlanNode toNode = planToWork.getPlanNodeById(to);
+		
+		
+		fromNode.addChild(toNode, pos);
+		
+		
+		ret.getNodesAffected().add(xmlpl.getRawNode(fromNode));
+		ret.setValidationResult(getValidation(planid));
+		
+
+		return ret;
 	}
 
 }

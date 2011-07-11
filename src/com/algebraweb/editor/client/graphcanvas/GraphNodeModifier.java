@@ -12,6 +12,7 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.hydro4ge.raphaelgwt.client.AnimationCallback;
+import com.hydro4ge.raphaelgwt.client.Raphael.Circle;
 
 public class GraphNodeModifier {
 
@@ -272,6 +273,10 @@ public class GraphNodeModifier {
 
 		GraphEdge current;
 
+		//TODO: make this configurable somehow
+
+
+
 		while (i.hasNext()) {
 
 			current = i.next();
@@ -287,22 +292,48 @@ public class GraphNodeModifier {
 		}
 
 
+
 		while (a.hasNext()) {
 
 			current = a.next();
 
 			if (forceall || !current.equals(e)) {
-				this.c.getGraphEdgeModifier().updateOffsetFrom(current,step * c,quiet,animated);
+
+				if (current.getFrom().getFixedChildCount() != -1 && current.getFixedParentPos() != -1) {
+
+					step = Math.round(gurr /(current.getFrom().getFixedChildCount()+1));
+					c=current.getFixedParentPos();
+					
+					
+					this.c.getGraphEdgeModifier().updateOffsetFrom(current,step * c,quiet,animated);
+					
+
+				}else{
+
+					this.c.getGraphEdgeModifier().updateOffsetFrom(current,step * c,quiet,animated);
+					c++;
+				}
 
 			}else{
 
-				ret = step * c;
-			}
+				if (current.getFrom().getFixedChildCount() != -1 && current.getFixedParentPos() != -1) {
 
-			c++;
+					step = Math.round(gurr /(current.getFrom().getFixedChildCount()+1));
+									
+					ret = step * current.getFixedParentPos();
+
+				}else{
+
+					ret = step * c;
+					c++;
+
+				}
+			}
 
 
 		}
+
+
 
 
 		return ret;
@@ -366,15 +397,31 @@ public class GraphNodeModifier {
 	protected void connectShapeToNode(String identifier,ConnectedShape s, GraphNode n) {
 
 		n.getConnectedShapes().put(identifier, s);
-		s.getShape().attr("x",n.getX() + s.getX());
-		s.getShape().attr("y",n.getY() + s.getY());		
+	
+		if (s.getShape() instanceof Circle) {
+			
+			
+			s.getShape().attr("cx",n.getX() + s.getX());
+			s.getShape().attr("cy",n.getY() + s.getY());	
+			
+		}else{
+			
+			
+			s.getShape().attr("x",n.getX() + s.getX());
+			s.getShape().attr("y",n.getY() + s.getY());	
+			
+		}
+		
 	}
 
 	protected void removeShapeFromNode(String identifier,GraphNode n) {
 
 		ConnectedShape s = n.getConnectedShapes().get(identifier);
-		s.getShape().remove();
-		n.getConnectedShapes().remove(identifier);
+		if (s != null ) {
+			s.getShape().remove();
+			n.getConnectedShapes().remove(identifier);
+		}
+		
 
 	}
 

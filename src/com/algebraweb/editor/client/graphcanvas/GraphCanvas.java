@@ -39,7 +39,7 @@ public class GraphCanvas extends Raphael  {
 	private GraphNode dragNode = null;
 	private int dragOffsetX = 0;
 	private int dragOffsetY = 0;
-	
+
 	private ArrayList<NodeSelectionHandler> selectionHandlers = new ArrayList<NodeSelectionHandler>();
 
 	private double scale = 1;
@@ -63,7 +63,7 @@ public class GraphCanvas extends Raphael  {
 	private GraphEdgeModifier gem;
 	private boolean invertArrows = false;
 	private HashMap<Integer,GraphNode> selected = new HashMap<Integer,GraphNode>();
-
+	private HashMap<Coordinate,GraphEdge> selectedEdges = new HashMap<Coordinate,GraphEdge>();
 
 	private int height;
 	private int width;
@@ -186,16 +186,27 @@ public class GraphCanvas extends Raphael  {
 		setSelectedNodes(t);
 
 	}
-	
+
+	public void setSelectedEdge(GraphEdge n) {
+
+		ArrayList<GraphEdge> t = new ArrayList<GraphEdge>();
+		t.add(n);
+		setSelectedEdges(t);
+
+	}
+
 	public void clearSelection() {
-		
-		
+
+
 		Iterator<GraphNode> it = selected.values().iterator();
-		
 		while(it.hasNext()) gnm.setNotSelected(it.next());
-		
+
+		Iterator<GraphEdge> itE = selectedEdges.values().iterator();
+		while(itE.hasNext()) gem.setNotSelected(itE.next());
+
 		selected.clear();
-		
+		selectedEdges.clear();
+
 	}
 
 	/**
@@ -206,9 +217,9 @@ public class GraphCanvas extends Raphael  {
 	public void setSelectedNodes(ArrayList<GraphNode> nodes) {
 
 		Iterator<GraphNode> it = nodes.iterator();
-	
+
 		clearSelection();
-		
+
 		while(it.hasNext()) {
 
 			GraphNode n = it.next();
@@ -217,28 +228,78 @@ public class GraphCanvas extends Raphael  {
 			getGraphNodeModifier().setSelected(n);
 
 		}
-		
-		
+
+
 		Iterator<NodeSelectionHandler> itH = selectionHandlers.iterator();
-		
-		
+
+
 		while (itH.hasNext()) {
-			
+
 			itH.next().isSelected(selected);
-			
+
 		}
 
 	}
 
-	/**
-	 * Unset the GraphNode n selected
-	 * @param n
-	 */
+	public void setSelectedEdges(ArrayList<GraphEdge> edges) {
+
+
+		Iterator<GraphEdge> it = edges.iterator();
+
+		clearSelection();
+
+		while(it.hasNext()) {
+
+			GraphEdge e = it.next();
+
+			this.selectedEdges.put(new Coordinate(e.getFrom().getId(),e.getTo().getId()), e);
+			getGraphEdgeModifier().setSelected(e);
+
+		}
+
+
+
+
+	}
+
+	public boolean hasEdge (int from, int to) {
+
+
+		GraphNode fromN = getGraphNodeById(from);
+		GraphNode toN = getGraphNodeById(to);
+
+		Iterator<GraphEdge> itTo = toN.getEdgesTo().iterator();
+		Iterator<GraphEdge> itFrom = fromN.getEdgesFrom().iterator();
+
+		boolean success = false;
+
+		while (itTo.hasNext()) {
+
+			if (itTo.next().getFrom().getId() == from) success = true;
+
+		}
+
+		while (success==true && itFrom.hasNext()) {
+
+			if (itFrom.next().getTo().getId() == to) return success;
+
+		}
+
+		return false;
+
+	}
+
 
 	public HashMap<Integer,GraphNode> getSelectedNode() {
 
 		return selected;
 	}
+
+	public HashMap<Coordinate,GraphEdge> getSelectedEdges() {
+
+		return selectedEdges;
+	}
+
 
 	public boolean isMouseOverNode() {
 		return mouseOverNode;
@@ -424,10 +485,10 @@ public class GraphCanvas extends Raphael  {
 	 * @param quiet
 	 */
 
-	public void createEdge(GraphNode from, GraphNode to, boolean quiet) {
+	public void createEdge(GraphNode from, GraphNode to, int fixedPos,boolean quiet) {
 
-
-		this.edges.add(new GraphEdge(this,from,to,quiet, !this.isHidden()));
+		GraphEdge t = new GraphEdge(this,from,to,fixedPos,quiet, !this.isHidden());
+		this.edges.add(t);
 
 	}
 
@@ -461,9 +522,10 @@ public class GraphCanvas extends Raphael  {
 	 * @return
 	 */
 
-	public GraphNode addNode(int id,int color,int x, int y,int width, int height,String text) {
+	public GraphNode addNode(int id,int color,int x, int y,int width, int height,String text, int fixedChildCount) {
 
 		GraphNode g =  new GraphNode(this,color,x,y, width, height,text,id);
+		g.setFixedChildCount(fixedChildCount);
 
 		this.nodes.add( g);
 
@@ -481,12 +543,12 @@ public class GraphCanvas extends Raphael  {
 
 
 
-	public GraphNode addNode(int id,int color,int width, int height,String text) {
+	public GraphNode addNode(int id,int color,int width, int height,String text, int fixedChildCount) {
 
 		int x = (int)(this.width * this.getScale()) / 2;
 		int y = (int)(this.height * this.getScale()) / 2;
 
-		return this.addNode(id,color,x,y,width,height,text);
+		return this.addNode(id,color,x,y,width,height,text,fixedChildCount);
 
 	}
 
@@ -726,6 +788,12 @@ public class GraphCanvas extends Raphael  {
 
 	}
 
+	public Circle circleFactory(double x, double y, double r) {
+
+		return new Circle(x, y, r);
+
+	}
+
 	public Text textFactory(double x, double y, String text) {
 
 		return new Text(x, y, text);
@@ -779,19 +847,19 @@ public class GraphCanvas extends Raphael  {
 		}
 
 	}
-	
+
 	public boolean addNodeSelectionHandler(NodeSelectionHandler h) {
-		
-		
+
+
 		return this.selectionHandlers.add(h);
-		
+
 	}
-	
+
 	public boolean removeNodeSelectionHandler(NodeSelectionHandler h) {
-		
-		
+
+
 		return this.selectionHandlers.remove(h);
-		
+
 	}
 
 

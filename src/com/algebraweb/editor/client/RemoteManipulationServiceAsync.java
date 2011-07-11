@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -69,6 +70,12 @@ public interface RemoteManipulationServiceAsync {
 
 	void getReferencableColumns(int nid, int pid,
 			AsyncCallback<ArrayList<Property>> callback);
+
+	void deleteEdge(Coordinate[] edges, int planid,
+			AsyncCallback<RemoteManipulationMessage> manipulationCallback);
+
+	void addEdge(int planid, Coordinate fromTo, int pos,
+			AsyncCallback<RemoteManipulationMessage> callback);
 		
 
 }

@@ -2,6 +2,8 @@ package com.algebraweb.editor.client.graphcanvas;
 
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.hydro4ge.raphaelgwt.client.Raphael.Path;
 
 
@@ -17,6 +19,8 @@ public class GraphEdge {
 	private GraphNode toNode;
 
 	private String pathSmall;
+	
+	private int fixedParentPos=-1;
 
 	private double x1;
 	private double x2;
@@ -37,16 +41,37 @@ public class GraphEdge {
 	private String paths;
 
 
-	public GraphEdge(GraphCanvas c, GraphNode from, GraphNode to,boolean quiet,boolean animated) {
+	public GraphEdge(GraphCanvas c, GraphNode from, GraphNode to,int fixedParentPos,boolean quiet,boolean animated) {
 
 		this.c =c;
 
 		this.fromNode=from;
 		this.toNode=to;
+		this.fixedParentPos = fixedParentPos;
 
 		from.addEdgeFrom(this);
 		to.addEdgeTo(this);
 		c.getGraphEdgeModifier().makeConnection(this,from,to,quiet,animated);
+		
+		MouseDownHandler mouseDownH = new MouseDownHandler() {
+
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				
+				GraphEdge.this.edgePath.toFront();
+				GraphEdge.this.arrowPath.toFront();
+	
+				GraphEdge.this.c.setSelectedEdge(GraphEdge.this);
+				
+		
+			}
+
+		};
+		
+		edgePath.addDomHandler(mouseDownH, MouseDownEvent.getType());
+		arrowPath.addDomHandler(mouseDownH, MouseDownEvent.getType());
+
+		
 
 	}
 
@@ -278,7 +303,15 @@ public class GraphEdge {
 
 	}
 
+	/**
+	 * @return the fixedParentPos
+	 */
+	public int getFixedParentPos() {
+		return fixedParentPos;
+	}
 
+
+    
 
 
 

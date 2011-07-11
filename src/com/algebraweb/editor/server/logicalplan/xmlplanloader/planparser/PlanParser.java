@@ -235,7 +235,7 @@ public class PlanParser {
 				int to = Integer.parseInt(((ContentVal)retEl).getAttributes().get("to").getVal());
 
 				PlanNode pn = mother.getPlanNodeById(to);
-				if (pn != null)
+	
 				node.getChilds().add(mother.getPlanNodeById(to));
 				
 			}

@@ -17,6 +17,8 @@ public class RawNode implements Serializable  {
 	private String text;
 	private int color;
 	
+	private int fixedChildCount=-1;
+	
 	private int width;
 	private int height;
 	
@@ -95,6 +97,20 @@ public class RawNode implements Serializable  {
 	
 	public ArrayList<RawEdge> getEdgesToList() {
 		return edgesTo;
+	}
+
+	/**
+	 * @return the fixedChildCount
+	 */
+	public int getFixedChildCount() {
+		return fixedChildCount;
+	}
+
+	/**
+	 * @param fixedChildCount the fixedChildCount to set
+	 */
+	public void setFixedChildCount(int fixedChildCount) {
+		this.fixedChildCount = fixedChildCount;
 	}
 	
 	

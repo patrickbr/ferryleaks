@@ -651,3 +651,9 @@ body.hidden #loading #msg {
 		width:200px;
 
 }
+
+.node-adding {
+	
+	cursor:crosshair;
+	
+}

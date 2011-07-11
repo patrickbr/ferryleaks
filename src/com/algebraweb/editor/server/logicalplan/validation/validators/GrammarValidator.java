@@ -204,7 +204,8 @@ public class GrammarValidator implements Validator {
 
 		while (it.hasNext()) {
 
-			r.getErrors().addAll(validateNode(it.next()));
+			PlanNode current = it.next();
+			if (current != null) r.getErrors().addAll(validateNode(current));
 
 		}
 

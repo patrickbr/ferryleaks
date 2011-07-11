@@ -275,7 +275,7 @@ public class GraphEdgeModifier {
 
 		e.getArrowPath().attr("path",arrowPath);
 		e.getArrowPath().attr("stroke-width","1");
-
+		e.getArrowPath().attr("fill","#FAFAFA");
 
 
 
@@ -363,10 +363,16 @@ public class GraphEdgeModifier {
 								&& ((i != 2 && j != 7) || p[i].getX()+offSetTo > p[j].getX()-offSetTo) 
 								&& ((i != 0 && j != 5) || p[i].getY()-offSetTo  > p[j].getY() +offSetTo) 
 								&& ((i != 1 && j != 4) || p[i].getY()+offSetTo < p[j].getY()-offSetTo))) {
-					dis.add((int) (dx + dy));
 
-					d.put(dis.get(dis.size() - 1), new Coordinate(i, j));
+					//TODO: if tre1!!!
+					if (j!= 5) {
+
+						dis.add((int) (dx + dy));
+						d.put(dis.get(dis.size() - 1), new Coordinate(i, j));
+
+					}
 				}
+
 			}
 		}
 
@@ -377,7 +383,7 @@ public class GraphEdgeModifier {
 		} else {
 			res = d.get(getSmallestVal(dis));
 
-			//TODO: if tree!!!
+			//TODO: if tree!!!!!!!
 			res = new Coordinate(1,res.getY());
 		}
 

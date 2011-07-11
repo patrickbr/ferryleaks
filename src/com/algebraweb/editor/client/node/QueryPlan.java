@@ -63,6 +63,7 @@ public class QueryPlan implements Serializable {
 	public PlanNode addNode(NodeScheme s) {
 
 		PlanNode n = new PlanNode(getFreeId(), s.getKind(), s, this);
+		
 		plan.add(n);
 		return n;
 
@@ -109,7 +110,10 @@ public class QueryPlan implements Serializable {
 		Iterator<PlanNode> i = plan.iterator();
 
 		while (i.hasNext()) {
-			ret += i.next().toString() + "\n";
+			
+			PlanNode cur = i.next();
+			
+			if (cur != null) ret += i.next().toString() + "\n";
 		}
 
 		return ret;
@@ -122,7 +126,7 @@ public class QueryPlan implements Serializable {
 		while (i.hasNext()) {
 
 			PlanNode current = i.next();
-			if (current.getId() == id) return current;
+			if (current != null && current.getId() == id) return current;
 
 		}
 

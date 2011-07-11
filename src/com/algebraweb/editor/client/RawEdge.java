@@ -10,6 +10,7 @@ public class RawEdge implements IsSerializable  {
 	private static final long serialVersionUID = 5343591495878501668L;
 	int to;
 	int from;
+	int fixedParentPos=-1;
 	double[] anchors;
 	
 	public RawEdge() {
@@ -37,5 +38,21 @@ public class RawEdge implements IsSerializable  {
 		
 		return anchors;
 	}
+
+	/**
+	 * @return the fixedParentPos
+	 */
+	public int getFixedParentPos() {
+		return fixedParentPos;
+	}
+
+	/**
+	 * @param fixedParentPos the fixedParentPos to set
+	 */
+	public void setFixedParentPos(int fixedParentPos) {
+		this.fixedParentPos = fixedParentPos;
+	}
+	
+	
 
 }

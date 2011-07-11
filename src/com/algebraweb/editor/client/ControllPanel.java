@@ -14,7 +14,9 @@ import gwtupload.client.Uploader;
 import gwtupload.client.IUploadStatus.Status;
 
 import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
+import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
@@ -133,7 +135,8 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				m.deleteNode(ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0]), ControllPanel.this.e.getActiveCanvas().getId());
-
+				m.deleteEdges(ControllPanel.this.e.getActiveCanvas().getSelectedEdges().keySet().toArray(new Coordinate[0]), ControllPanel.this.e.getActiveCanvas().getId());
+				
 			}});
 
 		editPanel.add(delete);
@@ -366,12 +369,7 @@ public class ControllPanel extends AbsolutePanel{
 	}
 
 
-	private AsyncCallback<String> xmlCb = new AsyncCallback<String>() {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-		}
+	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>() {
 
 		@Override
 		public void onSuccess(String result) {
@@ -387,12 +385,7 @@ public class ControllPanel extends AbsolutePanel{
 
 
 
-	private AsyncCallback<String[]> nodeTypesCb = new AsyncCallback<String[]>() {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-		}
+	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>() {
 
 		@Override
 		public void onSuccess(String[] result) {
@@ -405,12 +398,7 @@ public class ControllPanel extends AbsolutePanel{
 
 	};
 
-	private  AsyncCallback<ArrayList<HashMap<String,String>>> evalCb = new  AsyncCallback<ArrayList<HashMap<String,String>>>() {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-		}
+	private  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>> evalCb = new  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>>() {
 
 		@Override
 		public void onSuccess(ArrayList<HashMap<String,String>> result) {
@@ -423,12 +411,7 @@ public class ControllPanel extends AbsolutePanel{
 
 	};
 	
-	private  AsyncCallback<Void> markAsRootCb = new  AsyncCallback<Void>() {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-		}
+	private  GraphCanvasCommunicationCallback<Void> markAsRootCb = new  GraphCanvasCommunicationCallback<Void>() {
 
 		@Override
 		public void onSuccess(Void v) {

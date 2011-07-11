@@ -3,7 +3,9 @@ package com.algebraweb.editor.client;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
@@ -58,12 +60,28 @@ public class PlanModelManipulator {
 
 	}
 
+	public void deleteEdges(Coordinate[] edges, int planid) {
+
+		GraphCanvas.showLoading("Deleting edge...");
+		manServ.deleteEdge(edges, planid, manipulationCallback);
+
+
+
+	}
+
 	public void addNode(int pid, String type, int x, int y) {
 
 		GraphCanvas.showLoading("Adding node...");
 		manServ.addNode(pid, type,x,y, manipulationCallback);
 
 
+
+	}
+
+	public void addEdge(Coordinate e, int planid, int pos) {
+
+		GraphCanvas.showLoading("Adding edge...");
+		manServ.addEdge(planid, e, pos, manipulationCallback);
 
 	}
 
@@ -114,12 +132,8 @@ public class PlanModelManipulator {
 	}
 
 
-	private AsyncCallback<ValidationResult> validationCallback = new AsyncCallback<ValidationResult>() {
+	private GraphCanvasCommunicationCallback<ValidationResult> validationCallback = new GraphCanvasCommunicationCallback<ValidationResult>() {
 
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-		}
 
 		@Override
 		public void onSuccess(ValidationResult result) {
@@ -132,12 +146,14 @@ public class PlanModelManipulator {
 
 	};
 
-	private AsyncCallback<RemoteManipulationMessage> manipulationCallback = new AsyncCallback<RemoteManipulationMessage>() {
+	private GraphCanvasCommunicationCallback<RemoteManipulationMessage> manipulationCallback = new GraphCanvasCommunicationCallback<RemoteManipulationMessage>() {
+
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
 
+			super.onFailure(caught);
+			GraphCanvas.hideLoading();
 		}
 
 		@Override
@@ -178,19 +194,19 @@ public class PlanModelManipulator {
 
 						while(i.hasNext()) {
 
-							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(i.next().getTo());
-							e.getCanvas(result.getPlanid()).createEdge(from, to, true);
+							RawEdge ed = i.next();
 
-
+							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(ed.getTo());
+							
+							//only draw if not already there
+							if (!e.getCanvas(result.getPlanid()).hasEdge(from.getId(), to.getId())) {
+								e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);
+							}
 						}
 
 						e.getCanvas(result.getPlanid()).showEdges();
 
 					}
-
-
-
-
 				}
 
 
@@ -207,56 +223,18 @@ public class PlanModelManipulator {
 								(int)result.getCoordinates().get(current.getNid()).getY(),
 								(int)current.getWidth(),
 								(int)current.getHeight(),
-								current.getText());
+								current.getText(),								
+								current.getFixedChildCount());
 
+						GWT.log("a:"+ current.getFixedChildCount());
 					}
-
-
-
-
 				}
 
-
-
-
 				showValidation(result.getValidationResult());
-
-
-
-
-
-
 			}
 
 
-			if (result.getReturnCode() == 3) {
 
-
-				final DialogBox d = new DialogBox();
-
-				d.setText("Error");
-				Button ok = new Button("OK");
-				ok.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						d.hide();
-					}
-				});
-				;
-				VerticalPanel p = new VerticalPanel();
-
-				p.add(new HTML("<span style='font-weight:bold;color:red'>Could not save node.</span> Reason was:<br><br>" + SafeHtmlUtils.htmlEscape(result.getMessage())));
-				p.add(ok);
-				ok.getElement().getStyle().setMargin(20, Unit.PX);
-				p.setCellHorizontalAlignment(ok, HasHorizontalAlignment.ALIGN_CENTER);
-
-				d.add(p);
-
-
-
-				d.center();
-				d.show();
-
-			}
 
 		}
 

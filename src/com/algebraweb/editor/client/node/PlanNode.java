@@ -25,11 +25,11 @@ public class PlanNode extends ContentNode {
 
 	private int id;
 	private String kind;
-	
+
 	protected NodeScheme scheme;
 	private QueryPlan mother;
-	
-	
+
+
 	/**
 	 * Returns the nodes general scheme as specified in the
 	 * scheme XML
@@ -44,7 +44,7 @@ public class PlanNode extends ContentNode {
 	public void setScheme(NodeScheme scheme) {
 		this.scheme = scheme;
 	}
-		
+
 
 
 	public PlanNode(int id, String kind, NodeScheme scheme, QueryPlan mother) {
@@ -52,8 +52,10 @@ public class PlanNode extends ContentNode {
 		this.id=id;
 		this.kind=kind;
 		this.mother=mother;
-		
+
 		this.scheme=scheme;
+
+
 
 	}	
 
@@ -62,59 +64,11 @@ public class PlanNode extends ContentNode {
 	}	
 
 
-	public boolean deleteChild(int nid) {
-
-		Iterator<PlanNode> it = nodeChilds.iterator();
-		
-		while(it.hasNext()) {
-			
-			PlanNode current = it.next();
-			
-			if (current.getId() == nid) {
-				
-				it.remove();
-				return true;
-				
-			}
-			
-		}
-
-		return false;
-		/**
-		Iterator<NodeContent> it =  getAllContentWithInternalName("edge").iterator();
-
-		while (it.hasNext()) {
-
-			NodeContent current = it.next();
-
-			if (Integer.parseInt(current.getAttributes().get("to").getVal()) == nid) {
-
-				if (removeContent(current)) System.out.println("gurri");;
-				return true;	
-
-			}
-		}
-
-		return false;
-		*/
-	}
-
 
 	public ArrayList<PlanNode> getChilds() {
 
 		return nodeChilds;
-		
-		/**
-		ArrayList<PlanNode> ret = new ArrayList<PlanNode>();
 
-		NodeContent[] edges = getAllContentWithInternalName("edge").toArray(new NodeContent[0]);
-
-		for (NodeContent edge : edges) {
-			ret.add(myPlan.getPlanNodeById(Integer.parseInt(edge.getAttributes().get("to").getVal())));
-		}
-
-		return ret;
-		*/
 	}
 
 	public ArrayList<NodeContent> getContent() {
@@ -144,52 +98,6 @@ public class PlanNode extends ContentNode {
 	public void setKind(String kind) {
 		this.kind = kind;
 	}
-	/**
-
-	public ArrayList<NodeContent> getAllContentWithInternalName(String name) {
-
-		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
-
-		Iterator<NodeContent> i = childs.iterator();
-
-		while (i.hasNext()) {
-
-			NodeContent c = i.next();
-			if (c.getInternalName().equals(name)) temp.add(c);
-
-			//go into child
-			temp.addAll(c.getAllContentWithInternalName(name));
-
-		}
-
-		return temp;
-
-	}
-
-
-	public boolean removeContent(NodeContent con) {
-
-
-		Iterator<NodeContent> i = childs.iterator();
-
-		while (i.hasNext()) {
-
-			NodeContent c = i.next();
-			if (c == con) {
-				i.remove();
-				return true;
-			}
-
-			if (c.removeContent(con)) return true;
-
-		}
-
-
-		return false;
-
-	}
-
-	 **/
 
 	public ArrayList<Property> getReferencableColumnsWithoutAdded() {
 
@@ -200,10 +108,14 @@ public class PlanNode extends ContentNode {
 
 		while (i.hasNext()) {
 
+			PlanNode cur = i.next();
 
-			ArrayList<Property> gurr = i.next().getReferencableColumnsFromValues();
+			if (cur != null) {
 
-			ret.addAll(gurr);
+				ArrayList<Property> gurr = cur.getReferencableColumnsFromValues();
+				ret.addAll(gurr);
+
+			}
 
 		}
 
@@ -216,7 +128,7 @@ public class PlanNode extends ContentNode {
 
 
 		return (((NodeScheme)this.getScheme()).getProperties().containsKey("reset_columns") &&
-		((NodeScheme)this.getScheme()).getProperties().get("reset_columns").equals("true"));
+				((NodeScheme)this.getScheme()).getProperties().get("reset_columns").equals("true"));
 
 	}
 
@@ -329,6 +241,68 @@ public class PlanNode extends ContentNode {
 	}
 
 
+	public void addChild(PlanNode c, int pos) {
+
+		nodeChilds.set(pos-1, c);
+
+
+		//first, clear all old edges
+		Iterator<NodeContent> it = getDirectContentWithInternalName("edge").iterator();
+
+		while(it.hasNext()) {
+			childs.remove(it.next());
+		}
+
+		Iterator<PlanNode> childsIt = nodeChilds.iterator();
+
+		while (childsIt.hasNext()) {
+
+			PlanNode cur = childsIt.next();
+	
+			ContentVal edge = new ContentVal("edge", "edge", "");
+
+			PropertyMap pm = new PropertyMap();
+
+			Property to = new Property("to", Integer.toString(cur.getId()), "int");
+			pm.put(to);
+			edge.setAttributes(pm);
+
+			childs.add(edge);
+
+		}
+
+	
+
+	}
+
+	public boolean removeChild(int nid) {
+
+		Iterator<NodeContent> it = childs.iterator();
+		boolean success=false;
+
+		while (it.hasNext()) {
+
+			NodeContent cur = it.next();
+
+			if (cur.getInternalName().equals("edge") && cur.getAttributes().get("to").getVal().equals(Integer.toString(nid))) {
+
+				it.remove();		
+				success=true;
+
+			}
+
+		}
+
+		if (success) {
+			nodeChilds.set(nodeChilds.indexOf(mother.getPlanNodeById(nid)),null);
+		}
+
+		return success;
+
+
+	}
+
+
 
 	public String toString() {
 
@@ -358,7 +332,7 @@ public class PlanNode extends ContentNode {
 		return temp;
 	}
 
-	
+
 	@Override
 	public String getInternalName() {
 		return "node_" + id;
@@ -371,7 +345,41 @@ public class PlanNode extends ContentNode {
 	public QueryPlan getMother() {
 		return mother;
 	}
-	
-	
+
+
+	/**
+	 * @return the maxChildCount
+	 */
+	public int getMaxChildCount() {
+
+		Iterator<GoAble> it = scheme.getSchema().iterator();
+
+		while (it.hasNext()) {
+
+			GoAble cur = it.next();
+
+
+
+			if (cur.getXmlObject().equals("edge")) {
+
+				if (cur.getHowOften().equals("2") || cur.getHowOften().equals("{,2}")) {
+
+					return 2;
+
+				}
+
+				if (cur.getHowOften().equals("1") || cur.getHowOften().equals("{,1}")) {
+
+					return 1;
+
+				}
+
+			}
+
+		}
+
+		return -1;
+
+	}
 
 }
