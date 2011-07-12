@@ -400,11 +400,14 @@ public class GraphCanvas extends Raphael  {
 			@Override
 			public void onMouseWheel(MouseWheelEvent event) {
 
-				DOM.eventGetCurrentEvent().preventDefault();
+				if (event.isControlKeyDown()) {
 
-				if (event.isNorth()) zoom(((1 / getScale()) * 100) + 10);
-				if (event.isSouth()) zoom(((1 / getScale()) * 100) - 10);
+					DOM.eventGetCurrentEvent().preventDefault();
 
+					if (event.isNorth()) zoom(((1 / getScale()) * 100) + 10);
+					if (event.isSouth()) zoom(((1 / getScale()) * 100) - 10);
+
+				}
 			}
 
 		}, MouseWheelEvent.getType());
