@@ -24,7 +24,7 @@ public class PlanNodeSQLBuilder {
 
 
 
-	private String pfPath = "pf";
+	private String pfPath = "/usr/local/bin/pf";
 	private String[] args = {pfPath, "-IS"};
 
 
