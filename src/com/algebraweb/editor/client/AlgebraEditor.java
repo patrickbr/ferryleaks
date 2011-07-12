@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Alpha 5.6";
+	private static String VERSION = "Alpha 5.61";
 	
 	private static String TITLE = "the bugFerry";
 	private static String AUTHOR = "Patrick Brosi";

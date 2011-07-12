@@ -657,3 +657,16 @@ body.hidden #loading #msg {
 	cursor:crosshair;
 	
 }
+
+.edge-connector {
+	
+	fill:red;	
+	cursor:pointer;
+	
+}
+
+.edge-connector:hover {
+	
+	fill:#FF9696;	
+	
+}

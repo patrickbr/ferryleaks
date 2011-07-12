@@ -34,6 +34,7 @@ public class GraphEdgeModifier {
 		newAttrs.put("stroke-width", new JSONNumber(2));
 		e.getEdgePath().animate(newAttrs, 300);
 		e.getArrowPath().animate(newAttrs, 300);
+
 	}
 
 	protected void setNotSelected(GraphEdge e) {
@@ -77,6 +78,8 @@ public class GraphEdgeModifier {
 			@Override
 			public void onComplete() {
 				hide(e);
+				e.getEdgePath().attr("path",e.getEdgePathSmallString());
+				e.setSnakingIn(false);
 			}
 		};
 	}
@@ -89,6 +92,7 @@ public class GraphEdgeModifier {
 			@Override
 			public void onComplete() {
 				showArrow(e);
+				e.setSnakingOut(false);
 			}
 		};
 	}
@@ -101,6 +105,7 @@ public class GraphEdgeModifier {
 		e.setSnakedIn(false);
 
 		if (animated) {
+			e.setSnakingOut(true);
 			e.getEdgePath().attr("path", e.getEdgePathSmallString());
 			show(e);
 			JSONObject attrs = new JSONObject();
@@ -124,11 +129,13 @@ public class GraphEdgeModifier {
 		e.setSnakedIn(true);
 
 		if (animated) {
+			e.setSnakingIn(true);
 			hideArrow(e);
 			e.getEdgePath().attr("path", e.getEdgePathString());
 			JSONObject attrs = new JSONObject();
 			attrs.put("path", new JSONString(e.getEdgePathSmallString()));
 			e.getEdgePath().animate(attrs,600,snakeInCallbackBuilder(e));
+			
 		}else{
 
 			hideArrow(e);
@@ -242,6 +249,12 @@ public class GraphEdgeModifier {
 		e.setEdgePathString("M" + e.getX1() + "," + e.getY1() + "C" + e.getX2() + "," + e.getY2() + "," + e.getX3() + "," + e.getY3() + "," + e.getX4() + "," + e.getY4());
 
 		if (!quiet) {
+			e.getEdgePath().stop();
+			
+			if (e.isSnakingIn()) snakeInCallbackBuilder(e).onComplete();
+			if (e.isSnakingOut()) snakeCallbackBuilder(e).onComplete();
+			
+			
 			e.getEdgePath().attr("path",e.getEdgePathString());
 		}
 

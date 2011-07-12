@@ -220,7 +220,7 @@ public class LogicalCanvas extends GraphCanvas{
 
 
 					Circle cr = super.circleFactory(0,0, 6);
-					cr.attr("fill", "red");
+					cr.getElement().setAttribute("class", "edge-connector");
 					cr.addDomHandler(createEdgeShapeMouseHandler(n,current),  MouseDownEvent.getType());
 
 					int y= n.getHeight()+3;

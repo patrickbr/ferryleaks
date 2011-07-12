@@ -86,7 +86,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid) {
+	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid) throws PlanManipulationException {
 
 
 		HttpServletRequest request = this.getThreadLocalRequest();
@@ -314,7 +314,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml) {
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml) throws PlanManipulationException {
 
 		System.out.println("Trying to save " + xml);
 
@@ -352,7 +352,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 	@Override
-	public RemoteManipulationMessage updatePlanNode(int nid, int pid, PlanNode p) {
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid, PlanNode p) throws PlanManipulationException {
 		// TODO update other things 
 
 		HttpServletRequest request = this.getThreadLocalRequest();
@@ -366,9 +366,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		if (nodeToWork != null) {	
 
 			nodeToWork.setContent(p.getContent());
+			nodeToWork.setChilds(p.getChilds());
 
 			System.out.println("Updated node #" + nid);
-			//deleted, revalidating...
+			
 
 			ValidationResult res = getValidation(pid);
 
@@ -464,7 +465,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public RemoteManipulationMessage addNode(int pid,String nodeType, int x, int y) {
+	public RemoteManipulationMessage addNode(int pid,String nodeType, int x, int y) throws PlanManipulationException {
 
 		HttpServletRequest request = this.getThreadLocalRequest();
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		

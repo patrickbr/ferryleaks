@@ -166,6 +166,10 @@ public class RaphaelJS extends JavaScriptObject {
     public final native Element scale(double Xtimes, double Ytimes, double centerX, double centerY) /*-{
       return this.scale(Xtimes, Ytimes, centerX, centerY);
     }-*/;
+    
+    public final native Element stop() /*-{
+    return this.stop();
+  }-*/;
 
     /**
      * Linearly changes an attribute from its current value to its specified value in the given amount of milliseconds. 

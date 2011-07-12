@@ -6,7 +6,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.GoInto;
 import com.algebraweb.editor.client.scheme.NodeScheme;
+import com.algebraweb.editor.client.scheme.Value;
 
 
 
@@ -63,6 +66,28 @@ public class QueryPlan implements Serializable {
 	public PlanNode addNode(NodeScheme s) {
 
 		PlanNode n = new PlanNode(getFreeId(), s.getKind(), s, this);
+		
+		//TODO: not nice
+		for (int i=0;i<n.getMaxChildCount();i++) {
+			
+			n.getChilds().add(null);
+			
+		}
+		
+		Iterator<GoAble> it = s.getSchema().iterator();
+
+		while (it.hasNext()) {
+			
+			GoAble cur = it.next();
+			
+			if (cur instanceof GoInto && !(cur instanceof Value)) {
+				
+				n.getContent().add(new ValGroup(((GoInto)cur).getInternalName()));
+				
+			}
+			
+			
+		}
 		
 		plan.add(n);
 		return n;

@@ -1,14 +1,13 @@
 package com.algebraweb.editor.client.node;
 
-import java.io.Serializable;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
-import com.algebraweb.editor.client.scheme.Field;
+
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.NodeScheme;
-import com.algebraweb.editor.client.scheme.Value;
+
 
 
 public class PlanNode extends ContentNode {
@@ -52,11 +51,8 @@ public class PlanNode extends ContentNode {
 		this.id=id;
 		this.kind=kind;
 		this.mother=mother;
-
 		this.scheme=scheme;
-
-
-
+				
 	}	
 
 	public PlanNode() {
@@ -82,6 +78,11 @@ public class PlanNode extends ContentNode {
 	public void setContent(ArrayList<NodeContent> content) {
 		this.childs = content;
 	}
+
+	public void setChilds(ArrayList<PlanNode> childs) {
+		this.nodeChilds = childs;
+	}
+
 
 	public int getId() {
 		return id;
@@ -257,21 +258,27 @@ public class PlanNode extends ContentNode {
 
 		while (childsIt.hasNext()) {
 
+
+
 			PlanNode cur = childsIt.next();
-	
+
 			ContentVal edge = new ContentVal("edge", "edge", "");
 
 			PropertyMap pm = new PropertyMap();
+			Property to;
 
-			Property to = new Property("to", Integer.toString(cur.getId()), "int");
+			if (cur != null) to = new Property("to", Integer.toString(cur.getId()), "int");
+			else to = new Property("to", Integer.toString(-1), "int");
+
 			pm.put(to);
 			edge.setAttributes(pm);
 
 			childs.add(edge);
 
+
 		}
 
-	
+
 
 	}
 

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
+import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
@@ -189,15 +190,18 @@ public class PlanModelManipulator {
 						RawNode current = it.next();
 						e.getCanvas(result.getPlanid()).clearEdgesFrom(e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid()));
 
-						Iterator<RawEdge> i = current.getEdgesToList().iterator();
 						GraphNode from = e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid());
+
+						
+
+						Iterator<RawEdge> i = current.getEdgesToList().iterator();
 
 						while(i.hasNext()) {
 
 							RawEdge ed = i.next();
 
 							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(ed.getTo());
-							
+
 							//only draw if not already there
 							if (!e.getCanvas(result.getPlanid()).hasEdge(from.getId(), to.getId())) {
 								e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);

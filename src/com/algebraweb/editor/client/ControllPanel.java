@@ -398,18 +398,7 @@ public class ControllPanel extends AbsolutePanel{
 
 	};
 
-	private  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>> evalCb = new  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>>() {
-
-		@Override
-		public void onSuccess(ArrayList<HashMap<String,String>> result) {
-
-
-			new SqlResDialog(result);
-
-
-		}
-
-	};
+	
 	
 	private  GraphCanvasCommunicationCallback<Void> markAsRootCb = new  GraphCanvasCommunicationCallback<Void>() {
 

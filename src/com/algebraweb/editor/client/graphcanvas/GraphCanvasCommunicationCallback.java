@@ -8,7 +8,7 @@ public abstract class GraphCanvasCommunicationCallback<T> implements AsyncCallba
 
 	@Override
 	public void onFailure(Throwable caught) {
-		
+	
 		new GraphCanvasErrorDialogBox("<span style='font-weight:bold;color:red'>Could not save node.</span> Reason was:<br><br>" + caught.getMessage());
 		
 	}

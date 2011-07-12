@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
@@ -24,9 +25,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface RemoteManipulationService extends RemoteService {
 	
 	
-	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid);
+	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid) throws PlanManipulationException;
 	
-	public RemoteManipulationMessage addNode(int planid,String nodeType, int x, int y);
+	public RemoteManipulationMessage addNode(int planid,String nodeType, int x, int y) throws PlanManipulationException;
 	
 	public RemoteManipulationMessage addEdge(int planid,Coordinate fromTo, int pos);
 		
@@ -40,9 +41,9 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public ArrayList<Property> getReferencableColumnsWithoutAdded(int nid, int pid);
 	
-	public RemoteManipulationMessage updatePlanNode(int nid, int pid,PlanNode p);
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid,PlanNode p) throws PlanManipulationException;
 	
-	public RemoteManipulationMessage updatePlanNode(int nid, int pid,String xml);
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid,String xml) throws PlanManipulationException;
 	
 	public ArrayList<ValidationError> valideContentNodeGrammer(ContentNode c,ArrayList<GoAble> schema, boolean stayFlat); 
 

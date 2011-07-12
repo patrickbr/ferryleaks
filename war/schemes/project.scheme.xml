@@ -13,9 +13,9 @@
 	<schema>
 	
 	
-	  	<gointo xmlob="content" howoften="1">
+	  	<gointo xmlob="content" humanname="Projection" howoften="1">
 
-			<val xmlob="column" name="column" howoften="*">
+			<val xmlob="column" namefield="name" humanname="Projection columns" name="column" howoften="*">
 
 				<fields>
 
@@ -27,7 +27,7 @@
 				</fields>
 						
 			</val>
-			<val xmlob="column" name="column" howoften="*">
+			<val xmlob="column" namefield="name" humanname="Kept columns"  name="column" howoften="*">
 
 				<fields>
 

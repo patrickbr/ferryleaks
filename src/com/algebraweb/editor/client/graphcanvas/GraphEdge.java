@@ -17,6 +17,10 @@ public class GraphEdge {
 	private int fromPosition;
 	private GraphNode fromNode;
 	private GraphNode toNode;
+	private boolean snakedIn = true;
+	
+	private boolean snakingIn = false;
+	private boolean snakingOut = false;
 
 	private String pathSmall;
 	
@@ -97,6 +101,35 @@ public class GraphEdge {
 		this.arrowSize = size;
 	}
 
+	
+
+	/**
+	 * @return the snakingIn
+	 */
+	public boolean isSnakingIn() {
+		return snakingIn;
+	}
+
+	/**
+	 * @param snakingIn the snakingIn to set
+	 */
+	public void setSnakingIn(boolean snakingIn) {
+		this.snakingIn = snakingIn;
+	}
+
+	/**
+	 * @return the snakingOut
+	 */
+	public boolean isSnakingOut() {
+		return snakingOut;
+	}
+
+	/**
+	 * @param snakingOut the snakingOut to set
+	 */
+	public void setSnakingOut(boolean snakingOut) {
+		this.snakingOut = snakingOut;
+	}
 
 	public int getToPosition() {
 		return toPosition;
@@ -283,8 +316,7 @@ public class GraphEdge {
 	}
 
 
-	private boolean snakedIn = true;
-
+	
 
 	public String getEdgePathString() {
 		return paths;

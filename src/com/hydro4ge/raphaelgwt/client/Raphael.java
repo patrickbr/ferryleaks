@@ -53,6 +53,8 @@ public class Raphael extends Widget {
       sh.add(s);
       return this;
     }
+    
+    
     public Set animate(JSONObject newAttrs, int duration) {
       set.animate(newAttrs.getJavaScriptObject(), duration);
       return this;
@@ -153,6 +155,13 @@ public class Raphael extends Widget {
      */
     public void doDetach() {
       onDetach();
+    }
+    
+
+    public Shape stop() {
+      el.stop();
+     
+      return this;
     }
 
     public Shape animate(JSONObject newAttrs, int duration) {

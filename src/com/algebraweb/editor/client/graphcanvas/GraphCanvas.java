@@ -624,16 +624,19 @@ public class GraphCanvas extends Raphael  {
 		GraphEdge current;
 		Iterator<GraphEdge> it = from.iterator();
 
-		while (it.hasNext()) {
+		GWT.log(Integer.toString(to));
 
+
+		while (it.hasNext()) {
 
 			current = it.next();			
 			if (current.getTo().getId() == to) {
+
 				gem.snakeIn(current,!this.isHidden());
-				//gem.deleteFromTo(current);
+				gem.deleteFromTo(current);
 				//gem.deleteFromFrom(current);
 				this.edges.remove(current);
-				//it.remove();
+				it.remove();
 			}
 
 		}	
