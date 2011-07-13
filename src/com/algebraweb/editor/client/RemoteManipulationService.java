@@ -29,7 +29,7 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public RemoteManipulationMessage addNode(int planid,String nodeType, int x, int y) throws PlanManipulationException;
 	
-	public RemoteManipulationMessage addEdge(int planid,Coordinate fromTo, int pos);
+	public RemoteManipulationMessage addEdge(int planid,Coordinate fromTo, int pos) throws PlanManipulationException;
 		
 	public ValidationResult getValidation(int planid);
 	
@@ -51,13 +51,13 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public String getXMLFromPlanNode(int pid, int nid);
 	
-	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c);
+	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c) throws PlanManipulationException;
 	
-	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c);
+	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c) throws PlanManipulationException;
 	
 	public String[] getNodeTypes();
 	
-	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context);
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context) throws PlanManipulationException;
 
 	public Integer createNewPlan();
 	

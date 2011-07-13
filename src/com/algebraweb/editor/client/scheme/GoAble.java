@@ -16,5 +16,7 @@ public interface GoAble extends IsSerializable  {
 	public ArrayList<Field> getFields();
 	
 	public boolean hasFields();
+	public boolean isEditable();
+	public void setEditable(boolean editable);
 
 }

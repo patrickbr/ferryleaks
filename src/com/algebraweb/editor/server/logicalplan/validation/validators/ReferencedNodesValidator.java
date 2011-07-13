@@ -30,7 +30,7 @@ public class ReferencedNodesValidator implements Validator {
 
 					int curId = Integer.parseInt(edges.next().getAttributes().get("to").getVal());
 
-					if (!hasChildWithId(current,curId)) {
+					if (!hasChildWithId(current,curId) && curId > -1) {
 
 						String errorMsg = "Node wishes to be the loving mother of node #" + curId + ", but the child couldn't be found. Maybe you referred to a node introduced after this?";
 

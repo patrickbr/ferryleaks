@@ -8,6 +8,7 @@ public class GoInto implements GoAble {
 	protected String xmlObject;
 	protected String howOften;
 	protected String humanName;
+	protected boolean editable = true;
 
 	protected ArrayList<GoAble> childs = new ArrayList<GoAble>();
 
@@ -104,5 +105,22 @@ public class GoInto implements GoAble {
 		return false;
 	}
 
+
+	/**
+	 * @return the editable
+	 */
+	public boolean isEditable() {
+		return editable;
+	}
+
+
+	/**
+	 * @param editable the editable to set
+	 */
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+
+	
 
 }

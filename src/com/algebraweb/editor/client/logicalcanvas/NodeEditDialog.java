@@ -74,7 +74,7 @@ public class NodeEditDialog extends DialogBox{
 		this.pmm=pmm;
 		this.nid=nid;
 		this.pid=pid;
-		xmlEditPanel = new NodeEditSourcePanel(nid,manServ,pmm);
+		xmlEditPanel = new NodeEditSourcePanel(nid,pid,manServ,pmm);
 		super.setText("Edit node #" + nid);
 		t.setAnimationVertical(false);
 		t.setAnimationDuration(500);
@@ -123,13 +123,7 @@ public class NodeEditDialog extends DialogBox{
 
 					}
 
-
-
-
-
 				}
-
-
 			}
 		});
 
@@ -170,9 +164,9 @@ public class NodeEditDialog extends DialogBox{
 		ok.getElement().getStyle().setMargin(10, Unit.PX);
 		cancel.getElement().getStyle().setMargin(10, Unit.PX);
 		cancel.getElement().getStyle().setMarginLeft(0, Unit.PX);
-		
 
-		
+
+
 		hh.add(ok);
 		hh.add(cancel);
 
@@ -275,8 +269,7 @@ public class NodeEditDialog extends DialogBox{
 
 				GoAble currentSchema = schemas.next();
 
-
-				tree.addItem(new LogicalSchemeTreeItem(manServ,currentSchema, result));
+				if (currentSchema.isEditable()) tree.addItem(new LogicalSchemeTreeItem(manServ,currentSchema, result));
 
 
 			}

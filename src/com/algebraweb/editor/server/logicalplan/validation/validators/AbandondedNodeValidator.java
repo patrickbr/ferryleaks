@@ -27,11 +27,7 @@ public class AbandondedNodeValidator implements Validator {
 				Iterator<PlanNode> itt = plan.iterator();
 
 				while (itt.hasNext()) {
-
-
 					if (itt.next().getChilds().contains(current)) isChild=true;
-
-
 				}
 
 				if (!isChild && current.getChilds().size() == 0) r.addError(new ValidationError(current.getId(), "Node is abandonded. It has neither parents no childs."));

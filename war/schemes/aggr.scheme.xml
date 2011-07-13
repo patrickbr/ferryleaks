@@ -5,6 +5,7 @@
 	<properties>
 	
 		<property name="color">0xeeeeee</property>
+		<property name="reset_columns">true</property>
 
 	</properties>
 
@@ -18,7 +19,7 @@
 
 				<fields>
 
-					<field type="__COLUMN">name</field>
+					<field type="__COLUMN_NEW">name</field>
 					<field type="boolean" must_be="false">new</field>
 					<field type="string" must_be="partition">function</field>
 			

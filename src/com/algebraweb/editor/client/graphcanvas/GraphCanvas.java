@@ -50,7 +50,7 @@ public class GraphCanvas extends Raphael  {
 
 	private NodePopup popup;
 
-	private boolean isHidden=true;
+	private boolean isNotActive=true;
 
 
 	private static LoadingMessagePopUp loadingMessagePopUp = new LoadingMessagePopUp();
@@ -118,14 +118,14 @@ public class GraphCanvas extends Raphael  {
 	}
 
 
-	public boolean isHidden() {
-		return isHidden;
+	public boolean isNotActive() {
+		return isNotActive;
 	}
 
 
 
-	public void setHidden(boolean isHidden) {
-		this.isHidden = isHidden;
+	public void setNotActive(boolean isHidden) {
+		this.isNotActive = isHidden;
 	}
 
 
@@ -400,7 +400,7 @@ public class GraphCanvas extends Raphael  {
 			@Override
 			public void onMouseWheel(MouseWheelEvent event) {
 
-				if (event.isControlKeyDown()) {
+				if (event.isMetaKeyDown() || event.isAltKeyDown() || event.isShiftKeyDown() || event.isControlKeyDown()) {
 
 					DOM.eventGetCurrentEvent().preventDefault();
 
@@ -490,7 +490,7 @@ public class GraphCanvas extends Raphael  {
 
 	public void createEdge(GraphNode from, GraphNode to, int fixedPos,boolean quiet) {
 
-		GraphEdge t = new GraphEdge(this,from,to,fixedPos,quiet, !this.isHidden());
+		GraphEdge t = new GraphEdge(this,from,to,fixedPos,quiet, !this.isNotActive());
 		this.edges.add(t);
 
 	}
@@ -527,7 +527,7 @@ public class GraphCanvas extends Raphael  {
 
 	public GraphNode addNode(int id,int color,int x, int y,int width, int height,String text, int fixedChildCount) {
 
-		GraphNode g =  new GraphNode(this,color,x,y, width, height,text,id);
+		GraphNode g =  new GraphNode(this,color,x,y, -1, height,text,id);
 		g.setFixedChildCount(fixedChildCount);
 
 		this.nodes.add( g);
@@ -583,9 +583,9 @@ public class GraphCanvas extends Raphael  {
 		GraphEdge current;
 
 		while (it.hasNext()) {
-
+			GWT.log(Boolean.toString(!this.isNotActive()));
 			current = it.next();			
-			gem.snakeIn(current,!this.isHidden());
+			gem.snakeIn(current,!this.isNotActive());
 			gem.deleteFromTo(current);
 			this.edges.remove(current);
 			it.remove();
@@ -607,7 +607,7 @@ public class GraphCanvas extends Raphael  {
 		while (it.hasNext()) {
 
 			current = it.next();			
-			gem.snakeIn(current,!this.isHidden());
+			gem.snakeIn(current,!this.isNotActive());
 			gem.deleteFromFrom(current);
 			this.edges.remove(current);
 			it.remove();
@@ -635,7 +635,8 @@ public class GraphCanvas extends Raphael  {
 			current = it.next();			
 			if (current.getTo().getId() == to) {
 
-				gem.snakeIn(current,!this.isHidden());
+			
+				gem.snakeIn(current,!this.isNotActive());
 				gem.deleteFromTo(current);
 				//gem.deleteFromFrom(current);
 				this.edges.remove(current);
@@ -697,7 +698,7 @@ public class GraphCanvas extends Raphael  {
 
 		while(i.hasNext()) {
 
-			this.getGraphNodeModifier().showEdges(i.next(),!this.isHidden());
+			this.getGraphNodeModifier().showEdges(i.next(),!this.isNotActive());
 
 
 		}

@@ -20,7 +20,7 @@ public class SerializePanel extends LayoutPanel {
 
 	private RemoteManipulationServiceAsync manServ;
 
-	private ListBox columnsSelected = new ListBox();
+
 	private AvailableColumnsField columnsAvailable;
 	private final AvailableColumnsField iterColumn;
 	private final TextBox valueTextBox;
@@ -53,7 +53,7 @@ public class SerializePanel extends LayoutPanel {
 		iterPanel.add(userUseColumn);
 		iterColumn = new AvailableColumnsField(pid, nid,manServ);
 		iterPanel.add(iterColumn);
-		
+
 		this.addStyleName("loading");
 		this.addStyleName("serialize-panel");
 
@@ -99,9 +99,9 @@ public class SerializePanel extends LayoutPanel {
 		preDefinedSortingListBox.addItem("DESCENDING");
 
 		serPanel.add(preDefinedSortingListBox);
-		
+
 		sortOnColumn = new AvailableColumnsField(pid, nid, manServ);
-		
+
 		serPanel.add(new Label("sort on:"));
 		serPanel.add(sortOnColumn);
 
@@ -142,11 +142,7 @@ public class SerializePanel extends LayoutPanel {
 		});
 
 
-
-
-		columnsAvailable = new AvailableColumnsField(pid, nid, manServ);
-
-		columnsSelected.setVisibleItemCount(10);
+		columnsAvailable = new AvailableColumnsField(pid, nid, manServ,true);
 
 		columnsAvailable.getWidget().setVisibleItemCount(10);
 
@@ -156,45 +152,10 @@ public class SerializePanel extends LayoutPanel {
 		itemsPanel.add(columnSelPanel);
 
 
-
-		columnsSelected.addStyleName("eval-item-columns-selected");
 		columnsAvailable.addStyleName("eval-item-columns-available");
 
 		columnSelPanel.add(new Label("Item columns selected:"));
-		columnSelPanel.add(columnsSelected);
-
-		Button addButton = new Button("<-");
-		addButton.addStyleName("eval-item-add-button");
-
-		addButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-
-				addColumnToSelected(columnsAvailable.getWidget().getSelectedIndex());
-
-			}
-		});
-
-
-
-		Button removeButton = new Button("->");
-		removeButton.addStyleName("eval-item-remove-button");
-
-
-		removeButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-
-				removeColumnFromSelected(columnsSelected.getSelectedIndex());
-
-			}
-		});
-
-
-		itemsPanel.add(addButton);
-		itemsPanel.add(removeButton);
+	
 		itemsPanel.add(columnAvPanel);
 
 
@@ -207,19 +168,7 @@ public class SerializePanel extends LayoutPanel {
 
 	}
 
-	private void addColumnToSelected(int i) {
-
-		columnsSelected.addItem(columnsAvailable.getWidget().getItemText(i));
-		columnsAvailable.getWidget().removeItem(i);
-
-	}
-
-	private void removeColumnFromSelected(int i) {
-
-		columnsAvailable.getWidget().addItem(columnsSelected.getItemText(i));
-		columnsSelected.removeItem(i);
-
-	}
+	
 
 
 	public boolean fillEvaluationContext(EvaluationContext c) {
@@ -233,21 +182,15 @@ public class SerializePanel extends LayoutPanel {
 		}
 		c.setIterColumnNat(Integer.parseInt(valueTextBox.getValue()));
 
-		
+
 		c.setIterUseColumn(userUseColumn.getValue());
 
 		c.setSortColumnName(sortColumn.getWidget().getItemText(sortColumn.getWidget().getSelectedIndex()));
 		c.setSortOrder(preDefinedSortingListBox.getValue(preDefinedSortingListBox.getSelectedIndex()));
 		c.setSortUseColumn(useSortColumnButton.getValue());
 
-		String[] itemCols = new String[columnsSelected.getItemCount()];
-		
-		for (int i=0;i<columnsSelected.getItemCount();i++) {
-			
-			itemCols[i] = columnsSelected.getItemText(i);
-			
-		}
-		
+		String[] itemCols = columnsAvailable.getSelectedItems();
+
 		c.setItemColumns(itemCols);
 
 		return true;
@@ -258,32 +201,26 @@ public class SerializePanel extends LayoutPanel {
 	public void loadEvaluationContext(EvaluationContext c) {
 
 		this.removeStyleName("loading");
-		
+
 		iterColumn.setProjectedSelection(c.getIterColumnName());
 		valueTextBox.setValue(Integer.toString(c.getIterColumnNat()),true);
-		
+
 		userUseColumn.setValue(!c.isIterUseColumn(),true);
 		userUseColumn.setValue(c.isIterUseColumn(),true);
-		
-		
+
+
 		sortColumn.setProjectedSelection(c.getSortColumnName());
-				
+
 		for (int i=0;i<preDefinedSortingListBox.getItemCount();i++) {
 
 			if (preDefinedSortingListBox.getValue(i).equals(c.getSortOrder())) preDefinedSortingListBox.setSelectedIndex(i);
 
 		}
-		
+
 		useSortColumnButton.setValue(!c.isSortUseColumn(),true);
 		useSortColumnButton.setValue(c.isSortUseColumn(),true);
-		
-		for (String col : c.getItemColumns()) {
-			GWT.log(col);
-			columnsSelected.addItem(col);
-						
-		}
-		
-		columnsAvailable.setProjectedDelete(c.getItemColumns());
+
+		columnsAvailable.setProjectedSelection(c.getItemColumns());
 		
 	}
 

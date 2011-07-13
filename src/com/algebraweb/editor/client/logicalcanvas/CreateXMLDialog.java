@@ -124,9 +124,7 @@ public class CreateXMLDialog extends TabbedDialog{
 		@Override
 		public void onSuccess(String result) {
 
-
 			Window.alert(result);
-
 
 		}
 

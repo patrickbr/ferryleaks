@@ -65,7 +65,7 @@ public class QueryPlan implements Serializable {
 
 	public PlanNode addNode(NodeScheme s) {
 
-		PlanNode n = new PlanNode(getFreeId(), s.getKind(), s, this);
+		PlanNode n = new PlanNode(getFreeId(), s, this);
 		
 		//TODO: not nice
 		for (int i=0;i<n.getMaxChildCount();i++) {

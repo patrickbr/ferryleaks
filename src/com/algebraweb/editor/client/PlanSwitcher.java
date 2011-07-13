@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.PushButton;
 public class PlanSwitcher extends AbsolutePanel{
 
 
-	private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
+	private HashMap<Integer, PlanSwitchButton> buttons = new HashMap<Integer, PlanSwitchButton>();
 	private AlgebraEditor editor;
 	private FlowPanel p = new FlowPanel();
 	private int active = -1;
@@ -35,13 +35,13 @@ public class PlanSwitcher extends AbsolutePanel{
 
 	}
 
-	public void addPlan(final int pid) {
+	public PlanSwitchButton addPlan(final int pid) {
 
 		GWT.log("adding new plan");
-		Button newB = new Button();
+		PlanSwitchButton newB = new PlanSwitchButton(pid);
 		buttons.put(pid,newB);
 
-		newB.addClickHandler(new ClickHandler() {
+		newB.getButton().addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -52,9 +52,10 @@ public class PlanSwitcher extends AbsolutePanel{
 
 		});
 
-		newB.setText("Plan " +pid);
+	
 		p.add(newB);
 
+		return newB;
 
 	}
 

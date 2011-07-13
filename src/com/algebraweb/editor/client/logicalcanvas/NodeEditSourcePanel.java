@@ -13,16 +13,18 @@ public class NodeEditSourcePanel extends LayoutPanel {
 	private RemoteManipulationServiceAsync manServ;
 	private PlanModelManipulator pmm;
 	private int nid;
+	private int pid;
 	
-	public NodeEditSourcePanel(int nid,RemoteManipulationServiceAsync manServ,PlanModelManipulator pmm) {
+	public NodeEditSourcePanel(int nid,int pid,RemoteManipulationServiceAsync manServ,PlanModelManipulator pmm) {
 		
 		super();
 		
 		this.manServ = manServ;
 		this.pmm=pmm;
 		this.nid=nid;
+		this.pid=pid;
 		
-		this.manServ.getXMLFromPlanNode(0, nid, xmlCb);
+		this.manServ.getXMLFromPlanNode(pid, nid, xmlCb);
 		editArea.addStyleName("sourceedit");
 		super.add(editArea);
 		
@@ -31,10 +33,9 @@ public class NodeEditSourcePanel extends LayoutPanel {
 	
 	
 	public void save() {
+	
 		
-		//TODO: planid!
-		
-		pmm.updateNodeContent(0, nid, editArea.getText());
+		pmm.updateNodeContent(pid, nid, editArea.getText());
 		
 		
 		

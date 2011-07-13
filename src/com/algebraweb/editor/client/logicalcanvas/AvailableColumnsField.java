@@ -14,15 +14,21 @@ public class AvailableColumnsField extends Composite {
 
 	private RemoteManipulationServiceAsync manServ;
 	private AbsolutePanel p;
-	ListBox b = new ListBox();
-	private String projSel;
+	ListBox b;
+	private String[] projSel;
 	private String[] projDel;
 	private boolean received = false;
 
 	public AvailableColumnsField(int pid, int nid, RemoteManipulationServiceAsync manServ) {
+		this(pid, nid, manServ, false);
+	}
+
+
+	public AvailableColumnsField(int pid, int nid, RemoteManipulationServiceAsync manServ, boolean allowMultipleSelection) {
 
 		super();
 		this.manServ=manServ;
+		b = new ListBox(allowMultipleSelection);
 
 		p = new AbsolutePanel();
 
@@ -30,29 +36,38 @@ public class AvailableColumnsField extends Composite {
 
 		this.initWidget(p);
 
+
 		manServ.getReferencableColumns(nid, pid, cb);
 
 
 	}
 
-	public void setProjectedSelection(String item) {
+	public void setProjectedSelection(String[] item) {
 
 		projSel = item;
 		if (received) {
-
-			selectStringItem(item);
+			for (String s : item)
+				selectStringItem(s);
 
 		}
 
 	}
-	
+
+	public void setProjectedSelection(String item) {
+
+		String[] tmp = new String[1];
+		tmp[0] = item;
+
+		setProjectedSelection(tmp);
+	}
+
 	public void setProjectedDelete(String[] item) {
 
 		projDel = item;
 		if (received) {
-			
+
 			for (String s : item)
-			b.removeItem(selectStringItem(s));
+				if (selectStringItem(s)>-1) b.removeItem(selectStringItem(s));
 
 		}
 
@@ -67,18 +82,18 @@ public class AvailableColumnsField extends Composite {
 
 
 		for (int i=0;i<b.getItemCount();i++) {
-			
-			
+
+
 			if (b.getValue(i).equals(item)) {
 				b.setSelectedIndex(i);
 				return i;
 			}
-			
-			
+
+
 		}
-		
+
 		return -1;
-		
+
 
 	}
 
@@ -119,11 +134,15 @@ public class AvailableColumnsField extends Composite {
 
 
 			AvailableColumnsField.this.showResults(result);
-			selectStringItem(projSel);
-			
+
+			if (projSel != null)
+				for (String s : projSel)
+					selectStringItem(s);
+
+
 			if (projDel != null)
-			for (String s : projDel)
-				b.removeItem(selectStringItem(s));
+				for (String s : projDel)
+					b.removeItem(selectStringItem(s));
 			received=true;
 
 		}		
@@ -134,6 +153,21 @@ public class AvailableColumnsField extends Composite {
 	public ListBox getWidget() {
 
 		return b;
+
+	}
+
+	public String[] getSelectedItems() {
+
+		ArrayList<String> ret = new ArrayList<String>();
+
+		for (int i=0;i<b.getItemCount();i++) {
+
+			if (b.isItemSelected(i)) ret.add(b.getItemText(i));
+
+		}
+
+
+		return ret.toArray(new String[0]);
 
 	}
 

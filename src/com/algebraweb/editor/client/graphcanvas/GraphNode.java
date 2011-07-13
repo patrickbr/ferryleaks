@@ -49,19 +49,14 @@ public class GraphNode {
 	public double stepY;
 	private int color;
 
-	public GraphNode(GraphCanvas c, int color,int x, int y,int width, int height, String textStr,int id) {
+	public GraphNode(GraphCanvas c, int color,int x, int y, int width, int height, String textStr,int id) {
 
 		this.id=id;
 		this.c=c;
 		this.height = height;
-		this.width = width;
+		
 		this.color=color;
 		
-		this.x=x;
-		this.y=y;
-
-		this.rect = c.new Rect(x,y,width,height,5);
-		rect.getElement().setAttribute("class", "node");
 		
 		textString = textStr;
 
@@ -70,7 +65,20 @@ public class GraphNode {
 
 		text.getElement().setAttribute("class", "node-text");
 		
+	
+		
+		if (width < 0) width = (int) text.getBBox().width() + 50;
+		this.width = width;
+		
+		this.x=x;
+		this.y=y;
+
+		this.rect = c.new Rect(x,y,width,height,5);
+		rect.getElement().setAttribute("class", "node");
 		rect.getElement().setAttribute("r", "");
+		text.toFront();
+		text.attr("x",x + width/2);
+		text.attr("y",y+height/2);
 		
 		
 		

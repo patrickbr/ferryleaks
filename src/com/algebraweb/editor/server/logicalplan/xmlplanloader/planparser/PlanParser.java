@@ -143,7 +143,6 @@ public class PlanParser {
 
 		PlanNode newNode = new PlanNode(
 				Integer.parseInt(el.getAttributes().getNamedItem("id").getNodeValue()),
-				el.getAttributes().getNamedItem("kind").getNodeValue(),
 				getScheme(el.getAttributes().getNamedItem("kind").getNodeValue()),
 				mother
 
@@ -228,6 +227,7 @@ public class PlanParser {
 				((ContentVal)retEl).getAttributes().put(new Property(name,value, type));
 
 			}
+			
 
 			// what if edge erroneous??
 			if (((Value)g).getInternalName().equals("edge")) {
@@ -235,9 +235,10 @@ public class PlanParser {
 				int to = Integer.parseInt(((ContentVal)retEl).getAttributes().get("to").getVal());
 
 				PlanNode pn = mother.getPlanNodeById(to);
-	
+
 				node.getChilds().add(mother.getPlanNodeById(to));
 				
+
 			}
 
 		}

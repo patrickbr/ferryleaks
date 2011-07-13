@@ -25,7 +25,7 @@ public class ReferencedColumnsValidator implements Validator {
 
 			PlanNode current = it.next();
 
-			if (current == null) {
+			if (current != null) {
 
 				ArrayList<Property> refedCols = current.getReferencedColumns();
 
@@ -44,7 +44,7 @@ public class ReferencedColumnsValidator implements Validator {
 
 							int num = Integer.parseInt(currentCol.getPropertyVal().getType().split("\\{")[1].replaceAll("\\}", ""));
 
-							if (current.getChilds().size() > num-1) {
+							if (current.getChilds().size() > num-1 && current.getChilds().get(num-1) != null) {
 								errorMsg += " expected in node <span class='tt'>#" + current.getChilds().get(num-1).getId() + "</span> of type <span class='tt'>" + current.getChilds().get(num-1).getKind()+ "</span>";
 							}else{
 								errorMsg += " expected in child node <span class='tt'>#" + num + "</span>";
@@ -68,7 +68,7 @@ public class ReferencedColumnsValidator implements Validator {
 
 				Property currentCol = itIntroCols.next();
 
-				if ((!current.resetsColumns() && containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
+				if ((!current.resetsColumns() && !containsPropertyByVal(currentCol,current.getRemovedColumns()) && containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
 
 					String errorMsg = "Node introduces already existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
 					r.addError(new ValidationError(current.getId(),errorMsg));

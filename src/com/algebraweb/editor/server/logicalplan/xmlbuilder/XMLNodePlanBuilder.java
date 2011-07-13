@@ -5,11 +5,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.servlet.ServletContext;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Text;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -27,14 +30,14 @@ public class XMLNodePlanBuilder {
 	}
 
 
-	public Element getNodePlan(int id, PlanNode rootNode, EvaluationContext c) {
+	public Element getNodePlan(int id, PlanNode rootNode, EvaluationContext c, ServletContext context) throws PlanManipulationException {
 
 		Element nodePlan = new Element("query_plan");
 		nodePlan.setAttribute("id", Integer.toString(id));
 		Element logicalPlan = new Element("logical_query_plan");
 		logicalPlan.setAttribute("unique_names", "true");
 		
-		SerializeRelationBuilder srb = new SerializeRelationBuilder(c);
+		SerializeRelationBuilder srb = new SerializeRelationBuilder(c,context);
 		
 		rootNode = srb.addSerializRelation(rootNode);
 
@@ -58,12 +61,12 @@ public class XMLNodePlanBuilder {
 
 	
 
-	public Document getNodePlan(QueryPlan p) {
+	public Document getNodePlan(QueryPlan p, ServletContext context) throws PlanManipulationException {
 		
 		
 		Document d = new Document();
 		
-		d.addContent(getNodePlan(p.getId(),p.getRoot(),p.getEvContext()));
+		d.addContent(getNodePlan(p.getId(),p.getRoot(),p.getEvContext(),context));
 		
 		return d;
 		
@@ -96,7 +99,10 @@ public class XMLNodePlanBuilder {
 
 	private ArrayList<PlanNode> getAllNodesUnderThis(PlanNode rootNode) {
 
+				
 		ArrayList<PlanNode> nodes = new ArrayList<PlanNode>();
+		
+		if (rootNode == null) return nodes;
 
 		Iterator<PlanNode> it = rootNode.getChilds().iterator();
 
@@ -158,6 +164,7 @@ public class XMLNodePlanBuilder {
 
 			ret.setAttribute("kind", ((PlanNode)n).getKind());
 
+			
 
 		}else{
 

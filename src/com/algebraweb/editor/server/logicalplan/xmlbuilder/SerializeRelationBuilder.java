@@ -1,6 +1,9 @@
 package com.algebraweb.editor.server.logicalplan.xmlbuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.servlet.ServletContext;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.node.ContentVal;
@@ -10,15 +13,19 @@ import com.algebraweb.editor.client.node.PropertyMap;
 import com.algebraweb.editor.client.node.PropertyValue;
 import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.client.node.ValGroup;
+import com.algebraweb.editor.client.scheme.NodeScheme;
 
 public class SerializeRelationBuilder {
 
 
-	EvaluationContext c;
+	private EvaluationContext c;
+	private ServletContext context;
 
-	public SerializeRelationBuilder(EvaluationContext c) {
+	public SerializeRelationBuilder(EvaluationContext c, ServletContext context) {
 
 		this.c=c;
+		this.context=context;
+		
 
 	}
 
@@ -29,7 +36,7 @@ public class SerializeRelationBuilder {
 		String dummyIterColumn = "iter_bugferry_dummy_iter_col";
 		String dummySortColumn = "pos_bugferry_dummy_sort_col";
 
-
+		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>)context.getAttribute("nodeSchemes");
 
 		PlanNode newRootNode = root;
 
@@ -38,7 +45,7 @@ public class SerializeRelationBuilder {
 		if (!c.isIterUseColumn()) {
 
 
-			PlanNode attachNode = new PlanNode(root.getMother().getFreeId(nids), "attach", null,root.getMother());
+			PlanNode attachNode = new PlanNode(root.getMother().getFreeId(nids), schemes.get("attach"),root.getMother());
 			nids.add(attachNode.getId());
 			ValGroup contentGroup = new ValGroup("content");
 			attachNode.getContent().add(contentGroup);
@@ -64,7 +71,7 @@ public class SerializeRelationBuilder {
 
 		}
 
-		PlanNode serializeRel = new PlanNode(root.getMother().getFreeId(nids), "serialize relation", null,root.getMother());
+		PlanNode serializeRel = new PlanNode(root.getMother().getFreeId(nids), schemes.get("serialize relation"),root.getMother());
 		nids.add(serializeRel.getId());
 
 		ValGroup contentGroup = new ValGroup("content"); 
@@ -125,7 +132,7 @@ public class SerializeRelationBuilder {
 
 		}
 		
-		PlanNode nilNode = new PlanNode(root.getMother().getFreeId(nids), "nil", null,root.getMother());
+		PlanNode nilNode = new PlanNode(root.getMother().getFreeId(nids), schemes.get("nil"),root.getMother());
 
 		createEdgeTo(serializeRel, nilNode);
 		createEdgeTo(serializeRel, newRootNode);

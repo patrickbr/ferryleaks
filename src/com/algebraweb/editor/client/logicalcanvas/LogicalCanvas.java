@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.PlanModelManipulator;
+import com.algebraweb.editor.client.PlanSwitchButton;
 import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
@@ -23,6 +24,7 @@ import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.user.client.ui.Button;
 
 public class LogicalCanvas extends GraphCanvas{
 
@@ -36,14 +38,17 @@ public class LogicalCanvas extends GraphCanvas{
 	private GraphNode drawEdgeTo;
 	private GraphNode drawEdgeFrom;
 	private int drawEdgeFromPos;
+	private PlanSwitchButton myTabButton;
+	
+	private int errorCount=0;
 
 
-	public LogicalCanvas(int id,final PlanModelManipulator m,int width, int height) {
+	public LogicalCanvas(int id,final PlanModelManipulator m,int width, int height, PlanSwitchButton myTabButton) {
 		super(width, height,true);
 
 		this.id=id;
 		this.m=m;
-
+		this.myTabButton = myTabButton;
 
 		super.addNodeSelectionHandler(new NodeSelectionHandler() {
 
@@ -65,7 +70,7 @@ public class LogicalCanvas extends GraphCanvas{
 
 
 					m.addEdge(new Coordinate(drawEdgeFrom.getId(),drawEdgeTo.getId()), LogicalCanvas.this.getId(), drawEdgeFromPos);
-					
+
 
 					state=0;
 
@@ -117,21 +122,12 @@ public class LogicalCanvas extends GraphCanvas{
 					//TODO: pid
 
 					LogicalCanvas.this.m.addNode(LogicalCanvas.this.getId(), addingModeNodeType, x,y);
-
-
-
 				}
-
-
 			}
 
 		}, MouseUpEvent.getType());
 
-
 	}
-
-
-
 
 
 	public int getId() {
@@ -139,12 +135,12 @@ public class LogicalCanvas extends GraphCanvas{
 	}
 
 
-
 	public void setErroneous(int nid) {
-
 
 		if (!super.getGraphNodeById(nid).getConnectedShapes().containsKey("__logicalplan_error")) {
 
+			errorCount++;
+			myTabButton.setErrorCount(errorCount);
 			Text errorMark = super.textFactory(0, 0,"!");
 			errorMark.getElement().setAttribute("class", "logicalplan-node-errormark-text");
 			errorMark.attr("fill","red");
@@ -152,13 +148,12 @@ public class LogicalCanvas extends GraphCanvas{
 			super.hangShapeOntoNode("__logicalplan_error", new ConnectedShape(errorMark, -6, -8), nid);				
 
 		}
-
-
 	}
 
 	public void clearErroneous() {
 
-
+		errorCount=0;
+		myTabButton.setErrorCount(errorCount);
 		Iterator<GraphNode> it = super.getNodes().iterator();
 
 		while (it.hasNext()) {

@@ -142,15 +142,22 @@ public class NodeSchemeLoader {
 		String humanName = n.getAttributes().getNamedItem("humanname") != null?n.getAttributes().getNamedItem("humanname").getNodeValue():name;
 		String nameField = n.getAttributes().getNamedItem("namefield") != null?n.getAttributes().getNamedItem("namefield").getNodeValue():"";
 		boolean hasVals = Boolean.parseBoolean(n.getAttributes().getNamedItem("hasval") != null?n.getAttributes().getNamedItem("hasval").getNodeValue():"false");
+		boolean editable = Boolean.parseBoolean(n.getAttributes().getNamedItem("editable") != null?n.getAttributes().getNamedItem("editable").getNodeValue():"true");
+		
+		if (xmlOb.equals("edge")) editable = false;
 		
 		GoInto ret;
 		
+		
 		if (e.getNodeName().equals("gointo")) {
 			ret = new GoInto(xmlOb,howOften,humanName);
+			
 		}else{
 			ret = new Value(xmlOb,howOften,name, humanName,nameField,hasVals);
 			loadFields(e,(Value)ret);
 		}
+		
+		ret.setEditable(editable);
 	
 		for (int i=0;i<e.getChildNodes().getLength();i++) {
 
@@ -161,6 +168,8 @@ public class NodeSchemeLoader {
 			}
 
 		}
+		
+	
 
 		return ret;
 

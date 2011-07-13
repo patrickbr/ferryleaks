@@ -126,7 +126,7 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 
 				GoAble currentSchema = schemas.next();
 
-				this.addItem(new LogicalSchemeTreeItem(manServ,currentSchema, content));
+				if (currentSchema.isEditable()) this.addItem(new LogicalSchemeTreeItem(manServ,currentSchema, content));
 
 
 			}

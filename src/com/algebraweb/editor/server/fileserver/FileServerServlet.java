@@ -60,11 +60,11 @@ public class FileServerServlet extends HttpServlet {
 			
 			XMLNodePlanBuilder builder = new XMLNodePlanBuilder();
 			
-			Document d = builder.getNodePlan(planToWork);
+			Document d = builder.getNodePlan(planToWork,getServletContext());
 
 			outputter.output(d, out);
 			
-			//out.flush();
+		
 			out.close();
 		}
 		catch (Exception e) {

@@ -7,16 +7,16 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 public class NodeScheme implements IsSerializable,GoAble{
-	
+
 	private String kind;
 	private HashMap<String,String> properties = new HashMap<String,String>();
 	private ArrayList<GoAble> schema = new ArrayList<GoAble>();
-	
-	
+
+
 	public NodeScheme() {
-		
+
 	}
-	
+
 	public NodeScheme(String kind) {
 		this.kind=kind;
 	}
@@ -28,7 +28,7 @@ public class NodeScheme implements IsSerializable,GoAble{
 	public void setKind(String kind) {
 		this.kind = kind;
 	}
-	
+
 	public String getHumanName() {
 		return "Scheme of type '"+ kind + "'";
 	}
@@ -38,34 +38,34 @@ public class NodeScheme implements IsSerializable,GoAble{
 		this.schema = schema;
 	}
 
-	
+
 	public HashMap<String,String> getProperties() {
 		return properties;
 	}
-	
+
 	public ArrayList<GoAble> getSchema() {
 		return schema;
 	}
-	
+
 	public void addToSchema(GoAble goAble) {
 		this.schema.add(goAble);
 	}
-	
+
 	public String toString() {
-		
+
 		Iterator<GoAble> i = schema.iterator();
-		
+
 		String ret ="";
-		
+
 		while(i.hasNext()) {
-			
+
 			ret+="\n" + i.next().toString();
-			
+
 		}
-		
+
 		return ret;
-		
-		
+
+
 	}
 
 	@Override
@@ -91,16 +91,26 @@ public class NodeScheme implements IsSerializable,GoAble{
 
 	@Override
 	public ArrayList<Field> getFields() {
-	
+
 		return null;
 	}
 
 	@Override
 	public boolean hasFields() {
-	
+
 		return false;
 	}
-	
-	
-	
+
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
+	@Override
+	public void setEditable(boolean editable) {
+
+	}
+
+
+
 }

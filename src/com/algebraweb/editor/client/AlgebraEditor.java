@@ -30,13 +30,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class AlgebraEditor implements EntryPoint {
 
 	private static String VERSION = "Alpha 5.61";
-	
+
 	private static String TITLE = "the bugFerry";
 	private static String AUTHOR = "Patrick Brosi";
 	private static String YEAR = "2011";
 	private static String FACILITY = "Universität Tübingen";
-	
-	
+
+
 
 	//TODO: this should be in an extra graph MultiEditor or sth like this
 
@@ -46,7 +46,7 @@ public class AlgebraEditor implements EntryPoint {
 	private PlanSwitcher s;
 	private RemoteManipulationServiceAsync rmsa;
 	private PlanModelManipulator m;
-	
+
 	/**
 	 * Everything begins here...
 	 */
@@ -67,51 +67,53 @@ public class AlgebraEditor implements EntryPoint {
 		Window.setTitle(TITLE + " - " + VERSION);
 		RootPanel.get("impressum").getElement().setInnerHTML(TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " " + AUTHOR); 
 		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE); 
-		
-		
+
+
 		GWT.log("loading empty plan...");
 		rmsa.createNewPlan(createCb);
-		
+
 
 	}
-	
-	
+
+
 	public LogicalCanvas getCanvas(int pid) {
-		
+
 		Iterator<LogicalCanvas> it = canvi.iterator();
 
 		while (it.hasNext()) {
-			
+
 			LogicalCanvas cur = it.next();
-			
+
 			if (cur.getId() == pid) return cur;
-			
+
 		}
-		
+
 		return null;
-		
-		
+
+
 	}
 
 	public LogicalCanvas addCanvas(int id) {
 
-		LogicalCanvas c = new LogicalCanvas(id,m,Window.getClientWidth()-30,Window.getClientHeight()-30);
 		
 		
+		LogicalCanvas c = new LogicalCanvas(id,m,Window.getClientWidth()-30,Window.getClientHeight()-30,s.addPlan(id));
+
+
 		c.setGraphNodeModifier(new GraphNodeModifier(c));
 		c.setGraphEdgeModifier(new GraphEdgeModifier(c));
-		
+
 		c.setPopup(new LogicalNodePopup(c,rmsa));
 		c.setPadding(60, 45);
-		
+
 		FullScreenDragPanel d = new FullScreenDragPanel();
 		d.add(c);
 		d.hide();
 		RootPanel.get("editor").add(d);
-		s.addPlan(c.getId());
+	
 		canvi.add(c);
 		panels.add(d);
-		
+
 		return c;
 
 
@@ -127,18 +129,18 @@ public class AlgebraEditor implements EntryPoint {
 			cur.clear();
 			RootPanel.get("editor").remove(cur);
 			it.remove();
-			
+
 		}
 
 	}
-	
+
 	public void removeLogicalCanvas(LogicalCanvas c) {
-		
+
 		canvi.remove(c);
 		s.removePlan(c.getId());
-		
+
 	}
-	
+
 	public LogicalCanvas getActiveCanvas() {
 		return activeCanvas;
 	}
@@ -148,7 +150,6 @@ public class AlgebraEditor implements EntryPoint {
 
 		Iterator<FullScreenDragPanel> it = panels.iterator();
 
-
 		while (it.hasNext()) {
 
 			//TODO: make own canvasdragpanel!!
@@ -156,16 +157,16 @@ public class AlgebraEditor implements EntryPoint {
 			FullScreenDragPanel cur = it.next();
 
 			if (((LogicalCanvas)cur.getWidget(0)).getId() != id) {
-				
-				activeCanvas.setHidden(true);
+				((LogicalCanvas)cur.getWidget(0)).setNotActive(true);
 				cur.hide();
 
 			}else{
 
 				activeCanvas = ((LogicalCanvas)cur.getWidget(0));
-				activeCanvas.setHidden(false);
+				activeCanvas.setNotActive(false);
 				s.setActive(id);
 				cur.show();
+
 			}
 
 
@@ -173,7 +174,7 @@ public class AlgebraEditor implements EntryPoint {
 
 
 	}
-	
+
 	private  AsyncCallback<Integer> createCb = new  AsyncCallback<Integer>() {
 
 		@Override
@@ -192,12 +193,12 @@ public class AlgebraEditor implements EntryPoint {
 		}
 
 	};
-	
-	
-	public static void setSubTitle(String s) {
-		
 
-		Window.setTitle(TITLE + " - " + VERSION + " - " + s);
-		
+
+	public static void setSubTitle(String s) {
+
+
+		Window.setTitle(s + " - " + TITLE + " - " + VERSION);
+
 	}
 }

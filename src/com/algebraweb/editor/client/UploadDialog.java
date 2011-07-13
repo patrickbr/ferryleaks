@@ -88,7 +88,7 @@ public class UploadDialog extends DialogBox {
 				
 			}
 
-			if (uploader.getStatus() == Status.SUCCESS) {
+			if (uploader.getStatus() == Status.SUCCESS && uploader.getServerInfo().message != null) {
 
 				String msg = uploader.getServerInfo().message.split("!")[0];
 				String idstr = uploader.getServerInfo().message.split("!")[1];
@@ -96,7 +96,9 @@ public class UploadDialog extends DialogBox {
 				
 				if (awaitingFileUpload.equals(msg)) {
 
-					AlgebraEditor.setSubTitle(uploader.getFileName());
+					String fileName = uploader.getFileName().split("\\\\")[uploader.getFileName().split("\\\\").length-1];
+					
+					AlgebraEditor.setSubTitle(fileName);
 					String[] ids = idstr.split(":");
 					e.clearCanvases();
 				

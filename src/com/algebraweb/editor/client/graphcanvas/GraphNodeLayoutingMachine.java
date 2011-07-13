@@ -52,7 +52,7 @@ public class GraphNodeLayoutingMachine {
 		while(i.hasNext()) {
 
 			current = i.next();
-			gnm.hideEdges(current,!c.isHidden());
+			gnm.hideEdges(current,!c.isNotActive());
 
 		}		
 
@@ -131,7 +131,7 @@ public class GraphNodeLayoutingMachine {
 
 			GraphNode current = a.next();
 
-			if (!c.isHidden()) {
+			if (!c.isNotActive()) {
 				gnm.animateTo(current,current.getX()+offsetX, current.getY()+offsetY);
 			}else{
 				gnm.moveTo(current,current.getX()+offsetX, current.getY()+offsetY);

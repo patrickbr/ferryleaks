@@ -601,7 +601,20 @@ body.hidden #loading #msg {
 	color: #555;
 }
 
-.switcher button {
+.switcher button,.switcher button:hover {
+	background:transparent;
+	background-image:url(transpa.gif);
+	font-size: 11px;
+	border: none;
+	position:relative;
+	z-index:200;
+	min-width:65px;
+	text-align:left;
+
+}
+
+.switcher .planswitchbutton {
+	display: inline;
 	-webkit-border--radius: 0px;
 	-moz-border-radius: 0px;
 	border-radius: 0px;
@@ -613,60 +626,57 @@ body.hidden #loading #msg {
 	margin-right: 5px;
 	border: none;
 	position: relative;
-	top: 8px;
-	padding-right:10px;
-	padding-left:10px;
-	min-width:70px;
-	text-align:left;
+	top: 11px;
+	
+	text-align: left;
+	background-color: #BBBBBB;
+	padding:3px;
+
 }
 
-.switcher button.active:hover {
-	
-	background-color:#FAFAFA;
-	
+.switcher .gwt-HTML {
+
+	position:absolute;
+	right:4px;
+	top:2px;
+	height:22px;
 }
 
-.switcher button.active {
-	
-	background-color:#FAFAFA;
-	
+.switcher .planswitchbutton:hover {
+	background-color: #FFFAAE;
 }
 
-.switcher button:hover {
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
-	border-radius: 0px;
-	-webkit-border-top-right-radius: 9px;
-	-moz-border-radius-topright: 9px;
-	border-top-right-radius: 9px;
-	font-size: 11px;
-	margin-right: 5px;
-	border: none;
+.switcher .planswitchbutton.active {
+	background-color: #FAFAFA;
 }
 
 
-.eval-item-columns-selected, .eval-item-columns-available .gwt-ListBox{
 
+.switcher .error-count {
+
+	text-align:right;
+	color:red;
+	font-weight:bold;
+	font-size:12px;
 	
-		width:200px;
+	
+		
+	
+}
 
+.eval-item-columns-selected,.eval-item-columns-available .gwt-ListBox {
+	width: 200px;
 }
 
 .node-adding {
-	
-	cursor:crosshair;
-	
+	cursor: crosshair;
 }
 
 .edge-connector {
-	
-	fill:red;	
-	cursor:pointer;
-	
+	fill: red;
+	cursor: pointer;
 }
 
 .edge-connector:hover {
-	
-	fill:#FF9696;	
-	
+	fill: #FF9696;
 }

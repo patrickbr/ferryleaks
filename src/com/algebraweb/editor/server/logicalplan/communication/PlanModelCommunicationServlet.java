@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.tools.ant.types.CommandlineJava.SysProperties;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -89,21 +90,16 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid) throws PlanManipulationException {
 
 
-		HttpServletRequest request = this.getThreadLocalRequest();
-
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
-
 		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid,"delete", 1, "", null);
-
 
 		for (int nid : nids) {
 
-			PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+			PlanNode nodeToWork = getPlanToWork(planid).getPlanNodeById(nid);
 
 			if (nodeToWork == null) return new RemoteManipulationMessage(planid,"delete", 3, "Node doesn't exists in plan", null);
 
 
-			Iterator<PlanNode> it = planToWork.getPlan().iterator();
+			Iterator<PlanNode> it = getPlanToWork(planid).getPlan().iterator();
 
 			while (it.hasNext()) {
 
@@ -112,7 +108,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 			}
 
-			if (planToWork.getPlan().remove(nodeToWork)) {	
+			if (getPlanToWork(planid).getPlan().remove(nodeToWork)) {	
 
 
 				ret.getNodesAffected().add(new RawNode(nid));
@@ -137,14 +133,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public ValidationResult getValidation(int planid) {
 
-		System.out.println("Validation requested for " + planid);
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-
-		QueryPlan planToValidate = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
-
-		return vm.validate(planToValidate, planToValidate.getPlan());
-
+		return vm.validate(getPlanToWork(planid),  getPlanToWork(planid).getPlan());
 
 	}
 
@@ -154,14 +143,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		String ret = "";
 
 		HttpServletRequest request = this.getThreadLocalRequest();
-
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
-
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-
+	
 		ArrayList<ValidationError> vErrors;
 
-		if ((vErrors = vm.validate(planToWork,nodeToWork)).size() > 0) {
+		if ((vErrors = vm.validate(getPlanToWork(planid), getNodeToWork(planid,nid))).size() > 0) {
 
 			ret += "<div class='nodeinfo-error'>";
 
@@ -179,11 +164,11 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 		ret += "<div class='nodeinfo-block'><h4>Id:</h4>" + nid + "</div>";
-		ret += "<div class='nodeinfo-block'><h4>Type:</h4>"+ nodeToWork.getKind() +"</div>";
+		ret += "<div class='nodeinfo-block'><h4>Type:</h4>"+  getNodeToWork(planid,nid).getKind() +"</div>";
 
 		ret += "<div class='nodeinfo-block'><h4>Referencable columns:</h4>";
 
-		Iterator<Property> it = nodeToWork.getReferencableColumnsWithoutAdded().iterator();
+		Iterator<Property> it =  getNodeToWork(planid,nid).getReferencableColumnsWithoutAdded().iterator();
 
 		while(it.hasNext()) {
 
@@ -197,7 +182,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		ret += "<div class='nodeinfo-block'><h4>Referenced columns:</h4>";
 
-		it = nodeToWork.getReferencedColumns().iterator();
+		it = getNodeToWork(planid,nid).getReferencedColumns().iterator();
 
 		while(it.hasNext()) {
 
@@ -211,7 +196,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		ret += "<div class='nodeinfo-block'><h4>Columns introduced:</h4>";
 
-		it = nodeToWork.getAddedColumns().iterator();
+		it = getNodeToWork(planid,nid).getAddedColumns().iterator();
 
 		while(it.hasNext()) {
 
@@ -225,11 +210,11 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		ret += "<div class='nodeinfo-block'><h4>Columns discarded:</h4>";
 
-		if (nodeToWork.resetsColumns()) {
+		if (getNodeToWork(planid,nid).resetsColumns()) {
 			ret += "(all)";
 		}else{
 
-			it = nodeToWork.getRemovedColumns().iterator();
+			it = getNodeToWork(planid,nid).getRemovedColumns().iterator();
 
 			while(it.hasNext()) {
 
@@ -243,7 +228,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		ret+="</div>";
 
 
-		ret +=getNodeContentList(nodeToWork);
+		ret +=getNodeContentList(getNodeToWork(planid,nid));
 
 
 		return ret;
@@ -304,22 +289,12 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	@Override
 	public PlanNode getPlanNode(int nid, int pid) {
-		HttpServletRequest request = this.getThreadLocalRequest();
-
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-
-		return nodeToWork;
+		return getNodeToWork(pid,nid);
 	}
 
 
 	@Override
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml) throws PlanManipulationException {
-
-		System.out.println("Trying to save " + xml);
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 
 		PlanParser p = new PlanParser((HashMap<String,NodeScheme>)getServletContext().getAttribute("nodeSchemes"));
 
@@ -333,7 +308,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			Document doc;
 
 			doc = db.parse(s);
-			PlanNode newNode = p.parseNode(planToWork, (org.w3c.dom.Element)doc.getElementsByTagName("node").item(0));
+			PlanNode newNode = p.parseNode(getPlanToWork(pid), (org.w3c.dom.Element)doc.getElementsByTagName("node").item(0));
 			return updatePlanNode(nid,pid,newNode);
 
 		} catch (SAXException e) {
@@ -368,8 +343,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			nodeToWork.setContent(p.getContent());
 			nodeToWork.setChilds(p.getChilds());
 
-			System.out.println("Updated node #" + nid);
-			
+			System.out.println(p.getChilds());
 
 			ValidationResult res = getValidation(pid);
 
@@ -445,7 +419,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c) {
+	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c) throws PlanManipulationException {
 
 		Element e = getDomXMLLogicalPlanFromRootNode(pid, nid,c);
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
@@ -453,13 +427,13 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 
-	private Element getDomXMLLogicalPlanFromRootNode(int pid, int nid, EvaluationContext c) {
+	private Element getDomXMLLogicalPlanFromRootNode(int pid, int nid, EvaluationContext c) throws PlanManipulationException {
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 
-		Element e = npb.getNodePlan(pid, nodeToWork,c);
+		Element e = npb.getNodePlan(pid, nodeToWork,c,getServletContext());
 		return e;
 	}
 
@@ -540,7 +514,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c) {
+	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c) throws PlanManipulationException {
 
 		System.out.println("getting sql for plan #" + pid);
 
@@ -556,7 +530,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context) {
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context) throws PlanManipulationException {
 
 		SqlEvaluator eval = new SqlEvaluator(context);
 
@@ -652,7 +626,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public RemoteManipulationMessage addEdge(int planid, Coordinate e, int pos) {
+	public RemoteManipulationMessage addEdge(int planid, Coordinate e, int pos) throws PlanManipulationException {
 
 		HttpServletRequest request = this.getThreadLocalRequest();
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
@@ -663,19 +637,33 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		int from = (int) e.getX();
 		int to = (int) e.getY();
-		
+
 		PlanNode fromNode = planToWork.getPlanNodeById(from);
 		PlanNode toNode = planToWork.getPlanNodeById(to);
-		
-		
+
+
 		fromNode.addChild(toNode, pos);
-		
-		
+
+
 		ret.getNodesAffected().add(xmlpl.getRawNode(fromNode));
 		ret.setValidationResult(getValidation(planid));
-		
+
 
 		return ret;
+	}
+
+
+	private PlanNode getNodeToWork(int pid, int nid) {
+
+		return getPlanToWork(pid).getPlanNodeById(nid);
+
+	}
+
+	private QueryPlan getPlanToWork(int pid) {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		return ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+
 	}
 
 }

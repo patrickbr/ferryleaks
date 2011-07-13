@@ -33,6 +33,7 @@ import com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSorter;
 
 public class DotSorter implements RemoteSorter {
 
+	private static double DOT_CORRECTOR = 0.01818;
 	
 	/**
 	 * Returns a HashMap containing node-IDs as keys and Node-Coordinates as value
@@ -187,8 +188,8 @@ public class DotSorter implements RemoteSorter {
 
 	private String getDotNodeString(RawNode n) {
 
-		double width = ((double)n.getWidth()) / 55; 
-		double height = ((double)n.getHeight()) / 55;
+		double width = ((double)n.getWidth()) * DOT_CORRECTOR; 
+		double height = ((double)n.getHeight()) * DOT_CORRECTOR;
 
 		String ret ="";
 
