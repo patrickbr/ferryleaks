@@ -36,22 +36,24 @@ public class XMLNodePlanBuilder {
 		nodePlan.setAttribute("id", Integer.toString(id));
 		Element logicalPlan = new Element("logical_query_plan");
 		logicalPlan.setAttribute("unique_names", "true");
-		
-		SerializeRelationBuilder srb = new SerializeRelationBuilder(c,context);
-		
-		rootNode = srb.addSerializRelation(rootNode);
+
+		if (!rootNode.getKind().equals("serialize relation")) {
+
+			System.out.println("Adding serialize relation from eval context...");
+			SerializeRelationBuilder srb = new SerializeRelationBuilder(c,context);
+			rootNode = srb.addSerializRelation(rootNode);
+
+		}
 
 		HashMap<Integer,Integer> repl = new HashMap<Integer,Integer>();//getNodeIdReplacements(rootNode,0);
-		
+
 		ArrayList<PlanNode> nodes = getAllNodesUnderThis(rootNode);
-		
+
 		Collections.reverse(nodes);
 		Iterator<PlanNode> it = nodes.iterator();
 
 		while (it.hasNext()) {
-
 			logicalPlan.addContent(getXMLElementFromContentNode(it.next(),repl));
-
 		}
 
 		nodePlan.addContent(logicalPlan);
@@ -59,17 +61,56 @@ public class XMLNodePlanBuilder {
 
 	}
 
-	
+
+	private PlanNode getRootNode(QueryPlan p) {
+
+		ArrayList<PlanNode> temp = new ArrayList<PlanNode>();
+
+		temp.addAll(p.getPlan());
+
+		Iterator<PlanNode> itChilds = p.getPlan().iterator();
+
+		while (itChilds.hasNext()) {
+
+			deleteChildsFromPlan(itChilds.next(),temp);
+
+		}
+
+		//TODO: throws error if plan has cycle
+		return temp.get(0);
+
+	}
+
+	private void deleteChildsFromPlan(PlanNode p, ArrayList<PlanNode> plan) {
+
+
+		Iterator<PlanNode> it = p.getChilds().iterator();
+
+		while (it.hasNext()) {
+
+			PlanNode current = it.next();
+			plan.remove(current);
+
+		}
+
+
+	}
+
+
+
 
 	public Document getNodePlan(QueryPlan p, ServletContext context) throws PlanManipulationException {
-		
-		
+
+		PlanNode root = getRootNode(p);
+
+		System.out.println("Rootnode is #" + root.getId());
+
 		Document d = new Document();
-		
-		d.addContent(getNodePlan(p.getId(),p.getRoot(),p.getEvContext(),context));
-		
+
+		d.addContent(getNodePlan(p.getId(),getRootNode(p),p.getEvContext(),context));
+
 		return d;
-		
+
 	}
 
 
@@ -83,7 +124,7 @@ public class XMLNodePlanBuilder {
 		Iterator<PlanNode> it = nodes.iterator();
 
 		while (it.hasNext()) {
-			
+
 			int id = it.next().getId();
 
 			System.out.println("Mapping " + id + " to " + offset);
@@ -99,9 +140,9 @@ public class XMLNodePlanBuilder {
 
 	private ArrayList<PlanNode> getAllNodesUnderThis(PlanNode rootNode) {
 
-				
+
 		ArrayList<PlanNode> nodes = new ArrayList<PlanNode>();
-		
+
 		if (rootNode == null) return nodes;
 
 		Iterator<PlanNode> it = rootNode.getChilds().iterator();
@@ -129,7 +170,7 @@ public class XMLNodePlanBuilder {
 
 		}
 
-		
+
 		return nodes;
 
 
@@ -164,7 +205,7 @@ public class XMLNodePlanBuilder {
 
 			ret.setAttribute("kind", ((PlanNode)n).getKind());
 
-			
+
 
 		}else{
 
@@ -179,20 +220,20 @@ public class XMLNodePlanBuilder {
 
 				if (c.getPropertyVal().getType().equals("__NID") &&
 						nodeIdReplacements.get(Integer.parseInt(c.getPropertyVal().getVal()))!=null) {
-							
 
-						System.out.println("Replacing #" + Integer.parseInt(c.getPropertyVal().getVal()) + " with " + Integer.toString(nodeIdReplacements.get(Integer.parseInt(c.getPropertyVal().getVal()))));
-						ret.setAttribute(c.getPropertyName(), Integer.toString(nodeIdReplacements.get(Integer.parseInt(c.getPropertyVal().getVal()))));
-					
+
+					System.out.println("Replacing #" + Integer.parseInt(c.getPropertyVal().getVal()) + " with " + Integer.toString(nodeIdReplacements.get(Integer.parseInt(c.getPropertyVal().getVal()))));
+					ret.setAttribute(c.getPropertyName(), Integer.toString(nodeIdReplacements.get(Integer.parseInt(c.getPropertyVal().getVal()))));
+
 				}else{
 					ret.setAttribute(c.getPropertyName(), c.getPropertyVal().getVal());
 				}
 			}
-			
-			if (n instanceof ContentVal && ((ContentVal)n).getValue() !="") {
-				ret.addContent(new Text(((ContentVal)n).getValue()));
+
+			if (n instanceof ContentVal && ((ContentVal)n).getValue() !=null && ((ContentVal)n).getValue().getVal() !="") {
+				ret.addContent(new Text(((ContentVal)n).getValue().getVal()));
 			}
-			
+
 		}
 
 		Iterator<NodeContent> i = n.getContent().iterator();

@@ -5,6 +5,7 @@
 	<properties>
 	
 		<property name="color">0xeeeeee</property>
+		<property name="label_schema">[_kind]\n({column}), val: {value}</property>
 
 	</properties>
 
@@ -14,7 +15,7 @@
 	
 	  	<gointo xmlob="content" humanname="Columns to attach" howoften="1">
 
-			<val xmlob="column" namefield="name" humanname="Column" name="column" howoften="1">
+			<val xmlob="column" name_to_print="[name]" namefield="name" humanname="Column" name="column" howoften="1">
 
 				<fields>
 
@@ -23,7 +24,7 @@
 			
 				</fields>
 				
-				<val xmlob="value" namefield="type" humanname="Inserted values" name="value" howoften="*">
+				<val xmlob="value" hasval="true" name_to_print="&quot;[_val]&quot;" namefield="type" humanname="Inserted values" name="value" howoften="*">
 
 				<fields>
 

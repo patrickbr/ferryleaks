@@ -5,6 +5,8 @@
 	<properties>
 	
 		<property name="color">0x3600ff</property>
+		<property name="label_schema">{kind}\n({res_column}): &lt;{val_column}&gt;</property>
+		
 	
 	</properties>
 
@@ -14,7 +16,7 @@
 	
 	  	<gointo xmlob="content" howoften="1">
 	  	
-	  	    <val xmlob="kind" name="kind" howoften="1">
+	  	    <val xmlob="kind" name_to_print="[name]" name="kind" howoften="1">
 	  	    
 	  	    	<fields>
 	  	    
@@ -23,7 +25,7 @@
 	  	    
 	  	    </val>
 	  	    
-	  	    <val xmlob="column" name="column" howoften="1">
+	  	    <val xmlob="column" name_to_print="[name]" name="res_column" howoften="1">
 	  	    
 	  	    	<fields>
 	  	    		<field type="__COLUMN_NEW">name</field>
@@ -32,7 +34,7 @@
 	  	    
 	  	    </val>
 
-			<val xmlob="column" name="column" howoften="*">
+			<val xmlob="column" name_to_print="[name]" name="val_column" howoften="*">
 
 				<fields>
 

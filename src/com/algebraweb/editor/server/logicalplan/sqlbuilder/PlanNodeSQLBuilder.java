@@ -18,6 +18,8 @@ import org.jdom.output.XMLOutputter;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
+
 
 
 public class PlanNodeSQLBuilder {
@@ -35,7 +37,7 @@ public class PlanNodeSQLBuilder {
 
 
 
-	public HashMap<Integer,String> getCompiledSQL(Element planToCompile) {
+	public HashMap<Integer,String> getCompiledSQL(Element planToCompile) throws PathFinderCompilationError {
 
 		HashMap<Integer,String> ret = new HashMap<Integer,String>();
 		byte[] buffer = new byte[1024];
@@ -66,8 +68,6 @@ public class PlanNodeSQLBuilder {
 
 			while ((bytesRead = error.read(buffer)) != -1) {
 
-				//Process the chunk of bytes read
-				//in this case we just construct a String and print it out
 				String chunk = new String(buffer, 0, bytesRead);
 				errorMsg += chunk;
 			}		
@@ -89,29 +89,20 @@ public class PlanNodeSQLBuilder {
 
 					ret.put(id, plan.getElementsByTagName("query").item(0).getTextContent());
 
-					System.out.println("Added for plan #" + id + " SQL:" + plan.getElementsByTagName("query").item(0).getTextContent() );
-
 				}
 			} catch (SAXException e) {
-				
-				if (p.exitValue() == 0) {
-					//everything went okay for pathfinder, but still XML is buggy...
-					
-				}else{
-					
-					System.out.println(errorMsg);
-					
-				}
+
+
+				throw new PathFinderCompilationError(errorMsg);
 
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new PathFinderCompilationError(e.getMessage());
 
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new PathFinderCompilationError(e.getMessage());
+
 		}
 
 		return ret;

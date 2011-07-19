@@ -5,6 +5,8 @@
 	<properties>
 	
 		<property name="color">0xff3333</property>
+	    <property name="label_schema">[_kind]\n({column_res}: &lt;{column_to_s}&gt;)</property>
+	
 
 	</properties>
 
@@ -15,7 +17,7 @@
 
 		<gointo xmlob="content" howoften="1">
 
-			<val xmlob="column" name="column" howoften="1">
+			<val xmlob="column" humanname="Result column" name_to_print="[name]" name="column_res" howoften="1">
 
 				<fields>
 
@@ -26,39 +28,21 @@
 						
 			</val>
 			
-			<val xmlob="column" name="column" howoften="+">
+			<val xmlob="column" humanname="Sort columns" name_to_print="[name]" name="column_to_s" howoften="+">
 
 				<fields>
 
 					<field type="__COLUMN">name</field>
 					<field type="string">function</field>
 					<field type="int">position</field>
-					<field type="string">direction</field>
+					<field type="string" can_be="ascending,descending">direction</field>
 					<field type="boolean">new</field>
 			
 				</fields>
 						
 			</val>
 			
-			<val xmlob="column" name="column" howoften="1">
-
-				<fields>
-
-					<field type="string">name</field>
-					<field type="boolean">new</field>
-			
-				</fields>
-
-				<val xmlob="value" name="value" howoften="*">
-
-				<fields>
-					<field type="datatype">type</field>
-				</fields>
-				</val>
-							
-				
-			</val>
-
+	
 		</gointo>
 		
 		<val xmlob="edge" name="edgeto" howoften="{,2}">
@@ -80,6 +64,8 @@
 	<properties>
 	
 		<property name="color">0xff3333</property>
+	    <property name="label_schema">[_kind]\n({column_res}: &lt;{column_to_s}&gt;)</property>
+	
 
 	</properties>
 
@@ -90,7 +76,7 @@
 
 		<gointo xmlob="content" howoften="1">
 
-			<val xmlob="column" name="column" howoften="1">
+			<val xmlob="column" humanname="Result column" name_to_print="[name]" name="column_res" howoften="1">
 
 				<fields>
 
@@ -101,46 +87,28 @@
 						
 			</val>
 			
-			<val xmlob="column" name="column" howoften="+">
+			<val xmlob="column" humanname="Sort columns" name_to_print="[name]" name="column_to_s" howoften="+">
 
 				<fields>
 
 					<field type="__COLUMN">name</field>
 					<field type="string">function</field>
 					<field type="int">position</field>
-					<field type="string">direction</field>
+					<field type="string" can_be="ascending,descending">direction</field>
 					<field type="boolean">new</field>
 			
 				</fields>
 						
 			</val>
 			
-			<val xmlob="column" name="column" howoften="1">
-
-				<fields>
-
-					<field type="string">name</field>
-					<field type="boolean">new</field>
-			
-				</fields>
-
-				<val xmlob="value" name="value" howoften="*">
-
-				<fields>
-					<field type="datatype">type</field>
-				</fields>
-				</val>
-							
-				
-			</val>
-
+	
 		</gointo>
 		
-		<val xmlob="edge" name="edgeto" howoften="1">
+		<val xmlob="edge" name="edgeto" howoften="{,2}">
 		
 				<fields>
 
-					<field type="int">to</field>
+					<field type="__NID">to</field>
 							
 				</fields>
 				

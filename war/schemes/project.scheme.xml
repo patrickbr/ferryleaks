@@ -6,6 +6,7 @@
 	
 		<property name="color">0xeeeeee</property>
 		<property name="reset_columns">true</property>
+		<property name="label_schema">[_kind]\n({column_proj} {column_kept})</property>
 
 	</properties>
 
@@ -15,7 +16,7 @@
 	
 	  	<gointo xmlob="content" humanname="Projection" howoften="1">
 
-			<val xmlob="column" namefield="name" humanname="Projection columns" name="column" howoften="*">
+			<val xmlob="column" name_to_print="[old_name]:[name]" humanname="Projection columns" name="column_proj" howoften="*">
 
 				<fields>
 
@@ -27,7 +28,7 @@
 				</fields>
 						
 			</val>
-			<val xmlob="column" namefield="name" humanname="Kept columns"  name="column" howoften="*">
+			<val xmlob="column" name_to_print="[name]" humanname="Kept columns"  name="column_kept" howoften="*">
 
 				<fields>
 

@@ -18,14 +18,17 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class EvaluationDialog extends CreateXMLDialog {
+public class EvaluationDialog extends CreateSQLDialog {
 
-
+	private DatabaseConfigPanel db;
 
 	public EvaluationDialog(int pid, int nid, RemoteManipulationServiceAsync manServ) {
 
+			
 		super(pid,nid,manServ);
 		super.setText("Evaluation");
+		db = new DatabaseConfigPanel(pid, nid, manServ);
+		super.addTab(db, "Database");
 		
 	
 	}
@@ -38,7 +41,7 @@ public class EvaluationDialog extends CreateXMLDialog {
 		
 		getSerializationPanel().fillEvaluationContext(c);
 				
-		getManServ().eval(getPid(), getNid(),c, evalCb);
+		getManServ().eval(getPid(), getNid(),c,getSaveCurrenNodeValue(), evalCb);
 		
 	}
 	

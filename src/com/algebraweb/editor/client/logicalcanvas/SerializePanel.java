@@ -8,7 +8,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
@@ -25,34 +27,45 @@ public class SerializePanel extends LayoutPanel {
 	private final AvailableColumnsField iterColumn;
 	private final TextBox valueTextBox;
 	private RadioButton userUseColumn;
+	private RadioButton iterUseValue;
 	private final AvailableColumnsField sortColumn;
 	private final AvailableColumnsField sortOnColumn;
 	private final ListBox preDefinedSortingListBox;
 	private RadioButton useSortColumnButton;
+	private RadioButton useSortPreDefButton;
 
 	public SerializePanel(int pid, int nid, RemoteManipulationServiceAsync manServ ) {
 
 
 		super();
+		
 		this.manServ=manServ;
 		FlowPanel mainPanel = new FlowPanel();
 		FlowPanel iterPanel = new FlowPanel();
 		FlowPanel serPanel = new FlowPanel();
 
+		mainPanel.addStyleName("serialize-panel-inner");
+		
 		FlowPanel columnSelPanel = new FlowPanel();
 		FlowPanel columnAvPanel = new FlowPanel();
 
 		HorizontalPanel itemsPanel = new HorizontalPanel();
 
+		
+		
 		mainPanel.add(new Label("Iteration:"));
-		RadioButton iterUseValue  = new RadioButton("iteration","Use value: ");
+		iterUseValue  = new RadioButton("iteration","Use value: ");
+		iterUseValue.addStyleName("iter-use-value");
 		iterPanel.add(iterUseValue);
 		valueTextBox = new TextBox();
 		iterPanel.add(valueTextBox);
+		valueTextBox.addStyleName("value-text-box");
 		userUseColumn = new RadioButton("iteration","Use column: ");
 		iterPanel.add(userUseColumn);
-		iterColumn = new AvailableColumnsField(pid, nid,manServ);
+		userUseColumn.addStyleName("iter-use-column");
+		iterColumn = new AvailableColumnsField(pid, nid,true,manServ);
 		iterPanel.add(iterColumn);
+		iterColumn.addStyleName("iter-column");
 
 		this.addStyleName("loading");
 		this.addStyleName("serialize-panel");
@@ -89,28 +102,34 @@ public class SerializePanel extends LayoutPanel {
 
 
 
-		RadioButton useSortPreDefButton = new RadioButton("sorting","Use predefined: ");
-
+		useSortPreDefButton = new RadioButton("sorting","Use predefined: ");
+		useSortPreDefButton.addStyleName("use-sort-predef-button");
 		serPanel.add(useSortPreDefButton);
 
 		preDefinedSortingListBox = new ListBox();
 
-		preDefinedSortingListBox.addItem("ASCENDING");
-		preDefinedSortingListBox.addItem("DESCENDING");
+		preDefinedSortingListBox.addItem("ascending");
+		preDefinedSortingListBox.addItem("descending");
+		
+		preDefinedSortingListBox.addStyleName("predef-sorting-lb");
 
 		serPanel.add(preDefinedSortingListBox);
 
-		sortOnColumn = new AvailableColumnsField(pid, nid, manServ);
+		sortOnColumn = new AvailableColumnsField(pid, nid, true,manServ);
+		sortOnColumn.addStyleName("sort-on-col");
 
-		serPanel.add(new Label("sort on:"));
+		serPanel.add(new InlineHTML(" on: "));
 		serPanel.add(sortOnColumn);
+		serPanel.add(new InlineHTML("<br>"));
 
 		useSortColumnButton = new RadioButton("sorting","Use column: ");
-
+		useSortColumnButton.addStyleName("sort-column-button");
+		
 		serPanel.add(useSortColumnButton);
 
-		sortColumn = new AvailableColumnsField(pid, nid,manServ);
-
+		sortColumn = new AvailableColumnsField(pid, nid,true,manServ);
+		sortColumn.addStyleName("sort-column");
+		
 		serPanel.add(sortColumn);
 
 		useSortPreDefButton.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -142,11 +161,11 @@ public class SerializePanel extends LayoutPanel {
 		});
 
 
-		columnsAvailable = new AvailableColumnsField(pid, nid, manServ,true);
-
+		columnsAvailable = new AvailableColumnsField(pid, nid, true,manServ,true);
+		columnsAvailable.addStyleName("cols-av");
 		columnsAvailable.getWidget().setVisibleItemCount(10);
 
-		columnAvPanel.add(new Label("Columns available"));
+		columnAvPanel.add(new Label("Item columns"));
 		columnAvPanel.add(columnsAvailable);
 
 		itemsPanel.add(columnSelPanel);
@@ -154,8 +173,6 @@ public class SerializePanel extends LayoutPanel {
 
 		columnsAvailable.addStyleName("eval-item-columns-available");
 
-		columnSelPanel.add(new Label("Item columns selected:"));
-	
 		itemsPanel.add(columnAvPanel);
 
 
@@ -165,6 +182,7 @@ public class SerializePanel extends LayoutPanel {
 		mainPanel.add(serPanel);
 		mainPanel.add(itemsPanel);
 		this.add(mainPanel);
+		
 
 	}
 
@@ -189,6 +207,8 @@ public class SerializePanel extends LayoutPanel {
 		c.setSortOrder(preDefinedSortingListBox.getValue(preDefinedSortingListBox.getSelectedIndex()));
 		c.setSortUseColumn(useSortColumnButton.getValue());
 
+		c.setSortOrderColumnOn(sortOnColumn.getListBox().getValue(sortOnColumn.getListBox().getSelectedIndex()));
+		
 		String[] itemCols = columnsAvailable.getSelectedItems();
 
 		c.setItemColumns(itemCols);
@@ -205,8 +225,9 @@ public class SerializePanel extends LayoutPanel {
 		iterColumn.setProjectedSelection(c.getIterColumnName());
 		valueTextBox.setValue(Integer.toString(c.getIterColumnNat()),true);
 
-		userUseColumn.setValue(!c.isIterUseColumn(),true);
+		iterUseValue.setValue(!c.isIterUseColumn(),true);
 		userUseColumn.setValue(c.isIterUseColumn(),true);
+		
 
 
 		sortColumn.setProjectedSelection(c.getSortColumnName());
@@ -216,8 +237,10 @@ public class SerializePanel extends LayoutPanel {
 			if (preDefinedSortingListBox.getValue(i).equals(c.getSortOrder())) preDefinedSortingListBox.setSelectedIndex(i);
 
 		}
+		
+		sortOnColumn.setProjectedSelection(c.getSortOrderColumnOn());
 
-		useSortColumnButton.setValue(!c.isSortUseColumn(),true);
+		useSortPreDefButton.setValue(!c.isSortUseColumn(),true);
 		useSortColumnButton.setValue(c.isSortUseColumn(),true);
 
 		columnsAvailable.setProjectedSelection(c.getItemColumns());

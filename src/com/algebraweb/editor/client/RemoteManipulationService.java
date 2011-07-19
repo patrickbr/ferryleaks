@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client;
 
 import java.sql.Array;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,9 @@ import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
+import com.algebraweb.editor.client.logicalcanvas.SqlError;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
@@ -31,41 +34,41 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public RemoteManipulationMessage addEdge(int planid,Coordinate fromTo, int pos) throws PlanManipulationException;
 		
-	public ValidationResult getValidation(int planid);
+	public ValidationResult getValidation(int planid) throws PlanManipulationException;
 	
-	public String getNodeInformationHTML(int nid, int planid);
+	public String getNodeInformationHTML(int nid, int planid) throws PlanManipulationException;
 		
-	public PlanNode getPlanNode(int nid, int pid);
+	public PlanNode getPlanNode(int nid, int pid) throws PlanManipulationException;
 	
 	public ArrayList<Property> getReferencableColumns(int nid, int pid);
 	
 	public ArrayList<Property> getReferencableColumnsWithoutAdded(int nid, int pid);
 	
+	public ArrayList<Property> getReferencableColumnsWithoutAddedFromPos(int nid, int pid, int pos) throws PlanManipulationException;
+	
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid,PlanNode p) throws PlanManipulationException;
 	
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid,String xml) throws PlanManipulationException;
 	
-	public ArrayList<ValidationError> valideContentNodeGrammer(ContentNode c,ArrayList<GoAble> schema, boolean stayFlat); 
-
 	public String getXMLFromContentNode(ContentNode c);
 	
 	public String getXMLFromPlanNode(int pid, int nid);
 	
-	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c) throws PlanManipulationException;
+	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException;
 	
-	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c) throws PlanManipulationException;
+	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError;
 	
 	public String[] getNodeTypes();
 	
-	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context) throws PlanManipulationException;
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, SqlError;
 
 	public Integer createNewPlan();
 	
 	public void markAsRoot(int pid, int nid);
 	
-	public EvaluationContext getEvaluationContext(int pid, int nid);
+	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException;
 
-	public RemoteManipulationMessage deleteEdge(Coordinate[] edges, int planid);
+	public RemoteManipulationMessage deleteEdge(Coordinate[] edges, int planid) throws PlanManipulationException;
 	
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.AlgebraEditor;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
@@ -65,6 +66,7 @@ public class RemoteSorter implements GraphSorter {
 			rawNodeList.add(nNode);
 		}
 
+		AlgebraEditor.log("Sorting with sorter '" + sorter + "'");
 		commServ.doSort(sorter,rawNodeList, sortedCallback(cb));
 
 	}

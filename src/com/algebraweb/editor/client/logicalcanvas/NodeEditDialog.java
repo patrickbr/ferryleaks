@@ -85,7 +85,7 @@ public class NodeEditDialog extends DialogBox{
 		p.setSize("550px", "350px");
 
 
-		p.addWest(tree, 150);
+		p.addWest(tree, 220);
 
 
 		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
@@ -237,7 +237,7 @@ public class NodeEditDialog extends DialogBox{
 
 			//TODO!!!: plan id!!
 
-			pmm.updateNodeContent(0, node);
+			pmm.updateNodeContent(pid, node);
 		}else{
 
 			xmlEditPanel.save();

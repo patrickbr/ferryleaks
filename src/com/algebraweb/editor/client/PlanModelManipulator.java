@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
@@ -54,6 +55,8 @@ public class PlanModelManipulator {
 
 	public void deleteNode(Integer[] nids, int planid) {
 
+		if (nids.length == 0) return;
+		AlgebraEditor.log("Deleting node(s) " + Arrays.toString(nids) + " from plan #" + planid);
 		GraphCanvas.showLoading("Deleting node...");
 		manServ.deleteNodes(nids, planid, manipulationCallback);
 
@@ -63,6 +66,8 @@ public class PlanModelManipulator {
 
 	public void deleteEdges(Coordinate[] edges, int planid) {
 
+		if (edges.length == 0) return;
+		AlgebraEditor.log("Deleting edge(s) from plan #" + planid);
 		GraphCanvas.showLoading("Deleting edge...");
 		manServ.deleteEdge(edges, planid, manipulationCallback);
 
@@ -72,6 +77,7 @@ public class PlanModelManipulator {
 
 	public void addNode(int pid, String type, int x, int y) {
 
+		AlgebraEditor.log("Adding node of type " + type + " to plan #" + pid);
 		GraphCanvas.showLoading("Adding node...");
 		manServ.addNode(pid, type,x,y, manipulationCallback);
 
@@ -81,6 +87,7 @@ public class PlanModelManipulator {
 
 	public void addEdge(Coordinate e, int planid, int pos) {
 
+		AlgebraEditor.log("Adding edge from #" + (int)e.getX() + " to #" +(int) e.getY() + " to plan #" + planid);
 		GraphCanvas.showLoading("Adding edge...");
 		manServ.addEdge(planid, e, pos, manipulationCallback);
 
@@ -89,6 +96,7 @@ public class PlanModelManipulator {
 
 	public void validate(int planid) {
 
+		AlgebraEditor.log("Requesting validation for #" + planid);
 		manServ.getValidation(planid,validationCallback);
 
 	}
@@ -112,7 +120,7 @@ public class PlanModelManipulator {
 
 	public void updateNodeContent(int planid, PlanNode p) {
 
-
+		AlgebraEditor.log("Committing update of node #" + p.getId() + " for plan #" + planid);
 		manServ.updatePlanNode(p.getId(), planid, p, manipulationCallback);
 
 
@@ -120,7 +128,7 @@ public class PlanModelManipulator {
 
 	public void updateNodeContent(int planid, int nid, String XML) {
 
-
+		AlgebraEditor.log("Committing source update of node #" + nid + " for plan #" + planid);
 		manServ.updatePlanNode(nid, planid, XML, manipulationCallback);
 
 
@@ -166,6 +174,7 @@ public class PlanModelManipulator {
 
 			if (result.getReturnCode() == 1 ) {
 
+				AlgebraEditor.log(("   received a '" + result.getAction() + "' manipulation for plan #" + result.getPlanid()));
 				//success
 
 				if (result.getAction().equals("delete")) {
@@ -192,7 +201,7 @@ public class PlanModelManipulator {
 
 						GraphNode from = e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid());
 
-						
+						e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid()).setText(current.getText());
 
 						Iterator<RawEdge> i = current.getEdgesToList().iterator();
 
@@ -230,11 +239,14 @@ public class PlanModelManipulator {
 								current.getText(),								
 								current.getFixedChildCount());
 
-						GWT.log("a:"+ current.getFixedChildCount());
+					
 					}
 				}
 
 				showValidation(result.getValidationResult());
+
+				e.getCanvas(result.getPlanid()).updateSQLListener();
+
 			}
 
 

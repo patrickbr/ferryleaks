@@ -5,6 +5,8 @@
 	<properties>
 	
 		<property name="color">0xffa500</property>
+		<property name="label_schema">[_kind]</property>
+		
 		
 	</properties>
 

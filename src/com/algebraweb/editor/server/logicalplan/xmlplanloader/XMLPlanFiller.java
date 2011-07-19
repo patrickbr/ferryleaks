@@ -30,6 +30,8 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		this.session=s;
 		this.id=id;
 		this.context = context;
+		
+		System.out.println("Initialized XMLPlanFiller with id=" + id);
 
 	}
 
@@ -43,12 +45,16 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 
 	@Override
 	public boolean hasNextNode() {
-		// TODO Auto-generated method stub
+		
+		System.out.println("call to hasnextnode for id=" + id);
+		
 		return it.hasNext();
 	}
 
 	@Override
 	public void init() {
+		
+		System.out.println("call to init for id=" + id);
 
 		QueryPlanBundle qps = (QueryPlanBundle) session.getAttribute("queryPlans");
 
@@ -72,8 +78,6 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 
 		while (it.hasNext()) {
 
-
-
 			PlanNode current = it.next();
 
 			if (current != null) {
@@ -90,7 +94,7 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 	public RawNode getRawNode(PlanNode current) {
 
 
-		RawNode temp = new RawNode(current.getId(), current.getKind(), 0xCCCCCC, 130, 25);
+		RawNode temp = new RawNode(current.getId(), current.getLabel(), 0xCCCCCC, 130, 25);
 
 		temp.setFixedChildCount(current.getMaxChildCount());
 				

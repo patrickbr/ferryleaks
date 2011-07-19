@@ -65,8 +65,6 @@ public class GraphCanvasRemoteFillingMachine {
 
 		GraphCanvas.hideLoading();
 
-		//automatically sort...
-		c.sort(new RemoteSorter("dot"));
 
 
 

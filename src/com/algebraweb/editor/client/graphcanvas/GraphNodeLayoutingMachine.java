@@ -3,6 +3,7 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 
@@ -39,7 +40,7 @@ public class GraphNodeLayoutingMachine {
 	 * @param sorter
 	 */
 
-	public void sortGraph(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges,GraphSorter sorter) {
+	public void sortGraph(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges,GraphSorter sorter, final boolean layout) {
 
 		this.nodes=nodes;
 		this.edges=edges;
@@ -57,8 +58,8 @@ public class GraphNodeLayoutingMachine {
 		}		
 
 
-
-		GWT.log("Layouting...");
+		
+	
 		GraphCanvas.showLoading("Layouting...");
 
 
@@ -68,17 +69,19 @@ public class GraphNodeLayoutingMachine {
 			public void onComplete() {
 
 				GraphCanvas.hideLoading();
-				layout(GraphNodeLayoutingMachine.this.nodes);
+				if (layout)	layout(GraphNodeLayoutingMachine.this.nodes,true);
 
 			}
 
 		});
+		
+		
 
 	}
 
-	public void layout(ArrayList<GraphNode> nodes) {
+	public void layout(ArrayList<GraphNode> nodes, boolean animate) {
 
-
+		AlgebraEditor.log("Layouting with animate = " + Boolean.toString(animate));
 		Iterator<GraphNode> a = nodes.iterator();
 
 		int width=0;
@@ -124,14 +127,14 @@ public class GraphNodeLayoutingMachine {
 		offsetX=180;
 		offsetY=100;
 
-		a = GraphNodeLayoutingMachine.this.nodes.iterator();
+		a = nodes.iterator();
 
 
 		while(a.hasNext()) {
 
 			GraphNode current = a.next();
 
-			if (!c.isNotActive()) {
+			if (!c.isNotActive() && animate) {
 				gnm.animateTo(current,current.getX()+offsetX, current.getY()+offsetY);
 			}else{
 				gnm.moveTo(current,current.getX()+offsetX, current.getY()+offsetY);

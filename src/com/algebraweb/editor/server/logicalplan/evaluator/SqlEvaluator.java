@@ -15,6 +15,7 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.SqlError;
 
 public class SqlEvaluator {
 
@@ -25,18 +26,18 @@ public class SqlEvaluator {
 	private static String database = "bugferrytest";
 	private static String dbUser = "bugferry";
 	private static String dbPassword = "test";
-	
+
 	private EvaluationContext c;
 
 	public SqlEvaluator(EvaluationContext c) {
-		
+
 		this.c=c;
-		
-		
+
+
 		try {
 
 			Class.forName("org.postgresql.Driver");
-			
+
 
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dbHost + ":"
 					+ dbPort + "/" + database, dbUser, dbPassword);
@@ -48,24 +49,22 @@ public class SqlEvaluator {
 	}
 
 
-	public ArrayList<HashMap<String,String>> eval(String qry) {
+	public ArrayList<HashMap<String,String>> eval(String qry) throws SqlError {
 
 
 		Statement query;
 		ArrayList<HashMap<String,String>> res = null;
 		QueryRunner qrun = new QueryRunner();
 
-
 		try {
-			query = conn.createStatement();
+		query = conn.createStatement();
 
+		
 			res = (ArrayList<HashMap<String,String>>) qrun.query(conn, qry, new SerializableHandler());
-			
-
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new SqlError(e.getMessage());
 		}
+
 
 		return res;
 

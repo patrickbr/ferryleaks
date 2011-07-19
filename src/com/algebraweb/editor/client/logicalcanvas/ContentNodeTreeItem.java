@@ -22,30 +22,23 @@ public class ContentNodeTreeItem extends NodeTreeItem{
 	private GoAble scheme;
 	protected RemoteManipulationServiceAsync manServ;
 	private String name = "";
+	private ArrayList<ValidationError> errors;
 
 
 	public ContentNodeTreeItem(RemoteManipulationServiceAsync manServ,NodeContent c, GoAble scheme) {
 
-
 		this.c=c;
 		this.scheme=scheme;
 		this.manServ=manServ;
-		
-		name = c.getInternalName();
-		
-		if (scheme instanceof Value && ((Value) scheme).getNameField() != "" && c.getAttributes().containsKey(((Value) scheme).getNameField())) {
-			
-			name = c.getAttributes().get(((Value) scheme).getNameField()).getVal();
-			
-		}
+
+		name = c.getLabel();
 
 		super.setWidget(new HTML("<span style='font-style:italic'>"+ name + "</span>"));
-
-
-		manServ.valideContentNodeGrammer(c, scheme.getSchema(),true,contentNodeValidationCallBack);
-
-
 		
+		if (c.getEvalRes() != null && !c.getEvalRes().isEmpty()) {
+			ContentNodeTreeItem.this.setWidget(new HTML("<span style='color:red'>" + "<span style='font-style:italic'>"+ name + "</span>" + "</span>"));
+			errors = c.getEvalRes();
+		}
 
 	}
 
@@ -72,26 +65,15 @@ public class ContentNodeTreeItem extends NodeTreeItem{
 
 	}
 
-	
 
-	private AsyncCallback<ArrayList<ValidationError>> contentNodeValidationCallBack = new AsyncCallback<ArrayList<ValidationError>>() {
 
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-		}
 
-		@Override
-		public void onSuccess(ArrayList<ValidationError> result) {
-
-			if (!result.isEmpty()) {
-				ContentNodeTreeItem.this.setWidget(new HTML("<span style='color:red'>" + "<span style='font-style:italic'>"+ name + "</span>" + "</span>"));
-				
-			}
-
-		}
-
-	};
+	/**
+	 * @return the errors
+	 */
+	public ArrayList<ValidationError> getErrors() {
+		return errors;
+	}
 
 
 

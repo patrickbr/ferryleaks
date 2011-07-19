@@ -4,21 +4,32 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import java.util.ArrayList;
 
-public class Raphael extends Widget {
+public class Raphael extends FlowPanel {
 
   private RaphaelJS overlay;
   private final ArrayList<Shape> shapes = new ArrayList<Shape>();
+  private final Element raphaelElement;
 
   public Raphael(int width, int height) {
     super();
     Element raphaelDiv = DOM.createDiv();
-    setElement(raphaelDiv);
+    super.getElement().appendChild(raphaelDiv);
+    raphaelElement = raphaelDiv;
+    sinkEvents(Event.KEYEVENTS);
     overlay = RaphaelJS.create(raphaelDiv, width, height);
   }
 
+  public Element getRaphaelElement() {
+	  
+	  return raphaelElement;
+	  
+  }
+  
   public static boolean isSupported() {
     return RaphaelJS.isDefined();
   }

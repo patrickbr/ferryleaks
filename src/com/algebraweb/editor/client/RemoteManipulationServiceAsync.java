@@ -31,9 +31,6 @@ public interface RemoteManipulationServiceAsync {
 	void updatePlanNode(int nid, int pid, String xml,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
-	void valideContentNodeGrammer(ContentNode c, ArrayList<GoAble> schema,
-			boolean stayFlat, AsyncCallback<ArrayList<ValidationError>> callback);
-
 	void getReferencableColumnsWithoutAdded(int nid, int pid,
 			AsyncCallback<ArrayList<Property>> callback);
 
@@ -45,7 +42,7 @@ public interface RemoteManipulationServiceAsync {
 			AsyncCallback<RemoteManipulationMessage> callback);
 
 	void getXMLLogicalPlanFromRootNode(int pid, int nid, EvaluationContext c,
-			AsyncCallback<String> callback);
+			boolean saveContext, AsyncCallback<String> callback);
 
 	void addNode(int planid, String nodeType, int x, int y,
 			AsyncCallback<RemoteManipulationMessage> callback);
@@ -53,9 +50,9 @@ public interface RemoteManipulationServiceAsync {
 	void getNodeTypes(AsyncCallback<String[]> callback);
 
 	void getSQLFromPlanNode(int pid, int nid, EvaluationContext c,
-			AsyncCallback<String> callback);
+			boolean saveContext, AsyncCallback<String> callback);
 
-	void eval(int pid, int nid, EvaluationContext context,
+	void eval(int pid, int nid, EvaluationContext context, boolean saveContext,
 			AsyncCallback<ArrayList<HashMap<String, String>>> callback);
 
 	void createNewPlan(AsyncCallback<Integer> callback);
@@ -76,6 +73,8 @@ public interface RemoteManipulationServiceAsync {
 
 	void addEdge(int planid, Coordinate fromTo, int pos,
 			AsyncCallback<RemoteManipulationMessage> callback);
-		
+
+	void getReferencableColumnsWithoutAddedFromPos(int nid, int pid, int pos,
+			AsyncCallback<ArrayList<Property>> callback);
 
 }

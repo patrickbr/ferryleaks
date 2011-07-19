@@ -19,10 +19,10 @@ public class ContentVal extends NodeContent {
 
 	
 
-	private String value;
+	private PropertyValue value;
 
 
-	public ContentVal(String name, String internalName,String value) {
+	public ContentVal(String name, String internalName,PropertyValue value) {
 		
 		this.name=name;
 		this.value=value;
@@ -48,12 +48,12 @@ public class ContentVal extends NodeContent {
 
 
 
-	public String getValue() {
+	public PropertyValue getValue() {
 		return value;
 	}
 
 
-	public void setValue(String value) {
+	public void setValue(PropertyValue value) {
 		this.value = value;
 	}
 	

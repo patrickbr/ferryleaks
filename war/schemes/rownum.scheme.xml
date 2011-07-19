@@ -32,7 +32,7 @@
 	  	    	<field type="__COLUMN">name</field>
 	  	    	<field type="string" must_be="sort">function</field>
 	  	    	<field type="boolean" must_be="false">new</field>
-	  	        <field type="string">direction</field>
+	  	        <field can_be="ascending,descending" type="string">direction</field>
 	  	        <field type="int">position</field>
 	  	        
 	  	        </fields>

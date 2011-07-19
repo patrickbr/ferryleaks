@@ -5,7 +5,7 @@ import java.util.HashMap;
 public abstract class NodeSelectionHandler {
 	
 	
-	public abstract void isSelected(HashMap<Integer,GraphNode> nodes);
+	public abstract void isSelected(GraphNode nodes);
 	
 
 }

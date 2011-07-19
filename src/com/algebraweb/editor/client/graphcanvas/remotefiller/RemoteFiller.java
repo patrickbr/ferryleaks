@@ -3,7 +3,9 @@ package com.algebraweb.editor.client.graphcanvas.remotefiller;
 import java.util.ArrayList;
 
 
+import com.algebraweb.editor.client.AlgebraEditor;
 import com.algebraweb.editor.client.RawNode;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvasErrorDialogBox;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,11 +27,7 @@ public class RemoteFiller {
 	private String filler;
 	private String args = "";
 
-	public RemoteFiller(String filler) {
 
-		this.filler=filler;
-
-	}
 
 	public RemoteFiller(String filler, String args) {
 
@@ -40,6 +38,7 @@ public class RemoteFiller {
 
 	public void init(GraphCanvasRemoteFillingMachine m, GraphManipulationCallback cb) {
 
+		AlgebraEditor.log("Calling commServ for raw nodes with args: " + args);
 		commServ.getRawNodes(filler,args,nodeCallback);
 		this.m=m;
 		this.cb=cb;
@@ -51,7 +50,9 @@ public class RemoteFiller {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
+
+			new GraphCanvasErrorDialogBox("Error while getting graph from server (" + caught.getClass().getName() + "): " + caught.getMessage());
+
 		}
 
 		@Override

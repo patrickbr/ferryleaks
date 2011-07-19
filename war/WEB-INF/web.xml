@@ -36,6 +36,16 @@
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>RegistrationServiceServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.registrationservice.RegistrationServiceServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>RegistrationServiceServlet</servlet-name>
+    <url-pattern>/algebraeditor/register</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>FileServerServlet</servlet-name>
     <servlet-class>com.algebraweb.editor.server.fileserver.FileServerServlet</servlet-class>
   </servlet>

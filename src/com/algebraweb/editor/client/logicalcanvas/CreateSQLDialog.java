@@ -3,17 +3,28 @@ package com.algebraweb.editor.client.logicalcanvas;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CheckBox;
 
-public class CreateSQLDialog extends CreateXMLDialog {
+public class CreateSQLDialog extends CreateEvaluationContextDialog {
 
-
+	private CheckBox cb;
 
 	public CreateSQLDialog(int pid, int nid, RemoteManipulationServiceAsync manServ) {
 
 		super(pid,nid,manServ);
 		super.setText("SQL generation");
-		
 	
+		cb = new CheckBox();
+		cb.setText("Save for current node");
+
+		addButton(cb);
+	
+	}
+	
+	protected boolean getSaveCurrenNodeValue() {
+		
+		return cb.getValue();
+		
 	}
 	
 	@Override
@@ -24,7 +35,7 @@ public class CreateSQLDialog extends CreateXMLDialog {
 		
 		getSerializationPanel().fillEvaluationContext(c);
 		
-		getManServ().getSQLFromPlanNode(getPid(), getNid(), c, sqlCb);
+		getManServ().getSQLFromPlanNode(getPid(), getNid(), c,cb.getValue(), sqlCb);
 		
 		
 	}

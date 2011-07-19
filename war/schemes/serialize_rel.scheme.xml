@@ -5,6 +5,8 @@
 	<properties>
 	
 		<property name="color">0xc0c0c0</property>
+		<property name="label_schema">[_kind]\n({column_item}) order by ({column_pos})</property>
+		
 		
 	</properties>
 
@@ -14,7 +16,7 @@
 	
 	  	<gointo xmlob="content" howoften="1">
 
-			<val xmlob="column" name="column" howoften="1">
+			<val xmlob="column" name_to_print="[name]" name="column_iter" howoften="1">
 
 				<fields>
 
@@ -26,7 +28,7 @@
 						
 			</val>
 			
-			<val xmlob="column" name="column" howoften="1">
+			<val xmlob="column" name_to_print="[name]" name="column_pos" howoften="1">
 
 				<fields>
 
@@ -38,7 +40,7 @@
 						
 			</val>
 			
-			<val xmlob="column" name="column" howoften="*">
+			<val xmlob="column" name_to_print="[name]" name="column_item" howoften="*">
 
 				<fields>
 

@@ -30,7 +30,7 @@
 
 				<fields>
 
-					<field type="string">kind</field>
+					<field type="string" can_be="avg,max,min,sum,count,seqty1,all,prod,distinct">kind</field>
 						
 				</fields>
 				

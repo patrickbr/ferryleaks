@@ -1,6 +1,7 @@
 package com.algebraweb.editor.server.logicalplan.validation.validators;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.node.ContentNode;
@@ -65,24 +66,91 @@ public class GrammarValidator implements Validator {
 		currentNodeValidaded = n.getId();
 		currentSchema = n.getKind();
 
-		res.addAll(validateContentNode(n,nodeScheme.getSchema()));
+		res.addAll(validateContentNode(n,nodeScheme));
 		return res;
 
 	}
 
-	public ArrayList<ValidationError> validateContentNode(ContentNode n, ArrayList<GoAble> g) {
+	public ArrayList<ValidationError> validateContentNode(ContentNode n,GoAble g) {
 
 		return validateContentNode(n, g, false);
 
 
 	}
+	
+	
+	
+	public void fillContentNodeWithContentValidationResults(ContentNode n, ArrayList<GoAble> schema) {
+		
+		
+		Iterator<GoAble> it = schema.iterator();
+		
+		
+		while (it.hasNext()) {
+			
+			GoAble cur = it.next();
+			
+			Iterator<NodeContent> i = n.getDirectNodeContentByScheme(cur).iterator();
+			
+			while (i.hasNext()) {
+				
+				NodeContent curr = i.next();
+				curr.setEvalRes(validateContentNode(curr,cur,true)); 
+				
+			}
+		
+			
+		}
+		
+		
+		
+		
+	}
+	
+	
 
-
-	public ArrayList<ValidationError> validateContentNode(ContentNode n, ArrayList<GoAble> g, boolean stayFlat) {
+	public ArrayList<ValidationError> validateContentNode(ContentNode n, GoAble g, boolean stayFlat) {
 
 		ArrayList<ValidationError> res = new ArrayList<ValidationError>();
+				
+		
+		
+		if (g instanceof Value && n instanceof NodeContent) {
+			
+			Iterator<Field> it = ((Value)g).getFields().iterator();
+			
+			while (it.hasNext()) {
+				
+				Field current = it.next();
+				
+				String val = ((NodeContent) n).getAttributes().get(current.getVal()).getVal();
+				
+				if (current.hasCanBe() && !Arrays.asList(current.getCanBe()).contains(val)) {
+					
+					String retMsg = "Attribute " + current.getVal() + " is expected to be one of {";
+					
+					for (String i:current.getCanBe()) {
+						
+						retMsg += i + ", ";
+						
+					}
+					
+					retMsg += "}";
+					retMsg.replaceAll(", \\}", "}");
+	
+					
+					res.add(new ValidationError(currentNodeValidaded,retMsg));
+					
+				}
+				
+				
+			}
+			
+			
+		}
+		
 
-		Iterator<GoAble> it = g.iterator();
+		Iterator<GoAble> it = g.getSchema().iterator();
 
 		while (it.hasNext()) {
 
@@ -166,6 +234,7 @@ public class GrammarValidator implements Validator {
 				}
 
 			}
+		
 
 			if (!stayFlat) {
 
@@ -173,7 +242,7 @@ public class GrammarValidator implements Validator {
 
 				while (itt.hasNext()) {
 
-					res.addAll(validateContentNode(itt.next(),current.getSchema()));
+					res.addAll(validateContentNode(itt.next(),current));
 
 				}
 			}

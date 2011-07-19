@@ -31,7 +31,7 @@ public class GoInto implements GoAble {
 		this.xmlObject=xmlObject;
 		this.howOften = howOften;
 		this.humanName = humanName;
-
+		
 	}
 
 	public void addChild(GoAble child) {

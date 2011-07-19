@@ -46,7 +46,7 @@ public class TabbedDialog extends DialogBox{
 		getTabPanel().add(w, title);
 	}
 	
-	protected void addButton(Button b) {
+	protected void addButton(Widget b) {
 		getButtonsPanel().add(b);
 		p.setWidgetBottomHeight(buttonsPanel, 0, Unit.PX, 50, Unit.PX);
 	}

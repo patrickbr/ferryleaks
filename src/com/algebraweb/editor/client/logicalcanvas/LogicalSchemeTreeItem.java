@@ -67,7 +67,7 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 
 		if (scheme instanceof Value) {
 
-			n = new ContentVal(((Value)scheme).getValName(),((Value)scheme).getXmlObject(),"");
+			n = new ContentVal(((Value)scheme).getValName(),((Value)scheme).getXmlObject(),null);
 
 
 			Iterator<Field> it = scheme.getFields().iterator();

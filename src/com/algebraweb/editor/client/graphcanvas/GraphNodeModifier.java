@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -11,8 +12,10 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.ui.Widget;
 import com.hydro4ge.raphaelgwt.client.AnimationCallback;
 import com.hydro4ge.raphaelgwt.client.Raphael.Circle;
+import com.hydro4ge.raphaelgwt.client.Raphael.Text;
 
 public class GraphNodeModifier {
 
@@ -47,13 +50,21 @@ public class GraphNodeModifier {
 		newAttrs.put("x", new JSONNumber(x));
 		newAttrs.put("y", new JSONNumber(y));
 
-		JSONObject newAttrsText = new JSONObject();
+		int i=0;
 
-		newAttrsText.put("x", new JSONNumber(x + n.getWidth()/2));
-		newAttrsText.put("y", new JSONNumber(y + n.getHeight()/2));
+		for (Text t:n.getText()) {
+
+			JSONObject newAttrsText = new JSONObject();
+
+			newAttrsText.put("x", new JSONNumber(x + n.getWidth()/2));
+			newAttrsText.put("y", new JSONNumber(y + (n.getLineHeight()/2) + 5 + (i*n.getLineHeight())));
+
+			t.animate(newAttrsText,1000, "backIn");
+			i++;
+		}
 
 		n.getShape().animate(newAttrs,1000, "backIn",buildAnimationCallback(n));
-		n.getText().animate(newAttrsText,1000, "backIn");
+
 
 		Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
 
@@ -69,6 +80,21 @@ public class GraphNodeModifier {
 			current.getShape().animate(newAttrsShape,1000, "backIn");
 
 		}
+		
+		Iterator<ConnectedWidget> itw = n.getConnectedWidgets().values().iterator();
+
+		while (itw.hasNext()) {
+
+			ConnectedWidget current = itw.next();
+
+			current.getElement().getStyle().setTop(((y +(n.getHeight()/2) + current.getY())/c.getScale() + c.getMarginTop()), Unit.PX);
+			current.getElement().getStyle().setLeft((x + current.getX())/c.getScale() + c.getMarginLeft(), Unit.PX);
+
+
+		}
+		
+		
+		
 
 	}
 
@@ -101,8 +127,9 @@ public class GraphNodeModifier {
 		JSONObject newAttrs = new JSONObject();
 		newAttrs.put("opacity", new JSONNumber(0));
 		n.getShape().animate(newAttrs,1000);
-		n.getText().animate(newAttrs,1000);
-
+		for (Text t:n.getText()) {
+			t.animate(newAttrs,1000);
+		}
 		Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
 
 		while (it.hasNext()) {
@@ -145,7 +172,7 @@ public class GraphNodeModifier {
 
 		JSONObject newAttrs = new JSONObject();
 
-		newAttrs.put("stroke-width", new JSONNumber(2));
+		newAttrs.put("stroke-width", new JSONNumber(3));
 
 		n.getShape().animate(newAttrs, 300);
 
@@ -196,8 +223,12 @@ public class GraphNodeModifier {
 			n.getShape().attr("x", x);
 			n.getShape().attr("y", y);
 
-			n.getText().attr("x", x + n.getWidth()/2);
-			n.getText().attr("y", y + n.getHeight()/2);
+			int i=0;
+			for (Text t:n.getText()) {
+				t.attr("x", x + n.getWidth()/2);
+				t.attr("y", y + (n.getLineHeight()/2) + 5 + (n.getLineHeight())*i);
+				i++;
+			}
 
 
 			Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
@@ -210,6 +241,18 @@ public class GraphNodeModifier {
 				current.getShape().attr("y", y + current.getY());
 
 			}
+			
+			Iterator<ConnectedWidget> itw = n.getConnectedWidgets().values().iterator();
+
+			while (itw.hasNext()) {
+
+				ConnectedWidget current = itw.next();
+
+				current.getElement().getStyle().setTop((y+(n.getHeight()/2) + current.getY())/c.getScale() + c.getMarginTop(), Unit.PX);
+				current.getElement().getStyle().setLeft((x + current.getX())/c.getScale()+ c.getMarginLeft(), Unit.PX);
+
+
+			}
 
 
 			n.setX(x);
@@ -217,6 +260,24 @@ public class GraphNodeModifier {
 
 			update(n,false,false);
 		}
+	}
+	
+	protected void updateConnectedWidgets(GraphNode n) {
+		
+		
+		Iterator<ConnectedWidget> itw = n.getConnectedWidgets().values().iterator();
+
+		while (itw.hasNext()) {
+
+			ConnectedWidget current = itw.next();
+
+			current.getElement().getStyle().setTop((n.getY()+(n.getHeight()/2) + current.getY())/c.getScale() + c.getMarginTop(), Unit.PX);
+			current.getElement().getStyle().setLeft((n.getX() + current.getX())/c.getScale()+ c.getMarginLeft(), Unit.PX);
+
+
+		}
+		
+		
 	}
 
 	private AnimationCallback buildAnimationCallback(final GraphNode n) {
@@ -303,10 +364,10 @@ public class GraphNodeModifier {
 
 					step = Math.round(gurr /(current.getFrom().getFixedChildCount()+1));
 					c=current.getFixedParentPos();
-					
-					
+
+
 					this.c.getGraphEdgeModifier().updateOffsetFrom(current,step * c,quiet,animated);
-					
+
 
 				}else{
 
@@ -319,7 +380,7 @@ public class GraphNodeModifier {
 				if (current.getFrom().getFixedChildCount() != -1 && current.getFixedParentPos() != -1) {
 
 					step = Math.round(gurr /(current.getFrom().getFixedChildCount()+1));
-									
+
 					ret = step * current.getFixedParentPos();
 
 				}else{
@@ -380,7 +441,9 @@ public class GraphNodeModifier {
 
 	protected void kill(GraphNode n) {
 
-		n.getText().remove();
+		for (Text t:n.getText()) {
+			t.remove();
+		}
 		n.getShape().remove();
 
 		Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
@@ -392,26 +455,35 @@ public class GraphNodeModifier {
 			current.getShape().remove();
 
 		}
+		
+		Iterator<ConnectedWidget> iter = n.getConnectedWidgets().values().iterator();
+
+		while (iter.hasNext()) {
+
+			ConnectedWidget current = iter.next();
+			c.remove(current);
+
+		}
 	}
 
 	protected void connectShapeToNode(String identifier,ConnectedShape s, GraphNode n) {
 
 		n.getConnectedShapes().put(identifier, s);
-	
+
 		if (s.getShape() instanceof Circle) {
-			
-			
+
+
 			s.getShape().attr("cx",n.getX() + s.getX());
 			s.getShape().attr("cy",n.getY() + s.getY());	
-			
+
 		}else{
-			
-			
+
+
 			s.getShape().attr("x",n.getX() + s.getX());
 			s.getShape().attr("y",n.getY() + s.getY());	
-			
+
 		}
-		
+
 	}
 
 	protected void removeShapeFromNode(String identifier,GraphNode n) {
@@ -421,7 +493,7 @@ public class GraphNodeModifier {
 			s.getShape().remove();
 			n.getConnectedShapes().remove(identifier);
 		}
-		
+
 
 	}
 
@@ -433,17 +505,7 @@ public class GraphNodeModifier {
 			public void onMouseMove(MouseMoveEvent event) {
 
 				FullScreenDragPanel.preventDrag();
-
-				if (!n.aniLock()) {
-
-					JSONObject newAttrs = new JSONObject();
-
-					newAttrs.put("stroke", new JSONString("#000"));
-
-					n.getShape().animate(newAttrs, 100);
-
-
-				}
+				n.getShape().attr("fill-opacity",0.9);
 
 			}
 		};
@@ -458,17 +520,33 @@ public class GraphNodeModifier {
 			public void onMouseOut(MouseOutEvent event) {
 
 				FullScreenDragPanel.unPreventDrag();
+				n.getShape().attr("fill-opacity",1);
 
-				if (!n.aniLock()) {
-
-					JSONObject newAttrs = new JSONObject();
-					newAttrs.put("stroke", new JSONString("#555"));
-					n.getShape().animate(newAttrs, 100);
-
-				}
 			}
 
 		};
+
+	}
+
+
+	public void connectWidgetToNode(String identifier, ConnectedWidget w, GraphNode n) {
+
+
+		n.getConnectedWidgets().put(identifier, w);
+
+		w.getElement().getStyle().setTop((n.getY() +(n.getHeight()/2) + w.getY())/c.getScale() + c.getMarginTop(), Unit.PX);
+		w.getElement().getStyle().setLeft((n.getX() + w.getX())/c.getScale() + + c.getMarginLeft(), Unit.PX);
+
+
+	}
+	
+	public Widget unhandWidgetToNode(String identifier, GraphNode n) {
+
+
+		
+		Widget w = n.getConnectedWidgets().get(identifier);
+		n.getConnectedWidgets().remove(identifier);
+		return w;
 
 	}
 

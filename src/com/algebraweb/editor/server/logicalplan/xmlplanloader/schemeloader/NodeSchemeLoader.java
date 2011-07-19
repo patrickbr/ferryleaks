@@ -140,20 +140,20 @@ public class NodeSchemeLoader {
 		String name = n.getAttributes().getNamedItem("name") != null?n.getAttributes().getNamedItem("name").getNodeValue() : xmlOb;
 		String howOften = n.getAttributes().getNamedItem("howoften").getNodeValue() != null?n.getAttributes().getNamedItem("howoften").getNodeValue():"1";
 		String humanName = n.getAttributes().getNamedItem("humanname") != null?n.getAttributes().getNamedItem("humanname").getNodeValue():name;
-		String nameField = n.getAttributes().getNamedItem("namefield") != null?n.getAttributes().getNamedItem("namefield").getNodeValue():"";
+		String nameToPrint = n.getAttributes().getNamedItem("name_to_print") != null?n.getAttributes().getNamedItem("name_to_print").getNodeValue():"";
+		
 		boolean hasVals = Boolean.parseBoolean(n.getAttributes().getNamedItem("hasval") != null?n.getAttributes().getNamedItem("hasval").getNodeValue():"false");
 		boolean editable = Boolean.parseBoolean(n.getAttributes().getNamedItem("editable") != null?n.getAttributes().getNamedItem("editable").getNodeValue():"true");
 		
 		if (xmlOb.equals("edge")) editable = false;
 		
 		GoInto ret;
-		
-		
+				
 		if (e.getNodeName().equals("gointo")) {
 			ret = new GoInto(xmlOb,howOften,humanName);
 			
 		}else{
-			ret = new Value(xmlOb,howOften,name, humanName,nameField,hasVals);
+			ret = new Value(xmlOb,howOften,name, humanName,nameToPrint,hasVals);
 			loadFields(e,(Value)ret);
 		}
 		
@@ -168,9 +168,7 @@ public class NodeSchemeLoader {
 			}
 
 		}
-		
 	
-
 		return ret;
 
 	}
@@ -188,6 +186,11 @@ public class NodeSchemeLoader {
 			Field f = new Field(fieldList.item(i).getAttributes().getNamedItem("type").getNodeValue(),
 					getTextValue((Element)fieldList.item(i)));
 
+					
+			if (((Element)fieldList.item(i)).hasAttribute("can_be")) {
+				f.setCanBe(fieldList.item(i).getAttributes().getNamedItem("can_be").getNodeValue().split(","));
+			}
+			
 			if (((Element)fieldList.item(i)).hasAttribute("must_be")) {
 				f.setMust_be(fieldList.item(i).getAttributes().getNamedItem("must_be").getNodeValue());
 			}

@@ -16,10 +16,16 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
+import com.algebraweb.editor.client.node.LabelAttrIdentifierOb;
+import com.algebraweb.editor.client.node.LabelContentIdentifierOb;
+import com.algebraweb.editor.client.node.LabelOb;
+import com.algebraweb.editor.client.node.LabelStringOb;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.Property;
+import com.algebraweb.editor.client.node.PropertyValue;
 import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.client.node.ValGroup;
 import com.algebraweb.editor.client.scheme.Field;
@@ -163,6 +169,7 @@ public class PlanParser {
 		NodeScheme s = getScheme(n.getKind());
 		ArrayList<GoAble> schema = s.getSchema();
 
+		parseNodeLabelSchema(n,s);
 		parseContent(nodeEl, n.getContent(), schema, mother, node);
 
 	}
@@ -209,7 +216,7 @@ public class PlanParser {
 
 		if (g instanceof Value) {
 
-			retEl = new ContentVal(((Value)g).getValName(),((Value)g).getXmlObject(),getTextValue(e));
+			retEl = new ContentVal(((Value)g).getValName(),((Value)g).getInternalName(),new PropertyValue(getTextValue(e),"string"));
 
 			ArrayList<Field> fields = ((Value)g).getFields();
 
@@ -240,14 +247,64 @@ public class PlanParser {
 				
 
 			}
+			
+			parseContentLabelSchema(retEl, ((Value)g));
 
 		}
+		
+		
 
 		ArrayList<GoAble> schema = g.getSchema();
 
 		parseContent(e, retEl.getContent(), schema, mother, node);
 		return retEl;
 
+	}
+
+	private void parseContentLabelSchema(NodeContent retEl, Value g) {
+			
+		String schema = g.getNameToPrint();
+		parseLabelSchema(retEl, schema);
+
+	}
+	
+	private void parseNodeLabelSchema(PlanNode retEl, NodeScheme s) {
+		
+		String schema = s.getProperties().get("label_schema");
+		if (schema == null) schema = "";
+		parseLabelSchema(retEl, schema);
+
+	}
+
+	private void parseLabelSchema(ContentNode retEl, String schema) {
+		LabelOb c = new LabelStringOb("");
+		
+		for (int i=0;i<schema.length();i++) {
+			
+			if (schema.substring(i, i+1).equals("{")) {
+				
+				if (c!= null) retEl.addLabelOb(c);
+				c = new LabelContentIdentifierOb("");
+							
+			}else if ((schema.substring(i, i+1).equals("}")) || (schema.substring(i, i+1).equals("]"))) {
+				
+				if (c!= null) retEl.addLabelOb(c);
+				c = new LabelStringOb("");
+				
+			}else if (schema.substring(i, i+1).equals("[")) {
+				
+				if (c!= null) retEl.addLabelOb(c);
+				c = new LabelAttrIdentifierOb("");
+				
+			}else{
+				
+				c.addChar(schema.substring(i, i+1));
+				
+			}
+			
+		}
+		
+		if (!(c == null) && !c.getVal().equals("")) retEl.addLabelOb(c);
 	}
 
 	/**

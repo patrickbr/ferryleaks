@@ -2,8 +2,10 @@ package com.algebraweb.editor.server.logicalplan.xmlbuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.ServletContext;
+
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.node.ContentVal;
@@ -25,7 +27,7 @@ public class SerializeRelationBuilder {
 
 		this.c=c;
 		this.context=context;
-		
+
 
 	}
 
@@ -33,8 +35,8 @@ public class SerializeRelationBuilder {
 	public PlanNode addSerializRelation(PlanNode root) {
 
 
-		String dummyIterColumn = "iter_bugferry_dummy_iter_col";
-		String dummySortColumn = "pos_bugferry_dummy_sort_col";
+		String dummyIterColumn = getFreeColumnName("iter",root);
+		String dummySortColumn = getFreeColumnName("pos",root);
 
 		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>)context.getAttribute("nodeSchemes");
 
@@ -50,7 +52,7 @@ public class SerializeRelationBuilder {
 			ValGroup contentGroup = new ValGroup("content");
 			attachNode.getContent().add(contentGroup);
 
-			ContentVal attachColumn = new ContentVal("column", "column", "");
+			ContentVal attachColumn = new ContentVal("column", "column", null);
 			PropertyMap attachColumnAttrs = new PropertyMap();
 			attachColumnAttrs.put(new Property("name", new PropertyValue(dummyIterColumn,"string")));
 			attachColumnAttrs.put(new Property("new", new PropertyValue("true","boolean")));
@@ -58,7 +60,7 @@ public class SerializeRelationBuilder {
 
 			contentGroup.getContent().add(attachColumn);
 
-			ContentVal attachColumnValue = new ContentVal("value","value",Integer.toString(c.getIterColumnNat()));
+			ContentVal attachColumnValue = new ContentVal("value","value",new PropertyValue(Integer.toString(c.getIterColumnNat()),"string"));
 			PropertyMap attachColumnValueAttrs = new PropertyMap();
 			attachColumnValueAttrs.put(new Property("type", new PropertyValue("nat","string")));
 			attachColumnValue.setAttributes(attachColumnValueAttrs);
@@ -69,6 +71,42 @@ public class SerializeRelationBuilder {
 			newRootNode = attachNode;
 
 
+
+
+		}
+
+		if (!c.isSortUseColumn()) {
+
+			PlanNode rowRankNode = new PlanNode(root.getMother().getFreeId(nids), schemes.get("rowrank"),root.getMother());
+			nids.add(rowRankNode.getId());
+
+			ValGroup contentGroup = new ValGroup("content");
+			rowRankNode.getContent().add(contentGroup);
+
+			ContentVal sortColumn = new ContentVal("column", "column", null);
+
+			PropertyMap sortColumnAttrs = new PropertyMap();
+			sortColumnAttrs.put(new Property("name", new PropertyValue(dummySortColumn,"string")));
+			sortColumnAttrs.put(new Property("new", new PropertyValue("true","boolean")));
+			sortColumn.setAttributes(sortColumnAttrs);
+
+			contentGroup.getContent().add(sortColumn);
+
+			ContentVal directionColumn = new ContentVal("column", "column", null);
+
+			PropertyMap directionColumnAttrs = new PropertyMap();
+			directionColumnAttrs.put(new Property("name", new PropertyValue(c.getSortOrderColumnOn(),"string")));
+			directionColumnAttrs.put(new Property("new", new PropertyValue("false","boolean")));
+			directionColumnAttrs.put(new Property("function", new PropertyValue("sort","string")));
+			directionColumnAttrs.put(new Property("position", new PropertyValue("0","int")));
+			directionColumnAttrs.put(new Property("direction", new PropertyValue(c.getSortOrder(),"string")));
+					
+			directionColumn.setAttributes(directionColumnAttrs);
+			contentGroup.getContent().add(directionColumn);
+			
+			createEdgeTo(rowRankNode, newRootNode);
+			newRootNode = rowRankNode;
+
 		}
 
 		PlanNode serializeRel = new PlanNode(root.getMother().getFreeId(nids), schemes.get("serialize relation"),root.getMother());
@@ -78,7 +116,7 @@ public class SerializeRelationBuilder {
 		serializeRel.getContent().add(contentGroup);
 
 		//fill the iter column field
-		ContentVal iter = new ContentVal("column", "column", "");
+		ContentVal iter = new ContentVal("column", "column", null);
 		PropertyMap attributes = new PropertyMap();
 
 		attributes.put(new Property("new", new PropertyValue("false","boolean")));
@@ -94,7 +132,7 @@ public class SerializeRelationBuilder {
 
 
 		//fill the pos column field
-		ContentVal pos = new ContentVal("column","column","");
+		ContentVal pos = new ContentVal("column","column",null);
 		PropertyMap attributesPos = new PropertyMap();
 
 		attributesPos.put(new Property("new", new PropertyValue("false","boolean")));
@@ -118,7 +156,7 @@ public class SerializeRelationBuilder {
 
 		for (String itemCol : c.getItemColumns()) {
 
-			ContentVal item = new ContentVal("column","column","");
+			ContentVal item = new ContentVal("column","column",null);
 			PropertyMap attributesItem = new PropertyMap();
 
 			attributesItem.put(new Property("new", new PropertyValue("false","boolean")));
@@ -131,17 +169,17 @@ public class SerializeRelationBuilder {
 			i++;
 
 		}
-		
+
 		PlanNode nilNode = new PlanNode(root.getMother().getFreeId(nids), schemes.get("nil"),root.getMother());
 
 		createEdgeTo(serializeRel, nilNode);
 		createEdgeTo(serializeRel, newRootNode);
-		
-		
-		
+
+
+
 		newRootNode = serializeRel;
 
-		
+
 
 		return newRootNode;
 
@@ -154,7 +192,7 @@ public class SerializeRelationBuilder {
 
 		from.getChilds().add(to);
 
-		ContentVal edge = new ContentVal("edge", "edge", "");
+		ContentVal edge = new ContentVal("edge", "edge", null);
 
 		PropertyMap attributesItem = new PropertyMap();
 		attributesItem.put(new Property("to", new PropertyValue(Integer.toString(to.getId()),"int")));
@@ -166,6 +204,32 @@ public class SerializeRelationBuilder {
 
 
 
+	private String getFreeColumnName(String prefix, PlanNode n) {
 
 
+		ArrayList<Property> cols = n.getReferencableColumnsFromValues();
+		String idea = Integer.toString((int) (Math.random() * 99999999));
+
+		while (containsPropertyVal(cols, prefix + idea)) {			
+			idea = Integer.toString((int) (Math.random() * 99999999));
+		}
+
+		return prefix + idea;
+
+	}
+
+
+	private boolean containsPropertyVal(ArrayList<Property> toCheck, String val) {
+
+
+		Iterator<Property> it = toCheck.iterator();
+
+		while (it.hasNext()) {
+
+			if (it.next().getPropertyVal().getVal().equals(val)) return true;
+
+		}
+
+		return false;		
+	}
 }

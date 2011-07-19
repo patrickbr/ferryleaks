@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.node.PropertyValue;
 import com.algebraweb.editor.client.scheme.Field;
 import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.client.scheme.Value;
+import com.algebraweb.editor.client.validation.ValidationError;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,7 +30,7 @@ public class PropertyEditPanel extends Composite{
 
 	private NodeContent c;
 	private GoAble scheme;
-	
+
 	private ContentNodeTreeItem treeItem;
 	private int pid;
 
@@ -41,19 +44,34 @@ public class PropertyEditPanel extends Composite{
 		this.pid=pid;
 		this.scheme=scheme;
 		this.treeItem=treeItem;
-		
+
 		this.manServ=manServ;
 
 		HTML title= new HTML("Edit " + this.c.getInternalName());
+
 
 
 		title.addStyleName("content-edit-panel-title");
 		p.addStyleName("content-edit-panel");
 
 		p.add(title);
-		
+
+		if (treeItem.getErrors() != null) {
+
+			HTML errorP = new HTML();
+			String tmpRet ="";
+			Iterator<ValidationError> i = treeItem.getErrors().iterator();
+			while (i.hasNext()) tmpRet += i.next().getErrorMsg() + "<br>";
+
+			errorP.addStyleName("error-msg-edit-panel");
+			errorP.setHTML(tmpRet);
+
+			p.add(errorP);
+
+		}
+
 		Button deleteButton = new Button("X");
-		
+
 		deleteButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -61,15 +79,15 @@ public class PropertyEditPanel extends Composite{
 
 				((LogicalSchemeTreeItem)PropertyEditPanel.this.treeItem.getParentItem()).deleteContent(PropertyEditPanel.this.treeItem);
 
-				
+
 			}
-			
+
 		});
-		
+
 		deleteButton.addStyleName("delete-button");
 		p.add(deleteButton);
-		
-		
+
+
 
 		if (this.scheme.hasFields()) {
 			Iterator<Field> it = scheme.getFields().iterator();
@@ -94,23 +112,15 @@ public class PropertyEditPanel extends Composite{
 
 				if (current.getType().matches("__COLUMN[\\{]?[0-9]*[\\}]?") || current.getType().equals("__COLUMN_REMOVE")) {
 
-					f = new PropertyEditFieldGivenValues(current);
-
-					manServ.getReferencableColumnsWithoutAdded(nodeContext.getId(), pid, refColsLoadCallBack((PropertyEditFieldGivenValues)f,pv));
+					f = new PropertyEditFieldAvailableColumns(pid,nodeContext.getId(), manServ, current);
 
 
 				}else{
 
-					f = new PropertyEditField(current);
-					f.bindToPropertyVal(pv);
-					f.drawField();
-
+					f = new PropertyEditTextField(current);
 				}
 
-
-
-
-
+				f.bindToPropertyVal(pv);
 				if (current.hasMustBe()) f.setLocked(true);
 
 				fields.add(f);
@@ -119,16 +129,20 @@ public class PropertyEditPanel extends Composite{
 
 			}
 
-
-
 		}
-
-
-
-
+		
+		if (this.scheme instanceof Value && c instanceof ContentVal && ((Value)this.scheme).hasVal()) {
+			
+			PropertyEditField f;
+			f = new PropertyEditTextField("Value");
+			f.bindToPropertyVal(((ContentVal)c).getValue());
+			fields.add(f);
+			p.add(f);
+			
+		}
+		
+	
 		initWidget(p);
-
-
 
 	}
 
@@ -145,36 +159,6 @@ public class PropertyEditPanel extends Composite{
 
 
 	}
-	
-
-
-	private AsyncCallback<ArrayList<Property>> refColsLoadCallBack(final PropertyEditFieldGivenValues field,final PropertyValue pv) {
-
-
-
-		return new AsyncCallback<ArrayList<Property>>() {
-
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void onSuccess(ArrayList<Property> result) {
-
-
-				field.setPossibleValues(result);
-				field.drawField();
-				field.bindToPropertyVal(pv);
-
-
-			}
-
-		};
-
-	}
-
 
 
 

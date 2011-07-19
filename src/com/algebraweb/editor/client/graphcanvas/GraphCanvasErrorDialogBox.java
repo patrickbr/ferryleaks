@@ -1,5 +1,6 @@
 package com.algebraweb.editor.client.graphcanvas;
 
+import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -15,6 +16,7 @@ public class GraphCanvasErrorDialogBox extends DialogBox {
 	
 	public GraphCanvasErrorDialogBox(String msg) {
 		
+		AlgebraEditor.log("ERROR: " + msg);
 		
 		super.setText("Error");
 		Button ok = new Button("OK");

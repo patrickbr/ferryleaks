@@ -1,63 +1,29 @@
 package com.algebraweb.editor.client;
 
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import gwtupload.client.IUploader;
-import gwtupload.client.MultiUploader;
-import gwtupload.client.SingleUploader;
-import gwtupload.client.Uploader;
-import gwtupload.client.IUploadStatus.Status;
 
-import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
-import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
-import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
-import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
-import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
-import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
+import com.algebraweb.editor.client.logicalcanvas.AddSQListenerDIalog;
 import com.algebraweb.editor.client.logicalcanvas.CreateSQLDialog;
 import com.algebraweb.editor.client.logicalcanvas.CreateXMLDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
-import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.StackLayoutPanel;
-import com.google.gwt.user.client.ui.StackPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.hydro4ge.raphaelgwt.client.Raphael.Text;
 
 /**
  * A panel with some testing buttons. Highly experimental.
@@ -70,10 +36,6 @@ import com.hydro4ge.raphaelgwt.client.Raphael.Text;
 public class ControllPanel extends AbsolutePanel{
 
 
-	private int dragOffsetX;
-	private int dragOffsetY;
-
-	private boolean dragging=false;
 	final UploadDialog d;
 
 
@@ -86,7 +48,7 @@ public class ControllPanel extends AbsolutePanel{
 		super();
 
 		this.m=man;
-	
+
 		this.rmsa = rmsa;
 		this.e=e;
 
@@ -113,8 +75,8 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		editPanel.add(addNodeButton);
-		
-		
+
+
 		ControllPanelButton addEdgeButton = new ControllPanelButton("Add new edge","add-edge");
 
 		addEdgeButton.addClickHandler(new ClickHandler() {
@@ -136,7 +98,7 @@ public class ControllPanel extends AbsolutePanel{
 			public void onClick(ClickEvent event) {
 				m.deleteNode(ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0]), ControllPanel.this.e.getActiveCanvas().getId());
 				m.deleteEdges(ControllPanel.this.e.getActiveCanvas().getSelectedEdges().keySet().toArray(new Coordinate[0]), ControllPanel.this.e.getActiveCanvas().getId());
-				
+
 			}});
 
 		editPanel.add(delete);
@@ -148,7 +110,6 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				//TODO: planid is fix
 				new NodeEditDialog(m,ControllPanel.this.rmsa,ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(),ControllPanel.this.e.getActiveCanvas().getId());
 
 			}});
@@ -166,18 +127,6 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		editPanel.add(xml);
-		
-		ControllPanelButton rootB = new ControllPanelButton("Mark as root","root");
-
-		rootB.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-
-				ControllPanel.this.rmsa.markAsRoot(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), markAsRootCb);
-			}});
-
-		editPanel.add(rootB);
 
 		ControllPanelButton xmlPlan = new ControllPanelButton("Get XML plan beginning with selected node","xml-down");
 
@@ -186,13 +135,11 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				new CreateXMLDialog(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0])[0],rmsa);
-				
-				//ControllPanel.this.rmsa.getXMLLogicalPlanFromRootNode(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), xmlCb);
 			}});
 
 		editPanel.add(xmlPlan);
-		
-		
+
+
 
 		ControllPanelButton sqlB = new ControllPanelButton("Get SQL of subgraph","sql-down");
 
@@ -215,7 +162,6 @@ public class ControllPanel extends AbsolutePanel{
 			public void onClick(ClickEvent event) {
 
 				new EvaluationDialog(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0])[0],rmsa);
-				//ControllPanel.this.rmsa.eval(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), evalCb);
 			}});
 
 		editPanel.add(evalB);
@@ -253,8 +199,7 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		sortPanel.add(sortC);
-
-
+		
 		ControllPanelButton sortBBB = new ControllPanelButton("line","sort-line");
 
 		sortBBB.addClickHandler(new ClickHandler() {
@@ -279,7 +224,8 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				GraphCanvas.showLoading("Preparing file...");
-				Window.open(GWT.getModuleBaseURL() + "fileserver?pid=0" , "_self", "");
+				int pid = ControllPanel.this.e.getActiveCanvas().getId();
+				Window.open(GWT.getModuleBaseURL() + "fileserver?pid="+ pid , "_self", "");
 				GraphCanvas.hideLoading();
 
 			}});
@@ -384,7 +330,6 @@ public class ControllPanel extends AbsolutePanel{
 
 
 
-
 	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>() {
 
 		@Override
@@ -394,18 +339,6 @@ public class ControllPanel extends AbsolutePanel{
 			new NodeTypeSelector(result, ControllPanel.this.e.getActiveCanvas());
 
 
-		}
-
-	};
-
-	
-	
-	private  GraphCanvasCommunicationCallback<Void> markAsRootCb = new  GraphCanvasCommunicationCallback<Void>() {
-
-		@Override
-		public void onSuccess(Void v) {
-
-		
 		}
 
 	};

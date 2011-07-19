@@ -16,6 +16,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,14 +48,20 @@ public class FullScreenDragPanel extends FlowPanel {
 	private static boolean dragPreventer = false;
 	private boolean lockMainDrag = false;
 
+	public FullScreenDragPanel() {
+		
+		sinkEvents(Event.KEYEVENTS);
+		
+	}
 
 	private MouseUpHandler mouseUpHandler = new MouseUpHandler() {
-
 		@Override
 		public void onMouseUp(MouseUpEvent event) {
 			FullScreenDragPanel.this.clearDrag();
 			dragPreventer = false;
 		}
+		
+		
 	};
 
 	private MouseOutHandler mouseOutHandler = new MouseOutHandler() {

@@ -36,22 +36,28 @@ public class ReferencedColumnsValidator implements Validator {
 
 					Property currentCol = refIt.next();
 
-					if (!(containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
+					if (currentCol.getPropertyVal().getType().matches("__COLUMN\\{[0-9]*\\}")) {
 
-						String errorMsg = "Node referers to non existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
+						int num = Integer.parseInt(currentCol.getPropertyVal().getType().split("\\{")[1].replaceAll("\\}", ""));
 
-						if (currentCol.getPropertyVal().getType().matches("__COLUMN\\{[0-9]*\\}")) {
+						if (!(containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded(num)))) {
 
-							int num = Integer.parseInt(currentCol.getPropertyVal().getType().split("\\{")[1].replaceAll("\\}", ""));
-
+							String errorMsg = "Node referers to non existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
+							
 							if (current.getChilds().size() > num-1 && current.getChilds().get(num-1) != null) {
 								errorMsg += " expected in node <span class='tt'>#" + current.getChilds().get(num-1).getId() + "</span> of type <span class='tt'>" + current.getChilds().get(num-1).getKind()+ "</span>";
 							}else{
 								errorMsg += " expected in child node <span class='tt'>#" + num + "</span>";
 							}
-
+							
+							r.addError(new ValidationError(current.getId(),errorMsg));
 						}
 
+					}else
+
+					if (!(containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
+
+						String errorMsg = "Node referers to non existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
 
 						r.addError(new ValidationError(current.getId(),errorMsg));
 

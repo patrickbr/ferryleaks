@@ -6,7 +6,9 @@ import java.util.Iterator;
 
 import com.algebraweb.editor.client.PlanModelManipulator;
 import com.algebraweb.editor.client.PlanSwitchButton;
+import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
+import com.algebraweb.editor.client.graphcanvas.ConnectedWidget;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
@@ -17,6 +19,11 @@ import com.algebraweb.editor.client.graphcanvas.NodeSelectionHandler;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -24,7 +31,9 @@ import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public class LogicalCanvas extends GraphCanvas{
 
@@ -39,7 +48,9 @@ public class LogicalCanvas extends GraphCanvas{
 	private GraphNode drawEdgeFrom;
 	private int drawEdgeFromPos;
 	private PlanSwitchButton myTabButton;
-	
+
+	private HashMap<Integer,SQLBubble> sqlBubbleList = new HashMap<Integer,SQLBubble>();
+
 	private int errorCount=0;
 
 
@@ -53,30 +64,23 @@ public class LogicalCanvas extends GraphCanvas{
 		super.addNodeSelectionHandler(new NodeSelectionHandler() {
 
 			@Override
-			public void isSelected(HashMap<Integer, GraphNode> nodes) {
+			public void isSelected(GraphNode node) {
 
 
 				switch (state) {
-
 
 				case 2:
 
 					break;
 				case 3:
 
-
-
-					drawEdgeTo = nodes.values().toArray(new GraphNode[0])[0];
-
+					drawEdgeTo = node;
 
 					m.addEdge(new Coordinate(drawEdgeFrom.getId(),drawEdgeTo.getId()), LogicalCanvas.this.getId(), drawEdgeFromPos);
 
-
 					state=0;
 
-
 					Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
-
 
 					while (it.hasNext()) {
 
@@ -84,16 +88,13 @@ public class LogicalCanvas extends GraphCanvas{
 						clearEdgeConnectors(n);
 					}
 
-
 					break;
-
-
 				}
-
-
-
 			}
 		});
+
+
+
 
 		super.addDomHandler(new MouseMoveHandler() {
 
@@ -303,6 +304,33 @@ public class LogicalCanvas extends GraphCanvas{
 		}
 
 		return null;
+
+
+	}
+
+	public void addSQLListener(int nid, RemoteManipulationServiceAsync rmsa, EvaluationContext c) {
+
+		SQLBubble listener = new SQLBubble(nid,this.getId(),rmsa,c,this);
+		GraphNode n = getGraphNodeById(nid);
+		super.hangWidgetOntoNode("sql-listener", new ConnectedWidget(listener,n.getWidth(),0), nid);
+		sqlBubbleList.put(nid, listener);
+		listener.update();
+
+	}
+
+	public void removeSQLListener(SQLBubble b) {
+
+		super.unHangWidgetFromNode("sql-listener", b.getNid());
+		sqlBubbleList.remove(b);
+
+
+	}
+
+	public void updateSQLListener() {
+
+		Iterator<SQLBubble> it = sqlBubbleList.values().iterator();
+
+		while (it.hasNext()) it.next().update();
 
 
 	}

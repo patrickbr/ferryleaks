@@ -56,15 +56,16 @@ public class XMLPlanUploadServlet extends UploadAction{
 
 					
 					//parse the plan, store it into the session...
+				
 					HttpSession session = request.getSession(true);
 					XMLPlanLoader planLoader = new XMLPlanLoader();
-				
+					
 					
 					QueryPlanBundle sessionBundle = planLoader.parsePlans(file.getAbsolutePath(),this.getServletContext());
 					session.setAttribute("queryPlans",sessionBundle);
 								
-					System.out.println( request.getParameter("myinfo"));
-					response = request.getParameter("myinfo");
+					System.out.println(request.getParameter("file_id"));
+					response = request.getParameter("file_id");
 					response += "!";
 					
 					Iterator<Integer> it = sessionBundle.getPlans().keySet().iterator();
@@ -73,9 +74,10 @@ public class XMLPlanUploadServlet extends UploadAction{
 						response += it.next() + ":";
 					}
 					
+					
+					
 				} catch (Exception e) {
-					e.printStackTrace();
-					//throw new UploadActionException(e);
+					throw new UploadActionException(e.getMessage());
 				}
 			}
 		}
@@ -83,6 +85,7 @@ public class XMLPlanUploadServlet extends UploadAction{
 		//remove the file, it is already stored in the temp folder
 		removeSessionFileItems(request);
 		
+		System.out.println(response);
 		//TODO: responses
 		return response;
 	}

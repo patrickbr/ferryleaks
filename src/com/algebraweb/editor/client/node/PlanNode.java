@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
+import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 
@@ -24,8 +25,7 @@ public class PlanNode extends ContentNode {
 	protected NodeScheme scheme;
 	private QueryPlan mother;
 
-
-
+	private EvaluationContext c;
 
 
 	public PlanNode(int id, NodeScheme scheme, QueryPlan mother) {
@@ -120,6 +120,7 @@ public class PlanNode extends ContentNode {
 	 */
 
 	public ArrayList<Property> getReferencableColumnsWithoutAdded() {
+
 		ArrayList<Property> ret = new ArrayList<Property>();
 		Iterator<PlanNode> i = this.getChilds().iterator();
 
@@ -129,6 +130,24 @@ public class PlanNode extends ContentNode {
 				addPropertiesDistinct(ret,cur.getReferencableColumnsFromValues());
 			}
 		}
+		return ret;
+	}
+
+	/**
+	 * Returns the columns referancable from this node <b>without</b>
+	 * the columns introduced in the specifed child (left to right)
+	 * @return
+	 */
+
+	public ArrayList<Property> getReferencableColumnsWithoutAdded(int pos) {
+
+		ArrayList<Property> ret = new ArrayList<Property>();
+
+		PlanNode cur = this.getChilds().get(pos-1);
+		if (cur != null) {
+			addPropertiesDistinct(ret,cur.getReferencableColumnsFromValues());
+		}
+
 		return ret;
 	}
 
@@ -281,7 +300,8 @@ public class PlanNode extends ContentNode {
 
 			PlanNode cur = childsIt.next();
 
-			ContentVal edge = new ContentVal("edge", "edge", "");
+
+			ContentVal edge = new ContentVal("edge", "edge", null);
 
 			PropertyMap pm = new PropertyMap();
 			Property to;
@@ -387,7 +407,7 @@ public class PlanNode extends ContentNode {
 
 
 
-			if (cur.getXmlObject().equals("edge")) {
+			if (cur.getInternalName().equals("edge")) {
 
 				if (cur.getHowOften().equals("2") || cur.getHowOften().equals("{,2}")) {
 
@@ -408,5 +428,68 @@ public class PlanNode extends ContentNode {
 		return -1;
 
 	}
+
+
+	public String getLabel() {
+
+		String ret="";
+
+		Iterator<LabelOb> it = labelScheme.iterator();
+
+		while (it.hasNext()) {
+
+			LabelOb cur = it.next();
+
+			if (cur instanceof LabelStringOb) ret += cur.getVal();
+
+			if (cur instanceof LabelAttrIdentifierOb) {
+
+				if (cur.getVal().equals("_kind")) {
+
+					ret += getKind();
+
+				}
+			}
+
+
+			if (cur instanceof LabelContentIdentifierOb) {
+
+				Iterator<NodeContent> iter = getAllContentWithValName(cur.getVal()).iterator();
+
+				String temp ="";
+
+				while (iter.hasNext()) {
+
+					temp += iter.next().getLabel() + " ";
+
+				}
+
+				if (temp.endsWith(" ")) ret += temp.substring(0,temp.length()-1).trim();
+
+			}
+
+		}
+
+		if (ret == "") return getKind();
+		else return ret;
+	}
+
+	/**
+	 * @return the c
+	 */
+	public EvaluationContext getEvaluationContext() {
+		return c;
+	}
+
+	/**
+	 * @param c the c to set
+	 */
+	public void setEvaluationContext(EvaluationContext c) {
+		this.c = c;
+	}
+
+
+
+
 
 }

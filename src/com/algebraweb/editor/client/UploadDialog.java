@@ -80,51 +80,41 @@ public class UploadDialog extends DialogBox {
 	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
 		public void onFinish(IUploader uploader) {
 
-			hide();
-			
+
 			if (uploader.getStatus() == Status.ERROR) {
-				
+
+				AlgebraEditor.log("Upload finished with error status.");
 				new GraphCanvasErrorDialogBox("Error while uploading. Please try again.");
-				
+
 			}
 
-			if (uploader.getStatus() == Status.SUCCESS && uploader.getServerInfo().message != null) {
+			if (uploader.getStatus() == Status.SUCCESS && 
+					uploader.getServerInfo().message != null &&
+					uploader.getServerInfo().message.split("!").length > 1) {
 
+				AlgebraEditor.log("Upload finished successfull! Received: '" + uploader.getServerInfo().message + "'");
 				String msg = uploader.getServerInfo().message.split("!")[0];
 				String idstr = uploader.getServerInfo().message.split("!")[1];
 
-				
+
 				if (awaitingFileUpload.equals(msg)) {
 
 					String fileName = uploader.getFileName().split("\\\\")[uploader.getFileName().split("\\\\").length-1];
-					
+
 					AlgebraEditor.setSubTitle(fileName);
 					String[] ids = idstr.split(":");
 					e.clearCanvases();
-				
 
 					for (String sid : ids) {
-
-						final int id = Integer.parseInt(sid);
-
-						LogicalCanvas c = e.addCanvas(id);
-
-						if (sid.equals(ids[0])) e.changeCanvas(Integer.parseInt(ids[0]));
-
-						GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
-
-						awaitingFileUpload = "";
-						f.fill(new RemoteFiller("xml",Integer.toString(id)), new GraphManipulationCallback() {
-
-							@Override
-							public void onComplete() {
-								p.getM().validate(id);
-
-							}
-						});
+						AlgebraEditor.log("Loading finished plan #" + sid);
+						e.loadFinishedPlanFromServer(Integer.parseInt(sid));
 					}
+
+					awaitingFileUpload = "";
 				}
 			}
+
+			hide();
 		}
 	};
 
@@ -139,10 +129,12 @@ public class UploadDialog extends DialogBox {
 
 			GWT.log(servPath);
 			setVisible(false);
-			uploader.setServletPath(servPath+ "?myinfo=" + awaitingFileUpload);
+			uploader.setServletPath(servPath+ "?file_id=" + awaitingFileUpload);
 
 		}
 
 
 	};
+
+
 }

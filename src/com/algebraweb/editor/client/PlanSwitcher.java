@@ -63,6 +63,7 @@ public class PlanSwitcher extends AbsolutePanel{
 
 		p.remove(buttons.get(pid));
 		buttons.remove(pid);
+		if (active == pid) active = -1;
 
 	}
 
