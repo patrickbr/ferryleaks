@@ -68,7 +68,7 @@ public interface RemoteManipulationServiceAsync {
 	void getReferencableColumns(int nid, int pid,
 			AsyncCallback<ArrayList<Property>> callback);
 
-	void deleteEdge(Coordinate[] edges, int planid,
+	void deleteEdge(HashMap<Coordinate, Integer> edges, int planid,
 			AsyncCallback<RemoteManipulationMessage> manipulationCallback);
 
 	void addEdge(int planid, Coordinate fromTo, int pos,

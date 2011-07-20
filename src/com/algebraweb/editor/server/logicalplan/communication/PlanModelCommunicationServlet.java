@@ -609,7 +609,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public RemoteManipulationMessage deleteEdge(Coordinate[] edges, int planid) throws PlanManipulationException {
+	public RemoteManipulationMessage deleteEdge(HashMap<Coordinate,Integer> edges, int planid) throws PlanManipulationException {
 
 		HttpServletRequest request = this.getThreadLocalRequest();
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
@@ -618,15 +618,18 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
 
+		Iterator<Coordinate> it = edges.keySet().iterator();
 
-		for (Coordinate e : edges) {
+		while(it.hasNext()) {
+			
+			Coordinate e = it.next();
 
 			int from = (int) e.getX();
 			int to = (int) e.getY();
 
 			PlanNode fromNode = planToWork.getPlanNodeById(from);
 
-			fromNode.removeChild(to);
+			fromNode.removeChild(to,edges.get(e));
 
 
 			ret.getNodesAffected().add(xmlpl.getRawNode(fromNode));

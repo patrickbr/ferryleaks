@@ -324,6 +324,24 @@ public class GraphCanvas extends Raphael  {
 
 		return selectedEdges;
 	}
+	
+	public HashMap<Coordinate,Integer> getSelectedEdgesWithPos() {
+
+		HashMap<Coordinate,Integer> ret = new HashMap<Coordinate,Integer>();
+		
+		Iterator<GraphEdge> it = getSelectedEdges().values().iterator();
+		
+		while (it.hasNext()) {
+			
+			GraphEdge cur = it.next();
+			
+			ret.put(new Coordinate(cur.getFrom().getId(),cur.getTo().getId()), cur.getFixedParentPos());
+			
+			
+		}
+		
+		return ret;
+	}
 
 
 	public boolean isMouseOverNode() {
@@ -517,6 +535,7 @@ public class GraphCanvas extends Raphael  {
 
 	public void createEdge(GraphNode from, GraphNode to, int fixedPos,boolean quiet) {
 
+		AlgebraEditor.log("(GraphCanvas) Creating edge from " + from.getId() + " to " + to.getId() + (fixedPos != -1?" with fixed pos " + fixedPos:""));
 		GraphEdge t = new GraphEdge(this,from,to,fixedPos,quiet, !this.isNotActive());
 		this.edges.add(t);
 
@@ -558,10 +577,10 @@ public class GraphCanvas extends Raphael  {
 	}
 
 
-	private void clearDrag() {
+	public void clearDrag() {
 
 		if (this.dragNode != null) {
-			dragNode.setDragged(false);
+			dragNode.setDragged(false);			
 			this.dragNode = null;
 		}
 
@@ -786,8 +805,8 @@ public class GraphCanvas extends Raphael  {
 
 
 		if ((getPopup().getNodeId() != nodeid) &&
-				!getPopup().isShowing()) {
-
+				!getPopup().isShowing() && dragNode == null) {
+ 
 			if (popupDelay != null) popupDelay.cancel();
 
 			popupDelay = new Timer() {

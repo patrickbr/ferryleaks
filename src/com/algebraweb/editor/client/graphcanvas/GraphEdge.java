@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.graphcanvas;
 
 
+import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -55,6 +56,7 @@ public class GraphEdge {
 
 		from.addEdgeFrom(this);
 		to.addEdgeTo(this);
+		AlgebraEditor.log("(GraphCanvas) Calling graphEdgeModifier to create a new edge...");
 		c.getGraphEdgeModifier().makeConnection(this,from,to,quiet,animated);
 		
 		MouseDownHandler mouseDownH = new MouseDownHandler() {

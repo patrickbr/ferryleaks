@@ -321,27 +321,49 @@ public class PlanNode extends ContentNode {
 
 
 	}
-
+	
 	public boolean removeChild(int nid) {
+		
+		int count = nodeChilds.size();
+		boolean success=false;
+		
+		for (int i=0;i<count;i++) {
+			
+			success=removeChild(nid,i+1);
+			
+		}
+		
+		return success;
+		
+	}
+
+	public boolean removeChild(int nid, int pos) {
+		
+		System.out.println("Removing child #" + nid + "from pos " + pos);
 
 		Iterator<NodeContent> it = childs.iterator();
 		boolean success=false;
+		int count = 1;
 
-		while (it.hasNext()) {
+		while (it.hasNext() && !success) {
 
 			NodeContent cur = it.next();
 
-			if (cur.getInternalName().equals("edge") && cur.getAttributes().get("to").getVal().equals(Integer.toString(nid))) {
+			if (cur.getInternalName().equals("edge")) {
 
-				it.remove();		
-				success=true;
+				if (count != pos) {
+					count++;
+				}else if (cur.getAttributes().get("to").getVal().equals(Integer.toString(nid))){
+					cur.getAttributes().get("to").setVal("-1");		
+					success=true;
+				}
 
 			}
 
 		}
 
 		if (success) {
-			nodeChilds.set(nodeChilds.indexOf(mother.getPlanNodeById(nid)),null);
+			nodeChilds.set(pos-1,null);
 		}
 
 		return success;

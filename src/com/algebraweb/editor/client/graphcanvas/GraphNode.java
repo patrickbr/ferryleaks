@@ -369,14 +369,7 @@ public class GraphNode {
 
 			GraphNode.this.c.getGraphNodeModifier().edgesToFront(GraphNode.this);
 
-			if (event.isControlKeyDown()) {
-				GraphNode.this.c.addNodeToSelection(GraphNode.this);
-			}else{
-				GraphNode.this.c.setSelectedNode(GraphNode.this);
-			}
-
-
-			double rx;
+					double rx;
 			double ry;
 
 			rx=event.getRelativeX(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()* GraphNode.this.getX()) ;
@@ -384,6 +377,13 @@ public class GraphNode {
 
 			GraphNode.this.setDragged(true);
 			GraphNode.this.c.registerDrag(GraphNode.this,(int)rx,(int)ry);
+		
+			if (event.isControlKeyDown()) {
+				GraphNode.this.c.addNodeToSelection(GraphNode.this);
+			}else{
+				GraphNode.this.c.setSelectedNode(GraphNode.this);
+			}
+		
 		}
 
 	};

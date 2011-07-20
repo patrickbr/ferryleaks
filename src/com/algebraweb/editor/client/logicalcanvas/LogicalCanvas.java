@@ -75,7 +75,7 @@ public class LogicalCanvas extends GraphCanvas{
 				case 3:
 
 					drawEdgeTo = node;
-
+					clearDrag();
 					m.addEdge(new Coordinate(drawEdgeFrom.getId(),drawEdgeTo.getId()), LogicalCanvas.this.getId(), drawEdgeFromPos);
 
 					state=0;

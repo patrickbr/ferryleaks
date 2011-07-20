@@ -68,7 +68,7 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException;
 
-	public RemoteManipulationMessage deleteEdge(Coordinate[] edges, int planid) throws PlanManipulationException;
+	public RemoteManipulationMessage deleteEdge(HashMap<Coordinate,Integer>  edges, int planid) throws PlanManipulationException;
 	
 
 }

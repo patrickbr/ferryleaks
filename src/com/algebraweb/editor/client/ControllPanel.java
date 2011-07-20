@@ -97,7 +97,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				m.deleteNode(ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0]), ControllPanel.this.e.getActiveCanvas().getId());
-				m.deleteEdges(ControllPanel.this.e.getActiveCanvas().getSelectedEdges().keySet().toArray(new Coordinate[0]), ControllPanel.this.e.getActiveCanvas().getId());
+				m.deleteEdges(ControllPanel.this.e.getActiveCanvas().getSelectedEdgesWithPos(), ControllPanel.this.e.getActiveCanvas().getId());
 
 			}});
 

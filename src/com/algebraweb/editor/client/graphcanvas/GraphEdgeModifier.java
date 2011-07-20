@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
@@ -166,7 +167,9 @@ public class GraphEdgeModifier {
 			e.setOffsetFrom(c.getGraphNodeModifier().getOffset(from,e.getFromPosition(),e,(fromPositionOld != e.getFromPosition() && e.getOffsetFrom()!=-1), fromPositionOld,false,quiet,animated));		
 		}
 
+		
 		generatePath(e,from,to, e.getToPosition(),e.getFromPosition());
+	
 		drawEdge(e,quiet,animated);
 
 	}

@@ -2,6 +2,7 @@ package com.algebraweb.editor.client;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
@@ -64,9 +65,9 @@ public class PlanModelManipulator {
 
 	}
 
-	public void deleteEdges(Coordinate[] edges, int planid) {
+	public void deleteEdges(HashMap<Coordinate,Integer> edges, int planid) {
 
-		if (edges.length == 0) return;
+		if (edges.size() == 0) return;
 		AlgebraEditor.log("Deleting edge(s) from plan #" + planid);
 		GraphCanvas.showLoading("Deleting edge...");
 		manServ.deleteEdge(edges, planid, manipulationCallback);
@@ -212,9 +213,9 @@ public class PlanModelManipulator {
 							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(ed.getTo());
 
 							//only draw if not already there
-							if (!e.getCanvas(result.getPlanid()).hasEdge(from.getId(), to.getId())) {
+							//if (!e.getCanvas(result.getPlanid()).hasEdge(from.getId(), to.getId())) {
 								e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);
-							}
+							//}
 						}
 
 						e.getCanvas(result.getPlanid()).showEdges();
