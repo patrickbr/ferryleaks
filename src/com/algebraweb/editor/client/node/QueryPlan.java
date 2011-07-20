@@ -155,6 +155,7 @@ public class QueryPlan implements Serializable {
 
 		}
 
+		System.out.println("Plannode with id #" + id  + " not found!");
 		return null;
 
 	}

@@ -69,7 +69,7 @@ public class ControllPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				ControllPanel.this.rmsa.getNodeTypes(nodeTypesCb);
+				m.getNodeTypes();
 
 
 			}});
@@ -328,20 +328,6 @@ public class ControllPanel extends AbsolutePanel{
 
 	};
 
-
-
-	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>() {
-
-		@Override
-		public void onSuccess(String[] result) {
-
-
-			new NodeTypeSelector(result, ControllPanel.this.e.getActiveCanvas());
-
-
-		}
-
-	};
 
 
 }

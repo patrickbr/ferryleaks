@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
@@ -76,5 +77,11 @@ public interface RemoteManipulationServiceAsync {
 
 	void getReferencableColumnsWithoutAddedFromPos(int nid, int pid, int pos,
 			AsyncCallback<ArrayList<Property>> callback);
+
+	void copyNodes(ArrayList<PlanNodeCopyMessage> msg, int pid,
+			AsyncCallback<Void> callback);
+
+	void insert(int pid, int x, int y,
+			AsyncCallback<RemoteManipulationMessage> callback);
 
 }

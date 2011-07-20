@@ -33,6 +33,7 @@ import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
+import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
 import com.algebraweb.editor.client.logicalcanvas.SessionExpiredException;
 import com.algebraweb.editor.client.logicalcanvas.SqlError;
 import com.algebraweb.editor.client.node.ContentNode;
@@ -46,6 +47,7 @@ import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
+import com.algebraweb.editor.server.logicalplan.ClipBoardPlanNode;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.server.logicalplan.evaluator.SqlEvaluator;
 import com.algebraweb.editor.server.logicalplan.sqlbuilder.PlanNodeSQLBuilder;
@@ -464,6 +466,9 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 				PlanNode newNode = planToWork.addNode(schemes.get(nodeType));
 
+				PlanParser p = new PlanParser();
+				p.parseNodeLabelSchema(newNode, newNode.getScheme());
+				
 				ValidationResult res = getValidation(pid);
 
 				RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"add", 1, "", res);
@@ -526,10 +531,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError {
 
-		
+
 		if (saveContext) saveEvaluationContextForNode(nid, pid, c);
 
-		
+
 		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid,c);
 
 		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder();
@@ -546,8 +551,8 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		SqlEvaluator eval = new SqlEvaluator(context);
 
-		
-		
+
+
 		return eval.eval(getSQLFromPlanNode(pid,nid,context,saveContext));
 
 	}
@@ -590,9 +595,9 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			return getPlanToWork(pid).getEvContext() ;
 
 		}else{
-			
+
 			return getNodeToWork(pid, nid).getEvaluationContext();
-			
+
 		}
 	}
 
@@ -621,7 +626,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		Iterator<Coordinate> it = edges.keySet().iterator();
 
 		while(it.hasNext()) {
-			
+
 			Coordinate e = it.next();
 
 			int from = (int) e.getX();
@@ -680,12 +685,12 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 	private QueryPlan getPlanToWork(int pid) throws PlanManipulationException {
-		
+
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession(false);
-		
+
 		if (session == null) throw new SessionExpiredException();
-		
+
 		return ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlan(pid);		
 
 	}
@@ -697,6 +702,198 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return getNodeToWork(pid,nid).getReferencableColumnsWithoutAdded(pos);
 	}
 
+
+	@Override
+	public void copyNodes(ArrayList<PlanNodeCopyMessage> msg, int pid) throws PlanManipulationException {
+
+
+		ArrayList<ClipBoardPlanNode> clipboard = new ArrayList<ClipBoardPlanNode>();
+		QueryPlan p = getPlanToWork(pid);
+
+
+		Iterator<PlanNodeCopyMessage> it = msg.iterator();
+		double offX=Double.MAX_VALUE;
+		double offY=Double.MAX_VALUE;
+
+		while (it.hasNext()) {
+			PlanNodeCopyMessage cur = it.next();
+			if (cur.getPos().getX() < offX && cur.getPos().getY() < offY) {
+				offX = cur.getPos().getX();
+				offY = cur.getPos().getY();
+			}
+		}
+
+
+		it = msg.iterator();
+
+		while (it.hasNext()) {
+
+			PlanNodeCopyMessage cur = it.next();
+
+			PlanNode curNode = p.getPlanNodeById(cur.getId());
+
+			PlanNode copy = new PlanNode(curNode.getId(), curNode.getScheme(), null);
+
+
+			Iterator<PlanNode> childs = curNode.getChilds().iterator();
+			int pos=1;
+			while (childs.hasNext()) {
+				PlanNode curr = childs.next();
+				if (curr != null && listContainsNode(curr.getId(),msg)) {
+					copy.addChild(curr, pos);
+					pos++;
+				}
+			}
+
+			Iterator<NodeContent> content = curNode.getContent().iterator();
+			while (content.hasNext()) {
+				NodeContent curC = content.next();
+				if (!curC.getInternalName().equals("edge")) {
+					copy.getContent().add(curC);
+				}
+			}
+
+
+			clipboard.add(new ClipBoardPlanNode(copy, new Coordinate(cur.getPos().getX()-offX,cur.getPos().getY()-offY)));
+
+		}
+
+		String s= "";
+
+		Iterator<ClipBoardPlanNode> iter = clipboard.iterator();
+		while(iter.hasNext()) {
+			s+=iter.next().getP().getId() + ", ";
+		}
+		s = s.substring(0, s.length()-2);
+		System.out.println("Saving nodes " + s + " to clipboard...");
+		getSession().setAttribute("clipboard",clipboard);
+
+
+	}
+
+	private boolean listContainsNode(int id, ArrayList<PlanNodeCopyMessage> nodes) {
+
+		Iterator<PlanNodeCopyMessage> it = nodes.iterator();
+
+		while(it.hasNext()) {
+			if (it.next().getId() == id) return true;
+		}
+
+		return false;
+
+	}
+
+	@Override
+	public RemoteManipulationMessage insert(int pid,int x, int y) throws PlanManipulationException {
+
+		ArrayList<ClipBoardPlanNode> nodes = (ArrayList<ClipBoardPlanNode>)getSession().getAttribute("clipboard");
+
+		QueryPlan p = getPlanToWork(pid);
+
+		HashMap<Integer,PlanNode> newNodes = new HashMap<Integer,PlanNode>();
+
+
+		HashMap<Integer,Integer> idReplacements = new HashMap<Integer,Integer>();
+
+		Iterator<ClipBoardPlanNode> it = nodes.iterator();
+
+		ArrayList<Integer> blackList = new ArrayList<Integer>();
+
+		while (it.hasNext()) {
+
+			PlanNode cur = it.next().getP();
+
+			int newId = p.getFreeId(blackList);
+			blackList.add(newId);
+
+			idReplacements.put(cur.getId(),newId);
+
+		}
+
+		it = nodes.iterator();
+
+		while (it.hasNext()) {
+
+			PlanNode cur = it.next().getP();
+			PlanNode newNode = new PlanNode(idReplacements.get(cur.getId()), cur.getScheme(), p);
+
+			PlanParser pa = new PlanParser();
+			pa.parseNodeLabelSchema(newNode, newNode.getScheme());
+			
+			Iterator<NodeContent> content = cur.getContent().iterator();
+			while (content.hasNext()) {
+				NodeContent curC = content.next();
+				if (!curC.getInternalName().equals("edge")) {
+					newNode.getContent().add(curC);
+				}
+			}				
+
+			System.out.println("Adding node to plan with id #" + newNode.getId());
+			p.getPlan().add(newNode);
+			newNodes.put(newNode.getId(),newNode);
+
+		}
+
+		it = nodes.iterator();
+
+		while (it.hasNext()) {
+
+			PlanNode cur = it.next().getP();
+
+			Iterator<PlanNode> childs = cur.getChilds().iterator();
+			int pos=1;
+
+			while (childs.hasNext()) {
+
+				PlanNode child = childs.next();
+				newNodes.get(idReplacements.get(cur.getId())).addChild(p.getPlanNodeById(idReplacements.get(child.getId())), pos);
+				pos++;
+
+			}
+		}
+
+		RemoteManipulationMessage res =  new RemoteManipulationMessage(pid, "add", 1, "", null);
+
+		HashMap<Integer,Coordinate> coords = new HashMap<Integer,Coordinate>();
+
+
+		XMLPlanFiller xmlpl = new XMLPlanFiller(getSession(),getServletContext(),pid);
+
+		Iterator<ClipBoardPlanNode> newNodesIt = nodes.iterator();
+
+		while (newNodesIt.hasNext()) {
+
+			ClipBoardPlanNode cur = newNodesIt.next();
+			
+			PlanNode curNode = p.getPlanNodeById(idReplacements.get(cur.getP().getId()));
+
+			res.getNodesAffected().add(xmlpl.getRawNode(curNode));
+			coords.put(curNode.getId(),new Coordinate(cur.getPos().getX()+x,cur.getPos().getY()+y));
+
+		}
+
+
+
+		res.setCoordinates(coords);
+		res.setValidationResult(getValidation(pid));
+
+
+		return res;
+
+
+	}
+
+
+	private HttpSession getSession() throws SessionExpiredException {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession(false);
+
+		if (session == null) throw new SessionExpiredException();
+
+		return session;
+
+	}
 
 
 }

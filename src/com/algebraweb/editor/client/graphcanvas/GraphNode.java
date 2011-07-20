@@ -15,6 +15,8 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.hydro4ge.raphaelgwt.client.Raphael.Rect;
@@ -35,6 +37,7 @@ public class GraphNode {
 	private GraphCanvas c;
 	private ArrayList<GraphEdge> edgesTo = new ArrayList<GraphEdge>();
 	private ArrayList<GraphEdge> edgesFrom = new ArrayList<GraphEdge>();
+	private boolean hasBeenDragged=false;
 
 	private HashMap<String,ConnectedShape> connectedShapes = new HashMap<String,ConnectedShape>();
 	private HashMap<String,ConnectedWidget> connectedWidgets = new HashMap<String,ConnectedWidget>();
@@ -91,7 +94,9 @@ public class GraphNode {
 		setText(textStr);
 
 		getShape().addDomHandler(mouseDownH, MouseDownEvent.getType());
+		getShape().addDomHandler(mouseUpH, MouseUpEvent.getType());
 		getShape().addDomHandler(mouseMoveH, MouseMoveEvent.getType());
+		
 		getShape().addDomHandler(doubleC, DoubleClickEvent.getType());
 		getShape().addDomHandler(contextMenuH, ContextMenuEvent.getType());
 
@@ -283,8 +288,10 @@ public class GraphNode {
 
 
 			cur.addDomHandler(mouseDownH, MouseDownEvent.getType());
+			cur.addDomHandler(mouseUpH, MouseUpEvent.getType());
 			cur.addDomHandler(mouseMoveH, MouseMoveEvent.getType());
 			cur.addDomHandler(doubleC, DoubleClickEvent.getType());
+			
 
 
 			cur.addDomHandler(GraphNodeModifier.mouseMoveHandlerBuilder(this), MouseMoveEvent.getType());
@@ -352,6 +359,27 @@ public class GraphNode {
 
 		}
 	};
+	
+	private MouseUpHandler mouseUpH = new MouseUpHandler() {
+
+		@Override
+		public void onMouseUp(MouseUpEvent event) {
+			
+			if (!GraphNode.this.hasBeenDragged() && GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)){
+				
+				if (event.isControlKeyDown()) {
+					GraphNode.this.c.addNodeToSelection(GraphNode.this);
+				}else {
+					GraphNode.this.c.setSelectedNode(GraphNode.this);
+				}
+			
+			}
+			
+		}
+		
+		
+		
+	};
 
 	private MouseDownHandler mouseDownH = new MouseDownHandler() {
 
@@ -369,18 +397,19 @@ public class GraphNode {
 
 			GraphNode.this.c.getGraphNodeModifier().edgesToFront(GraphNode.this);
 
-					double rx;
+			double rx;
 			double ry;
 
 			rx=event.getRelativeX(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()* GraphNode.this.getX()) ;
 			ry=event.getRelativeY(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()*GraphNode.this.getY()) ;
 
 			GraphNode.this.setDragged(true);
+			setHasBeenDragged(false);
 			GraphNode.this.c.registerDrag(GraphNode.this,(int)rx,(int)ry);
 		
 			if (event.isControlKeyDown()) {
 				GraphNode.this.c.addNodeToSelection(GraphNode.this);
-			}else{
+			}else if (!GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)){
 				GraphNode.this.c.setSelectedNode(GraphNode.this);
 			}
 		
@@ -388,6 +417,23 @@ public class GraphNode {
 
 	};
 
+	/**
+	 * @return the hasBeenDragged
+	 */
+	public boolean hasBeenDragged() {
+		return hasBeenDragged;
+	}
+
+	/**
+	 * @param hasBeenDragged the hasBeenDragged to set
+	 */
+	public void setHasBeenDragged(boolean hasBeenDragged) {
+		this.hasBeenDragged = hasBeenDragged;
+	}
+	
+	
+
+	
 
 
 

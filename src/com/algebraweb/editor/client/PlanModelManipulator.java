@@ -12,6 +12,7 @@ import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
+import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
@@ -102,6 +103,33 @@ public class PlanModelManipulator {
 
 	}
 
+	public void copy(int planid) {
+
+		AlgebraEditor.log("Copying selected nodes for #" + planid);
+		ArrayList<PlanNodeCopyMessage> msg = new ArrayList<PlanNodeCopyMessage>();
+
+		Iterator<GraphNode> it = e.getCanvas(planid).getSelectedNode().values().iterator();
+
+		while (it.hasNext()) {
+			GraphNode cur = it.next();
+			msg.add(new PlanNodeCopyMessage(cur.getId(), new Coordinate(cur.getX(), cur.getY())));
+		}
+
+		manServ.copyNodes(msg, planid, new GraphCanvasCommunicationCallback<Void>(){
+
+			@Override
+			public void onSuccess(Void result) {
+
+			}});
+
+	}
+
+	public void paste(int planid,int x, int y ) {
+
+		manServ.insert(planid, x,y, manipulationCallback);
+
+	}
+
 
 	private void showValidation(ValidationResult r) {
 
@@ -116,7 +144,11 @@ public class PlanModelManipulator {
 
 	}
 
-
+	public void getNodeTypes() {
+		
+		manServ.getNodeTypes(nodeTypesCb);
+		
+	}
 
 
 	public void updateNodeContent(int planid, PlanNode p) {
@@ -214,7 +246,7 @@ public class PlanModelManipulator {
 
 							//only draw if not already there
 							//if (!e.getCanvas(result.getPlanid()).hasEdge(from.getId(), to.getId())) {
-								e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);
+							e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);
 							//}
 						}
 
@@ -240,7 +272,26 @@ public class PlanModelManipulator {
 								current.getText(),								
 								current.getFixedChildCount());
 
+					}
 					
+					it = result.getNodesAffected().iterator();
+					while (it.hasNext()) {
+						
+
+						RawNode current = it.next();
+	
+						GraphNode from = e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid());
+						Iterator<RawEdge> i = current.getEdgesToList().iterator();
+
+						while(i.hasNext()) {
+							
+							RawEdge ed = i.next();
+
+							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(ed.getTo());
+							e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);
+							
+						}
+						e.getCanvas(result.getPlanid()).showEdges();
 					}
 				}
 
@@ -256,6 +307,21 @@ public class PlanModelManipulator {
 		}
 
 
+
+	};
+	
+
+
+	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>() {
+
+		@Override
+		public void onSuccess(String[] result) {
+
+
+			new NodeTypeSelector(result, e.getActiveCanvas());
+
+
+		}
 
 	};
 

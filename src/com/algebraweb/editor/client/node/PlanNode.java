@@ -32,7 +32,10 @@ public class PlanNode extends ContentNode {
 		this.id=id;
 		this.mother=mother;
 		this.scheme=scheme;
-		nodeChilds.ensureCapacity(getMaxChildCount());
+
+		System.out.println("Creating instance of node with kind=" + scheme.getKind() + " and max child count = " + getMaxChildCount());
+
+
 	}	
 
 	public PlanNode() {
@@ -143,6 +146,8 @@ public class PlanNode extends ContentNode {
 
 		ArrayList<Property> ret = new ArrayList<Property>();
 
+		if (this.getChilds().size() < pos) return ret;
+		
 		PlanNode cur = this.getChilds().get(pos-1);
 		if (cur != null) {
 			addPropertiesDistinct(ret,cur.getReferencableColumnsFromValues());
@@ -282,6 +287,10 @@ public class PlanNode extends ContentNode {
 
 	public void addChild(PlanNode c, int pos) {
 
+		while (nodeChilds.size() < pos) {
+			nodeChilds.add(null);
+		}
+		
 		nodeChilds.set(pos-1, c);
 
 
@@ -321,24 +330,24 @@ public class PlanNode extends ContentNode {
 
 
 	}
-	
+
 	public boolean removeChild(int nid) {
-		
+
 		int count = nodeChilds.size();
 		boolean success=false;
-		
+
 		for (int i=0;i<count;i++) {
-			
+
 			success=removeChild(nid,i+1);
-			
+
 		}
-		
+
 		return success;
-		
+
 	}
 
 	public boolean removeChild(int nid, int pos) {
-		
+
 		System.out.println("Removing child #" + nid + "from pos " + pos);
 
 		Iterator<NodeContent> it = childs.iterator();

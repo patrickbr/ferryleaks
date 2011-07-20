@@ -61,6 +61,12 @@ public class PlanParser {
 		this.schemes=schemes;
 
 	}
+	
+	public PlanParser() {
+
+		this.schemes=schemes;
+
+	}
 
 	/**
 	 * Parse the plan given to the constructor using the specified 
@@ -268,7 +274,7 @@ public class PlanParser {
 
 	}
 	
-	private void parseNodeLabelSchema(PlanNode retEl, NodeScheme s) {
+	public void parseNodeLabelSchema(PlanNode retEl, NodeScheme s) {
 		
 		String schema = s.getProperties().get("label_schema");
 		if (schema == null) schema = "";

@@ -11,6 +11,8 @@ import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
+import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
+import com.algebraweb.editor.client.logicalcanvas.SessionExpiredException;
 import com.algebraweb.editor.client.logicalcanvas.SqlError;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -69,6 +71,9 @@ public interface RemoteManipulationService extends RemoteService {
 	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException;
 
 	public RemoteManipulationMessage deleteEdge(HashMap<Coordinate,Integer>  edges, int planid) throws PlanManipulationException;
+
+	public void copyNodes(ArrayList<PlanNodeCopyMessage> msg, int pid) throws SessionExpiredException, PlanManipulationException;
 	
+	public RemoteManipulationMessage insert(int pid,int x, int y) throws PlanManipulationException;
 
 }

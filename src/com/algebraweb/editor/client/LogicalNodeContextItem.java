@@ -1,5 +1,6 @@
 package com.algebraweb.editor.client;
 
+import com.algebraweb.editor.client.graphcanvas.ContextMenuItem;
 import com.algebraweb.editor.client.graphcanvas.NodeContextMenuItem;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 

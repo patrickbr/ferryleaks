@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.graphcanvas.ContextMenu;
 import com.algebraweb.editor.client.graphcanvas.FullScreenDragPanel;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
@@ -21,6 +22,7 @@ import com.algebraweb.editor.client.logicalcanvas.CreateSQLDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.LogicalNodePopup;
+import com.algebraweb.editor.client.logicalcanvas.LogicalPlanNodeContextItem;
 import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.google.gwt.core.client.EntryPoint;
@@ -74,7 +76,7 @@ public class AlgebraEditor implements EntryPoint {
 	private RemoteManipulationServiceAsync rmsa;
 	private PlanModelManipulator m;
 	private NodeContextMenu nodeContextMenu = new NodeContextMenu();
-
+	private ContextMenu planContextMenu = new ContextMenu();
 
 	/**
 	 * Everything begins here...
@@ -100,7 +102,7 @@ public class AlgebraEditor implements EntryPoint {
 		AlgebraEditor.log(TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " " + AUTHOR);
 		AlgebraEditor.log("   running in " + BROWSER_NAME + " " + BROWSER_VER + " (" + BROWSER_OS + ") (" + (Navigator.isCookieEnabled()?"Cookies enabled":"Cookies _NOT_ enabled. Session handling will not work properly!")+ ")");
 		AlgebraEditor.log("   servlet on " + GWT.getModuleBaseURL() + " running in " + (GWT.isProdMode()?"production":"development") + " mode");
-		
+
 		AlgebraEditor.log("initializing remote manupulation service...");
 		rmsa = (RemoteManipulationServiceAsync) GWT.create(RemoteManipulationService.class);
 
@@ -112,12 +114,13 @@ public class AlgebraEditor implements EntryPoint {
 		AlgebraEditor.log("initializing controll panel...");
 		RootPanel.get("editor").add(new ControllPanel(this,m,300,300,rmsa));
 		RootPanel.get("editor").add(s);
-		
+
 		Window.setTitle(TITLE + " - " + VERSION);
 		RootPanel.get("impressum").getElement().setInnerHTML(TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " " + AUTHOR); 
 		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE); 
 		initContextMenu();
-
+		initPlanContextMenu();
+		
 		AlgebraEditor.log("Sending registration...");
 
 		registor.register(new AsyncCallback<Configuration>() {
@@ -224,6 +227,7 @@ public class AlgebraEditor implements EntryPoint {
 
 		c.setPopup(new LogicalNodePopup(c,rmsa));
 		c.setContextMenu(nodeContextMenu);
+		c.setCanvasMenu(planContextMenu);
 		c.setPadding(60, 45);
 
 		FullScreenDragPanel d = new FullScreenDragPanel();
@@ -365,6 +369,14 @@ public class AlgebraEditor implements EntryPoint {
 		return nodeContextMenu;
 	}
 
+	/**
+	 * @return the contextMenu
+	 */
+	public ContextMenu getContextMenu() {
+		return planContextMenu;
+	}
+
+
 
 	public PlanModelManipulator getPlanManipulator() {
 
@@ -377,13 +389,40 @@ public class AlgebraEditor implements EntryPoint {
 		return rmsa;
 
 	}
+	
+	private void initPlanContextMenu() {
+
+		AlgebraEditor.log("initializing context menu...");
+
+		final ContextMenu m = getContextMenu();
+
+
+		m.addItem(new LogicalPlanNodeContextItem("Add node") {
+
+			@Override
+			public void onClick() {
+				getPlanManipulator().getNodeTypes();
+			}
+		});
+
+		m.addSeperator();
+		
+		m.addItem(new LogicalPlanNodeContextItem("Paste") {
+
+			@Override
+			public void onClick() {
+				getPlanManipulator().paste(getActiveCanvas().getId(), (int)(m.getX()*getActiveCanvas().getScale()),  (int)(m.getY()*getActiveCanvas().getScale()));
+			}
+		});
+
+	}
 
 
 	private void initContextMenu() {
 
 		AlgebraEditor.log("initializing context menu...");
 
-		NodeContextMenu m = getNodeContextMenu();
+		final NodeContextMenu m = getNodeContextMenu();
 
 
 		m.addItem(new LogicalNodeContextItem("Delete") {
@@ -413,6 +452,22 @@ public class AlgebraEditor implements EntryPoint {
 			@Override
 			public void onClick(int nid) {
 				getActiveCanvas().selectNodeWithSubs(getActiveCanvas().getGraphNodeById(nid));
+			}
+		});
+
+		m.addItem(new LogicalNodeContextItem("Copy") {
+
+			@Override
+			public void onClick(int nid) {
+				getPlanManipulator().copy(getActiveCanvas().getId());
+			}
+		});
+		
+		m.addItem(new LogicalNodeContextItem("Paste") {
+
+			@Override
+			public void onClick(int nid) {
+				getPlanManipulator().paste(getActiveCanvas().getId(),m.getX(),m.getY());
 			}
 		});
 

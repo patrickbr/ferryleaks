@@ -13,28 +13,43 @@ import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class NodeContextMenu extends ContextMenu{
-
-	private GraphNode n;
-
-
-	public NodeContextMenu() {
-
-		super();
-
-	}
-
-	public void show(GraphNode n, int x, int y) {
-
-		super.show(x,y);
-
-		this.n=n;
-
-
-	}
-
+public class ContextMenu extends PopupPanel{
 	
-	public void addItem(final NodeContextMenuItem i) {
+	private FlowPanel rows = new FlowPanel();
+	private int x;
+	private int y;
+	
+	public ContextMenu() {
+		
+		super(true);
+		super.setModal(true);
+		super.setAnimationEnabled(true);
+		super.addStyleName("node-context-menu");
+		
+	}
+	
+	public void show(int x, int y) {
+		
+		super.setPopupPosition(x, y);
+		this.x=x;
+		this.y=y;
+			
+		this.clear();
+		this.add(rows);
+				
+		super.show();
+					
+	}
+	
+	public void addSeperator() {
+		
+		HTML sep = new HTML();
+		sep.addStyleName("node-context-line-break");
+		rows.add(sep);
+		
+	}
+	
+	public void addItem(final ContextMenuItem i) {
 		
 		final FlowPanel tmp = new FlowPanel();
 		
@@ -44,8 +59,8 @@ public class NodeContextMenu extends ContextMenu{
 			@Override
 			public void onClick(ClickEvent event) {
 				
-				i.onClick(NodeContextMenu.this.n.getId());
-				NodeContextMenu.this.hide();
+				i.onClick();
+				ContextMenu.this.hide();
 				tmp.removeStyleName("hover");
 				
 			}
@@ -76,9 +91,28 @@ public class NodeContextMenu extends ContextMenu{
 		
 		tmp.add(text);
 		
-		super.getRows().add(tmp);
+		rows.add(tmp);
 		
 	}
 
+	/**
+	 * @return the x
+	 */
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * @return the y
+	 */
+	public int getY() {
+		return y;
+	}
+	
+	protected FlowPanel getRows() {
+		
+		return rows;
+	}
+	
 
 }

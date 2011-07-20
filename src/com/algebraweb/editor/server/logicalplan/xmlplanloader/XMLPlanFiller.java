@@ -93,7 +93,7 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 
 	public RawNode getRawNode(PlanNode current) {
 
-
+		System.out.println(current.getLabel());
 		RawNode temp = new RawNode(current.getId(), current.getLabel(), 0xCCCCCC, 130, 25);
 
 		temp.setFixedChildCount(current.getMaxChildCount());
@@ -111,6 +111,7 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 				RawEdge tempEdge= new RawEdge(cur.getId(),temp.getNid());
 				
 				tempEdge.setFixedParentPos(c);
+				System.out.println("XMLplanfiller: adding edge from " + tempEdge.getFrom() + " to " + tempEdge.getTo());
 				temp.getEdgesToList().add(tempEdge);
 
 			}
