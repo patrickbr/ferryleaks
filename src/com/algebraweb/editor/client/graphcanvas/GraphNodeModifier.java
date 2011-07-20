@@ -100,9 +100,6 @@ public class GraphNodeModifier {
 
 
 	protected void checkDimension(GraphNode n,double x, double y) {
-		/**
-		 * TODO: scale!!
-		 */
 
 		if ((x/c.getScale())+(n.getWidth() / c.getScale()) > c.getWidth()) {
 			c.setWidth((int)(c.getWidth() + (50 / c.getScale()) + ((x/c.getScale())+(n.getWidth() / c.getScale()) - c.getWidth())));

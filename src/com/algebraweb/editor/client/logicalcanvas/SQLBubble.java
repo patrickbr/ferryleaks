@@ -77,6 +77,16 @@ public class SQLBubble extends FlowPanel {
 
 			}
 		});
+		
+		b.addDomHandler(new MouseMoveHandler() {
+			
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				
+				addStyleName("hover");
+				
+			}
+		},MouseMoveEvent.getType());
 
 
 		Button d= new Button("");
@@ -93,11 +103,21 @@ public class SQLBubble extends FlowPanel {
 			}
 		});
 		
+		d.addDomHandler(new MouseMoveHandler() {
+			
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				
+				addStyleName("hover");
+				
+			}
+		},MouseMoveEvent.getType());
+		
 		Button refresh= new Button("");
 
 		refresh.addStyleName("sql-bubble-refresh");
 
-		d.addClickHandler(new ClickHandler() {
+		refresh.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -106,6 +126,16 @@ public class SQLBubble extends FlowPanel {
 
 			}
 		});
+		
+		refresh.addDomHandler(new MouseMoveHandler() {
+			
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+				
+				addStyleName("hover");
+				
+			}
+		},MouseMoveEvent.getType());
 		this.add(d);
 		this.add(refresh);
 		this.add(b);

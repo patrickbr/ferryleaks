@@ -53,7 +53,7 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Alpha 6.06";
+	private static String VERSION = "Alpha 6.07";
 
 	private static String TITLE = "the bugFerry";
 	private static String AUTHOR = "Patrick Brosi";
@@ -71,7 +71,7 @@ public class AlgebraEditor implements EntryPoint {
 
 	private ArrayList<LogicalCanvas> canvi = new ArrayList<LogicalCanvas>();
 	private ArrayList<FullScreenDragPanel> panels = new ArrayList<FullScreenDragPanel>();
-	private LogicalCanvas activeCanvas=null;
+	private static LogicalCanvas activeCanvas=null;
 	private PlanSwitcher s;
 	private RemoteManipulationServiceAsync rmsa;
 	private PlanModelManipulator m;
@@ -271,7 +271,7 @@ public class AlgebraEditor implements EntryPoint {
 
 	}
 
-	public LogicalCanvas getActiveCanvas() {
+	public static LogicalCanvas getActiveCanvas() {
 		return activeCanvas;
 	}
 
@@ -463,14 +463,6 @@ public class AlgebraEditor implements EntryPoint {
 			}
 		});
 		
-		m.addItem(new LogicalNodeContextItem("Paste") {
-
-			@Override
-			public void onClick(int nid) {
-				getPlanManipulator().paste(getActiveCanvas().getId(),m.getX(),m.getY());
-			}
-		});
-
 		m.addSeperator();
 
 		m.addItem(new LogicalNodeContextItem("View XML source") {

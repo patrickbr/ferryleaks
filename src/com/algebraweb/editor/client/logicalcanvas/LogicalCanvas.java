@@ -20,6 +20,7 @@ import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -29,6 +30,7 @@ import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Window;
@@ -48,6 +50,8 @@ public class LogicalCanvas extends GraphCanvas{
 	private GraphNode drawEdgeFrom;
 	private int drawEdgeFromPos;
 	private PlanSwitchButton myTabButton;
+	
+	private boolean overEdgeConnector=false;
 
 	private HashMap<Integer,SQLBubble> sqlBubbleList = new HashMap<Integer,SQLBubble>();
 
@@ -111,6 +115,20 @@ public class LogicalCanvas extends GraphCanvas{
 
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
+
+
+				if (!isOverEdgeConnector() && !mouseOverNode(event.getClientX(), event.getClientY()) && (state == 3 || state == 2)) {
+
+					state = 0;
+					Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
+
+					while (it.hasNext()) {
+
+						GraphNode n = it.next();
+						clearEdgeConnectors(n);
+					}
+
+				}
 
 
 				if (state == 1) {
@@ -218,7 +236,21 @@ public class LogicalCanvas extends GraphCanvas{
 					Circle cr = super.circleFactory(0,0, 6);
 					cr.getElement().setAttribute("class", "edge-connector");
 					cr.addDomHandler(createEdgeShapeMouseHandler(n,current),  MouseDownEvent.getType());
+					cr.addDomHandler(new MouseMoveHandler() {
 
+						@Override
+						public void onMouseMove(MouseMoveEvent event) {
+							setOverEdgeConnector(true);
+
+						}
+					}, MouseMoveEvent.getType());
+					cr.addDomHandler(new MouseOutHandler() {
+
+						@Override
+						public void onMouseOut(MouseOutEvent event) {
+							setOverEdgeConnector(false);
+						}
+					}, MouseOutEvent.getType());
 					int y= n.getHeight()+3;
 					int x= (n.getWidth() / (freeChilds.size() +1)) * current;
 
@@ -333,6 +365,22 @@ public class LogicalCanvas extends GraphCanvas{
 		while (it.hasNext()) it.next().update();
 
 
+	}
+
+
+	/**
+	 * @return the overEdgeConnector
+	 */
+	protected boolean isOverEdgeConnector() {
+		return overEdgeConnector;
+	}
+
+
+	/**
+	 * @param overEdgeConnector the overEdgeConnector to set
+	 */
+	protected void setOverEdgeConnector(boolean overEdgeConnector) {
+		this.overEdgeConnector = overEdgeConnector;
 	}
 
 

@@ -145,9 +145,9 @@ public class PlanModelManipulator {
 	}
 
 	public void getNodeTypes() {
-		
+
 		manServ.getNodeTypes(nodeTypesCb);
-		
+
 	}
 
 
@@ -272,24 +272,25 @@ public class PlanModelManipulator {
 								current.getText(),								
 								current.getFixedChildCount());
 
+
 					}
-					
+
 					it = result.getNodesAffected().iterator();
 					while (it.hasNext()) {
-						
+
 
 						RawNode current = it.next();
-	
+
 						GraphNode from = e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid());
 						Iterator<RawEdge> i = current.getEdgesToList().iterator();
 
 						while(i.hasNext()) {
-							
+
 							RawEdge ed = i.next();
 
 							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(ed.getTo());
 							e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);
-							
+
 						}
 						e.getCanvas(result.getPlanid()).showEdges();
 					}
@@ -309,7 +310,7 @@ public class PlanModelManipulator {
 
 
 	};
-	
+
 
 
 	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>() {

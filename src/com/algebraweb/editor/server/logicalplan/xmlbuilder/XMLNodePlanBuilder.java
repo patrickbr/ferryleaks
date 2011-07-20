@@ -188,8 +188,8 @@ public class XMLNodePlanBuilder {
 	public Element getXMLElementFromContentNode(ContentNode n,HashMap<Integer,Integer> nodeIdReplacements) {
 
 
-		Element ret;
-
+		Element ret = null;
+		
 		if (n instanceof PlanNode) {
 
 
@@ -226,6 +226,7 @@ public class XMLNodePlanBuilder {
 					ret.setAttribute(c.getPropertyName(), Integer.toString(nodeIdReplacements.get(Integer.parseInt(c.getPropertyVal().getVal()))));
 
 				}else{
+					if (c.getPropertyVal().getVal() != null)
 					ret.setAttribute(c.getPropertyName(), c.getPropertyVal().getVal());
 				}
 			}

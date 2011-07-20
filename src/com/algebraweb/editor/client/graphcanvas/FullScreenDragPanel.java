@@ -39,8 +39,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class FullScreenDragPanel extends FlowPanel {
 
 
-	private int mainDragOffsetX = -1;
-	private int mainDragOffsetY = -1;
+	private static int mainDragOffsetX = -1;
+	private static int mainDragOffsetY = -1;
 
 	private int mainDragOffsetLeft = -1;
 	private int mainDragOffsetTop = -1;
@@ -79,6 +79,7 @@ public class FullScreenDragPanel extends FlowPanel {
 		public void onMouseDown(MouseDownEvent event) {
 			if (mainDragOffsetX < 0 && ! dragPreventer) 
 				startMainDrag(event.getScreenX(), event.getScreenY());
+			else if (dragPreventer) FullScreenDragPanel.this.clearDrag();
 		}
 
 	};
@@ -93,7 +94,7 @@ public class FullScreenDragPanel extends FlowPanel {
 				//we don't want the browser to start its own drag&drop
 				DOM.eventGetCurrentEvent().preventDefault();
 				FullScreenDragPanel.this.scrollTo(mainDragOffsetLeft -(event.getScreenX() -mainDragOffsetX ) , mainDragOffsetTop -(event.getScreenY() -mainDragOffsetY ));
-			}
+			}else if (dragPreventer) FullScreenDragPanel.this.clearDrag();
 		}
 	};
 
@@ -161,7 +162,7 @@ public class FullScreenDragPanel extends FlowPanel {
 	}
 
 
-	private void clearDrag() {
+	public static void clearDrag() {
 
 		mainDragOffsetX = -1;
 		mainDragOffsetY = -1;
@@ -202,7 +203,7 @@ public class FullScreenDragPanel extends FlowPanel {
 	public static void preventDrag() {
 
 		dragPreventer = true;
-
+	
 	}
 
 	/**

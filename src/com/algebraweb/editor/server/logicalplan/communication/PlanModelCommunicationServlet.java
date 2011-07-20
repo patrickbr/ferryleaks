@@ -717,7 +717,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		while (it.hasNext()) {
 			PlanNodeCopyMessage cur = it.next();
-			if (cur.getPos().getX() < offX && cur.getPos().getY() < offY) {
+			if (cur.getPos().getY() < offY) {
 				offX = cur.getPos().getX();
 				offY = cur.getPos().getY();
 			}

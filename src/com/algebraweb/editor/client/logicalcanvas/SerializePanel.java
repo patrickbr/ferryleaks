@@ -191,7 +191,8 @@ public class SerializePanel extends LayoutPanel {
 
 	public boolean fillEvaluationContext(EvaluationContext c) {
 
-		c.setIterColumnName(iterColumn.getWidget().getItemText(iterColumn.getWidget().getSelectedIndex()));
+	
+		if (iterColumn.getWidget().getSelectedIndex() > -1) c.setIterColumnName(iterColumn.getWidget().getItemText(iterColumn.getWidget().getSelectedIndex()));
 
 		if (!valueTextBox.getValue().matches("[0-9]*")) {
 
@@ -203,11 +204,11 @@ public class SerializePanel extends LayoutPanel {
 
 		c.setIterUseColumn(userUseColumn.getValue());
 
-		c.setSortColumnName(sortColumn.getWidget().getItemText(sortColumn.getWidget().getSelectedIndex()));
+		if (sortColumn.getWidget().getSelectedIndex()> -1) c.setSortColumnName(sortColumn.getWidget().getItemText(sortColumn.getWidget().getSelectedIndex()));
 		c.setSortOrder(preDefinedSortingListBox.getValue(preDefinedSortingListBox.getSelectedIndex()));
 		c.setSortUseColumn(useSortColumnButton.getValue());
 
-		c.setSortOrderColumnOn(sortOnColumn.getListBox().getValue(sortOnColumn.getListBox().getSelectedIndex()));
+		if (sortOnColumn.getListBox().getSelectedIndex() > -1) c.setSortOrderColumnOn(sortOnColumn.getListBox().getValue(sortOnColumn.getListBox().getSelectedIndex()));
 		
 		String[] itemCols = columnsAvailable.getSelectedItems();
 

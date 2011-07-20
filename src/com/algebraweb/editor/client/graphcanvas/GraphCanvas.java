@@ -425,26 +425,27 @@ public class GraphCanvas extends Raphael  {
 
 				if (GraphCanvas.this.dragNode != null) {
 					dragNode.setHasBeenDragged(true);
+					FullScreenDragPanel.clearDrag();
 					DOM.eventGetCurrentEvent().preventDefault();
 					double x = scale * (event.getRelativeX(GraphCanvas.this.getRaphaelElement())-dragOffsetX);
 					double y = scale *(event.getRelativeY(GraphCanvas.this.getRaphaelElement())-dragOffsetY);
 
 					hidePopUp();
-					
+
 					if (getSelectedNode().size()>1) {
 
 						double oldX = dragNode.getX();
 						double oldY = dragNode.getY();
-						
+
 						Iterator<GraphNode> u = getSelectedNode().values().iterator();
-						
+
 						while (u.hasNext()) {
-							
+
 							GraphNode cur = u.next();
 							gnm.moveTo(cur, (cur.getX()-oldX) + x, (cur.getY()-oldY) + y);
-							
+
 						}
-						
+
 					}else{
 						gnm.moveTo(dragNode,x,y);
 					}
@@ -456,13 +457,20 @@ public class GraphCanvas extends Raphael  {
 			}
 
 		}, MouseMoveEvent.getType());
-		
-		
+
+
 		this.addDomHandler(new MouseUpHandler() {
 
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				GraphCanvas.this.clearDrag();
+				
+				if (!mouseOverNode(event.getClientX(), event.getClientY())) {
+					
+					clearSelection();
+					
+				}
+				
 			}
 
 		}, MouseUpEvent.getType());
@@ -471,17 +479,17 @@ public class GraphCanvas extends Raphael  {
 
 			@Override
 			public void onContextMenu(ContextMenuEvent event) {
-				
-		
+
+
 				if (!mouseOverNode(event.getNativeEvent().getClientX(), event.getNativeEvent().getClientY()) && event.getNativeEvent().getButton() == NativeEvent.BUTTON_RIGHT) {
-					
+
 					event.preventDefault();
 					showCanvasContextMenu(event.getNativeEvent().getClientX(), event.getNativeEvent().getClientY());
-					
+
 				}
-				
+
 			}
-			
+
 		},ContextMenuEvent.getType());
 
 		this.addDomHandler(new MouseWheelHandler() {
@@ -653,9 +661,10 @@ public class GraphCanvas extends Raphael  {
 		//add dom handlers for node dragging
 
 		g.getShape().addDomHandler(GraphNodeModifier.mouseMoveHandlerBuilder(g), MouseMoveEvent.getType());
-
 		g.getShape().addDomHandler(GraphNodeModifier.mouseOutHandlerBuilder(g), MouseOutEvent.getType());
 
+		gnm.checkDimension(g,x,y);
+		
 		return g;
 
 	}
@@ -886,7 +895,7 @@ public class GraphCanvas extends Raphael  {
 
 	}
 
-	private boolean mouseOverNode(int mouseX, int mouseY) {
+	protected boolean mouseOverNode(int mouseX, int mouseY) {
 
 
 		int x = (int)((Window.getScrollLeft() -marginLeft + mouseX));
@@ -912,6 +921,7 @@ public class GraphCanvas extends Raphael  {
 
 
 		loadingMessagePopUp.show(msg);
+		
 
 
 	}
@@ -1079,13 +1089,15 @@ public class GraphCanvas extends Raphael  {
 	public void showContextMenu(GraphNode graphNode, int clientX, int clientY) {
 
 		hidePopUp();
+		unbugMe();
 		getContextMenu().show(graphNode, clientX+Window.getScrollLeft(),clientY+Window.getScrollTop());
 
 	}
-	
+
 	public void showCanvasContextMenu(int clientX, int clientY) {
 
 		hidePopUp();
+		unbugMe();
 		getCanvasMenu().show(clientX+Window.getScrollLeft(),clientY+Window.getScrollTop());
 
 	}
@@ -1109,7 +1121,16 @@ public class GraphCanvas extends Raphael  {
 	}
 
 
-	
+	public void unbugMe() {
+
+		if (dragNode != null) {
+			dragNode= null;
+			dragNode.setDragged(false);
+		}
+
+		FullScreenDragPanel.clearDrag();
+
+	}
 
 
 

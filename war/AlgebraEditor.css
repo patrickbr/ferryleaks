@@ -849,7 +849,7 @@ body.hidden #loading #msg {
 	
 	background-color:#666666;
 	color:white;	
-	padding-left:10px;
+	padding-left:25px;
 	padding-top:3px;
 	padding-bottom:3px;
 	cursor: pointer;
@@ -913,4 +913,20 @@ body.hidden #loading #msg {
 	margin-right:5px;
 	
 	
+}
+
+
+#backlogo {
+	
+	z-index:-100;
+
+	position:absolute;
+	position:fixed;
+	bottom:0px;
+	right:0px;
+	height:230px;
+	width:403px;
+	background-image:url(webferryback.png);
+
+
 }

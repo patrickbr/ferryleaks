@@ -1,5 +1,6 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
+import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -36,6 +37,7 @@ public class TabbedDialog extends DialogBox{
 		p.setSize("550px","400px");
 		
 		this.add(p);
+		AlgebraEditor.getActiveCanvas().unbugMe();
 		this.show();
 		this.center();
 		
