@@ -43,8 +43,8 @@ public class QueryPlan implements Serializable {
 	public QueryPlan() {
 
 	}
-
-
+	
+	
 
 	public ArrayList<Property> getProperties() {
 		return properties;

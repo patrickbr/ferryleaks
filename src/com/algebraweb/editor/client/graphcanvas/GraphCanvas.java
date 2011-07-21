@@ -589,7 +589,6 @@ public class GraphCanvas extends Raphael  {
 
 	public void createEdge(GraphNode from, GraphNode to, int fixedPos,boolean quiet) {
 
-		AlgebraEditor.log("(GraphCanvas) Creating edge from " + from.getId() + " to " + to.getId() + (fixedPos != -1?" with fixed pos " + fixedPos:""));
 		GraphEdge t = new GraphEdge(this,from,to,fixedPos,quiet, !this.isNotActive());
 		this.edges.add(t);
 

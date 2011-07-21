@@ -19,12 +19,12 @@ public class GraphEdge {
 	private GraphNode fromNode;
 	private GraphNode toNode;
 	private boolean snakedIn = true;
-	
+
 	private boolean snakingIn = false;
 	private boolean snakingOut = false;
 
 	private String pathSmall;
-	
+
 	private int fixedParentPos=-1;
 
 	private double x1;
@@ -56,28 +56,27 @@ public class GraphEdge {
 
 		from.addEdgeFrom(this);
 		to.addEdgeTo(this);
-		AlgebraEditor.log("(GraphCanvas) Calling graphEdgeModifier to create a new edge...");
 		c.getGraphEdgeModifier().makeConnection(this,from,to,quiet,animated);
-		
+
 		MouseDownHandler mouseDownH = new MouseDownHandler() {
 
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				
+
 				GraphEdge.this.edgePath.toFront();
 				GraphEdge.this.arrowPath.toFront();
-	
+
 				GraphEdge.this.c.setSelectedEdge(GraphEdge.this);
-				
-		
+
+
 			}
 
 		};
-		
+
 		edgePath.addDomHandler(mouseDownH, MouseDownEvent.getType());
 		arrowPath.addDomHandler(mouseDownH, MouseDownEvent.getType());
 
-		
+
 
 	}
 
@@ -103,7 +102,7 @@ public class GraphEdge {
 		this.arrowSize = size;
 	}
 
-	
+
 
 	/**
 	 * @return the snakingIn
@@ -318,7 +317,7 @@ public class GraphEdge {
 	}
 
 
-	
+
 
 	public String getEdgePathString() {
 		return paths;
@@ -345,7 +344,7 @@ public class GraphEdge {
 	}
 
 
-    
+
 
 
 

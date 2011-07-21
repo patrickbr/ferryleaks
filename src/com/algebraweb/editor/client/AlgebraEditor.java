@@ -53,7 +53,7 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Alpha 6.07";
+	private static String VERSION = "Alpha 6.08";
 
 	private static String TITLE = "the bugFerry";
 	private static String AUTHOR = "Patrick Brosi";
@@ -89,6 +89,7 @@ public class AlgebraEditor implements EntryPoint {
 			RootPanel.get("debugger").getElement().getStyle().setDisplay(Display.BLOCK);
 			LOGGING=true;
 			AlgebraEditor.log.setReadOnly(true);
+			
 		}
 
 
@@ -120,7 +121,7 @@ public class AlgebraEditor implements EntryPoint {
 		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE); 
 		initContextMenu();
 		initPlanContextMenu();
-		
+
 		AlgebraEditor.log("Sending registration...");
 
 		registor.register(new AsyncCallback<Configuration>() {
@@ -196,6 +197,22 @@ public class AlgebraEditor implements EntryPoint {
 			}
 		});
 	}
+	
+	
+	public void createNewPlan() {
+		
+		rmsa.createNewPlan(createCb);
+			
+		
+	}
+	
+	public void removePlan(int id) {
+		
+		
+		rmsa.removePlan(id, removeCb);
+		
+		
+	}
 
 
 	public LogicalCanvas getCanvas(int pid) {
@@ -215,9 +232,21 @@ public class AlgebraEditor implements EntryPoint {
 
 	}
 
+	public int getFreeCanvasId() {
+		int i=0;
+		while (hasCanvasWithId(i)) i++;
+		return i;
+	}
+
+	public boolean hasCanvasWithId(int i) {
+		Iterator<LogicalCanvas> it = canvi.iterator();
+		while (it.hasNext()) if (it.next().getId() == i) return true;
+		return false;
+	}
+
 	public LogicalCanvas addCanvas(int id) {
 
-
+		if (hasCanvasWithId(id)) return getCanvas(id);
 
 		LogicalCanvas c = new LogicalCanvas(id,m,Window.getClientWidth()-30,Window.getClientHeight()-30,s.addPlan(id));
 
@@ -336,11 +365,11 @@ public class AlgebraEditor implements EntryPoint {
 		});
 	}
 
-	private  AsyncCallback<Integer> createCb = new  AsyncCallback<Integer>() {
+	private  AsyncCallback<Integer> createCb = new  GraphCanvasCommunicationCallback<Integer>() {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
+			super.onFailure(caught);
 		}
 
 		@Override
@@ -348,6 +377,22 @@ public class AlgebraEditor implements EntryPoint {
 
 
 			if (addCanvas(result) != activeCanvas) changeCanvas(result);
+
+		}
+
+	};
+	
+	private  AsyncCallback<Integer> removeCb = new  GraphCanvasCommunicationCallback<Integer>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			super.onFailure(caught);
+		}
+
+		@Override
+		public void onSuccess(Integer result) {
+
+			if (hasCanvasWithId(result)) removeLogicalCanvas(getCanvas(result));
 
 		}
 
@@ -389,7 +434,7 @@ public class AlgebraEditor implements EntryPoint {
 		return rmsa;
 
 	}
-	
+
 	private void initPlanContextMenu() {
 
 		AlgebraEditor.log("initializing context menu...");
@@ -406,7 +451,7 @@ public class AlgebraEditor implements EntryPoint {
 		});
 
 		m.addSeperator();
-		
+
 		m.addItem(new LogicalPlanNodeContextItem("Paste") {
 
 			@Override
@@ -462,7 +507,7 @@ public class AlgebraEditor implements EntryPoint {
 				getPlanManipulator().copy(getActiveCanvas().getId());
 			}
 		});
-		
+
 		m.addSeperator();
 
 		m.addItem(new LogicalNodeContextItem("View XML source") {

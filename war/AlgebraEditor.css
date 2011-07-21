@@ -657,6 +657,17 @@ body.hidden #loading #msg {
 	padding: 3px;
 }
 
+.switcher .add-plan-button button {
+	
+	min-width:1px;
+	width:25px;
+	height:17px;
+	font-weight:bold;
+	
+	
+ }
+
+
 .switcher .gwt-HTML {
 	position: absolute;
 	right: 4px;
@@ -671,6 +682,8 @@ body.hidden #loading #msg {
 .switcher .planswitchbutton.active {
 	background-color: #FAFAFA;
 }
+
+
 
 .switcher .error-count {
 	text-align: right;
@@ -828,6 +841,18 @@ body.hidden #loading #msg {
 
 }
 
+#debuggerl {
+	
+	position:absolute;
+	right:15px;
+	bottom:10px;
+	font-size:90px;
+	color:#9F9F9F;
+
+	font-weight:bold;
+	z-index:-99;
+	
+}
 
 
 .node-context-menu {

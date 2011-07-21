@@ -468,7 +468,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 				PlanParser p = new PlanParser();
 				p.parseNodeLabelSchema(newNode, newNode.getScheme());
-				
+
 				ValidationResult res = getValidation(pid);
 
 				RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"add", 1, "", res);
@@ -559,22 +559,28 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public Integer createNewPlan() {
+	public Integer createNewPlan() throws SessionExpiredException {
+		
+		QueryPlanBundle b= getQueryPlanBundleFromSession();
+		int id= b.getFreePlanId();
+		System.out.println("Adding new empty plan with id #" +  id);
+		b.addPlan(new QueryPlan(id));
 
-		//TODO: everthing fixed
-
-		QueryPlanBundle b = new QueryPlanBundle();
-
-		b.addPlan(new QueryPlan(0));
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-
-		request.getSession(true).setAttribute("queryPlans",b);
-
-		return 0;
+		return id;
 
 	}
-
+	
+	private QueryPlanBundle getQueryPlanBundleFromSession() throws SessionExpiredException {
+		
+		QueryPlanBundle b = ((QueryPlanBundle)getSession().getAttribute("queryPlans"));		
+		
+		if (b==null) {
+			b = new QueryPlanBundle();
+			getSession().setAttribute("queryPlans",b);
+		}
+		
+		return b;
+	}
 
 	@Override
 	public void markAsRoot(int pid, int nid) {
@@ -788,97 +794,102 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		ArrayList<ClipBoardPlanNode> nodes = (ArrayList<ClipBoardPlanNode>)getSession().getAttribute("clipboard");
 
-		QueryPlan p = getPlanToWork(pid);
+		if (nodes != null) {
 
-		HashMap<Integer,PlanNode> newNodes = new HashMap<Integer,PlanNode>();
+			QueryPlan p = getPlanToWork(pid);
+
+			HashMap<Integer,PlanNode> newNodes = new HashMap<Integer,PlanNode>();
 
 
-		HashMap<Integer,Integer> idReplacements = new HashMap<Integer,Integer>();
+			HashMap<Integer,Integer> idReplacements = new HashMap<Integer,Integer>();
 
-		Iterator<ClipBoardPlanNode> it = nodes.iterator();
+			Iterator<ClipBoardPlanNode> it = nodes.iterator();
 
-		ArrayList<Integer> blackList = new ArrayList<Integer>();
+			ArrayList<Integer> blackList = new ArrayList<Integer>();
 
-		while (it.hasNext()) {
+			while (it.hasNext()) {
 
-			PlanNode cur = it.next().getP();
+				PlanNode cur = it.next().getP();
 
-			int newId = p.getFreeId(blackList);
-			blackList.add(newId);
+				int newId = p.getFreeId(blackList);
+				blackList.add(newId);
 
-			idReplacements.put(cur.getId(),newId);
-
-		}
-
-		it = nodes.iterator();
-
-		while (it.hasNext()) {
-
-			PlanNode cur = it.next().getP();
-			PlanNode newNode = new PlanNode(idReplacements.get(cur.getId()), cur.getScheme(), p);
-
-			PlanParser pa = new PlanParser();
-			pa.parseNodeLabelSchema(newNode, newNode.getScheme());
-			
-			Iterator<NodeContent> content = cur.getContent().iterator();
-			while (content.hasNext()) {
-				NodeContent curC = content.next();
-				if (!curC.getInternalName().equals("edge")) {
-					newNode.getContent().add(curC);
-				}
-			}				
-
-			System.out.println("Adding node to plan with id #" + newNode.getId());
-			p.getPlan().add(newNode);
-			newNodes.put(newNode.getId(),newNode);
-
-		}
-
-		it = nodes.iterator();
-
-		while (it.hasNext()) {
-
-			PlanNode cur = it.next().getP();
-
-			Iterator<PlanNode> childs = cur.getChilds().iterator();
-			int pos=1;
-
-			while (childs.hasNext()) {
-
-				PlanNode child = childs.next();
-				newNodes.get(idReplacements.get(cur.getId())).addChild(p.getPlanNodeById(idReplacements.get(child.getId())), pos);
-				pos++;
+				idReplacements.put(cur.getId(),newId);
 
 			}
+
+			it = nodes.iterator();
+
+			while (it.hasNext()) {
+
+				PlanNode cur = it.next().getP();
+				PlanNode newNode = new PlanNode(idReplacements.get(cur.getId()), cur.getScheme(), p);
+
+				PlanParser pa = new PlanParser();
+				pa.parseNodeLabelSchema(newNode, newNode.getScheme());
+
+				Iterator<NodeContent> content = cur.getContent().iterator();
+				while (content.hasNext()) {
+					NodeContent curC = content.next();
+					if (!curC.getInternalName().equals("edge")) {
+						newNode.getContent().add(curC);
+					}
+				}				
+
+				System.out.println("Adding node to plan with id #" + newNode.getId());
+				p.getPlan().add(newNode);
+				newNodes.put(newNode.getId(),newNode);
+
+			}
+
+			it = nodes.iterator();
+
+			while (it.hasNext()) {
+
+				PlanNode cur = it.next().getP();
+
+				Iterator<PlanNode> childs = cur.getChilds().iterator();
+				int pos=1;
+
+				while (childs.hasNext()) {
+
+					PlanNode child = childs.next();
+					newNodes.get(idReplacements.get(cur.getId())).addChild(p.getPlanNodeById(idReplacements.get(child.getId())), pos);
+					pos++;
+
+				}
+			}
+
+			RemoteManipulationMessage res =  new RemoteManipulationMessage(pid, "add", 1, "", null);
+
+			HashMap<Integer,Coordinate> coords = new HashMap<Integer,Coordinate>();
+
+
+			XMLPlanFiller xmlpl = new XMLPlanFiller(getSession(),getServletContext(),pid);
+
+			Iterator<ClipBoardPlanNode> newNodesIt = nodes.iterator();
+
+			while (newNodesIt.hasNext()) {
+
+				ClipBoardPlanNode cur = newNodesIt.next();
+
+				PlanNode curNode = p.getPlanNodeById(idReplacements.get(cur.getP().getId()));
+
+				res.getNodesAffected().add(xmlpl.getRawNode(curNode));
+				coords.put(curNode.getId(),new Coordinate(cur.getPos().getX()+x,cur.getPos().getY()+y));
+
+			}
+
+
+
+			res.setCoordinates(coords);
+			res.setValidationResult(getValidation(pid));
+
+
+			return res;
+		}else{
+			return new RemoteManipulationMessage(pid, "update", 0, "", null );
 		}
-
-		RemoteManipulationMessage res =  new RemoteManipulationMessage(pid, "add", 1, "", null);
-
-		HashMap<Integer,Coordinate> coords = new HashMap<Integer,Coordinate>();
-
-
-		XMLPlanFiller xmlpl = new XMLPlanFiller(getSession(),getServletContext(),pid);
-
-		Iterator<ClipBoardPlanNode> newNodesIt = nodes.iterator();
-
-		while (newNodesIt.hasNext()) {
-
-			ClipBoardPlanNode cur = newNodesIt.next();
-			
-			PlanNode curNode = p.getPlanNodeById(idReplacements.get(cur.getP().getId()));
-
-			res.getNodesAffected().add(xmlpl.getRawNode(curNode));
-			coords.put(curNode.getId(),new Coordinate(cur.getPos().getX()+x,cur.getPos().getY()+y));
-
-		}
-
-
-
-		res.setCoordinates(coords);
-		res.setValidationResult(getValidation(pid));
-
-
-		return res;
 
 
 	}
@@ -893,6 +904,15 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		return session;
 
+	}
+
+
+	@Override
+	public Integer removePlan(int pid) throws SessionExpiredException {
+		
+		getQueryPlanBundleFromSession().getPlans().remove(pid);
+		
+		return pid;
 	}
 
 

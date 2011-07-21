@@ -64,7 +64,9 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, SqlError;
 
-	public Integer createNewPlan();
+	public Integer createNewPlan() throws SessionExpiredException;
+	
+	public Integer removePlan(int pid) throws SessionExpiredException;
 	
 	public void markAsRoot(int pid, int nid);
 	

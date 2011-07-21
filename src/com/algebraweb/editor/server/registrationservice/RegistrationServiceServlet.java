@@ -37,7 +37,8 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 			tmp = new ConfigurationWithPlansInSession(((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().keySet().toArray(new Integer[0]));
 
 		}else{
-
+			session = request.getSession(true);
+			session.setAttribute("queryPlans", new QueryPlanBundle());
 			tmp = new Configuration();
 		}
 

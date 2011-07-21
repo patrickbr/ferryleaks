@@ -84,4 +84,6 @@ public interface RemoteManipulationServiceAsync {
 	void insert(int pid, int x, int y,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
+	void removePlan(int pid, AsyncCallback<Integer> callback);
+
 }
