@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.LabelAttrIdentifierOb;
@@ -61,7 +62,7 @@ public class PlanParser {
 		this.schemes=schemes;
 
 	}
-	
+
 	public PlanParser() {
 
 		this.schemes=schemes;
@@ -100,10 +101,15 @@ public class PlanParser {
 
 				parseNodes((Element)planNodes,p);
 
-				//TODO: not reliable :(
-				p.setRoot(p.getPlan().get(p.getPlan().size()-1));
+
 				System.out.println("Parsed and adding plan #" + p.getId());
-				ecp.fillEvaluationContext(p);
+
+				try {
+					ecp.fillEvaluationContext(p);
+				} catch (GraphNotConnectedException e) {
+					e.printStackTrace();
+				}
+
 				ret.addPlan(p);
 			}
 
@@ -240,7 +246,7 @@ public class PlanParser {
 				((ContentVal)retEl).getAttributes().put(new Property(name,value, type));
 
 			}
-			
+
 
 			// what if edge erroneous??
 			if (((Value)g).getInternalName().equals("edge")) {
@@ -250,15 +256,15 @@ public class PlanParser {
 				PlanNode pn = mother.getPlanNodeById(to);
 
 				node.getChilds().add(mother.getPlanNodeById(to));
-				
+
 
 			}
-			
+
 			parseContentLabelSchema(retEl, ((Value)g));
 
 		}
-		
-		
+
+
 
 		ArrayList<GoAble> schema = g.getSchema();
 
@@ -268,14 +274,14 @@ public class PlanParser {
 	}
 
 	private void parseContentLabelSchema(NodeContent retEl, Value g) {
-			
+
 		String schema = g.getNameToPrint();
 		parseLabelSchema(retEl, schema);
 
 	}
-	
+
 	public void parseNodeLabelSchema(PlanNode retEl, NodeScheme s) {
-		
+
 		String schema = s.getProperties().get("label_schema");
 		if (schema == null) schema = "";
 		parseLabelSchema(retEl, schema);
@@ -284,32 +290,32 @@ public class PlanParser {
 
 	private void parseLabelSchema(ContentNode retEl, String schema) {
 		LabelOb c = new LabelStringOb("");
-		
+
 		for (int i=0;i<schema.length();i++) {
-			
+
 			if (schema.substring(i, i+1).equals("{")) {
-				
+
 				if (c!= null) retEl.addLabelOb(c);
 				c = new LabelContentIdentifierOb("");
-							
+
 			}else if ((schema.substring(i, i+1).equals("}")) || (schema.substring(i, i+1).equals("]"))) {
-				
+
 				if (c!= null) retEl.addLabelOb(c);
 				c = new LabelStringOb("");
-				
+
 			}else if (schema.substring(i, i+1).equals("[")) {
-				
+
 				if (c!= null) retEl.addLabelOb(c);
 				c = new LabelAttrIdentifierOb("");
-				
+
 			}else{
-				
+
 				c.addChar(schema.substring(i, i+1));
-				
+
 			}
-			
+
 		}
-		
+
 		if (!(c == null) && !c.getVal().equals("")) retEl.addLabelOb(c);
 	}
 

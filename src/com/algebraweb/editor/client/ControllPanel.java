@@ -10,9 +10,11 @@ import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 import com.algebraweb.editor.client.logicalcanvas.AddSQListenerDIalog;
 import com.algebraweb.editor.client.logicalcanvas.CreateSQLDialog;
 import com.algebraweb.editor.client.logicalcanvas.CreateXMLDialog;
+import com.algebraweb.editor.client.logicalcanvas.EvaluatePlanDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
+import com.algebraweb.editor.client.node.PlanNode;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
@@ -161,7 +163,14 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				new EvaluationDialog(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0])[0],rmsa);
+				rmsa.getRootNode(AlgebraEditor.getActiveCanvas().getId(), new GraphCanvasCommunicationCallback<PlanNode>("getting root node") {
+
+					@Override
+					public void onSuccess(PlanNode result) {
+						new EvaluatePlanDialog(AlgebraEditor.getActiveCanvas().getId(),result.getId(),rmsa);
+					}
+				});
+
 			}});
 
 		editPanel.add(evalB);
@@ -199,7 +208,7 @@ public class ControllPanel extends AbsolutePanel{
 			}});
 
 		sortPanel.add(sortC);
-		
+
 		ControllPanelButton sortBBB = new ControllPanelButton("line","sort-line");
 
 		sortBBB.addClickHandler(new ClickHandler() {
@@ -315,7 +324,7 @@ public class ControllPanel extends AbsolutePanel{
 	}
 
 
-	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>() {
+	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>("getting XML") {
 
 		@Override
 		public void onSuccess(String result) {

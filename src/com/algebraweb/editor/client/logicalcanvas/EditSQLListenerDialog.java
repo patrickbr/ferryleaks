@@ -28,9 +28,7 @@ public class EditSQLListenerDialog extends AddSQListenerDIalog{
 	@Override
 	protected void submit() {
 		
-		
-		EvaluationContext c = new EvaluationContext();
-		getSerializationPanel().fillEvaluationContext(c);
+		EvaluationContext c = saveContext();
 	
 		b.setEvaluationContext(c);
 		b.update();

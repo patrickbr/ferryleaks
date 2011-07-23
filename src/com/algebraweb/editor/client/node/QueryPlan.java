@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.GoInto;
 import com.algebraweb.editor.client.scheme.NodeScheme;
@@ -24,17 +25,11 @@ public class QueryPlan implements Serializable {
 	int id = -1;
 	ArrayList<Property> properties = new ArrayList<Property>();
 	ArrayList<PlanNode> plan = new ArrayList<PlanNode>();
-	private PlanNode root;
 	private EvaluationContext evContext;
 
 
-	public PlanNode getRoot() {
-		return root;
-	}
+	
 
-	public void setRoot(PlanNode root) {
-		this.root = root;
-	}
 
 	public QueryPlan(int id) {
 		this.id=id;
@@ -159,6 +154,53 @@ public class QueryPlan implements Serializable {
 		return null;
 
 	}
+	
+	public PlanNode getRootNode() throws GraphNotConnectedException{
+		return getRootNode(true);
+	}
+	
+	public PlanNode getRootNode(boolean skipSerializeRelation) throws GraphNotConnectedException{
+
+		ArrayList<PlanNode> temp = new ArrayList<PlanNode>();
+
+		temp.addAll(this.getPlan());
+
+		Iterator<PlanNode> itChilds = this.getPlan().iterator();
+
+		while (itChilds.hasNext()) {
+
+			deleteChildsFromPlan(itChilds.next(),temp);
+
+		}
+		
+		if (temp.size()>1) throw new GraphNotConnectedException("Graph is not connected!");
+
+		//TODO: throws error if plan has cycle
+		
+		if (skipSerializeRelation && temp.get(0).getKind().equals("serialize relation")) {
+			return temp.get(0).getChilds().get(1);
+		}else{
+			return temp.get(0);
+		}
+	
+
+	}
+	
+
+	private void deleteChildsFromPlan(PlanNode p, ArrayList<PlanNode> plan) {
+
+		Iterator<PlanNode> it = p.getChilds().iterator();
+
+		while (it.hasNext()) {
+
+			PlanNode current = it.next();
+			plan.remove(current);
+
+		}
+
+
+	}
+
 
 
 

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.SqlResDialog;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvasErrorDialogBox;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,28 +26,42 @@ public class EvaluationDialog extends CreateSQLDialog {
 
 	public EvaluationDialog(int pid, int nid, RemoteManipulationServiceAsync manServ) {
 
-			
+
 		super(pid,nid,manServ);
 		super.setText("Evaluation");
 		db = new DatabaseConfigPanel(pid, nid, manServ);
 		super.addTab(db, "Database");
-		
-	
+
+
 	}
-	
+
+	@Override 
+	protected EvaluationContext saveContext() {
+
+		EvaluationContext c = super.saveContext();
+		db.fillEvaluationContext(c);
+		return c;		
+
+	}
+
 	@Override
 	protected void submit() {
-		
-		
-		EvaluationContext c = new EvaluationContext();
-		
-		getSerializationPanel().fillEvaluationContext(c);
-				
-		getManServ().eval(getPid(), getNid(),c,getSaveCurrenNodeValue(), evalCb);
-		
+
+
+		EvaluationContext c = saveContext();
+		getManServ().eval(getPid(), getNid(), c,getSaveCurrenNodeValue(), evalCb);
+
 	}
-	
-	private  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>> evalCb = new  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>>() {
+
+
+
+	protected DatabaseConfigPanel getDatabaseConfigPanel() {
+
+		return db;
+
+	}
+
+	private  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>> evalCb = new  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>>("evaluating") {
 
 		@Override
 		public void onSuccess(ArrayList<HashMap<String,String>> result) {
@@ -57,6 +73,15 @@ public class EvaluationDialog extends CreateSQLDialog {
 		}
 
 	};
+
+	@Override
+	protected void processContextResult(EvaluationContext result) {
+
+		super.processContextResult(result);
+		getDatabaseConfigPanel().loadEvaluationContext(result);
+
+
+	}
 
 
 }

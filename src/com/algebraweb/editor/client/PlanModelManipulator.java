@@ -115,7 +115,7 @@ public class PlanModelManipulator {
 			msg.add(new PlanNodeCopyMessage(cur.getId(), new Coordinate(cur.getX(), cur.getY())));
 		}
 
-		manServ.copyNodes(msg, planid, new GraphCanvasCommunicationCallback<Void>(){
+		manServ.copyNodes(msg, planid, new GraphCanvasCommunicationCallback<Void>("copying node(s)"){
 
 			@Override
 			public void onSuccess(Void result) {
@@ -174,7 +174,7 @@ public class PlanModelManipulator {
 	}
 
 
-	private GraphCanvasCommunicationCallback<ValidationResult> validationCallback = new GraphCanvasCommunicationCallback<ValidationResult>() {
+	private GraphCanvasCommunicationCallback<ValidationResult> validationCallback = new GraphCanvasCommunicationCallback<ValidationResult>("validating plan") {
 
 
 		@Override
@@ -188,7 +188,7 @@ public class PlanModelManipulator {
 
 	};
 
-	private GraphCanvasCommunicationCallback<RemoteManipulationMessage> manipulationCallback = new GraphCanvasCommunicationCallback<RemoteManipulationMessage>() {
+	private GraphCanvasCommunicationCallback<RemoteManipulationMessage> manipulationCallback = new GraphCanvasCommunicationCallback<RemoteManipulationMessage>("manipulating logical plan") {
 
 
 		@Override
@@ -313,7 +313,7 @@ public class PlanModelManipulator {
 
 
 
-	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>() {
+	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>("getting node types") {
 
 		@Override
 		public void onSuccess(String[] result) {

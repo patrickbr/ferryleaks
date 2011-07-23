@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class EvaluationContext implements IsSerializable {
 	
 	
+		
 	String databaseServer;
 	int databasePort;
 	String databaseUser;
@@ -237,8 +238,6 @@ public class EvaluationContext implements IsSerializable {
 	public void setSortOrderColumnOn(String sortOrderColumnOn) {
 		this.sortOrderColumnOn = sortOrderColumnOn;
 	}
-	
-	
 	
 
 }

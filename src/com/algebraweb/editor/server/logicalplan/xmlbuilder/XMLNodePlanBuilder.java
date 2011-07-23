@@ -12,6 +12,7 @@ import org.jdom.Element;
 import org.jdom.Text;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
@@ -62,52 +63,19 @@ public class XMLNodePlanBuilder {
 	}
 
 
-	private PlanNode getRootNode(QueryPlan p) {
-
-		ArrayList<PlanNode> temp = new ArrayList<PlanNode>();
-
-		temp.addAll(p.getPlan());
-
-		Iterator<PlanNode> itChilds = p.getPlan().iterator();
-
-		while (itChilds.hasNext()) {
-
-			deleteChildsFromPlan(itChilds.next(),temp);
-
-		}
-
-		//TODO: throws error if plan has cycle
-		return temp.get(0);
-
-	}
-
-	private void deleteChildsFromPlan(PlanNode p, ArrayList<PlanNode> plan) {
-
-
-		Iterator<PlanNode> it = p.getChilds().iterator();
-
-		while (it.hasNext()) {
-
-			PlanNode current = it.next();
-			plan.remove(current);
-
-		}
-
-
-	}
 
 
 
 
-	public Document getNodePlan(QueryPlan p, ServletContext context) throws PlanManipulationException {
+	public Document getNodePlan(QueryPlan p, ServletContext context) throws PlanManipulationException, GraphNotConnectedException {
 
-		PlanNode root = getRootNode(p);
+		PlanNode root = p.getRootNode();
 
 		System.out.println("Rootnode is #" + root.getId());
 
 		Document d = new Document();
 
-		d.addContent(getNodePlan(p.getId(),getRootNode(p),p.getEvContext(),context));
+		d.addContent(getNodePlan(p.getId(),p.getRootNode(),p.getEvContext(),context));
 
 		return d;
 

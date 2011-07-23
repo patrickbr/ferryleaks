@@ -3,12 +3,14 @@
 @font-face {
 	font-family: PTSans;
 	font-weight: bold;
+	src: url(PT_Sans-Caption-Web-Bold.eot);
 	src: url(PT_Sans-Caption-Web-Bold.ttf);
 }
 
 @font-face {
 	font-family: PTSans;
 	font-weight: normal;
+	src: url(PT_Sans-Caption-Web-Regular.eot);
 	src: url(PT_Sans-Caption-Web-Regular.ttf);
 }
 
@@ -16,6 +18,10 @@ body {
 	margin: 0px;
 	padding: 0px;
 	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+	background-image: url("webferryback.png");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: bottom right;
 }
 
 h1 {
@@ -268,6 +274,8 @@ h1 {
 	background-position: 10px -1px;
 	background-repeat: no-repeat;
 	width: 160px;
+	white-space:nowrap;
+	overflow:hidden;
 }
 
 .gwt-StackLayoutPanel .gwt-StackLayoutPanelHeader {
@@ -539,12 +547,9 @@ table td,table {
 }
 
 .controllbutton-eva {
-	
 	background-image: url(icons_black.png);
-	background-position: -153px -220px;	
-	
+	background-position: -153px -220px;
 }
-
 
 #impressum {
 	position: fixed;
@@ -658,15 +663,11 @@ body.hidden #loading #msg {
 }
 
 .switcher .add-plan-button button {
-	
-	min-width:1px;
-	width:25px;
-	height:17px;
-	font-weight:bold;
-	
-	
- }
-
+	min-width: 1px;
+	width: 25px;
+	height: 17px;
+	font-weight: bold;
+}
 
 .switcher .gwt-HTML {
 	position: absolute;
@@ -682,8 +683,6 @@ body.hidden #loading #msg {
 .switcher .planswitchbutton.active {
 	background-color: #FAFAFA;
 }
-
-
 
 .switcher .error-count {
 	text-align: right;
@@ -731,62 +730,49 @@ body.hidden #loading #msg {
 	background-image: url(pfeil.png);
 	background-repeat: no-repeat;
 	background-position: left 40px;
-	position:relative;
+	position: relative;
 	top: -49px;
-	padding-top:30px;
-	padding-bottom:30px;
+	padding-top: 30px;
+	padding-bottom: 30px;
 }
 
-
-.sql-bubble .sql-bubble-close,.sql-bubble .sql-bubble-edit,.sql-bubble .sql-bubble-refresh  {
-	
-	opacity:0.1;
-	position:absolute;
-	top:10px;
-	right:5px;
-	
-	padding-top:2px;
-	padding-bottom:2px;
-	
-	width:15px;
-	height:20px;
-
-	background:transparent;
-	background-image:url(icons_black.png);
-	background-position:-295px -38px;
-	border:none;
-	
+.sql-bubble .sql-bubble-close,.sql-bubble .sql-bubble-edit,.sql-bubble .sql-bubble-refresh
+	{
+	opacity: 0.1;
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	width: 15px;
+	height: 20px;
+	background: transparent;
+	background-image: url(icons_black.png);
+	background-position: -295px -38px;
+	border: none;
 }
 
-
-.sql-bubble.hover .sql-bubble-close,.sql-bubble.hover .sql-bubble-edit,.sql-bubble.hover .sql-bubble-refresh  {
-	
-	opacity:0.5;
-	
+.sql-bubble.hover .sql-bubble-close,.sql-bubble.hover .sql-bubble-edit,.sql-bubble.hover .sql-bubble-refresh
+	{
+	opacity: 0.5;
 }
 
-.sql-bubble.hover .sql-bubble-close:hover,.sql-bubble.hover .sql-bubble-edit:hover,.sql-bubble.hover .sql-bubble-refresh:hover  {
-
-	background-color:transparent;
-	border:none;
-	opacity:1;
-	
+.sql-bubble.hover .sql-bubble-close:hover,.sql-bubble.hover .sql-bubble-edit:hover,.sql-bubble.hover .sql-bubble-refresh:hover
+	{
+	background-color: transparent;
+	border: none;
+	opacity: 1;
 }
 
 .sql-bubble  .sql-bubble-edit {
-
-	right:25px;
-	background-position:-279px -38px;
+	right: 25px;
+	background-position: -279px -38px;
 }
 
 .sql-bubble  .sql-bubble-refresh {
-	
-	right:45px;
-	background-position:-262px -38px;
-
-	
+	right: 45px;
+	background-position: -262px -38px;
 }
-
 
 .sql-bubble-inner {
 	position: relative;
@@ -807,151 +793,100 @@ body.hidden #loading #msg {
 	overflow: auto;
 	background-color: white;
 	border: solid black 1px;
-	padding:5px;
+	padding: 5px;
 }
 
 .serialize-panel-inner {
-	
-	padding:10px;	
-	
+	padding: 10px;
 }
 
 .serialize-panel .iter-use-column,.serialize-panel .iter-use-value {
-
-	
-	margin-left:7px;
-		
+	margin-left: 7px;
 }
 
 .sort-column-button {
-	
-	margin-left:7px;	
-	
+	margin-left: 7px;
 }
 
 .use-sort-predef-button {
-	
-	margin-left:7px;
+	margin-left: 7px;
 }
 
-.serialize-panel .value-text-box{
-
-	margin-right:15px;
-	width:80px;
-
+.serialize-panel .value-text-box {
+	margin-right: 15px;
+	width: 80px;
 }
 
 #debuggerl {
-	
-	position:absolute;
-	right:15px;
-	bottom:10px;
-	font-size:90px;
-	color:#9F9F9F;
-
-	font-weight:bold;
-	z-index:-99;
-	
+	position: absolute;
+	right: 15px;
+	bottom: 10px;
+	font-size: 90px;
+	color: #9F9F9F;
+	font-weight: bold;
+	z-index: -99;
 }
 
-
 .node-context-menu {
-	
 	-webkit-border-radius: 0px;
 	-moz-border-radius: 0px;
 	border-radius: 0px;
-	overflow:hidden;
-	color:white;
-	padding:0px;
-	margin:0px;
-	border:solid #666 2px;
-	min-width:150px;
-	
+	overflow: hidden;
+	color: white;
+	padding: 0px;
+	margin: 0px;
+	border: solid #666 2px;
+	min-width: 150px;
 }
 
-
 .node-context-menu .node-context-menu-item {
-	
-	background-color:#666666;
-	color:white;	
-	padding-left:25px;
-	padding-top:3px;
-	padding-bottom:3px;
+	background-color: #666666;
+	color: white;
+	padding-left: 25px;
+	padding-top: 3px;
+	padding-bottom: 3px;
 	cursor: pointer;
-	
 }
 
 .node-context-menu .node-context-menu-item.hover {
-	
-	color:black;
-	background-color:#FFFAAE;
+	color: black;
+	background-color: #FFFAAE;
 	cursor: pointer;
-	
 }
 
 .node-context-menu .node-context-line-break {
-	
-	border-top:solid #555 1px;
-	border-bottom:solid #777 1px;
-	height:0px;
-	margin-bottom:2px;
-	margin-left:10px;
-	margin-right:10px;
-	
+	border-top: solid #555 1px;
+	border-bottom: solid #777 1px;
+	height: 0px;
+	margin-bottom: 2px;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 #debugger {
-
-	position:absolute;
-	position:fixed;
-	bottom:0px;
-	right:0px;
-	width:60%;
-	height:250px;
-
-	padding:5px;
-	background-color:#AAA;
-	opacity:0.7;
-	display:none;	
-
-	
+	position: absolute;
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+	width: 60%;
+	height: 250px;
+	padding: 5px;
+	background-color: #AAA;
+	opacity: 0.7;
+	display: none;
 }
 
 #debugger textarea {
-	
-	width:100%;
-	height:100%;
-	background:transparent;
-	font-size:9px;
-	color:black;
-	border:0px;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	font-size: 9px;
+	color: black;
+	border: 0px;
 	resize: none;
-	
-	
-	
 }
-
 
 .cancelbutton,.okbutton {
-
-	width:80px;
-	margin-right:5px;
-	
-	
-}
-
-
-#backlogo {
-	
-	z-index:-100;
-
-	position:absolute;
-	position:fixed;
-	bottom:0px;
-	right:0px;
-	height:230px;
-	width:403px;
-	background-image:url(webferryback.png);
-
-
+	width: 80px;
+	margin-right: 5px;
 }

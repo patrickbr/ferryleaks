@@ -32,14 +32,9 @@ public class CreateXMLDialog extends CreateEvaluationContextDialog{
 	@Override
 	protected void submit() {
 		
-		
-		EvaluationContext c = new EvaluationContext();
-		
-		getSerializationPanel().fillEvaluationContext(c);
-		
+		EvaluationContext c = saveContext();
 		getManServ().getXMLLogicalPlanFromRootNode(pid, nid, c, cb.getValue(), xmlCb);
-		
-		
+			
 	}
 	
 		

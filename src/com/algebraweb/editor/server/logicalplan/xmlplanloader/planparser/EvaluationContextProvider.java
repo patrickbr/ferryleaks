@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.Property;
@@ -21,17 +22,17 @@ public class EvaluationContextProvider {
 	//TODO should be in a special pipeline kind of class
 	//maybe interface
 
-	public void fillEvaluationContext(QueryPlan p) {
+	public void fillEvaluationContext(QueryPlan p) throws GraphNotConnectedException {
 
 
-		PlanNode root = p.getRoot();
+		PlanNode root = p.getRootNode(false);
 		EvaluationContext c = new EvaluationContext();
 
-		c.setDatabase("bugferrytest");
-		c.setDatabasePassword("test");
+		c.setDatabase("");
+		c.setDatabasePassword("");
 		c.setDatabasePort(5432);
 		c.setDatabaseServer("localhost");
-		c.setDatabaseUser("bugferry");
+		c.setDatabaseUser("");
 
 		if (root.getKind().equals("serialize relation")) {
 

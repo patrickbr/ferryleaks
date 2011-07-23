@@ -56,6 +56,7 @@ public class GraphCanvas extends Raphael  {
 	private Timer popupDelay;
 
 	private boolean mouseOverNode = false;
+	private boolean mouseOverEdge = false;
 
 	private NodePopup popup;
 
@@ -465,7 +466,7 @@ public class GraphCanvas extends Raphael  {
 			public void onMouseUp(MouseUpEvent event) {
 				GraphCanvas.this.clearDrag();
 				
-				if (!mouseOverNode(event.getClientX(), event.getClientY())) {
+				if (!isMouseOverEdge() && !mouseOverNode(event.getClientX(), event.getClientY())) {
 					
 					clearSelection();
 					
@@ -1123,8 +1124,8 @@ public class GraphCanvas extends Raphael  {
 	public void unbugMe() {
 
 		if (dragNode != null) {
-			dragNode= null;
 			dragNode.setDragged(false);
+			dragNode= null;
 		}
 
 		FullScreenDragPanel.clearDrag();
@@ -1132,5 +1133,23 @@ public class GraphCanvas extends Raphael  {
 	}
 
 
+
+	/**
+	 * @return the mouseOverEdge
+	 */
+	public boolean isMouseOverEdge() {
+		return mouseOverEdge;
+	}
+
+
+
+	/**
+	 * @param mouseOverEdge the mouseOverEdge to set
+	 */
+	public void setMouseOverEdge(boolean mouseOverEdge) {
+		this.mouseOverEdge = mouseOverEdge;
+	}
+
+	
 
 }

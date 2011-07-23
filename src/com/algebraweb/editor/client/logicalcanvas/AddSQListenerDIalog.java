@@ -25,8 +25,7 @@ public class AddSQListenerDIalog extends EvaluationDialog{
 	protected void submit() {
 		
 		
-		EvaluationContext c = new EvaluationContext();
-		getSerializationPanel().fillEvaluationContext(c);
+		EvaluationContext c = saveContext();
 		
 		this.c.addSQLListener(nid,getManServ(),c);
 		this.hide();

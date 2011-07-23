@@ -58,8 +58,6 @@ public interface RemoteManipulationServiceAsync {
 
 	void createNewPlan(AsyncCallback<Integer> callback);
 
-	void markAsRoot(int pid, int nid, AsyncCallback<Void> callback);
-
 	void deleteNodes(Integer[] nids, int planid,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
@@ -85,5 +83,7 @@ public interface RemoteManipulationServiceAsync {
 			AsyncCallback<RemoteManipulationMessage> callback);
 
 	void removePlan(int pid, AsyncCallback<Integer> callback);
+
+	void getRootNode(int pid, AsyncCallback<PlanNode> callback);
 
 }

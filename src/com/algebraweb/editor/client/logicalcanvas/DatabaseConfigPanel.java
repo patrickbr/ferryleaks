@@ -22,7 +22,6 @@ public class DatabaseConfigPanel extends LayoutPanel{
 
 		super();
 
-
 		FlowPanel mainPanel = new FlowPanel();
 		mainPanel.addStyleName("database-panel-inner");
 
@@ -35,8 +34,6 @@ public class DatabaseConfigPanel extends LayoutPanel{
 		mainPanel.add(new InlineHTML("<br>"));
 		mainPanel.add(new InlineHTML("Database name: "));
 		mainPanel.add(dbName);
-
-		
 		
 		mainPanel.add(new Label("User:"));
 
@@ -46,10 +43,32 @@ public class DatabaseConfigPanel extends LayoutPanel{
 		mainPanel.add(new InlineHTML("Password: "));
 		mainPanel.add(password);
 		
-
-
 		this.add(mainPanel);
 
+	}
+	
+	
+	public void loadEvaluationContext(EvaluationContext c) {
+		
+		serverAdress.setText(c.getDatabaseServer());
+		serverPort.setText(Integer.toString(c.getDatabasePort()));
+		dbName.setText(c.getDatabase());
+		userName.setText(c.getDatabaseUser());
+		password.setText(c.getDatabasePassword());
+			
+	}
+	
+	
+	public void fillEvaluationContext(EvaluationContext c) {
+		
+		c.setDatabaseServer(serverAdress.getText());
+		c.setDatabasePort(Integer.parseInt(serverPort.getText()));
+		c.setDatabase(dbName.getText());
+		c.setDatabaseUser(userName.getText());
+		c.setDatabasePassword(password.getText());
+		
+		
+		
 	}
 
 

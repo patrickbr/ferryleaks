@@ -365,7 +365,7 @@ public class GraphNode {
 		@Override
 		public void onMouseUp(MouseUpEvent event) {
 			
-			if (!GraphNode.this.hasBeenDragged() && GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)){
+			if (event.getNativeButton() == NativeEvent.BUTTON_LEFT && !GraphNode.this.hasBeenDragged() && GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)){
 				
 				if (event.isControlKeyDown()) {
 					GraphNode.this.c.addNodeToSelection(GraphNode.this);

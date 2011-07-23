@@ -31,6 +31,8 @@ import com.algebraweb.editor.client.RemoteManipulationMessage;
 import com.algebraweb.editor.client.RemoteManipulationService;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
+import com.algebraweb.editor.client.logicalcanvas.LogicalCanvasSQLException;
 import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
@@ -432,7 +434,20 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	private void saveEvaluationContextForNode(int nid, int pid, EvaluationContext c) throws PlanManipulationException {
 
-		System.out.println("Saving context for n #"+nid);
+		System.out.println("Saving context for n #"+nid + ":");
+		System.out.println("Values:");
+		System.out.println("database=" + c.getDatabase());
+		System.out.println("databasePassword=" + c.getDatabasePassword());
+		System.out.println("databasePort=" + c.getDatabasePort());
+		System.out.println("databaseServer=" + c.getDatabaseServer());
+		System.out.println("databaseUser=" + c.getDatabaseUser());
+		System.out.println("itercolumnname=" + c.getIterColumnName());
+		System.out.println("iterColumnNat=" + c.getIterColumnNat());
+		System.out.println("sortColumnName=" + c.getSortColumnName());
+		System.out.println("sortOrder="+c.getSortOrder());
+		System.out.println("sortOrderColumn="+c.getSortOrderColumnOn());
+		
+		
 		getNodeToWork(pid, nid).setEvaluationContext(c);
 
 
@@ -547,12 +562,11 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context,boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, SqlError {
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context,boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException {
 
+		if (saveContext) saveEvaluationContextForNode(nid, pid, context);
+		
 		SqlEvaluator eval = new SqlEvaluator(context);
-
-
-
 		return eval.eval(getSQLFromPlanNode(pid,nid,context,saveContext));
 
 	}
@@ -582,16 +596,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return b;
 	}
 
-	@Override
-	public void markAsRoot(int pid, int nid) {
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-
-		planToWork.setRoot(planToWork.getPlanNodeById(nid));
-
-	}
-
+	
 
 	@Override
 	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException {
@@ -914,6 +919,16 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		
 		return pid;
 	}
+
+
+	@Override
+	public PlanNode getRootNode(int pid)
+			throws PlanManipulationException, PathFinderCompilationError,
+			LogicalCanvasSQLException, GraphNotConnectedException {
+		return getPlanToWork(pid).getRootNode();
+	}
+
+
 
 
 }

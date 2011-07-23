@@ -6,10 +6,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public abstract class GraphCanvasCommunicationCallback<T> implements AsyncCallback<T> {
 
+	
+	private String whileString;
+	
+	
+	public GraphCanvasCommunicationCallback(String errorWhileString) {
+		this.whileString = errorWhileString;
+	}
+	
 	@Override
 	public void onFailure(Throwable caught) {
 	
-		new GraphCanvasErrorDialogBox("<span style='font-weight:bold;color:red'>Could not save node.</span> Reason was:<br><br>" + caught.getMessage());
+		new GraphCanvasErrorDialogBox("<span style='font-weight:bold;color:red'>Error while " + whileString + "!</span><br><br>" + caught.getMessage());
 		
 	}
 

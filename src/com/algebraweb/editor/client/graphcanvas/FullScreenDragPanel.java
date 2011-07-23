@@ -51,6 +51,7 @@ public class FullScreenDragPanel extends FlowPanel {
 	public FullScreenDragPanel() {
 		
 		sinkEvents(Event.KEYEVENTS);
+		this.addStyleName("dragpanel");
 		
 	}
 

@@ -3,6 +3,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvasErrorDialogBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -15,9 +16,11 @@ public class CreateEvaluationContextDialog extends TabbedDialog{
 	private RemoteManipulationServiceAsync manServ;
 	private final SerializePanel sp;
 
+	private EvaluationContext loadedContext = new EvaluationContext();
+	
 	private int pid;
 	private int nid;
-	private CheckBox cb;
+
 
 
 	public CreateEvaluationContextDialog(int pid, int nid, RemoteManipulationServiceAsync manServ) {
@@ -64,13 +67,21 @@ public class CreateEvaluationContextDialog extends TabbedDialog{
 
 	}
 
+
+	protected EvaluationContext saveContext() {
+
+		EvaluationContext c = getLoadedContext();
+		sp.fillEvaluationContext(c);
+		return c;
+
+	}
+
 	protected SerializePanel getSerializationPanel() {
 		return sp;
 	}
 
 	protected void fillEvalContext() {
 
-		GWT.log("gurr");
 		manServ.getEvaluationContext(pid, nid, getContextCb);
 
 	}
@@ -101,25 +112,42 @@ public class CreateEvaluationContextDialog extends TabbedDialog{
 	protected void submit() {
 
 
+
 	}
+
+	protected void processContextResult(EvaluationContext result) {
+
+
+		GWT.log("gurr");
+		sp.loadEvaluationContext(result);
+
+	}
+
 
 	private AsyncCallback<EvaluationContext> getContextCb = new AsyncCallback<EvaluationContext>() {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
+
+			new GraphCanvasErrorDialogBox(caught.getMessage());
 
 		}
 
 		@Override
 		public void onSuccess(EvaluationContext result) {
 
-			sp.loadEvaluationContext(result);
+			loadedContext = result;
+			processContextResult(result);
 
 		}
 
 	};
 
+	public EvaluationContext getLoadedContext() {
+		
+		return loadedContext;
+		
+	}
 
 
 }

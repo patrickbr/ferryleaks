@@ -28,16 +28,19 @@ public class CreateSQLDialog extends CreateEvaluationContextDialog {
 	}
 	
 	@Override
+	protected EvaluationContext saveContext() {
+		
+		EvaluationContext c = super.saveContext();
+		return c;
+		
+	}
+	
+	@Override
 	protected void submit() {
 		
-		
-		EvaluationContext c = new EvaluationContext();
-		
-		getSerializationPanel().fillEvaluationContext(c);
-		
+		EvaluationContext c = saveContext();
 		getManServ().getSQLFromPlanNode(getPid(), getNid(), c,cb.getValue(), sqlCb);
-		
-		
+				
 	}
 	
 	private AsyncCallback<String> sqlCb = new AsyncCallback<String>() {

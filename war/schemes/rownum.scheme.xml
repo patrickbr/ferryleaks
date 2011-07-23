@@ -5,6 +5,8 @@
 	<properties>
 	
 		<property name="color">0xff0000</property>
+		<property name="label_schema">[_kind]\n({column_res}: &lt;{column_rank}&gt;)</property>
+	
 	
 	</properties>
 
@@ -14,7 +16,7 @@
 	
 	  	<gointo xmlob="content" howoften="1">
 	  	
-	  	    <val xmlob="column" name="column" howoften="1">
+	  	    <val xmlob="column" name_to_print="[name]" humanname="Result column" name="column_res" howoften="1">
 	  	    
 	  	      <fields>
 	  	    
@@ -25,7 +27,7 @@
 	  	    
 	  	    </val>
 	  	    
-	  	    <val xmlob="column" name="column" howoften="+">
+	  	    <val xmlob="column" name_to_print="[name]" humanname="Rank on" name="column_rank" howoften="+">
 	  	    
 	  	       <fields>
 	  	    
@@ -39,7 +41,7 @@
 	  	        
 	  	    </val>
 
-			<val xmlob="column" name="column" howoften="?">
+			<val xmlob="column" name_to_print="[name]" humanname="Partition" name="column_part" howoften="?">
 
 				<fields>
 

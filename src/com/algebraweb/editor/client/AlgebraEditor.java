@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.graphcanvas.ContextMenu;
+import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.FullScreenDragPanel;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
@@ -53,11 +54,11 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Alpha 6.08";
+	private static String VERSION = "Alpha 6.10";
 
 	private static String TITLE = "the bugFerry";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011";
+	private static String YEAR = "2011 (July 23rd)";
 	private static String FACILITY = "Universität Tübingen";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
@@ -66,6 +67,8 @@ public class AlgebraEditor implements EntryPoint {
 	private static boolean LOGGING=false;
 	private static RegistrationServiceAsync registor = GWT.create(RegistrationService.class);
 	private static Timer keepAliveTimer;
+	
+	private static HashMap<Integer,Coordinate> scrollPositions = new HashMap<Integer,Coordinate>();
 
 	//TODO: this should be in an extra graph MultiEditor or sth like this
 
@@ -158,8 +161,8 @@ public class AlgebraEditor implements EntryPoint {
 				};
 
 				keepAliveTimer.scheduleRepeating(60000);
-
-
+				
+				
 
 				if (result instanceof ConfigurationWithPlansInSession) {
 
@@ -250,6 +253,7 @@ public class AlgebraEditor implements EntryPoint {
 
 		LogicalCanvas c = new LogicalCanvas(id,m,Window.getClientWidth()-30,Window.getClientHeight()-30,s.addPlan(id));
 
+		scrollPositions.put(id, new Coordinate(0,0));
 
 		c.setGraphNodeModifier(new GraphNodeModifier(c));
 		c.setGraphEdgeModifier(new GraphEdgeModifier(c));
@@ -296,6 +300,7 @@ public class AlgebraEditor implements EntryPoint {
 
 		AlgebraEditor.log("Removing canvas #" + c.getId());
 		canvi.remove(c);
+		scrollPositions.remove(c.getId());
 		s.removePlan(c.getId());
 
 	}
@@ -309,11 +314,16 @@ public class AlgebraEditor implements EntryPoint {
 		AlgebraEditor.log("Changing to canvas #" + id);
 		Iterator<FullScreenDragPanel> it = panels.iterator();
 
+		if (activeCanvas != null) scrollPositions.put(activeCanvas.getId(), new Coordinate(Window.getScrollLeft(),Window.getScrollTop()));
+		
+		
 		while (it.hasNext()) {
 
 			//TODO: make own canvasdragpanel!!
 
 			FullScreenDragPanel cur = it.next();
+			
+			
 
 			if (((LogicalCanvas)cur.getWidget(0)).getId() != id) {
 				((LogicalCanvas)cur.getWidget(0)).setNotActive(true);
@@ -325,6 +335,8 @@ public class AlgebraEditor implements EntryPoint {
 				activeCanvas.setNotActive(false);
 				s.setActive(id);
 				cur.show();
+				Window.scrollTo((int)scrollPositions.get(id).getX(), (int)scrollPositions.get(id).getY());
+				
 
 			}
 
@@ -365,7 +377,7 @@ public class AlgebraEditor implements EntryPoint {
 		});
 	}
 
-	private  AsyncCallback<Integer> createCb = new  GraphCanvasCommunicationCallback<Integer>() {
+	private  AsyncCallback<Integer> createCb = new  GraphCanvasCommunicationCallback<Integer>("adding new empty canvas") {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -382,7 +394,7 @@ public class AlgebraEditor implements EntryPoint {
 
 	};
 	
-	private  AsyncCallback<Integer> removeCb = new  GraphCanvasCommunicationCallback<Integer>() {
+	private  AsyncCallback<Integer> removeCb = new  GraphCanvasCommunicationCallback<Integer>("removing canvas") {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -560,7 +572,7 @@ public class AlgebraEditor implements EntryPoint {
 
 	}
 
-	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>() {
+	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>("getting XML") {
 
 		@Override
 		public void onSuccess(String result) {

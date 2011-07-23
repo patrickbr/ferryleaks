@@ -44,7 +44,7 @@ public class UploadDialog extends DialogBox {
 
 		SingleUploader defaultUploader = new SingleUploader();
 		defaultUploader.setAutoSubmit(true);
-		defaultUploader.setWidth("160px");
+	
 		defaultUploader.getFileInput().setLength(20);
 
 		Uploader.setStatusInterval(50);

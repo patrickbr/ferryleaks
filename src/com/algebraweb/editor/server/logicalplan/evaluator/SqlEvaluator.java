@@ -15,21 +15,18 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.LogicalCanvasSQLException;
 import com.algebraweb.editor.client.logicalcanvas.SqlError;
 
 public class SqlEvaluator {
 
 	private static Connection conn = null;
 
-	private static String dbHost = "localhost";
-	private static String dbPort = "5432";
-	private static String database = "bugferrytest";
-	private static String dbUser = "bugferry";
-	private static String dbPassword = "test";
+
 
 	private EvaluationContext c;
 
-	public SqlEvaluator(EvaluationContext c) {
+	public SqlEvaluator(EvaluationContext c) throws LogicalCanvasSQLException {
 
 		this.c=c;
 
@@ -38,32 +35,42 @@ public class SqlEvaluator {
 
 			Class.forName("org.postgresql.Driver");
 
+			String dbHost = c.getDatabaseServer();
+			String dbPort = Integer.toString(c.getDatabasePort());
+			String database = c.getDatabase();
+			String dbUser = c.getDatabaseUser();
+			String dbPassword = c.getDatabasePassword();
 
+			if (dbHost.equals("")) throw new LogicalCanvasSQLException("Please provide a valid host with PostgreSQL running!");
+			if (database.equals("")) throw new LogicalCanvasSQLException("Please provide a valid database name!");
+			if (dbUser.equals("")) throw new LogicalCanvasSQLException("Please provide a valid database user!");
+
+			
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dbHost + ":"
 					+ dbPort + "/" + database, dbUser, dbPassword);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			throw new LogicalCanvasSQLException(e.getMessage());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new LogicalCanvasSQLException(e.getMessage() + " (state was: " + e.getSQLState() + ")");
 		}
 	}
 
 
-	public ArrayList<HashMap<String,String>> eval(String qry) throws SqlError {
+	public ArrayList<HashMap<String,String>> eval(String qry) throws LogicalCanvasSQLException {
 
 
-		Statement query;
+
 		ArrayList<HashMap<String,String>> res = null;
 		QueryRunner qrun = new QueryRunner();
 
-		try {
-		query = conn.createStatement();
 
-		
+		try {
+			conn.createStatement();
 			res = (ArrayList<HashMap<String,String>>) qrun.query(conn, qry, new SerializableHandler());
 		} catch (SQLException e) {
-			throw new SqlError(e.getMessage());
+			throw new LogicalCanvasSQLException(e.getMessage() + " (state was: " + e.getSQLState() + ")");
 		}
+
 
 
 		return res;

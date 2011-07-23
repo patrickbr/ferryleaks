@@ -5,6 +5,12 @@ import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.hydro4ge.raphaelgwt.client.Raphael.Path;
 
 
@@ -58,10 +64,10 @@ public class GraphEdge {
 		to.addEdgeTo(this);
 		c.getGraphEdgeModifier().makeConnection(this,from,to,quiet,animated);
 
-		MouseDownHandler mouseDownH = new MouseDownHandler() {
+		MouseUpHandler mouseUpnH = new MouseUpHandler() {
 
 			@Override
-			public void onMouseDown(MouseDownEvent event) {
+			public void onMouseUp(MouseUpEvent event) {
 
 				GraphEdge.this.edgePath.toFront();
 				GraphEdge.this.arrowPath.toFront();
@@ -73,8 +79,31 @@ public class GraphEdge {
 
 		};
 
-		edgePath.addDomHandler(mouseDownH, MouseDownEvent.getType());
-		arrowPath.addDomHandler(mouseDownH, MouseDownEvent.getType());
+		MouseOverHandler mouseOverHandler = new MouseOverHandler() {
+
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				GraphEdge.this.c.setMouseOverEdge(true);
+
+			}
+		};
+
+		MouseOutHandler mouseOutHandler = new MouseOutHandler() {
+
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				GraphEdge.this.c.setMouseOverEdge(false);
+			}
+		};
+
+		edgePath.addDomHandler(mouseUpnH, MouseUpEvent.getType());
+		arrowPath.addDomHandler(mouseUpnH, MouseUpEvent.getType());
+		
+		edgePath.addDomHandler(mouseOverHandler, MouseOverEvent.getType());
+		arrowPath.addDomHandler(mouseOverHandler, MouseOverEvent.getType());
+		
+		edgePath.addDomHandler(mouseOutHandler, MouseOutEvent.getType());
+		arrowPath.addDomHandler(mouseOutHandler, MouseOutEvent.getType());
 
 
 

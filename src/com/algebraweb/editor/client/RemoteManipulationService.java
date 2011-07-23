@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
+import com.algebraweb.editor.client.logicalcanvas.LogicalCanvasSQLException;
 import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
@@ -62,13 +64,13 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public String[] getNodeTypes();
 	
-	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, SqlError;
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException;
 
+	public PlanNode getRootNode(int pid) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException, GraphNotConnectedException;
+	
 	public Integer createNewPlan() throws SessionExpiredException;
 	
 	public Integer removePlan(int pid) throws SessionExpiredException;
-	
-	public void markAsRoot(int pid, int nid);
 	
 	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException;
 
