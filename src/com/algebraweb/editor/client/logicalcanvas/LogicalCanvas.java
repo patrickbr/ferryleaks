@@ -156,7 +156,7 @@ public class LogicalCanvas extends GraphCanvas{
 
 	public void setErroneous(int nid) {
 
-		if (!super.getGraphNodeById(nid).getConnectedShapes().containsKey("__logicalplan_error")) {
+		if (!(super.getGraphNodeById(nid) == null) && !super.getGraphNodeById(nid).getConnectedShapes().containsKey("__logicalplan_error")) {
 
 			errorCount++;
 			myTabButton.setErrorCount(errorCount);

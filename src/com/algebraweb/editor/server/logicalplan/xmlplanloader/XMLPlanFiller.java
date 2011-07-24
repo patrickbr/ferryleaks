@@ -79,8 +79,12 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		while (it.hasNext()) {
 
 			PlanNode current = it.next();
-
-			if (current != null) {
+			PlanNode par;
+			
+			ArrayList<PlanNode> pars = qp.getParents(current);
+			if (pars.size()>0)  par = pars.get(0); else par=null;
+		
+			if (!(par != null && par.getKind().equals("serialize relation") && par.getChilds().get(0) == current) &&  current != null && !current.getKind().equals("serialize relation")) {
 
 				RawNode temp = getRawNode(current);
 				rawNodes.add(temp);

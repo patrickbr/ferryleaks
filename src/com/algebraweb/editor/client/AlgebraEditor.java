@@ -67,8 +67,7 @@ public class AlgebraEditor implements EntryPoint {
 	private static boolean LOGGING=false;
 	private static RegistrationServiceAsync registor = GWT.create(RegistrationService.class);
 	private static Timer keepAliveTimer;
-	
-	private static HashMap<Integer,Coordinate> scrollPositions = new HashMap<Integer,Coordinate>();
+
 
 	//TODO: this should be in an extra graph MultiEditor or sth like this
 
@@ -92,7 +91,7 @@ public class AlgebraEditor implements EntryPoint {
 			RootPanel.get("debugger").getElement().getStyle().setDisplay(Display.BLOCK);
 			LOGGING=true;
 			AlgebraEditor.log.setReadOnly(true);
-			
+
 		}
 
 
@@ -161,8 +160,8 @@ public class AlgebraEditor implements EntryPoint {
 				};
 
 				keepAliveTimer.scheduleRepeating(60000);
-				
-				
+
+
 
 				if (result instanceof ConfigurationWithPlansInSession) {
 
@@ -200,21 +199,21 @@ public class AlgebraEditor implements EntryPoint {
 			}
 		});
 	}
-	
-	
+
+
 	public void createNewPlan() {
-		
+
 		rmsa.createNewPlan(createCb);
-			
-		
+
+
 	}
-	
+
 	public void removePlan(int id) {
-		
-		
+
+
 		rmsa.removePlan(id, removeCb);
-		
-		
+
+
 	}
 
 
@@ -252,8 +251,6 @@ public class AlgebraEditor implements EntryPoint {
 		if (hasCanvasWithId(id)) return getCanvas(id);
 
 		LogicalCanvas c = new LogicalCanvas(id,m,Window.getClientWidth()-30,Window.getClientHeight()-30,s.addPlan(id));
-
-		scrollPositions.put(id, new Coordinate(0,0));
 
 		c.setGraphNodeModifier(new GraphNodeModifier(c));
 		c.setGraphEdgeModifier(new GraphEdgeModifier(c));
@@ -300,7 +297,6 @@ public class AlgebraEditor implements EntryPoint {
 
 		AlgebraEditor.log("Removing canvas #" + c.getId());
 		canvi.remove(c);
-		scrollPositions.remove(c.getId());
 		s.removePlan(c.getId());
 
 	}
@@ -314,36 +310,42 @@ public class AlgebraEditor implements EntryPoint {
 		AlgebraEditor.log("Changing to canvas #" + id);
 		Iterator<FullScreenDragPanel> it = panels.iterator();
 
-		if (activeCanvas != null) scrollPositions.put(activeCanvas.getId(), new Coordinate(Window.getScrollLeft(),Window.getScrollTop()));
-		
-		
+		int activeCanvasId=-1;
+
+		if (activeCanvas!= null) {
+			activeCanvasId = activeCanvas.getId();
+		}
+
+
 		while (it.hasNext()) {
 
 			//TODO: make own canvasdragpanel!!
 
+
+
+			FullScreenDragPanel cur = it.next();
+
+			if (((LogicalCanvas)cur.getWidget(0)).getId() == activeCanvasId) {
+				cur.hide();
+				((LogicalCanvas)cur.getWidget(0)).setNotActive(true);
+
+			}
+			
+		}
+		
+		it = panels.iterator();
+
+		while (it.hasNext()) {
+
 			FullScreenDragPanel cur = it.next();
 			
-			
-
-			if (((LogicalCanvas)cur.getWidget(0)).getId() != id) {
-				((LogicalCanvas)cur.getWidget(0)).setNotActive(true);
-				cur.hide();
-
-			}else{
-
+			if (((LogicalCanvas)cur.getWidget(0)).getId() == id) {
 				activeCanvas = ((LogicalCanvas)cur.getWidget(0));
 				activeCanvas.setNotActive(false);
 				s.setActive(id);
 				cur.show();
-				Window.scrollTo((int)scrollPositions.get(id).getX(), (int)scrollPositions.get(id).getY());
-				
-
 			}
-
-
 		}
-
-
 	}
 
 	public static void log(String s) {
@@ -393,7 +395,7 @@ public class AlgebraEditor implements EntryPoint {
 		}
 
 	};
-	
+
 	private  AsyncCallback<Integer> removeCb = new  GraphCanvasCommunicationCallback<Integer>("removing canvas") {
 
 		@Override

@@ -465,13 +465,13 @@ public class GraphCanvas extends Raphael  {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				GraphCanvas.this.clearDrag();
-				
+
 				if (!isMouseOverEdge() && !mouseOverNode(event.getClientX(), event.getClientY())) {
-					
+
 					clearSelection();
-					
+
 				}
-				
+
 			}
 
 		}, MouseUpEvent.getType());
@@ -664,7 +664,7 @@ public class GraphCanvas extends Raphael  {
 		g.getShape().addDomHandler(GraphNodeModifier.mouseOutHandlerBuilder(g), MouseOutEvent.getType());
 
 		gnm.checkDimension(g,x,y);
-		
+
 		return g;
 
 	}
@@ -921,7 +921,7 @@ public class GraphCanvas extends Raphael  {
 
 
 		loadingMessagePopUp.show(msg);
-		
+
 
 
 	}
@@ -1150,6 +1150,9 @@ public class GraphCanvas extends Raphael  {
 		this.mouseOverEdge = mouseOverEdge;
 	}
 
-	
+	public Coordinate  getScrollIntoViewPos(int nid) {
+		GraphNode n = getGraphNodeById(nid);
+		return new Coordinate(n.getWidth()/2 + getMarginLeft() + (int)(n.getX()*getScale()) - (Window.getClientWidth()/2), getMarginTop() + (int)(n.getY()*getScale() - (Window.getClientHeight()/2)));
+	}
 
 }

@@ -54,9 +54,7 @@ public class GraphCanvasRemoteFillingMachine {
 			while (nf.hasNext()) {
 
 				RawEdge cur = nf.next();
-
 				c.createEdge(c.getGraphNodeById(current.getNid()), c.getGraphNodeById(cur.getTo()),cur.getFixedParentPos(),true);
-
 
 			}
 
@@ -64,7 +62,7 @@ public class GraphCanvasRemoteFillingMachine {
 
 		
 		GraphCanvas.hideLoading();
-
+		
 
 
 

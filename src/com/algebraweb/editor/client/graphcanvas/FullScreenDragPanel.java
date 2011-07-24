@@ -1,6 +1,8 @@
 package com.algebraweb.editor.client.graphcanvas;
 
 
+import java.util.HashMap;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
@@ -47,10 +49,16 @@ public class FullScreenDragPanel extends FlowPanel {
 
 	private static boolean dragPreventer = false;
 	private boolean lockMainDrag = false;
+	
+	
+	
+	private Coordinate scrollPosition = new Coordinate();
 
 	public FullScreenDragPanel() {
 		
 		sinkEvents(Event.KEYEVENTS);
+		scrollPosition.setX(0);
+		scrollPosition.setY(0);
 		this.addStyleName("dragpanel");
 		
 	}
@@ -123,12 +131,13 @@ public class FullScreenDragPanel extends FlowPanel {
 	}
 
 	public void hide() {
-
-		
+				
+		scrollPosition = new Coordinate(Window.getScrollLeft(),Window.getScrollTop());
 		super.getElement().getStyle().setVisibility(Visibility.HIDDEN);
 		super.getElement().getStyle().setWidth(1, Unit.PX);
 		super.getElement().getStyle().setHeight(1, Unit.PX);
 		super.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+		
 
 	}
 
@@ -138,7 +147,8 @@ public class FullScreenDragPanel extends FlowPanel {
 		super.getElement().getStyle().clearWidth();
 		super.getElement().getStyle().clearHeight();
 		super.getElement().getStyle().setOverflow(Overflow.VISIBLE);
-
+		Window.scrollTo((int)scrollPosition.getX(), (int)scrollPosition.getY());
+	
 	}
 
 	public void scrollToUpperLeft() {
@@ -169,6 +179,12 @@ public class FullScreenDragPanel extends FlowPanel {
 		mainDragOffsetY = -1;
 
 
+	}
+	
+	public void changeSavedScrollPos(int x, int y) {
+		
+		scrollPosition  = new Coordinate(x,y);
+		
 	}
 
 

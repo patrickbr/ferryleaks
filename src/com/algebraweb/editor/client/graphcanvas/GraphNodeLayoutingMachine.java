@@ -141,7 +141,15 @@ public class GraphNodeLayoutingMachine {
 			}
 
 		}
-		((FullScreenDragPanel)gnm.getCanvas().getParent()).scrollToUpperLeft();
+		
+		Coordinate scrollTo = gnm.getCanvas().getScrollIntoViewPos(gnm.getCanvas().getNodes().get(gnm.getCanvas().getNodes().size()-1).getId());
+		
+		if (!gnm.getCanvas().isNotActive()) {
+			Window.scrollTo((int)scrollTo.getX(), (int)scrollTo.getY());
+			((FullScreenDragPanel)gnm.getCanvas().getParent()).changeSavedScrollPos((int)scrollTo.getX(), (int)scrollTo.getY());
+			
+		}
+		//((FullScreenDragPanel)gnm.getCanvas().getParent()).scrollToUpperLeft();
 		//((DragPanel)gnm.getCanvas().getParent()).center(gnm.getCanvas().getWidth(),gnm.getCanvas().getHeight());
 	}
 

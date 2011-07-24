@@ -201,6 +201,20 @@ public class QueryPlan implements Serializable {
 
 	}
 
+	public ArrayList<PlanNode> getParents(PlanNode n) {
+		
+		ArrayList<PlanNode> ret = new ArrayList<PlanNode>();
+		
+		Iterator<PlanNode> it = getPlan().iterator();
+		
+		while (it.hasNext()) {
+			PlanNode cur = it.next();
+			if(cur != null && cur.getChilds().contains(n)) ret.add(cur);
+		}
+				
+		return ret;
+		
+	}
 
 
 
