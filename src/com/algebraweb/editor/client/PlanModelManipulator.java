@@ -187,6 +187,20 @@ public class PlanModelManipulator {
 		}
 
 	};
+	
+	private boolean containsEdge(ArrayList<RawEdge> edges, int to, int pos) {
+		
+		Iterator<RawEdge> it = edges.iterator();
+		
+		while (it.hasNext()) {
+			RawEdge cur = it.next();
+			GWT.log(cur.getFixedParentPos() + ":" + pos + "to: " + to  + "(" + cur.getTo() +")");
+			if (cur.getTo() == to && cur.getFixedParentPos() == pos) return true;
+		}
+		
+		return false;
+		
+	}
 
 	private GraphCanvasCommunicationCallback<RemoteManipulationMessage> manipulationCallback = new GraphCanvasCommunicationCallback<RemoteManipulationMessage>("manipulating logical plan") {
 
@@ -209,6 +223,7 @@ public class PlanModelManipulator {
 
 				AlgebraEditor.log(("   received a '" + result.getAction() + "' manipulation for plan #" + result.getPlanid()));
 				//success
+				LogicalCanvas c = e.getCanvas(result.getPlanid());
 
 				if (result.getAction().equals("delete")) {
 
@@ -216,7 +231,7 @@ public class PlanModelManipulator {
 
 					while(it.hasNext()) {
 
-						e.getCanvas(result.getPlanid()).deleteNode(e.getCanvas(result.getPlanid()).getGraphNodeById(it.next().getNid()));
+						c.deleteNode(c.getGraphNodeById(it.next().getNid()));
 
 					}
 
@@ -230,27 +245,54 @@ public class PlanModelManipulator {
 					while(it.hasNext()) {
 
 						RawNode current = it.next();
-						e.getCanvas(result.getPlanid()).clearEdgesFrom(e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid()));
+						//e.getCanvas(result.getPlanid()).clearEdgesFrom(e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid()));
 
-						GraphNode from = e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid());
+						GraphNode from = c.getGraphNodeById(current.getNid());
 
-						e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid()).setText(current.getText());
+						c.getGraphNodeById(current.getNid()).setText(current.getText());
 
+						
+						HashMap<Integer,GraphNode> markedForDeletion = new HashMap<Integer,GraphNode>();
+						
+						Iterator<GraphEdge> a = from.getEdgesFrom().iterator();
+						
+						
+						while (a.hasNext()) {
+							
+							GraphEdge e = a.next();
+							GraphNode child = e.getTo();
+							
+							if (!containsEdge(current.getEdgesToList(),child.getId(),e.getFixedParentPos())) {
+								GWT.log("mark for deletion " + child.getId());
+								markedForDeletion.put(e.getFixedParentPos(),child);
+							}
+						}
+						
+						Iterator<Integer> u = markedForDeletion.keySet().iterator();
+						
+						while (u.hasNext()) {	
+							Integer cur = u.next();
+							c.removeEdge(from, markedForDeletion.get(cur).getId(),cur);							
+						}
+							
+						
+						
+						
 						Iterator<RawEdge> i = current.getEdgesToList().iterator();
 
 						while(i.hasNext()) {
 
 							RawEdge ed = i.next();
-
 							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(ed.getTo());
 
 							//only draw if not already there
-							//if (!e.getCanvas(result.getPlanid()).hasEdge(from.getId(), to.getId())) {
-							e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);
-							//}
+							if (to != null && !c.hasEdge(from.getId(), to.getId(),ed.getFixedParentPos())) {
+								c.createEdge(from, to, ed.getFixedParentPos(),false);
+							}
 						}
-
-						e.getCanvas(result.getPlanid()).showEdges();
+					
+						GWT.log("showing edges...");
+						c.showEdges();
 
 					}
 				}
@@ -281,24 +323,24 @@ public class PlanModelManipulator {
 
 						RawNode current = it.next();
 
-						GraphNode from = e.getCanvas(result.getPlanid()).getGraphNodeById(current.getNid());
+						GraphNode from = c.getGraphNodeById(current.getNid());
 						Iterator<RawEdge> i = current.getEdgesToList().iterator();
 
 						while(i.hasNext()) {
 
 							RawEdge ed = i.next();
 
-							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(ed.getTo());
-							e.getCanvas(result.getPlanid()).createEdge(from, to, ed.getFixedParentPos(),true);
+							GraphNode to = c.getGraphNodeById(ed.getTo());
+							c.createEdge(from, to, ed.getFixedParentPos(),true);
 
 						}
-						e.getCanvas(result.getPlanid()).showEdges();
+						c.showEdges();
 					}
 				}
 
 				showValidation(result.getValidationResult());
 
-				e.getCanvas(result.getPlanid()).updateSQLListener();
+				c.updateSQLListener();
 
 			}
 

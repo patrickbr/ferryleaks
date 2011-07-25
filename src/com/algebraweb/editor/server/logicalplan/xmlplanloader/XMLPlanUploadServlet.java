@@ -57,11 +57,11 @@ public class XMLPlanUploadServlet extends UploadAction{
 					
 					//parse the plan, store it into the session...
 				
-					HttpSession session = request.getSession(true);
+					HttpSession session = request.getSession();
 					XMLPlanLoader planLoader = new XMLPlanLoader();
 					
 					
-					QueryPlanBundle sessionBundle = planLoader.parsePlans(file.getAbsolutePath(),this.getServletContext());
+					QueryPlanBundle sessionBundle = planLoader.parsePlans(file.getAbsolutePath(),this.getServletContext(),request.getSession());
 					session.setAttribute("queryPlans",sessionBundle);
 								
 					System.out.println(request.getParameter("file_id"));

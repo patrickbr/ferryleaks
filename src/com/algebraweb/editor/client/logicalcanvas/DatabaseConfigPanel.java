@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
@@ -17,6 +18,7 @@ public class DatabaseConfigPanel extends LayoutPanel{
 	
 	private final TextBox userName = new TextBox();
 	private final PasswordTextBox password = new PasswordTextBox();
+	private final CheckBox saveGlobal = new CheckBox();
 
 	public DatabaseConfigPanel(int pid, int nid, RemoteManipulationServiceAsync manServ) {
 
@@ -31,7 +33,7 @@ public class DatabaseConfigPanel extends LayoutPanel{
 		mainPanel.add(serverAdress);
 		mainPanel.add(new InlineHTML(" Port: "));
 		mainPanel.add(serverPort);
-		mainPanel.add(new InlineHTML("<br>"));
+	
 		mainPanel.add(new InlineHTML("Database name: "));
 		mainPanel.add(dbName);
 		
@@ -39,9 +41,16 @@ public class DatabaseConfigPanel extends LayoutPanel{
 
 		mainPanel.add(new InlineHTML("Name: "));
 		mainPanel.add(userName);
-		mainPanel.add(new InlineHTML("<br>"));
+
 		mainPanel.add(new InlineHTML("Password: "));
 		mainPanel.add(password);
+		
+	
+		InlineHTML saveGlobalT = new InlineHTML("Set as session default");
+		mainPanel.add(saveGlobalT);
+		saveGlobal.addStyleName("set-save-global");
+		saveGlobalT.addStyleName("set-save-global-t");
+		mainPanel.add(saveGlobal);
 		
 		this.add(mainPanel);
 
@@ -66,7 +75,7 @@ public class DatabaseConfigPanel extends LayoutPanel{
 		c.setDatabase(dbName.getText());
 		c.setDatabaseUser(userName.getText());
 		c.setDatabasePassword(password.getText());
-		
+		c.setDatabaseSetGlobal(saveGlobal.getValue());
 		
 		
 	}

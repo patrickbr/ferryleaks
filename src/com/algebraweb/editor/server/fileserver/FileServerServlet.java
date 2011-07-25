@@ -33,38 +33,44 @@ public class FileServerServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 
-		
+
 
 		try {
 			ServletOutputStream out = response.getOutputStream();
 			ServletContext context = getServletContext();
 
 			String filename="plan.xml";
-		
+
 			response.setContentType("application/octet-stream");
 			//response.setContentLength((int) file.length());
 			response.setHeader("Content-Disposition", "attachement; filename=\"" + filename + "\"");
 
 			int pid = Integer.parseInt(request.getParameter("pid"));
-			
-			System.out.println("Requestet plan #" + pid);
-			
-			
-			
 
-			QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+			System.out.println("Requestet plan #" + pid);
+
+			Document d;
+			XMLNodePlanBuilder builder = new XMLNodePlanBuilder();
+
+			System.out.println("Downloading plan '" + pid + "'");
 			
-			
+			if (pid == -1) {
+
+				QueryPlanBundle b = ((QueryPlanBundle)request.getSession().getAttribute("queryPlans"));
+				d = builder.getPlanBundle(b,getServletContext());
+
+
+			}else{
+
+				QueryPlan planToWork = ((QueryPlanBundle)request.getSession().getAttribute("queryPlans")).getPlan(pid);		
+				d = builder.getNodePlan(planToWork,getServletContext());
+
+			}
 
 			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-			
-			XMLNodePlanBuilder builder = new XMLNodePlanBuilder();
-			
-			Document d = builder.getNodePlan(planToWork,getServletContext());
-
 			outputter.output(d, out);
-			
-		
+
+
 			out.close();
 		}
 		catch (Exception e) {

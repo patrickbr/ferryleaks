@@ -733,7 +733,7 @@ body.hidden #loading #msg {
 	position: relative;
 	top: -49px;
 	padding-top: 30px;
-	padding-bottom: 30px;
+	padding-bottom: 0px;
 }
 
 .sql-bubble .sql-bubble-close,.sql-bubble .sql-bubble-edit,.sql-bubble .sql-bubble-refresh
@@ -796,12 +796,63 @@ body.hidden #loading #msg {
 	padding: 5px;
 }
 
-.serialize-panel-inner {
+.serialize-panel-inner,.database-panel-inner {
 	padding: 10px;
 }
 
 .serialize-panel .iter-use-column,.serialize-panel .iter-use-value {
 	margin-left: 7px;
+
+}
+
+.database-panel-inner .gwt-InlineHTML {
+	
+	display:block;
+	width:150px;
+	float:left;
+	margin-left:10px;
+	
+}
+
+.database-panel-inner .set-save-global-t {
+	
+
+	margin-top:30px;
+	margin-left:0px;
+	
+}
+.database-panel-inner .set-save-global input {
+	
+	
+	margin-top:30px;
+	
+}
+
+.database-panel-inner .gwt-TextBox,.database-panel-inner .gwt-PasswordTextBox {
+	
+	display:block
+		
+}
+
+.serialize-panel  .gwt-Label,.database-panel-inner .gwt-Label {
+	
+	margin-top:10px;
+	margin-bottom:5px;
+	
+}
+
+.eval-item-columns-available {
+
+		margin-left:178px;	
+	
+}
+
+.iter-use-value,.iter-use-column,.sort-column-button {
+	
+	display:block;
+	width:170px;
+	float:left;	
+	
 }
 
 .sort-column-button {
@@ -810,11 +861,15 @@ body.hidden #loading #msg {
 
 .use-sort-predef-button {
 	margin-left: 7px;
+	display:block;
+	width:170px;
+	float:left;
 }
 
 .serialize-panel .value-text-box {
 	margin-right: 15px;
 	width: 80px;
+	display:block;
 }
 
 #debuggerl {
@@ -889,4 +944,10 @@ body.hidden #loading #msg {
 .cancelbutton,.okbutton {
 	width: 80px;
 	margin-right: 5px;
+}
+
+.gwt-ListBox {
+
+	min-width:70px;
+
 }

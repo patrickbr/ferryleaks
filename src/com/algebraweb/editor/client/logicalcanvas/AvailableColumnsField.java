@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.node.Property;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -84,7 +85,7 @@ public class AvailableColumnsField extends Composite {
 	public void setProjectedSelection(String[] item) {
 
 		projSel = item;
-		if (received) {
+		if (received && item != null) {
 			for (String s : item)
 				selectStringItem(s);
 
@@ -103,7 +104,7 @@ public class AvailableColumnsField extends Composite {
 	public void setProjectedDelete(String[] item) {
 
 		projDel = item;
-		if (received) {
+		if (received && item != null) {
 
 			for (String s : item)
 				if (selectStringItem(s)>-1) b.removeItem(selectStringItem(s));
@@ -167,26 +168,21 @@ public class AvailableColumnsField extends Composite {
 		return b;
 	}
 
-	AsyncCallback<ArrayList<Property>> cb = new AsyncCallback<ArrayList<Property>>() {
+	GraphCanvasCommunicationCallback<ArrayList<Property>> cb = new GraphCanvasCommunicationCallback<ArrayList<Property>>("getting available columns") {
 
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-
-		}
-
+	
 		@Override
 		public void onSuccess(ArrayList<Property> result) {
 
 
 			AvailableColumnsField.this.showResults(result);
 
-			if (projSel != null)
+			if (projSel != null && projSel != null)
 				for (String s : projSel)
 					selectStringItem(s);
 
 
-			if (projDel != null)
+			if (projDel != null  && projSel != null)
 				for (String s : projDel)
 					b.removeItem(selectStringItem(s));
 			received=true;

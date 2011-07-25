@@ -8,8 +8,11 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -34,9 +37,11 @@ public class PlanSwitcher extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				e.createNewPlan();
+				e.createNewPlan(false);
+			
 			}
 		});
+		
 
 		this.editor=e;
 
@@ -82,6 +87,17 @@ public class PlanSwitcher extends AbsolutePanel{
 
 			}
 		});
+		
+		newB.getButton().addDomHandler(new ContextMenuHandler() {
+
+			@Override
+			public void onContextMenu(ContextMenuEvent event) {
+			
+				event.preventDefault();
+				editor.getTabContextMenu().show(pid, event.getNativeEvent().getClientX()+Window.getScrollLeft(), event.getNativeEvent().getClientY()+Window.getScrollTop());
+				
+			}
+		},ContextMenuEvent.getType());
 
 
 		p.add(newB);

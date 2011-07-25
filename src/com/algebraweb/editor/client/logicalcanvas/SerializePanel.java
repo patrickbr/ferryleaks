@@ -163,7 +163,7 @@ public class SerializePanel extends LayoutPanel {
 
 		columnsAvailable = new AvailableColumnsField(pid, nid, true,manServ,true);
 		columnsAvailable.addStyleName("cols-av");
-		columnsAvailable.getWidget().setVisibleItemCount(10);
+		columnsAvailable.getWidget().setVisibleItemCount(7);
 
 		columnAvPanel.add(new Label("Item columns"));
 		columnAvPanel.add(columnsAvailable);

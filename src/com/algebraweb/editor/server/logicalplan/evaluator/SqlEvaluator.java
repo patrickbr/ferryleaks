@@ -30,7 +30,6 @@ public class SqlEvaluator {
 
 		this.c=c;
 
-
 		try {
 
 			Class.forName("org.postgresql.Driver");
@@ -44,7 +43,6 @@ public class SqlEvaluator {
 			if (dbHost.equals("")) throw new LogicalCanvasSQLException("Please provide a valid host with PostgreSQL running!");
 			if (database.equals("")) throw new LogicalCanvasSQLException("Please provide a valid database name!");
 			if (dbUser.equals("")) throw new LogicalCanvasSQLException("Please provide a valid database user!");
-
 			
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dbHost + ":"
 					+ dbPort + "/" + database, dbUser, dbPassword);

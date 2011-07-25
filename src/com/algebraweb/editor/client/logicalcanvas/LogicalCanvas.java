@@ -36,6 +36,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.ibm.icu.util.Currency;
 
 public class LogicalCanvas extends GraphCanvas{
 
@@ -49,8 +50,11 @@ public class LogicalCanvas extends GraphCanvas{
 	private GraphNode drawEdgeTo;
 	private GraphNode drawEdgeFrom;
 	private int drawEdgeFromPos;
+
+	private NewEdgeDrawer currentNewEdgeDrawer;
+
 	private PlanSwitchButton myTabButton;
-	
+
 	private boolean overEdgeConnector=false;
 
 	private HashMap<Integer,SQLBubble> sqlBubbleList = new HashMap<Integer,SQLBubble>();
@@ -68,7 +72,7 @@ public class LogicalCanvas extends GraphCanvas{
 		super.addNodeSelectionHandler(new NodeSelectionHandler() {
 
 			@Override
-			public void isSelected(GraphNode node) {
+			public boolean isSelected(GraphNode node) {
 
 
 				switch (state) {
@@ -80,9 +84,11 @@ public class LogicalCanvas extends GraphCanvas{
 
 					drawEdgeTo = node;
 					clearDrag();
-					m.addEdge(new Coordinate(drawEdgeFrom.getId(),drawEdgeTo.getId()), LogicalCanvas.this.getId(), drawEdgeFromPos);
+					currentNewEdgeDrawer.getPath().remove();
+					currentNewEdgeDrawer.getArrowPath().remove();
 
 					state=0;
+					setPreventHoverMenu(false);
 
 					Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
 
@@ -91,9 +97,14 @@ public class LogicalCanvas extends GraphCanvas{
 						GraphNode n = it.next();
 						clearEdgeConnectors(n);
 					}
+					m.addEdge(new Coordinate(drawEdgeFrom.getId(),drawEdgeTo.getId()), LogicalCanvas.this.getId(), drawEdgeFromPos);
 
-					break;
+
+					return false;
+
 				}
+
+				return true;
 			}
 		});
 
@@ -105,6 +116,19 @@ public class LogicalCanvas extends GraphCanvas{
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 
+				if (state == 3) {
+
+					setOverEdgeConnector(false);
+					
+					if (getHoverNode() != null && mouseOverNode(event.getClientX(),event.getClientY())) {
+
+						currentNewEdgeDrawer.moveTo(getHoverNode().getX() + getHoverNode().getWidth() / 2, getHoverNode().getY());
+
+					}else{
+						currentNewEdgeDrawer.moveTo(getScale() * (event.getRelativeX(LogicalCanvas.this.getRaphaelElement())-getMarginLeft()),getScale() *( event.getRelativeY(LogicalCanvas.this.getRaphaelElement())-getMarginTop()));
+					}
+
+				}
 
 			}
 
@@ -116,12 +140,17 @@ public class LogicalCanvas extends GraphCanvas{
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 
-
+				GWT.log("" + isOverEdgeConnector());
 				if (!isOverEdgeConnector() && !mouseOverNode(event.getClientX(), event.getClientY()) && (state == 3 || state == 2)) {
 
+				
 					state = 0;
+					setPreventHoverMenu(false);
 					Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
-
+					if (currentNewEdgeDrawer != null) {
+						currentNewEdgeDrawer.getPath().remove();
+						currentNewEdgeDrawer.getArrowPath().remove();
+					}
 					while (it.hasNext()) {
 
 						GraphNode n = it.next();
@@ -160,7 +189,7 @@ public class LogicalCanvas extends GraphCanvas{
 
 			errorCount++;
 			myTabButton.setErrorCount(errorCount);
-			Text errorMark = super.textFactory(0, 0,"!");
+			Text errorMark = new Text(0, 0,"!");
 			errorMark.getElement().setAttribute("class", "logicalplan-node-errormark-text");
 			errorMark.attr("fill","red");
 
@@ -191,7 +220,6 @@ public class LogicalCanvas extends GraphCanvas{
 
 	private void clearEdgeConnectors(GraphNode n) {
 
-
 		for (int i=0;i<n.getFixedChildCount();i++) {
 			unHangShapeFromNode("edge_circle_pos" + (i+1), n.getId());
 		}
@@ -213,10 +241,10 @@ public class LogicalCanvas extends GraphCanvas{
 	public void enterEdgeAddingMode() {
 
 		GWT.log("entering...");
-		state=2;
+		
 
 		Iterator<GraphNode> it = super.getNodes().iterator();
-
+		boolean hasConnectors = false;
 
 		while (it.hasNext()) {
 
@@ -232,10 +260,11 @@ public class LogicalCanvas extends GraphCanvas{
 
 				if (freeChilds.get(current).booleanValue()) {
 
+					hasConnectors = true;
 
-					Circle cr = super.circleFactory(0,0, 6);
+					Circle cr = new Circle(0,0,6);
 					cr.getElement().setAttribute("class", "edge-connector");
-					cr.addDomHandler(createEdgeShapeMouseHandler(n,current),  MouseDownEvent.getType());
+					cr.addDomHandler(createEdgeShapeMouseHandler(n,current),  MouseUpEvent.getType());
 					cr.addDomHandler(new MouseMoveHandler() {
 
 						@Override
@@ -266,7 +295,10 @@ public class LogicalCanvas extends GraphCanvas{
 			}
 
 
-
+			if (hasConnectors) {
+				state=2;
+				setPreventHoverMenu(true);
+			}
 
 
 		}
@@ -276,16 +308,31 @@ public class LogicalCanvas extends GraphCanvas{
 	}
 
 
-	private MouseDownHandler createEdgeShapeMouseHandler(final GraphNode n, final int pos) {
+	private MouseUpHandler createEdgeShapeMouseHandler(final GraphNode n, final int pos) {
 
-		return new MouseDownHandler() {
+		return new MouseUpHandler() {
 
 			@Override
-			public void onMouseDown(MouseDownEvent event) {
+			public void onMouseUp(MouseUpEvent event) {
 
 				state=3;
 				drawEdgeFrom = n;
 				drawEdgeFromPos = pos;
+
+				double y= n.getHeight()+3 + n.getY();
+				double x= n.getX() + (n.getWidth() / (getFreeChildEdgePositions(n).size() +1)) * pos;
+
+				currentNewEdgeDrawer = new NewEdgeDrawer(x, y, LogicalCanvas.this);
+				Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
+
+				
+				while (it.hasNext()) {
+
+					GraphNode n = it.next();
+					clearEdgeConnectors(n);
+				}
+
+
 			}
 
 		};

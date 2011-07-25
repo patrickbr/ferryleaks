@@ -315,7 +315,7 @@ public class GraphEdgeModifier {
 
 		if (!quiet) {
 			snakeOut(e,animated);
-		}
+		}	
 
 	}
 

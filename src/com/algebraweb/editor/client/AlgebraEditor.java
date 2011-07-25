@@ -15,17 +15,21 @@ import com.algebraweb.editor.client.graphcanvas.GraphEdgeModifier;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphNodeModifier;
 import com.algebraweb.editor.client.graphcanvas.NodeContextMenu;
+import com.algebraweb.editor.client.graphcanvas.TabContextMenu;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 import com.algebraweb.editor.client.logicalcanvas.AddSQListenerDIalog;
+import com.algebraweb.editor.client.logicalcanvas.ConfigurePlanDialog;
 import com.algebraweb.editor.client.logicalcanvas.CreateSQLDialog;
+import com.algebraweb.editor.client.logicalcanvas.EvaluatePlanDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.LogicalNodePopup;
 import com.algebraweb.editor.client.logicalcanvas.LogicalPlanNodeContextItem;
 import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
+import com.algebraweb.editor.client.node.PlanNode;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
@@ -79,6 +83,7 @@ public class AlgebraEditor implements EntryPoint {
 	private PlanModelManipulator m;
 	private NodeContextMenu nodeContextMenu = new NodeContextMenu();
 	private ContextMenu planContextMenu = new ContextMenu();
+	private TabContextMenu tabContextMenu = new TabContextMenu();
 
 	/**
 	 * Everything begins here...
@@ -123,6 +128,7 @@ public class AlgebraEditor implements EntryPoint {
 		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE); 
 		initContextMenu();
 		initPlanContextMenu();
+		initTabContextMenu();
 
 		AlgebraEditor.log("Sending registration...");
 
@@ -183,7 +189,7 @@ public class AlgebraEditor implements EntryPoint {
 						@Override
 						public void onClick(ClickEvent event) {
 							AlgebraEditor.log("loading empty plan...");
-							rmsa.createNewPlan(createCb);
+							createNewPlan(true);
 
 						}
 					});
@@ -193,7 +199,7 @@ public class AlgebraEditor implements EntryPoint {
 				}else{
 
 					AlgebraEditor.log("loading empty plan...");
-					rmsa.createNewPlan(createCb);
+					createNewPlan(true);
 
 				}
 			}
@@ -201,9 +207,9 @@ public class AlgebraEditor implements EntryPoint {
 	}
 
 
-	public void createNewPlan() {
+	public void createNewPlan(boolean clearFirst) {
 
-		rmsa.createNewPlan(createCb);
+		rmsa.createNewPlan(clearFirst,createCb);
 
 
 	}
@@ -292,12 +298,18 @@ public class AlgebraEditor implements EntryPoint {
 		}
 
 	}
+	
+	
 
-	public void removeLogicalCanvas(LogicalCanvas c) {
+	
+
+	private void removeLogicalCanvas(LogicalCanvas c) {
 
 		AlgebraEditor.log("Removing canvas #" + c.getId());
+
 		canvi.remove(c);
 		s.removePlan(c.getId());
+
 
 	}
 
@@ -330,15 +342,15 @@ public class AlgebraEditor implements EntryPoint {
 				((LogicalCanvas)cur.getWidget(0)).setNotActive(true);
 
 			}
-			
+
 		}
-		
+
 		it = panels.iterator();
 
 		while (it.hasNext()) {
 
 			FullScreenDragPanel cur = it.next();
-			
+
 			if (((LogicalCanvas)cur.getWidget(0)).getId() == id) {
 				activeCanvas = ((LogicalCanvas)cur.getWidget(0));
 				activeCanvas.setNotActive(false);
@@ -406,7 +418,21 @@ public class AlgebraEditor implements EntryPoint {
 		@Override
 		public void onSuccess(Integer result) {
 
-			if (hasCanvasWithId(result)) removeLogicalCanvas(getCanvas(result));
+			if (hasCanvasWithId(result)) {
+				
+
+				Iterator<FullScreenDragPanel> it = panels.iterator();
+
+				while (it.hasNext()) {
+					FullScreenDragPanel cur = it.next();
+					if (((LogicalCanvas) cur.getWidget(0)).getId() == result) {
+						removeLogicalCanvas((LogicalCanvas) cur.getWidget(0));
+						cur.clear();
+						RootPanel.get("editor").remove(cur);
+						it.remove();
+					}
+				}
+			}
 
 		}
 
@@ -435,6 +461,13 @@ public class AlgebraEditor implements EntryPoint {
 		return planContextMenu;
 	}
 
+	/**
+	 * @return the contextMenu
+	 */
+	public TabContextMenu getTabContextMenu() {
+		return tabContextMenu;
+	}
+
 
 
 	public PlanModelManipulator getPlanManipulator() {
@@ -449,9 +482,70 @@ public class AlgebraEditor implements EntryPoint {
 
 	}
 
+	private void initTabContextMenu() {
+
+		AlgebraEditor.log("initializing tab context menu...");
+
+		final TabContextMenu m = getTabContextMenu();
+
+		m.addItem(new LogicalTabContextItem("Evaluate") {
+
+			@Override
+			public void onClick(final int pid) {
+
+				new EvaluatePlanDialog(pid,rmsa);
+
+			}
+		});
+
+		m.addItem(new LogicalTabContextItem("Get SQL") {
+
+			@Override
+			public void onClick(int pid) {
+				rmsa.getSQLFromPlan(pid, sqlCb);
+			}
+		});
+
+		m.addItem(new LogicalTabContextItem("Download") {
+
+			@Override
+			public void onClick(int pid) {
+				GraphCanvas.showLoading("Preparing file...");
+				Window.open(GWT.getModuleBaseURL() + "fileserver?pid="+pid, "_self", "");
+				GraphCanvas.hideLoading();
+			}
+		});
+
+		m.addSeperator();
+
+		m.addItem(new LogicalTabContextItem("Configure") {
+
+			@Override
+			public void onClick(final int pid) {
+
+				new ConfigurePlanDialog(pid,rmsa);
+
+
+			}
+		});
+
+		m.addSeperator();
+
+		m.addItem(new LogicalTabContextItem("Close") {
+
+			@Override
+			public void onClick(int pid) {
+				removePlan(pid);
+			}
+		});
+
+
+	}
+
+
 	private void initPlanContextMenu() {
 
-		AlgebraEditor.log("initializing context menu...");
+		AlgebraEditor.log("initializing plan context menu...");
 
 		final ContextMenu m = getContextMenu();
 
@@ -580,7 +674,20 @@ public class AlgebraEditor implements EntryPoint {
 		public void onSuccess(String result) {
 
 
-			Window.alert(result);
+			new TextPresentationDialog("XML source",result);
+
+
+		}
+
+	};
+
+	private GraphCanvasCommunicationCallback<String> sqlCb = new GraphCanvasCommunicationCallback<String>("compiling SQL") {
+
+	
+		@Override
+		public void onSuccess(String result) {
+
+			new TextPresentationDialog("Compiled SQL",result);
 
 
 		}

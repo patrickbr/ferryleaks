@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Event;
@@ -74,7 +75,7 @@ public class GraphNode {
 
 		this.width = width;
 		this.height = height;
-		
+
 		this.minWidth = width;
 		this.minHeight = height;
 
@@ -96,7 +97,8 @@ public class GraphNode {
 		getShape().addDomHandler(mouseDownH, MouseDownEvent.getType());
 		getShape().addDomHandler(mouseUpH, MouseUpEvent.getType());
 		getShape().addDomHandler(mouseMoveH, MouseMoveEvent.getType());
-		
+		getShape().addDomHandler(mouseOutH,MouseOutEvent.getType());
+
 		getShape().addDomHandler(doubleC, DoubleClickEvent.getType());
 		getShape().addDomHandler(contextMenuH, ContextMenuEvent.getType());
 
@@ -291,7 +293,7 @@ public class GraphNode {
 			cur.addDomHandler(mouseUpH, MouseUpEvent.getType());
 			cur.addDomHandler(mouseMoveH, MouseMoveEvent.getType());
 			cur.addDomHandler(doubleC, DoubleClickEvent.getType());
-			
+			cur.addDomHandler(mouseOutH,MouseOutEvent.getType());
 
 
 			cur.addDomHandler(GraphNodeModifier.mouseMoveHandlerBuilder(this), MouseMoveEvent.getType());
@@ -326,9 +328,20 @@ public class GraphNode {
 		@Override
 		public void onMouseMove(MouseMoveEvent event) {
 
-
+			c.setHoverNode(GraphNode.this);
 			GraphNode.this.c.openPopUp(Window.getScrollLeft() + event.getClientX(), Window.getScrollTop() + event.getClientY(),GraphNode.this.getId(),700);
 
+
+		}
+
+	};
+
+	private MouseOutHandler mouseOutH = new MouseOutHandler() {
+
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+
+			c.setHoverNode(null);
 
 		}
 
@@ -359,26 +372,26 @@ public class GraphNode {
 
 		}
 	};
-	
+
 	private MouseUpHandler mouseUpH = new MouseUpHandler() {
 
 		@Override
 		public void onMouseUp(MouseUpEvent event) {
-			
+
 			if (event.getNativeButton() == NativeEvent.BUTTON_LEFT && !GraphNode.this.hasBeenDragged() && GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)){
-				
+
 				if (event.isControlKeyDown()) {
 					GraphNode.this.c.addNodeToSelection(GraphNode.this);
 				}else {
 					GraphNode.this.c.setSelectedNode(GraphNode.this);
 				}
-			
+
 			}
-			
+
 		}
-		
-		
-		
+
+
+
 	};
 
 	private MouseDownHandler mouseDownH = new MouseDownHandler() {
@@ -406,13 +419,17 @@ public class GraphNode {
 			GraphNode.this.setDragged(true);
 			setHasBeenDragged(false);
 			GraphNode.this.c.registerDrag(GraphNode.this,(int)rx,(int)ry);
-		
+
 			if (event.isControlKeyDown()) {
-				GraphNode.this.c.addNodeToSelection(GraphNode.this);
+				if (!GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)) {
+					GraphNode.this.c.addNodeToSelection(GraphNode.this);
+				}else{
+					GraphNode.this.c.removeNodeFromSelection(GraphNode.this);
+				}
 			}else if (!GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)){
 				GraphNode.this.c.setSelectedNode(GraphNode.this);
 			}
-		
+
 		}
 
 	};
@@ -430,10 +447,10 @@ public class GraphNode {
 	public void setHasBeenDragged(boolean hasBeenDragged) {
 		this.hasBeenDragged = hasBeenDragged;
 	}
-	
-	
 
-	
+
+
+
 
 
 

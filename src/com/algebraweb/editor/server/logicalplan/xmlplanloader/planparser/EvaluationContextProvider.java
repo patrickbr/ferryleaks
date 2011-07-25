@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 
+import javax.servlet.http.HttpSession;
+
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
@@ -15,8 +18,10 @@ import com.algebraweb.editor.client.node.QueryPlan;
 public class EvaluationContextProvider {
 
 
-	public EvaluationContextProvider() {
-
+	private HttpSession session;
+	
+	public EvaluationContextProvider(HttpSession session) {
+		this.session=session;
 	}
 
 	//TODO should be in a special pipeline kind of class
@@ -24,17 +29,23 @@ public class EvaluationContextProvider {
 
 	public void fillEvaluationContext(QueryPlan p) throws GraphNotConnectedException {
 
+		PlanNode root;
 
-		PlanNode root = p.getRootNode(false);
+		try {
+			root = p.getRootNode(false);
+		}catch(GraphIsEmptyException e) {
+			root = null;
+		}
 		EvaluationContext c = new EvaluationContext();
 
-		c.setDatabase("");
-		c.setDatabasePassword("");
-		c.setDatabasePort(5432);
-		c.setDatabaseServer("localhost");
-		c.setDatabaseUser("");
+	
+		c.setDatabase((String)session.getAttribute("databaseName"));
+		c.setDatabasePassword((String)session.getAttribute("databasePw"));
+		c.setDatabasePort((session.getAttribute("databasePort") != null?(Integer) session.getAttribute("databasePort"):0));
+		c.setDatabaseServer((String)session.getAttribute("databaseHost"));
+		c.setDatabaseUser((String)session.getAttribute("databaseUser"));
 
-		if (root.getKind().equals("serialize relation")) {
+		if (root != null && root.getKind().equals("serialize relation")) {
 
 			//TODO: what about erroneous nodes?
 			if (root.getContentWithAttributeValue("function", "iter").size() > 0) {

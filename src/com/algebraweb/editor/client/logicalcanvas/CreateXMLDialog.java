@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.algebraweb.editor.client.TextPresentationDialog;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -48,7 +49,7 @@ public class CreateXMLDialog extends CreateEvaluationContextDialog{
 		@Override
 		public void onSuccess(String result) {
 
-			Window.alert(result);
+			new TextPresentationDialog("XML source",result);
 
 		}
 

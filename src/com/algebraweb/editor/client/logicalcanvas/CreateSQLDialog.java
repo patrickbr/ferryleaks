@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.algebraweb.editor.client.TextPresentationDialog;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -19,6 +20,10 @@ public class CreateSQLDialog extends CreateEvaluationContextDialog {
 
 		addButton(cb);
 	
+	}
+	
+	protected CheckBox getSaveCheckBox() {
+		return cb;
 	}
 	
 	protected boolean getSaveCurrenNodeValue() {
@@ -53,8 +58,8 @@ public class CreateSQLDialog extends CreateEvaluationContextDialog {
 		@Override
 		public void onSuccess(String result) {
 
-
-			Window.alert(result);
+			
+			new TextPresentationDialog("Compiled SQL",result);
 
 
 		}

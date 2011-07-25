@@ -4,6 +4,7 @@ import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
@@ -51,6 +52,7 @@ public class TabbedDialog extends DialogBox{
 	protected void addButton(Widget b) {
 		getButtonsPanel().add(b);
 		p.setWidgetBottomHeight(buttonsPanel, 0, Unit.PX, 50, Unit.PX);
+		getButtonsPanel().setCellVerticalAlignment(b, HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 
 	/**

@@ -143,15 +143,14 @@ public class ControllPanel extends AbsolutePanel{
 
 
 
-		ControllPanelButton sqlB = new ControllPanelButton("Get SQL of subgraph","sql-down");
+		ControllPanelButton sqlB = new ControllPanelButton("Get SQL","sql-down");
 
 		sqlB.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 
-				new CreateSQLDialog(ControllPanel.this.e.getActiveCanvas().getId(),ControllPanel.this.e.getActiveCanvas().getSelectedNode().keySet().toArray(new Integer[0])[0],rmsa);
-				//ControllPanel.this.rmsa.getSQLFromPlanNode(ControllPanel.this.e.getActiveCanvas().getId(), ControllPanel.this.e.getActiveCanvas().getSelectedNode().values().iterator().next().getId(), sqlCb);
+				rmsa.getSQLFromPlan(ControllPanel.this.e.getActiveCanvas().getId(), sqlCb);
 			}});
 
 		editPanel.add(sqlB);
@@ -163,13 +162,9 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 
-				rmsa.getRootNode(AlgebraEditor.getActiveCanvas().getId(), new GraphCanvasCommunicationCallback<PlanNode>("getting root node") {
 
-					@Override
-					public void onSuccess(PlanNode result) {
-						new EvaluatePlanDialog(AlgebraEditor.getActiveCanvas().getId(),result.getId(),rmsa);
-					}
-				});
+				new EvaluatePlanDialog(AlgebraEditor.getActiveCanvas().getId(),rmsa);
+
 
 			}});
 
@@ -233,8 +228,7 @@ public class ControllPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				GraphCanvas.showLoading("Preparing file...");
-				int pid = ControllPanel.this.e.getActiveCanvas().getId();
-				Window.open(GWT.getModuleBaseURL() + "fileserver?pid="+ pid , "_self", "");
+				Window.open(GWT.getModuleBaseURL() + "fileserver?pid=-1", "_self", "");
 				GraphCanvas.hideLoading();
 
 			}});
@@ -330,7 +324,20 @@ public class ControllPanel extends AbsolutePanel{
 		public void onSuccess(String result) {
 
 
-			Window.alert(result);
+			new TextPresentationDialog("XML source",result);
+
+
+		}
+
+	};
+	
+	private GraphCanvasCommunicationCallback<String> sqlCb = new GraphCanvasCommunicationCallback<String>("compiling SQL") {
+
+		
+		@Override
+		public void onSuccess(String result) {
+
+			new TextPresentationDialog("Compiled SQL",result);
 
 
 		}

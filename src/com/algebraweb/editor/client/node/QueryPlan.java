@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.GoInto;
@@ -155,15 +156,17 @@ public class QueryPlan implements Serializable {
 
 	}
 	
-	public PlanNode getRootNode() throws GraphNotConnectedException{
+	public PlanNode getRootNode() throws GraphNotConnectedException, GraphIsEmptyException{
 		return getRootNode(true);
 	}
 	
-	public PlanNode getRootNode(boolean skipSerializeRelation) throws GraphNotConnectedException{
+	public PlanNode getRootNode(boolean skipSerializeRelation) throws GraphNotConnectedException, GraphIsEmptyException{
 
 		ArrayList<PlanNode> temp = new ArrayList<PlanNode>();
 
 		temp.addAll(this.getPlan());
+		
+		if (temp.size() == 0) throw new GraphIsEmptyException();
 
 		Iterator<PlanNode> itChilds = this.getPlan().iterator();
 
@@ -173,7 +176,7 @@ public class QueryPlan implements Serializable {
 
 		}
 		
-		if (temp.size()>1) throw new GraphNotConnectedException("Graph is not connected!");
+		if (temp.size()>1) throw new GraphNotConnectedException();
 
 		//TODO: throws error if plan has cycle
 		

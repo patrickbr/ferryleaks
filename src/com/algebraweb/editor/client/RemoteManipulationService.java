@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvasSQLException;
 import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
@@ -44,7 +45,7 @@ public interface RemoteManipulationService extends RemoteService {
 		
 	public PlanNode getPlanNode(int nid, int pid) throws PlanManipulationException;
 	
-	public ArrayList<Property> getReferencableColumns(int nid, int pid);
+	public ArrayList<Property> getReferencableColumns(int nid, int pid) throws GraphNotConnectedException, GraphIsEmptyException;
 	
 	public ArrayList<Property> getReferencableColumnsWithoutAdded(int nid, int pid);
 	
@@ -62,17 +63,19 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError;
 	
+	public String getSQLFromPlan(int pid) throws PlanManipulationException, PathFinderCompilationError, GraphNotConnectedException, GraphIsEmptyException;
+		
 	public String[] getNodeTypes();
 	
 	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException;
 
-	public PlanNode getRootNode(int pid) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException, GraphNotConnectedException;
+	public PlanNode getRootNode(int pid) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException, GraphNotConnectedException, GraphIsEmptyException;
 	
-	public Integer createNewPlan() throws SessionExpiredException;
+	public Integer createNewPlan(boolean clearFirst) throws SessionExpiredException;
 	
 	public Integer removePlan(int pid) throws SessionExpiredException;
 	
-	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException;
+	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException;
 
 	public RemoteManipulationMessage deleteEdge(HashMap<Coordinate,Integer>  edges, int planid) throws PlanManipulationException;
 
@@ -80,4 +83,9 @@ public interface RemoteManipulationService extends RemoteService {
 	
 	public RemoteManipulationMessage insert(int pid,int x, int y) throws PlanManipulationException;
 
+	public void updatePlanEvaluationContext(EvaluationContext c, int pid) throws PlanManipulationException;
+
+	ArrayList<HashMap<String, String>> evalPlan(int pid, EvaluationContext c,
+			boolean saveCurrenNodeValue) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException;
+	
 }

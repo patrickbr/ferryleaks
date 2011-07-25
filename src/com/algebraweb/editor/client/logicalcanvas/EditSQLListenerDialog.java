@@ -14,7 +14,7 @@ public class EditSQLListenerDialog extends AddSQListenerDIalog{
 		super(b.getNid(), rmsa, canvas);
 		this.b=b;
 		super.getSerializationPanel().loadEvaluationContext(b.getEvaluationContext());
-
+		super.getDatabaseConfigPanel().loadEvaluationContext(b.getEvaluationContext());
 		
 	}
 	

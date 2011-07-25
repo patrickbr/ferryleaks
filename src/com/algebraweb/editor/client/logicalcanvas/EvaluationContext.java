@@ -24,6 +24,8 @@ public class EvaluationContext implements IsSerializable {
 	
 	String[] itemColumns;
 	
+	boolean databaseSetGlobal=false;
+	
 	
 	
 	
@@ -238,6 +240,23 @@ public class EvaluationContext implements IsSerializable {
 	public void setSortOrderColumnOn(String sortOrderColumnOn) {
 		this.sortOrderColumnOn = sortOrderColumnOn;
 	}
+
+
+	/**
+	 * @return the databaseSetGlobal
+	 */
+	public boolean isDatabaseSetGlobal() {
+		return databaseSetGlobal;
+	}
+
+
+	/**
+	 * @param databaseSetGlobal the databaseSetGlobal to set
+	 */
+	public void setDatabaseSetGlobal(boolean databaseSetGlobal) {
+		this.databaseSetGlobal = databaseSetGlobal;
+	}
 	
 
+	
 }

@@ -30,7 +30,7 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		this.session=s;
 		this.id=id;
 		this.context = context;
-		
+
 		System.out.println("Initialized XMLPlanFiller with id=" + id);
 
 	}
@@ -45,15 +45,15 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 
 	@Override
 	public boolean hasNextNode() {
-		
+
 		System.out.println("call to hasnextnode for id=" + id);
-		
+
 		return it.hasNext();
 	}
 
 	@Override
 	public void init() {
-		
+
 		System.out.println("call to init for id=" + id);
 
 		QueryPlanBundle qps = (QueryPlanBundle) session.getAttribute("queryPlans");
@@ -79,16 +79,10 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		while (it.hasNext()) {
 
 			PlanNode current = it.next();
-			PlanNode par;
-			
-			ArrayList<PlanNode> pars = qp.getParents(current);
-			if (pars.size()>0)  par = pars.get(0); else par=null;
-		
-			if (!(par != null && par.getKind().equals("serialize relation") && par.getChilds().get(0) == current) &&  current != null && !current.getKind().equals("serialize relation")) {
 
-				RawNode temp = getRawNode(current);
-				rawNodes.add(temp);
-			}
+			RawNode temp = getRawNode(current);
+			rawNodes.add(temp);
+
 		}
 
 		return rawNodes;
@@ -101,9 +95,9 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		RawNode temp = new RawNode(current.getId(), current.getLabel(), 0xCCCCCC, 130, 25);
 
 		temp.setFixedChildCount(current.getMaxChildCount());
-				
+
 		Iterator<PlanNode> childs = current.getChilds().iterator();
-		
+
 		int c=1;
 
 		while (childs.hasNext()) {
@@ -113,13 +107,13 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 			if (cur != null) {
 
 				RawEdge tempEdge= new RawEdge(cur.getId(),temp.getNid());
-				
+
 				tempEdge.setFixedParentPos(c);
 				System.out.println("XMLplanfiller: adding edge from " + tempEdge.getFrom() + " to " + tempEdge.getTo());
 				temp.getEdgesToList().add(tempEdge);
 
 			}
-			
+
 			c++;
 		}
 

@@ -12,6 +12,7 @@ import org.jdom.Element;
 import org.jdom.Text;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.node.ContentNode;
@@ -20,6 +21,7 @@ import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.node.QueryPlan;
+import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 
 public class XMLNodePlanBuilder {
 
@@ -28,6 +30,26 @@ public class XMLNodePlanBuilder {
 
 
 
+	}
+	
+	public Document getPlanBundle(QueryPlanBundle b, ServletContext context) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException {
+		
+		Element planBundle = new Element ("query_plan_bundle");
+		
+		Iterator<QueryPlan> it = b.getPlans().values().iterator();
+		
+		while (it.hasNext()) {
+			
+			QueryPlan cur = it.next();
+			planBundle.addContent(getNodePlan(cur.getId(), cur.getRootNode(), cur.getEvContext(), context));
+			
+		}
+		
+		Document d = new Document();
+		d.addContent(planBundle);
+		return d;
+		
+		
 	}
 
 
@@ -67,7 +89,7 @@ public class XMLNodePlanBuilder {
 
 
 
-	public Document getNodePlan(QueryPlan p, ServletContext context) throws PlanManipulationException, GraphNotConnectedException {
+	public Document getNodePlan(QueryPlan p, ServletContext context) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException {
 
 		PlanNode root = p.getRootNode();
 

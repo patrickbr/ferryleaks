@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,6 +17,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
@@ -49,24 +51,27 @@ public class PlanParser {
 
 	private File file;
 	private HashMap<String,NodeScheme> schemes;
+	private HttpSession session;
 
-	public PlanParser(HashMap<String,NodeScheme> schemes, String file) {
+	public PlanParser(HashMap<String,NodeScheme> schemes, String file,HttpSession session) {
 
 		this.schemes=schemes;
 		this.file = new File(file);
+		this.session=session;
 
 	}
 
-	public PlanParser(HashMap<String,NodeScheme> schemes) {
+	public PlanParser(HashMap<String,NodeScheme> schemes,HttpSession session) {
 
 		this.schemes=schemes;
+		this.session=session;
 
 	}
 
-	public PlanParser() {
+	public PlanParser(HttpSession session) {
 
-		this.schemes=schemes;
-
+		this.session=session;
+	
 	}
 
 	/**
@@ -76,14 +81,13 @@ public class PlanParser {
 	 * here. It is not garantueed that the QueryPlans returned here are valid
 	 * either in terms of grammatical or semantical correctness. 
 	 * @return
+	 * @throws  
 	 */
-	public QueryPlanBundle parse() {
+	public QueryPlanBundle parse()  {
 
-
-		//TODO: this should also work with plan bundles...
 
 		QueryPlanBundle ret =new QueryPlanBundle();
-		EvaluationContextProvider ecp = new EvaluationContextProvider();
+		EvaluationContextProvider ecp = new EvaluationContextProvider(session);
 
 		try{
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -106,9 +110,19 @@ public class PlanParser {
 
 				try {
 					ecp.fillEvaluationContext(p);
+					PlanNode root = p.getRootNode(false);
+					if (root.getKind().equals("serialize relation")) {
+						if (root.getChilds().size()>0) p.getPlan().remove(root.getChilds().get(0));
+						p.getPlan().remove(root);
+					}
 				} catch (GraphNotConnectedException e) {
 					e.printStackTrace();
+			
+				} catch (GraphIsEmptyException e) {
+					e.printStackTrace();
 				}
+				
+				System.out.println("garr");
 
 				ret.addPlan(p);
 			}

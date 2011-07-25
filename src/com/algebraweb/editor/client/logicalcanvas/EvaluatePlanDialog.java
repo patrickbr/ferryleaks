@@ -9,9 +9,9 @@ import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback
 
 public class EvaluatePlanDialog extends EvaluationDialog {
 
-	public EvaluatePlanDialog(int pid, int nid, RemoteManipulationServiceAsync manServ) {
+	public EvaluatePlanDialog(int pid, RemoteManipulationServiceAsync manServ) {
 		
-		super(pid, nid, manServ);
+		super(pid, -1, manServ);
 		super.setText("Evaluate Plan");
 		
 
@@ -22,7 +22,7 @@ public class EvaluatePlanDialog extends EvaluationDialog {
 
 
 		EvaluationContext c = saveContext();
-		getManServ().eval(getPid(), getNid(), c,getSaveCurrenNodeValue(), evalCb);
+		getManServ().evalPlan(getPid(), c,getSaveCurrenNodeValue(), evalCb);
 
 	}
 	

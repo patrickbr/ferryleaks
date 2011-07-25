@@ -74,13 +74,17 @@ public class GraphNodeModifier {
 
 			JSONObject newAttrsShape = new JSONObject();
 
-			newAttrsShape.put("x", new JSONNumber(x + current.getX()));
-			newAttrsShape.put("y", new JSONNumber(y + current.getY()));
-
+			if (current.getShape() instanceof Circle) {
+				newAttrsShape.put("cx", new JSONNumber(x + current.getX()));
+				newAttrsShape.put("cy", new JSONNumber(y + current.getY()));
+			}else{
+				newAttrsShape.put("x", new JSONNumber(x + current.getX()));
+				newAttrsShape.put("y", new JSONNumber(y + current.getY()));
+			}
 			current.getShape().animate(newAttrsShape,1000, "backIn");
 
 		}
-		
+
 		Iterator<ConnectedWidget> itw = n.getConnectedWidgets().values().iterator();
 
 		while (itw.hasNext()) {
@@ -92,9 +96,9 @@ public class GraphNodeModifier {
 
 
 		}
-		
-		
-		
+
+
+
 
 	}
 
@@ -228,17 +232,24 @@ public class GraphNodeModifier {
 			}
 
 
-			Iterator<ConnectedShape> it = n.getConnectedShapes().values().iterator();
+			Iterator<String> it = n.getConnectedShapes().keySet().iterator();
 
 			while (it.hasNext()) {
 
-				ConnectedShape current = it.next();
+				String cur = it.next();
+				ConnectedShape current = n.getConnectedShapes().get(cur);
 
-				current.getShape().attr("x", x + current.getX());
-				current.getShape().attr("y", y + current.getY());
+
+				if (current.getShape() instanceof Circle) {
+					current.getShape().attr("cx", x + current.getX());
+					current.getShape().attr("cy", y + current.getY());
+				}else{
+					current.getShape().attr("x", x + current.getX());
+					current.getShape().attr("y", y + current.getY());
+				}
 
 			}
-			
+
 			Iterator<ConnectedWidget> itw = n.getConnectedWidgets().values().iterator();
 
 			while (itw.hasNext()) {
@@ -258,10 +269,10 @@ public class GraphNodeModifier {
 			update(n,false,false);
 		}
 	}
-	
+
 	protected void updateConnectedWidgets(GraphNode n) {
-		
-		
+
+
 		Iterator<ConnectedWidget> itw = n.getConnectedWidgets().values().iterator();
 
 		while (itw.hasNext()) {
@@ -273,8 +284,8 @@ public class GraphNodeModifier {
 
 
 		}
-		
-		
+
+
 	}
 
 	private AnimationCallback buildAnimationCallback(final GraphNode n) {
@@ -332,7 +343,6 @@ public class GraphNodeModifier {
 		GraphEdge current;
 
 		//TODO: make this configurable somehow
-
 
 
 		while (i.hasNext()) {
@@ -452,7 +462,7 @@ public class GraphNodeModifier {
 			current.getShape().remove();
 
 		}
-		
+
 		Iterator<ConnectedWidget> iter = n.getConnectedWidgets().values().iterator();
 
 		while (iter.hasNext()) {
@@ -536,11 +546,11 @@ public class GraphNodeModifier {
 
 
 	}
-	
+
 	public Widget unhandWidgetToNode(String identifier, GraphNode n) {
 
 
-		
+
 		Widget w = n.getConnectedWidgets().get(identifier);
 		n.getConnectedWidgets().remove(identifier);
 		return w;

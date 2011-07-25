@@ -28,6 +28,8 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession(false);
 		Configuration tmp;
+		
+		if (session == null) System.out.println("session is empty");
 
 		if (session != null && ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().size()>0 &&
 				!(((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().size() == 1 && ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().values().iterator().next().getPlan().size() == 0)) {
@@ -37,7 +39,10 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 			tmp = new ConfigurationWithPlansInSession(((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().keySet().toArray(new Integer[0]));
 
 		}else{
-			session = request.getSession(true);
+			if (session == null) {
+				System.out.println("creating new session");
+				session = request.getSession(true);
+			}
 			session.setAttribute("queryPlans", new QueryPlanBundle());
 			tmp = new Configuration();
 		}

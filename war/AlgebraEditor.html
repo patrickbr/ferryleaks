@@ -1,62 +1,44 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-"http://www.w3.org/TR/REC-html40/loose.dtd">
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-
-	<link rel="stylesheet" type="text/css" href="algebraeditor/gwt/standard/standard.css"> 
-    <link type="text/css" rel="stylesheet" href="AlgebraEditor.css">
-    
-    <title>Loading...</title>
-    
-    <script type="text/javascript" language="javascript" src="algebraeditor/algebraeditor.nocache.js"></script>
-    <script type="text/javascript" language="javascript" src="algebraeditor/raphael.js"></script>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="author" content="2011 Patrick Brosi, Universität Tübingen">
+		<meta name="description" content="A Web Editor for the Table Algebra">
+		<link rel="stylesheet" type="text/css" href="algebraeditor/gwt/standard/standard.css"> 
+		<link type="text/css" rel="stylesheet" href="AlgebraEditor.css">
+		<title>Loading...</title>
+		<script type="text/javascript" language="javascript" src="algebraeditor/algebraeditor.nocache.js"></script>
+		<script type="text/javascript" language="javascript" src="algebraeditor/raphael-min.js"></script>
   
-  	<!--[if gte IE 5.5]>
-<![if lt IE 7]>
-<link type="text/css" rel="stylesheet" href="AlgebraEditorIE6.css">
-<![endif]>
-<![endif]-->
-  </head>
+		<!--[if gte IE 5.5]>
+			<![if lt IE 7]>
+				<link type="text/css" rel="stylesheet" href="AlgebraEditorIE6.css">
+			<![endif]>
+		<![endif]-->
+	</head>
 
-  <body class="hidden" onload="window.document.body.className='visible';" >
-
-	<div style="overflow:hidden;position:absolute;height:1px;width:1px;">    
-<svg width="1" height="1" version="1.1"
-xmlns="http://www.w3.org/2000/svg">
-
-<defs>
-<filter id="Gaussian_Blur">
-<feGaussianBlur in="SourceGraphic" stdDeviation="1" />
-</filter>
-</defs>
-
-</svg> 
-</div>
-    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
-    
-
-    
- 
-    <div id="debugger"><div id="debuggerl">log</div></div>
-    <div id="editor"></div>
-    
-      
-    <div id="bugferrylogo"></div>
-    <div id="impressum"></div>
-	<div id="ie6com">IE6 compatibility mode</div>
-  
-  	<span id="loading">
-    <span id="msg">
-    loading...
-    </span>    
-    </span>
-    <noscript>
-      <div style="display:block;visibility:visible;width: 22em; position: absolute; left: 50%; top:50%;background-color:#FEFEFE;margin-top:15px;margin-left: -11em; color: red; border: 3px double red; padding: 4px">
-        It seems as if your web browser does not have JavaScript enabled!
-        In order for the bugFerry to sail out correctly, you have to enable JavaScript support.
-      </div>
-    </noscript>
-  </body>
+	<body class="hidden" onload="window.document.body.className='visible';" >
+		<div style="overflow:hidden;position:absolute;height:1px;width:1px;">    
+			<svg width="1" height="1" version="1.1" xmlns="http://www.w3.org/2000/svg">
+				<defs><filter id="Gaussian_Blur"><feGaussianBlur in="SourceGraphic" stdDeviation="1" /></filter>
+				</defs>
+			</svg> 
+		</div>
+		<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+		<div id="debugger">
+  			<div id="debuggerl">log</div>
+  	 	</div>
+  	 	<div id="editor"></div>
+   		<div id="bugferrylogo"></div>
+   		<div id="impressum"></div>
+		<span id="loading">
+   			<span id="msg">loading...</span>    
+		</span>
+		<noscript>
+			<div style="display:block;visibility:visible;width: 22em; position: absolute; left: 50%; top:50%;background-color:#FEFEFE;margin-top:15px;margin-left: -11em; color: red; border: 3px double red; padding: 4px">
+				It seems as if your web browser does not have JavaScript enabled!
+				In order for the bugFerry to sail out correctly, you have to enable JavaScript support.
+			</div>
+		</noscript>
+	</body>
 </html>

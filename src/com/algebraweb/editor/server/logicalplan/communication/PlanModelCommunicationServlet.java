@@ -31,6 +31,7 @@ import com.algebraweb.editor.client.RemoteManipulationMessage;
 import com.algebraweb.editor.client.RemoteManipulationService;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvasSQLException;
 import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
@@ -60,6 +61,7 @@ import com.algebraweb.editor.server.logicalplan.validation.validators.Referenced
 import com.algebraweb.editor.server.logicalplan.validation.validators.ReferencedNodesValidator;
 import com.algebraweb.editor.server.logicalplan.xmlbuilder.XMLNodePlanBuilder;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
+import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.EvaluationContextProvider;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -307,7 +309,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml) throws PlanManipulationException {
 
-		PlanParser p = new PlanParser((HashMap<String,NodeScheme>)getServletContext().getAttribute("nodeSchemes"));
+		PlanParser p = new PlanParser((HashMap<String,NodeScheme>)getServletContext().getAttribute("nodeSchemes"),getSession());
 
 
 		try {
@@ -446,11 +448,26 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		System.out.println("sortColumnName=" + c.getSortColumnName());
 		System.out.println("sortOrder="+c.getSortOrder());
 		System.out.println("sortOrderColumn="+c.getSortOrderColumnOn());
-		
-		
+
+		if (c.isDatabaseSetGlobal()) {
+
+			saveDefaultDatabaseConfiguration(c);
+
+		}
+
 		getNodeToWork(pid, nid).setEvaluationContext(c);
 
 
+	}
+
+
+	private void saveDefaultDatabaseConfiguration(EvaluationContext c)
+	throws SessionExpiredException {
+		getSession().setAttribute("databaseHost", c.getDatabaseServer());
+		getSession().setAttribute("databasePort",  c.getDatabasePort());
+		getSession().setAttribute("databaseName", c.getDatabase());
+		getSession().setAttribute("databaseUser", c.getDatabaseUser());
+		getSession().setAttribute("databasePw", c.getDatabasePassword());
 	}
 
 
@@ -481,7 +498,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 				PlanNode newNode = planToWork.addNode(schemes.get(nodeType));
 
-				PlanParser p = new PlanParser();
+				PlanParser p = new PlanParser(getSession());
 				p.parseNodeLabelSchema(newNode, newNode.getScheme());
 
 				ValidationResult res = getValidation(pid);
@@ -565,7 +582,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context,boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException {
 
 		if (saveContext) saveEvaluationContextForNode(nid, pid, context);
-		
+
 		SqlEvaluator eval = new SqlEvaluator(context);
 		return eval.eval(getSQLFromPlanNode(pid,nid,context,saveContext));
 
@@ -573,9 +590,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public Integer createNewPlan() throws SessionExpiredException {
-		
+	public Integer createNewPlan(boolean clearFirst) throws SessionExpiredException {
+
 		QueryPlanBundle b= getQueryPlanBundleFromSession();
+		if (clearFirst) b.getPlans().clear();
 		int id= b.getFreePlanId();
 		System.out.println("Adding new empty plan with id #" +  id);
 		b.addPlan(new QueryPlan(id));
@@ -583,42 +601,98 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return id;
 
 	}
-	
+
 	private QueryPlanBundle getQueryPlanBundleFromSession() throws SessionExpiredException {
-		
+
 		QueryPlanBundle b = ((QueryPlanBundle)getSession().getAttribute("queryPlans"));		
-		
+
 		if (b==null) {
 			b = new QueryPlanBundle();
 			getSession().setAttribute("queryPlans",b);
 		}
-		
+
 		return b;
 	}
 
-	
-
-	@Override
-	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException {
-
-		if (getNodeToWork(pid, nid).getEvaluationContext() == null) {
-
-			return getPlanToWork(pid).getEvContext() ;
-
-		}else{
-
-			return getNodeToWork(pid, nid).getEvaluationContext();
+	private EvaluationContext getPlanEvaluationContext(int pid) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException {
+		
+		System.out.println("getting ev context for plan #" + pid);
+		
+		if (getPlanToWork(pid).getEvContext() == null) {
+			System.out.println("Providing new evcontext for plan...");
+			EvaluationContextProvider p = new EvaluationContextProvider(getSession());
+			p.fillEvaluationContext(getPlanToWork(pid));
 
 		}
+
+		EvaluationContext c = getPlanToWork(pid).getEvContext();
+
+		if (c.getDatabase() == null && c.getDatabaseServer() == null) {
+			System.out.println("Filling with default database...");
+			fillDatabaseConfigurationFromGlobalDefault(c);
+		}
+
+
+		return getPlanToWork(pid).getEvContext();
+
 	}
 
 
+	private void fillDatabaseConfigurationFromGlobalDefault(EvaluationContext c)
+			throws SessionExpiredException {
+		c.setDatabase((String)getSession().getAttribute("database"));
+		c.setDatabasePassword((String)getSession().getAttribute("databasePw"));
+		c.setDatabasePort((getSession().getAttribute("databasePort") != null?(Integer) getSession().getAttribute("databasePort"):5432));
+		c.setDatabaseServer((getSession().getAttribute("databaseHost")!= null?(String)getSession().getAttribute("databaseHost"):"localhost"));
+		c.setDatabaseUser((String)getSession().getAttribute("databaseUser"));
+	}
+
 	@Override
-	public ArrayList<Property> getReferencableColumns(int nid, int pid) {
+	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException {
+
+		EvaluationContext c = null;
+		
+		if (nid == -1) {
+
+
+			c = getPlanEvaluationContext(pid);
+
+
+
+		}else{
+
+			if (getNodeToWork(pid, nid).getEvaluationContext() == null) {
+
+				c = getPlanEvaluationContext(pid);
+
+			}else{
+
+				c = getNodeToWork(pid, nid).getEvaluationContext();
+
+			}
+
+		}
+		
+		if (c.getDatabase() == null && c.getDatabaseServer() == null) fillDatabaseConfigurationFromGlobalDefault(c);
+		return c;
+
+	}
+
+	@Override
+	public ArrayList<Property> getReferencableColumns(int nid, int pid) throws GraphNotConnectedException {
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+
+		PlanNode nodeToWork;
+
+		try {
+			nodeToWork = (nid > -1 ? planToWork.getPlanNodeById(nid): planToWork.getRootNode());
+		}catch (GraphIsEmptyException e) {
+			return new ArrayList<Property>();
+		}
+
+		if (nodeToWork == null) return new ArrayList<Property>();
 
 		return nodeToWork.getReferencableColumnsFromValues();
 	}
@@ -830,7 +904,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 				PlanNode cur = it.next().getP();
 				PlanNode newNode = new PlanNode(idReplacements.get(cur.getId()), cur.getScheme(), p);
 
-				PlanParser pa = new PlanParser();
+				PlanParser pa = new PlanParser(getSession());
 				pa.parseNodeLabelSchema(newNode, newNode.getScheme());
 
 				Iterator<NodeContent> content = cur.getContent().iterator();
@@ -914,18 +988,61 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	@Override
 	public Integer removePlan(int pid) throws SessionExpiredException {
-		
+
 		getQueryPlanBundleFromSession().getPlans().remove(pid);
-		
+
 		return pid;
 	}
 
 
 	@Override
 	public PlanNode getRootNode(int pid)
-			throws PlanManipulationException, PathFinderCompilationError,
-			LogicalCanvasSQLException, GraphNotConnectedException {
+	throws PlanManipulationException, PathFinderCompilationError,
+	LogicalCanvasSQLException, GraphNotConnectedException, GraphIsEmptyException {
 		return getPlanToWork(pid).getRootNode();
+	}
+
+
+	@Override
+	public void updatePlanEvaluationContext(EvaluationContext c, int pid) throws PlanManipulationException {
+
+		if (c.isDatabaseSetGlobal()) saveDefaultDatabaseConfiguration(c);
+		getPlanToWork(pid).setEvContext(c);
+		
+		System.out.println("Saving context for plan #"+pid + ":");
+		System.out.println("Values:");
+		System.out.println("database=" + c.getDatabase());
+		System.out.println("databasePassword=" + c.getDatabasePassword());
+		System.out.println("databasePort=" + c.getDatabasePort());
+		System.out.println("databaseServer=" + c.getDatabaseServer());
+		System.out.println("databaseUser=" + c.getDatabaseUser());
+		System.out.println("itercolumnname=" + c.getIterColumnName());
+		System.out.println("iterColumnNat=" + c.getIterColumnNat());
+		System.out.println("sortColumnName=" + c.getSortColumnName());
+		System.out.println("sortOrder="+c.getSortOrder());
+		System.out.println("sortOrderColumn="+c.getSortOrderColumnOn());
+
+
+	}
+
+
+	@Override
+	public ArrayList<HashMap<String, String>> evalPlan(int pid,	EvaluationContext c, boolean saveContext) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException {
+
+		PlanNode root = getPlanToWork(pid).getRootNode();
+		if (saveContext) getPlanToWork(pid).setEvContext(c);
+		return eval(pid, root.getId(), c, false);
+
+
+	}
+
+
+	@Override
+	public String getSQLFromPlan(int pid) throws PlanManipulationException, PathFinderCompilationError, GraphNotConnectedException, GraphIsEmptyException {
+		
+			return getSQLFromPlanNode(pid, getPlanToWork(pid).getRootNode().getId(), getPlanEvaluationContext(pid), false); 
+		
+		
 	}
 
 

@@ -75,8 +75,12 @@ public class GraphCanvas extends Raphael  {
 	private HashMap<Integer,GraphNode> selected = new HashMap<Integer,GraphNode>();
 	private HashMap<Coordinate,GraphEdge> selectedEdges = new HashMap<Coordinate,GraphEdge>();
 
+	private GraphNode hoverNode=null;
+
 	private NodeContextMenu m;
 	private ContextMenu canvasMenu;
+
+	private boolean preventHoverMenu = false;
 
 	private int height;
 	private int width;
@@ -215,7 +219,6 @@ public class GraphCanvas extends Raphael  {
 
 	public void clearSelection() {
 
-
 		Iterator<GraphNode> it = selected.values().iterator();
 		while(it.hasNext()) gnm.setNotSelected(it.next());
 
@@ -230,21 +233,28 @@ public class GraphCanvas extends Raphael  {
 
 	public void addNodeToSelection(GraphNode node) {
 
-
-		this.selected.put(node.getId(), node);
-		getGraphNodeModifier().setSelected(node);
-
-
+		boolean dontSelect = false;
 		Iterator<NodeSelectionHandler> itH = selectionHandlers.iterator();
 
 		while (itH.hasNext()) {
-			itH.next().isSelected(node);
+			if (!itH.next().isSelected(node)) dontSelect=true;
+		}
+
+		if (!dontSelect) {
+			this.selected.put(node.getId(), node);
+			getGraphNodeModifier().setSelected(node);
 		}
 
 
+	}
 
+	public void removeNodeFromSelection(GraphNode node) {
+
+		this.selected.remove(node.getId());
+		getGraphNodeModifier().setNotSelected(node);
 
 	}
+
 
 	/**
 	 * Set the GraphNodes nodes selected
@@ -254,7 +264,7 @@ public class GraphCanvas extends Raphael  {
 	public void setSelectedNodes(ArrayList<GraphNode> nodes) {
 
 		Iterator<GraphNode> it = nodes.iterator();
-		popupDelay.cancel();
+		if (popupDelay!=null) popupDelay.cancel();
 
 		clearSelection();
 
@@ -262,14 +272,22 @@ public class GraphCanvas extends Raphael  {
 
 			GraphNode n = it.next();
 
-			this.selected.put(n.getId(), n);
-			getGraphNodeModifier().setSelected(n);
 
 			Iterator<NodeSelectionHandler> itH = selectionHandlers.iterator();
 
+			boolean dontSelect = false;
+
 			while (itH.hasNext()) {
-				itH.next().isSelected(n);
+				if (!itH.next().isSelected(n)) dontSelect=true;
 			}
+
+			if (!dontSelect) {
+				this.selected.put(n.getId(), n);
+				getGraphNodeModifier().setSelected(n);
+
+			}
+
+
 		}
 	}
 
@@ -294,7 +312,7 @@ public class GraphCanvas extends Raphael  {
 
 	}
 
-	public boolean hasEdge (int from, int to) {
+	public boolean hasEdge (int from, int to,int position) {
 
 
 		GraphNode fromN = getGraphNodeById(from);
@@ -305,15 +323,19 @@ public class GraphCanvas extends Raphael  {
 
 		boolean success = false;
 
+
 		while (itTo.hasNext()) {
 
 			if (itTo.next().getFrom().getId() == from) success = true;
 
 		}
 
+
 		while (success==true && itFrom.hasNext()) {
 
-			if (itFrom.next().getTo().getId() == to) return success;
+			GraphEdge cur = itFrom.next();
+
+			if (cur.getTo().getId() == to && cur.getFixedParentPos() == position) return success;
 
 		}
 
@@ -743,6 +765,32 @@ public class GraphCanvas extends Raphael  {
 
 	}
 
+	public void removeEdge(GraphNode n,int to,int position) {
+
+
+		ArrayList<GraphEdge> from = n.getEdgesFrom();
+
+
+		GraphEdge current;
+
+		GWT.log(Integer.toString(to));
+
+
+		for (int i=0;i<from.size();i++) {
+
+			current = from.get(i);			
+			if (current.getTo().getId() == to && current.getFixedParentPos() == position) {
+
+				gem.snakeIn(current,!this.isNotActive());
+				gem.deleteFromTo(current);
+				this.edges.remove(current);
+				if (from.contains(current)) from.remove(i);
+			}
+
+		}	
+
+	}
+
 	public void removeEdge(GraphNode n,int to) {
 
 
@@ -804,7 +852,7 @@ public class GraphCanvas extends Raphael  {
 	}
 
 
-	public GraphNode getGraphNodeById(int id) throws NodeNotFoundException{
+	public GraphNode getGraphNodeById(int id) {
 
 		Iterator<GraphNode> i = nodes.iterator();
 
@@ -815,7 +863,7 @@ public class GraphCanvas extends Raphael  {
 
 		}
 
-		throw new NodeNotFoundException(id);
+		return null;
 
 	}
 
@@ -832,10 +880,8 @@ public class GraphCanvas extends Raphael  {
 		Iterator<GraphNode> i = nodes.iterator();
 
 		while(i.hasNext()) {
-
+			GWT.log("showing... animation " + !this.isNotActive());
 			this.getGraphNodeModifier().showEdges(i.next(),!this.isNotActive());
-
-
 		}
 
 	}
@@ -859,7 +905,7 @@ public class GraphCanvas extends Raphael  {
 	public void openPopUp(final int x, final int y, final int nodeid, int delay) {
 
 
-		if ((getPopup().getNodeId() != nodeid) &&
+		if (!preventHoverMenu && (getPopup().getNodeId() != nodeid) &&
 				!getPopup().isShowing() && dragNode == null) {
 
 			if (popupDelay != null) popupDelay.cancel();
@@ -932,23 +978,6 @@ public class GraphCanvas extends Raphael  {
 
 	}
 
-	public Rect rectFactory(double x, double y, double w, double h) {
-
-		return new Rect(x, y, w, h);
-
-	}
-
-	public Circle circleFactory(double x, double y, double r) {
-
-		return new Circle(x, y, r);
-
-	}
-
-	public Text textFactory(double x, double y, String text) {
-
-		return new Text(x, y, text);
-
-	}
 
 	public void hangShapeOntoNode(String identifier, ConnectedShape s, int nid) {
 
@@ -1154,5 +1183,44 @@ public class GraphCanvas extends Raphael  {
 		GraphNode n = getGraphNodeById(nid);
 		return new Coordinate(n.getWidth()/2 + getMarginLeft() + (int)(n.getX()*getScale()) - (Window.getClientWidth()/2), getMarginTop() + (int)(n.getY()*getScale() - (Window.getClientHeight()/2)));
 	}
+
+
+
+	/**
+	 * @return the hoverNode
+	 */
+	public GraphNode getHoverNode() {
+		return hoverNode;
+	}
+
+
+
+	/**
+	 * @param hoverNode the hoverNode to set
+	 */
+	public void setHoverNode(GraphNode hoverNode) {
+		this.hoverNode = hoverNode;
+	}
+
+
+
+	/**
+	 * @return the preventHoverMenu
+	 */
+	public boolean isPreventHoverMenu() {
+		return preventHoverMenu;
+	}
+
+
+
+	/**
+	 * @param preventHoverMenu the preventHoverMenu to set
+	 */
+	public void setPreventHoverMenu(boolean preventHoverMenu) {
+		this.preventHoverMenu = preventHoverMenu;
+	}
+
+
+
 
 }
