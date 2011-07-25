@@ -27,6 +27,14 @@ public class NewEdgeDrawer {
 
 	}
 
+	public Path getArrowPath() {
+		return arrowPath;
+	}
+	
+	public Path getPath() {
+		return p;
+	}
+	
 	public void moveTo(double x,double y) {
 		
 		
@@ -39,14 +47,6 @@ public class NewEdgeDrawer {
 		
 		arrowPath.rotate(angle,this.x,this.y);
 		
-	}
-	
-	public Path getPath() {
-		return p;
-	}
-	
-	public Path getArrowPath() {
-		return arrowPath;
 	}
 
 

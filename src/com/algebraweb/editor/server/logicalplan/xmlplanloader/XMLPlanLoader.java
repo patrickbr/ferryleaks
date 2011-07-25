@@ -7,8 +7,6 @@ import java.util.Iterator;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-
-import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;

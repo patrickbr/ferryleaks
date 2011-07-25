@@ -2,29 +2,19 @@ package com.algebraweb.editor.client;
 
 public class ConfigurationWithPlansInSession extends Configuration {
 
-
 	Integer pids[];
 
-	public ConfigurationWithPlansInSession(Integer[] pids) {
-
+	public ConfigurationWithPlansInSession() {
 		super();
-		this.pids=pids;
-
-
 	}
 
-
-	public ConfigurationWithPlansInSession() {
-
+	public ConfigurationWithPlansInSession(Integer[] pids) {
 		super();
-
+		this.pids=pids;
 	}
 
 	public Integer[] getPlanIds() {
-
 		return pids;
-
 	}
-
 
 }

@@ -10,10 +10,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.InlineHTML;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class NodeContextMenu extends ContextMenu{
 
@@ -25,16 +22,6 @@ public class NodeContextMenu extends ContextMenu{
 		super();
 
 	}
-
-	public void show(GraphNode n, int x, int y) {
-
-		super.show(x,y);
-
-		this.n=n;
-
-
-	}
-
 
 	public void addItem(final NodeContextMenuItem i) {
 
@@ -88,6 +75,16 @@ public class NodeContextMenu extends ContextMenu{
 		tmp.add(text);
 
 		super.getRows().add(tmp);
+
+	}
+
+
+	public void show(GraphNode n, int x, int y) {
+
+		super.show(x,y);
+
+		this.n=n;
+
 
 	}
 

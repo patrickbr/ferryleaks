@@ -14,6 +14,7 @@ import org.jdom.Text;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
+import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
@@ -32,28 +33,74 @@ public class XMLNodePlanBuilder {
 
 	}
 	
-	public Document getPlanBundle(QueryPlanBundle b, ServletContext context) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException {
-		
-		Element planBundle = new Element ("query_plan_bundle");
-		
-		Iterator<QueryPlan> it = b.getPlans().values().iterator();
-		
-		while (it.hasNext()) {
-			
-			QueryPlan cur = it.next();
-			planBundle.addContent(getNodePlan(cur.getId(), cur.getRootNode(), cur.getEvContext(), context));
-			
-		}
-		
-		Document d = new Document();
-		d.addContent(planBundle);
-		return d;
-		
-		
+	private ArrayList<PlanNode> getAllNodesUnderThis(PlanNode rootNode) throws PlanHasCycleException {
+		return getAllNodesUnderThis(rootNode, new ArrayList<PlanNode>());
 	}
 
 
-	public Element getNodePlan(int id, PlanNode rootNode, EvaluationContext c, ServletContext context) throws PlanManipulationException {
+	private ArrayList<PlanNode> getAllNodesUnderThis(PlanNode rootNode, ArrayList<PlanNode> way) throws PlanHasCycleException {
+
+
+		ArrayList<PlanNode> nodes = new ArrayList<PlanNode>();
+
+		if (rootNode == null) return nodes;
+
+		Iterator<PlanNode> it = rootNode.getChilds().iterator();
+
+		nodes.add(rootNode);
+
+		while (it.hasNext()) {
+			PlanNode cur = it.next();
+			ArrayList<PlanNode> wayCopy = new ArrayList<PlanNode>();
+			wayCopy.addAll(way);
+			if (wayCopy.contains(cur) && cur != null) throw new PlanHasCycleException(cur.getId());
+			wayCopy.add(cur);
+			Iterator<PlanNode> i = getAllNodesUnderThis(cur,wayCopy).iterator();
+
+			while (i.hasNext()) {
+
+				PlanNode current = i.next();
+
+				if (!nodes.contains(current)) {
+
+					nodes.add(current);
+
+				}else{
+					nodes.remove(current);
+					nodes.add(current);
+				}
+
+			}
+
+		}
+
+
+		return nodes;
+
+
+
+	}
+
+	private HashMap<Integer,Integer> getNodeIdReplacements(PlanNode rootNode,int offset) throws PlanHasCycleException {
+
+		HashMap<Integer,Integer> retMap = new HashMap<Integer,Integer>();
+
+		ArrayList<PlanNode> nodes = getAllNodesUnderThis(rootNode);
+
+		Collections.reverse(nodes);
+		Iterator<PlanNode> it = nodes.iterator();
+
+		while (it.hasNext()) {
+			int id = it.next().getId();
+			System.out.println("Mapping " + id + " to " + offset);
+			retMap.put(id,offset);
+			offset++;
+
+		}
+		return retMap;
+	}
+
+	public Element getNodePlan(int id, PlanNode rootNode, EvaluationContext c, ServletContext context) throws PlanManipulationException, PlanHasCycleException {
 
 		Element nodePlan = new Element("query_plan");
 		nodePlan.setAttribute("id", Integer.toString(id));
@@ -84,12 +131,7 @@ public class XMLNodePlanBuilder {
 
 	}
 
-
-
-
-
-
-	public Document getNodePlan(QueryPlan p, ServletContext context) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException {
+	public Document getNodePlan(QueryPlan p, ServletContext context) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException {
 
 		PlanNode root = p.getRootNode();
 
@@ -102,69 +144,25 @@ public class XMLNodePlanBuilder {
 		return d;
 
 	}
-
-
-	private HashMap<Integer,Integer> getNodeIdReplacements(PlanNode rootNode,int offset) {
-
-		HashMap<Integer,Integer> retMap = new HashMap<Integer,Integer>();
-
-		ArrayList<PlanNode> nodes = getAllNodesUnderThis(rootNode);
-
-		Collections.reverse(nodes);
-		Iterator<PlanNode> it = nodes.iterator();
-
+	
+	public Document getPlanBundle(QueryPlanBundle b, ServletContext context) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException {
+		
+		Element planBundle = new Element ("query_plan_bundle");
+		
+		Iterator<QueryPlan> it = b.getPlans().values().iterator();
+		
 		while (it.hasNext()) {
-
-			int id = it.next().getId();
-
-			System.out.println("Mapping " + id + " to " + offset);
-			retMap.put(id,offset);
-			offset++;
-
+			
+			QueryPlan cur = it.next();
+			planBundle.addContent(getNodePlan(cur.getId(), cur.getRootNode(), cur.getEvContext(), context));
+			
 		}
-
-		return retMap;
-
-
-	}
-
-	private ArrayList<PlanNode> getAllNodesUnderThis(PlanNode rootNode) {
-
-
-		ArrayList<PlanNode> nodes = new ArrayList<PlanNode>();
-
-		if (rootNode == null) return nodes;
-
-		Iterator<PlanNode> it = rootNode.getChilds().iterator();
-
-		nodes.add(rootNode);
-
-		while (it.hasNext()) {
-
-			Iterator<PlanNode> i = getAllNodesUnderThis(it.next()).iterator();
-
-			while (i.hasNext()) {
-
-				PlanNode current = i.next();
-
-				if (!nodes.contains(current)) {
-
-					nodes.add(current);
-
-				}else{
-					nodes.remove(current);
-					nodes.add(current);
-				}
-
-			}
-
-		}
-
-
-		return nodes;
-
-
-
+		
+		Document d = new Document();
+		d.addContent(planBundle);
+		return d;
+		
+		
 	}
 
 

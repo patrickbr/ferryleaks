@@ -1,13 +1,9 @@
 package com.algebraweb.editor.client.node;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.validation.ValidationError;
-import com.algebraweb.editor.client.validation.ValidationResult;
-import com.google.gwt.core.client.GWT;
 
 
 public abstract class NodeContent extends ContentNode {
@@ -20,20 +16,19 @@ public abstract class NodeContent extends ContentNode {
 
 	protected String name;
 
-	public String getName() {
-		return name;
-	}
-
 	public PropertyMap getAttributes() {
 		return attributes;
 	}
 
-
-	public void setAttributes(PropertyMap attributes) {
-		this.attributes = attributes;
+	/**
+	 * @return the evalRes
+	 */
+	public ArrayList<ValidationError> getEvalRes() {
+		return evalRes;
 	}
 
 
+	@Override
 	public String getLabel() {
 
 		String ret="";
@@ -83,11 +78,13 @@ public abstract class NodeContent extends ContentNode {
 		else return ret;
 	}
 
-	/**
-	 * @return the evalRes
-	 */
-	public ArrayList<ValidationError> getEvalRes() {
-		return evalRes;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setAttributes(PropertyMap attributes) {
+		this.attributes = attributes;
 	}
 
 	/**

@@ -1,9 +1,6 @@
 package com.algebraweb.editor.server.fileserver;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -12,13 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jdom.DocType;
 import org.jdom.Document;
-import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.server.logicalplan.xmlbuilder.XMLNodePlanBuilder;
@@ -30,6 +24,7 @@ public class FileServerServlet extends HttpServlet {
 	byte[] bbuf = new byte[1024];
 
 
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 

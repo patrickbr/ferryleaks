@@ -12,22 +12,22 @@ public class PropertyValue implements IsSerializable{
 		
 	}
 	
-	public String getVal() {
-		return val;
-	}
-	public void setVal(String val) {
+	public PropertyValue(String val, String type) {
 		this.val = val;
+		this.type = type;
 	}
 	public String getType() {
 		return type;
+	}
+	public String getVal() {
+		return val;
 	}
 	public void setType(String type) {
 		this.type = type;
 	}
 	
-	public PropertyValue(String val, String type) {
+	public void setVal(String val) {
 		this.val = val;
-		this.type = type;
 	}
 	
 	

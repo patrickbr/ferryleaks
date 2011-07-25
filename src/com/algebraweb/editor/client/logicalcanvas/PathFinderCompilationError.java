@@ -4,16 +4,16 @@ public class PathFinderCompilationError extends Exception {
 	
 	
 	
-	public PathFinderCompilationError(String msg) {
+	public PathFinderCompilationError() {
 		
-		super(msg);
+		super();
 		
 		
 	}
 	
-	public PathFinderCompilationError() {
+	public PathFinderCompilationError(String msg) {
 		
-		super();
+		super(msg);
 		
 		
 	}

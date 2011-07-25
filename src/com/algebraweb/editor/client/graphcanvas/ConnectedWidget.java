@@ -5,7 +5,6 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.hydro4ge.raphaelgwt.client.Raphael.Shape;
 
 public class ConnectedWidget extends FlowPanel{
 
@@ -27,6 +26,11 @@ public class ConnectedWidget extends FlowPanel{
 		
 	}
 
+	public Widget getWidget() {
+		return w;
+	}
+
+
 	public int getX() {
 		return x;
 	}
@@ -34,11 +38,6 @@ public class ConnectedWidget extends FlowPanel{
 
 	public int getY() {
 		return y;
-	}
-
-
-	public Widget getWidget() {
-		return w;
 	}
 
 

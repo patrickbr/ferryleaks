@@ -4,12 +4,10 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasErrorDialogBox;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 
 public class CreateEvaluationContextDialog extends TabbedDialog{
 
@@ -21,6 +19,26 @@ public class CreateEvaluationContextDialog extends TabbedDialog{
 	private int pid;
 	private int nid;
 
+
+
+	private AsyncCallback<EvaluationContext> getContextCb = new AsyncCallback<EvaluationContext>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+
+			new GraphCanvasErrorDialogBox(caught.getMessage());
+
+		}
+
+		@Override
+		public void onSuccess(EvaluationContext result) {
+
+			loadedContext = result;
+			processContextResult(result);
+
+		}
+
+	};
 
 
 	public CreateEvaluationContextDialog(int pid, int nid, RemoteManipulationServiceAsync manServ) {
@@ -67,23 +85,16 @@ public class CreateEvaluationContextDialog extends TabbedDialog{
 
 	}
 
-
-	protected EvaluationContext saveContext() {
-
-		EvaluationContext c = getLoadedContext();
-		sp.fillEvaluationContext(c);
-		return c;
-
-	}
-
-	protected SerializePanel getSerializationPanel() {
-		return sp;
-	}
-
 	protected void fillEvalContext() {
 
 		manServ.getEvaluationContext(pid, nid, getContextCb);
 
+	}
+
+	public EvaluationContext getLoadedContext() {
+		
+		return loadedContext;
+		
 	}
 
 
@@ -96,57 +107,42 @@ public class CreateEvaluationContextDialog extends TabbedDialog{
 	}
 
 	/**
-	 * @return the pid
-	 */
-	protected int getPid() {
-		return pid;
-	}
-
-	/**
 	 * @return the nid
 	 */
 	protected int getNid() {
 		return nid;
 	}
 
-	protected void submit() {
+	/**
+	 * @return the pid
+	 */
+	protected int getPid() {
+		return pid;
+	}
 
-
-
+	protected SerializePanel getSerializationPanel() {
+		return sp;
 	}
 
 	protected void processContextResult(EvaluationContext result) {
 
-
-		GWT.log("gurr");
 		sp.loadEvaluationContext(result);
 
 	}
 
 
-	private AsyncCallback<EvaluationContext> getContextCb = new AsyncCallback<EvaluationContext>() {
+	protected EvaluationContext saveContext() {
 
-		@Override
-		public void onFailure(Throwable caught) {
+		EvaluationContext c = getLoadedContext();
+		sp.fillEvaluationContext(c);
+		return c;
 
-			new GraphCanvasErrorDialogBox(caught.getMessage());
+	}
 
-		}
+	protected void submit() {
 
-		@Override
-		public void onSuccess(EvaluationContext result) {
 
-			loadedContext = result;
-			processContextResult(result);
 
-		}
-
-	};
-
-	public EvaluationContext getLoadedContext() {
-		
-		return loadedContext;
-		
 	}
 
 

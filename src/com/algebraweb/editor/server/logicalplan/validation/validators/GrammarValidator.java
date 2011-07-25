@@ -28,6 +28,33 @@ public class GrammarValidator implements Validator {
 	private String currentSchema = "";
 	private int currentNodeValidaded = -1;
 
+	public void fillContentNodeWithContentValidationResults(ContentNode n, ArrayList<GoAble> schema) {
+		
+		
+		Iterator<GoAble> it = schema.iterator();
+		
+		
+		while (it.hasNext()) {
+			
+			GoAble cur = it.next();
+			
+			Iterator<NodeContent> i = n.getDirectNodeContentByScheme(cur).iterator();
+			
+			while (i.hasNext()) {
+				
+				NodeContent curr = i.next();
+				curr.setEvalRes(validateContentNode(curr,cur,true)); 
+				
+			}
+		
+			
+		}
+		
+		
+		
+		
+	}
+
 	private String getErrorMsg(String howMany, GoAble g) {
 
 		String ret = "Expected " + howMany + " element(s) of type <span class='tt'>" + g.getXmlObject() + "</span>";
@@ -57,19 +84,31 @@ public class GrammarValidator implements Validator {
 		return ret;
 	}
 
-	public ArrayList<ValidationError> validateNode(PlanNode n) {
+	private boolean isInteger(String a) {
 
-		ArrayList<ValidationError> res = new  ArrayList<ValidationError>();
-
-		NodeScheme nodeScheme = n.getScheme();
-
-		currentNodeValidaded = n.getId();
-		currentSchema = n.getKind();
-
-		res.addAll(validateContentNode(n,nodeScheme));
-		return res;
+		return (a.matches("[0-9]+"));
 
 	}
+	
+	
+	
+	@Override
+	public void validate(ArrayList<PlanNode> ps, ArrayList<PlanNode> plan,
+			ValidationResult r) {
+
+		Iterator<PlanNode> it = ps.iterator();
+
+		while (it.hasNext()) {
+
+			PlanNode current = it.next();
+			if (current != null) r.getErrors().addAll(validateNode(current));
+
+		}
+
+
+	}
+	
+	
 
 	public ArrayList<ValidationError> validateContentNode(ContentNode n,GoAble g) {
 
@@ -77,37 +116,10 @@ public class GrammarValidator implements Validator {
 
 
 	}
-	
-	
-	
-	public void fillContentNodeWithContentValidationResults(ContentNode n, ArrayList<GoAble> schema) {
-		
-		
-		Iterator<GoAble> it = schema.iterator();
-		
-		
-		while (it.hasNext()) {
-			
-			GoAble cur = it.next();
-			
-			Iterator<NodeContent> i = n.getDirectNodeContentByScheme(cur).iterator();
-			
-			while (i.hasNext()) {
-				
-				NodeContent curr = i.next();
-				curr.setEvalRes(validateContentNode(curr,cur,true)); 
-				
-			}
-		
-			
-		}
-		
-		
-		
-		
-	}
-	
-	
+
+
+
+
 
 	public ArrayList<ValidationError> validateContentNode(ContentNode n, GoAble g, boolean stayFlat) {
 
@@ -255,29 +267,17 @@ public class GrammarValidator implements Validator {
 
 	}
 
+	public ArrayList<ValidationError> validateNode(PlanNode n) {
 
+		ArrayList<ValidationError> res = new  ArrayList<ValidationError>();
 
+		NodeScheme nodeScheme = n.getScheme();
 
+		currentNodeValidaded = n.getId();
+		currentSchema = n.getKind();
 
-	private boolean isInteger(String a) {
-
-		return (a.matches("[0-9]+"));
-
-	}
-
-	@Override
-	public void validate(ArrayList<PlanNode> ps, ArrayList<PlanNode> plan,
-			ValidationResult r) {
-
-		Iterator<PlanNode> it = ps.iterator();
-
-		while (it.hasNext()) {
-
-			PlanNode current = it.next();
-			if (current != null) r.getErrors().addAll(validateNode(current));
-
-		}
-
+		res.addAll(validateContentNode(n,nodeScheme));
+		return res;
 
 	}
 }

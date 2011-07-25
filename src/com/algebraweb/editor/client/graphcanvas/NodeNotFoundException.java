@@ -16,6 +16,7 @@ public class NodeNotFoundException extends RuntimeException {
 	}
 	
 	
+	@Override
 	public String getMessage() {
 		
 		return "No node with nid=" + nid + " was found.";

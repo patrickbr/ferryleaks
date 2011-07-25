@@ -9,28 +9,6 @@ import com.google.gwt.core.client.JsArray;
 public class RaphaelJS extends JavaScriptObject {
 
   /**
-   * determine whether Raphael is defined on the client platform
-   * NB: do not call any other methods if Raphael is not defined
-   */
-  static public final native boolean isDefined() /*-{
-    return $wnd.Raphael!=undefined;
-  }-*/;
-
-  /**
-   * Raphael factory method
-   */
-  static public final native RaphaelJS create(String elementId, int width, int height) /*-{
-      return $wnd.Raphael(elementId, width, height);
-  }-*/;
-
-  /**
-   * Raphael factory method
-   */
-  static public final native RaphaelJS create(com.google.gwt.user.client.Element element, int width, int height) /*-{
-      return $wnd.Raphael(element, width, height);
-  }-*/;
-
-  /**
    * color object returned by Element.getColor() and friends
    */
   protected static class Color extends JavaScriptObject {
@@ -48,128 +26,6 @@ public class RaphaelJS extends JavaScriptObject {
    */
   protected static class Element extends JavaScriptObject {
     protected Element() { }
-
-    /**
-     * Gives you a reference to the DOM object, so you can assign event handlers or just mess around. 
-     *
-     * @return reference to the current DOM object
-     */
-    public final native com.google.gwt.user.client.Element node() /*-{
-      return this.node;
-    }-*/;
-
-    /**
-     *  Removes element from the DOM. You can't use it after this method call. 
-     */
-    public final native void remove() /*-{
-      this.remove();
-    }-*/;
-
-    /**
-     * Makes element invisible
-     *
-     * @return the javascript object hidden
-     */
-    public final native Element hide() /*-{
-      return this.hide();
-    }-*/;
-
-    /**
-     * Makes element visible
-     *
-     * @return the javascript object made visible
-     */
-    public final native Element show() /*-{
-      return this.show();
-    }-*/;
-
-    /**
-     * Rotates the element by the given degree from its center point relatively.
-     *
-     * @param degree        number of degrees of rotation (0-360)
-     *
-     * @return the javascript object rotated
-     */
-    public final native Element rotate(double degree) /*-{
-      return this.rotate(degree);
-    }-*/;
-
-    /**
-     * Rotates the element by the given degree from its center point.
-     *
-     * @param degree        number of degrees of rotation (0-360)
-     * @param isAbsolute    boolean Specifies if degree is relative to previous position (false) or is it absolute angle (true)
-     *
-     * @return the javascript object rotated
-     */
-    public final native Element rotate(double degree, boolean isAbsolute) /*-{
-      return this.rotate(degree, isAbsolute);
-    }-*/;
-
-    /**
-     * Rotates the element by the given degree from its center point relatively.
-     *
-     * @param degree        number of degrees of rotation (0-360)
-     * @param cx            number X coordinate of center of rotation        
-     * @param cy            number Y coordinate of center of rotation        
-     *
-     * @return the javascript object rotated
-     */
-    public final native Element rotate(double degree, double cx, double cy) /*-{
-      return this.rotate(degree, cx, cy);
-    }-*/;
-
-    /**
-     * Moves the element around the canvas by the given distances.
-     *
-     * @param dx    number of pixels of translation by X-axis
-     * @param dy    number of pixels of translation by Y-axis
-     *
-     * @return the javascript object translated
-     */
-    public final native Element translate(double dx, double dy) /*-{
-      return this.translate(dx, dy);
-    }-*/;
-
-    /**
-     * Resizes the element by the given multipliers.
-     *
-     * @param Xtimes    factor to scale horizontally
-     * @param Ytimes    factor to scale vertically
-     *
-     * @return the javascript object scaled
-     */
-    public final native Element scale(double Xtimes, double Ytimes) /*-{
-      return this.scale(Xtimes, Ytimes);
-    }-*/;
-
-    /**
-     * Resizes the element by the given multipliers.
-     *
-     * @param Xtimes    factor to scale horizontally
-     * @param Ytimes    factor to scale vertically
-     *
-     * @return the javascript object scaled
-     */
-    public final native Element scale(double Xtimes, double Ytimes, double centerX) /*-{
-      return this.scale(Xtimes, Ytimes, centerX);
-    }-*/;
-
-    /**
-     * Resizes the element by the given multipliers.
-     *
-     * @param Xtimes    factor to scale horizontally
-     * @param Ytimes    factor to scale vertically
-     *
-     * @return the javascript object scaled
-     */
-    public final native Element scale(double Xtimes, double Ytimes, double centerX, double centerY) /*-{
-      return this.scale(Xtimes, Ytimes, centerX, centerY);
-    }-*/;
-    
-    public final native Element stop() /*-{
-    return this.stop();
-  }-*/;
 
     /**
      * Linearly changes an attribute from its current value to its specified value in the given amount of milliseconds. 
@@ -203,6 +59,7 @@ public class RaphaelJS extends JavaScriptObject {
     public final native Element animate(JavaScriptObject newAttrs, int ms) /*-{
       return this.animate(newAttrs, ms);
     }-*/;
+
     public final native Element animate(JavaScriptObject newAttrs, int ms, AnimationCallback callback) /*-{
       return this.animate(newAttrs, ms, function() {
         @com.hydro4ge.raphaelgwt.client.AnimationCallback::fire(Lcom/hydro4ge/raphaelgwt/client/AnimationCallback;)(callback);
@@ -221,25 +78,9 @@ public class RaphaelJS extends JavaScriptObject {
     public final native Element animate(JavaScriptObject newAttrs, int ms, String easing) /*-{
       return this.animate(newAttrs, ms, easing);
     }-*/;
+
     public final native Element animate(JavaScriptObject newAttrs, int ms, String easing, AnimationCallback callback) /*-{
       return this.animate(newAttrs, ms, easing, function() {
-        @com.hydro4ge.raphaelgwt.client.AnimationCallback::fire(Lcom/hydro4ge/raphaelgwt/client/AnimationCallback;)(callback);
-    });
-    }-*/;
-
-    public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms) /*-{
-      return this.animateWith(element, newAttrs, ms);
-    }-*/;
-    public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms, AnimationCallback callback) /*-{
-      return this.animateWith(element, newAttrs, ms, function() {
-        @com.hydro4ge.raphaelgwt.client.AnimationCallback::fire(Lcom/hydro4ge/raphaelgwt/client/AnimationCallback;)(callback);
-      });
-    }-*/;
-    public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms, String easing) /*-{
-      return this.animateWith(element, newAttrs, ms, easing);
-    }-*/;
-    public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms, String easing, AnimationCallback callback) /*-{
-      return this.animateWith(element, newAttrs, ms, easing, function() {
         @com.hydro4ge.raphaelgwt.client.AnimationCallback::fire(Lcom/hydro4ge/raphaelgwt/client/AnimationCallback;)(callback);
     });
     }-*/;
@@ -247,9 +88,11 @@ public class RaphaelJS extends JavaScriptObject {
     public final native Element animateAlong(Element path, int ms) /*-{
       return this.animateAlong(path, ms);
     }-*/;
+
     public final native Element animateAlong(Element path, int ms, boolean rotate) /*-{
       return this.animateAlong(path, ms, rotate);
     }-*/;
+
     public final native Element animateAlong(Element path, int ms, boolean rotate, AnimationCallback callback) /*-{
       return this.animateAlong(path, ms, rotate, function() {
         @com.hydro4ge.raphaelgwt.client.AnimationCallback::fire(Lcom/hydro4ge/raphaelgwt/client/AnimationCallback;)(callback);
@@ -259,15 +102,56 @@ public class RaphaelJS extends JavaScriptObject {
     public final native Element animateAlongBack(Element path, int ms) /*-{
       return this.animateAlongBack(path, ms);
     }-*/;
+
     public final native Element animateAlongBack(Element path, int ms, boolean rotate) /*-{
       return this.animateAlongBack(path, ms, rotate);
     }-*/;
+
     public final native Element animateAlongBack(Element path, int ms, boolean rotate, AnimationCallback callback) /*-{
       return this.animateAlongBack(path, ms, rotate, function() {
         @com.hydro4ge.raphaelgwt.client.AnimationCallback::fire(Lcom/hydro4ge/raphaelgwt/client/AnimationCallback;)(callback);
       });
     }-*/;
 
+    public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms) /*-{
+      return this.animateWith(element, newAttrs, ms);
+    }-*/;
+    
+    public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms, AnimationCallback callback) /*-{
+      return this.animateWith(element, newAttrs, ms, function() {
+        @com.hydro4ge.raphaelgwt.client.AnimationCallback::fire(Lcom/hydro4ge/raphaelgwt/client/AnimationCallback;)(callback);
+      });
+    }-*/;
+
+    public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms, String easing) /*-{
+      return this.animateWith(element, newAttrs, ms, easing);
+    }-*/;
+    public final native Element animateWith(Element element, JavaScriptObject newAttrs, int ms, String easing, AnimationCallback callback) /*-{
+      return this.animateWith(element, newAttrs, ms, easing, function() {
+        @com.hydro4ge.raphaelgwt.client.AnimationCallback::fire(Lcom/hydro4ge/raphaelgwt/client/AnimationCallback;)(callback);
+    });
+    }-*/;
+
+    /**
+     * sets a values for given attribute names
+     *
+     * @return the current value for the given attribute name
+     */
+    public final native Element attr(JavaScriptObject params) /*-{
+      return this.attr(params);
+    }-*/;
+    /**
+     * gets an array of values for given attribute names
+     *
+     * @return the current value for the given attribute name
+     */
+    public final native JsArray attr(JsArray attributeNames) /*-{
+      return this.attr(attributeNames);
+    }-*/;
+
+    public final native Element attr(String attributeName, double value) /*-{
+      return this.attr(attributeName, value);
+    }-*/;
     /**
      * Sets the attributes of elements directly.
      *
@@ -309,19 +193,6 @@ public class RaphaelJS extends JavaScriptObject {
     public final native Element attr(String attributeName, String value) /*-{
       return this.attr(attributeName, value);
     }-*/;
-    public final native Element attr(String attributeName, double value) /*-{
-      return this.attr(attributeName, value);
-    }-*/;
-
-    /**
-     * sets a values for given attribute names
-     *
-     * @return the current value for the given attribute name
-     */
-    public final native Element attr(JavaScriptObject params) /*-{
-      return this.attr(params);
-    }-*/;
-
     /**
      * gets the value for an attribute
      *
@@ -330,7 +201,6 @@ public class RaphaelJS extends JavaScriptObject {
     public final native double attrAsDouble(String attributeName) /*-{
       return this.attr(attributeName);
     }-*/;
-
     /**
      * gets the value for an attribute
      *
@@ -340,33 +210,141 @@ public class RaphaelJS extends JavaScriptObject {
       return this.attr(attributeName);
     }-*/;
 
-    /**
-     * gets an array of values for given attribute names
-     *
-     * @return the current value for the given attribute name
-     */
-    public final native JsArray attr(JsArray attributeNames) /*-{
-      return this.attr(attributeNames);
-    }-*/;
-
     public final native BBox getBBox() /*-{
       return this.getBBox();
+    }-*/;
+    /**
+     * Makes element invisible
+     *
+     * @return the javascript object hidden
+     */
+    public final native Element hide() /*-{
+      return this.hide();
+    }-*/;
+    public final native Element insertAfter(Element obj) /*-{
+      return this.insertAfter(obj);
+    }-*/;
+
+    public final native Element insertBefore(Element obj) /*-{
+      return this.insertBefore(obj);
+    }-*/;
+    /**
+     * Gives you a reference to the DOM object, so you can assign event handlers or just mess around. 
+     *
+     * @return reference to the current DOM object
+     */
+    public final native com.google.gwt.user.client.Element node() /*-{
+      return this.node;
+    }-*/;
+    /**
+     *  Removes element from the DOM. You can't use it after this method call. 
+     */
+    public final native void remove() /*-{
+      this.remove();
+    }-*/;
+
+    /**
+     * Rotates the element by the given degree from its center point relatively.
+     *
+     * @param degree        number of degrees of rotation (0-360)
+     *
+     * @return the javascript object rotated
+     */
+    public final native Element rotate(double degree) /*-{
+      return this.rotate(degree);
+    }-*/;
+    /**
+     * Rotates the element by the given degree from its center point.
+     *
+     * @param degree        number of degrees of rotation (0-360)
+     * @param isAbsolute    boolean Specifies if degree is relative to previous position (false) or is it absolute angle (true)
+     *
+     * @return the javascript object rotated
+     */
+    public final native Element rotate(double degree, boolean isAbsolute) /*-{
+      return this.rotate(degree, isAbsolute);
+    }-*/;
+
+    /**
+     * Rotates the element by the given degree from its center point relatively.
+     *
+     * @param degree        number of degrees of rotation (0-360)
+     * @param cx            number X coordinate of center of rotation        
+     * @param cy            number Y coordinate of center of rotation        
+     *
+     * @return the javascript object rotated
+     */
+    public final native Element rotate(double degree, double cx, double cy) /*-{
+      return this.rotate(degree, cx, cy);
+    }-*/;
+
+    /**
+     * Resizes the element by the given multipliers.
+     *
+     * @param Xtimes    factor to scale horizontally
+     * @param Ytimes    factor to scale vertically
+     *
+     * @return the javascript object scaled
+     */
+    public final native Element scale(double Xtimes, double Ytimes) /*-{
+      return this.scale(Xtimes, Ytimes);
+    }-*/;
+
+    /**
+     * Resizes the element by the given multipliers.
+     *
+     * @param Xtimes    factor to scale horizontally
+     * @param Ytimes    factor to scale vertically
+     *
+     * @return the javascript object scaled
+     */
+    public final native Element scale(double Xtimes, double Ytimes, double centerX) /*-{
+      return this.scale(Xtimes, Ytimes, centerX);
+    }-*/;
+
+    /**
+     * Resizes the element by the given multipliers.
+     *
+     * @param Xtimes    factor to scale horizontally
+     * @param Ytimes    factor to scale vertically
+     *
+     * @return the javascript object scaled
+     */
+    public final native Element scale(double Xtimes, double Ytimes, double centerX, double centerY) /*-{
+      return this.scale(Xtimes, Ytimes, centerX, centerY);
+    }-*/;
+
+    /**
+     * Makes element visible
+     *
+     * @return the javascript object made visible
+     */
+    public final native Element show() /*-{
+      return this.show();
+    }-*/;
+
+    public final native Element stop() /*-{
+    return this.stop();
+  }-*/;
+
+    public final native Element toBack() /*-{
+      return this.toBack();
     }-*/;
 
     public final native Element toFront() /*-{
       return this.toFront();
     }-*/;
 
-    public final native Element toBack() /*-{
-      return this.toBack();
-    }-*/;
-
-    public final native Element insertBefore(Element obj) /*-{
-      return this.insertBefore(obj);
-    }-*/;
-
-    public final native Element insertAfter(Element obj) /*-{
-      return this.insertAfter(obj);
+    /**
+     * Moves the element around the canvas by the given distances.
+     *
+     * @param dx    number of pixels of translation by X-axis
+     * @param dy    number of pixels of translation by Y-axis
+     *
+     * @return the javascript object translated
+     */
+    public final native Element translate(double dx, double dy) /*-{
+      return this.translate(dx, dy);
     }-*/;
   }
 
@@ -382,26 +360,48 @@ public class RaphaelJS extends JavaScriptObject {
    */
   protected static class Path extends Element {
     protected Path() {}
-    public final native int getTotalLength() /*-{
-      return this.getTotalLength();
-    }-*/;
     public final native Point getPointAtLength(int length) /*-{
       return this.getPointAtLength(length);
     }-*/;
     public final native String getSubpath(int from, int to) /*-{
       return this.getSubpath(from, to);
     }-*/;
+    public final native int getTotalLength() /*-{
+      return this.getTotalLength();
+    }-*/;
   }
 
   protected static class Set extends Element {
     protected Set() {}
-    public final native Set push(Element obj) /*-{
-      return this.push(obj);
-    }-*/;
     public final native Element pop() /*-{
       return this.pop();
     }-*/;
+    public final native Set push(Element obj) /*-{
+      return this.push(obj);
+    }-*/;
   }
+
+  /**
+   * Raphael factory method
+   */
+  static public final native RaphaelJS create(com.google.gwt.user.client.Element element, int width, int height) /*-{
+      return $wnd.Raphael(element, width, height);
+  }-*/;
+
+  /**
+   * Raphael factory method
+   */
+  static public final native RaphaelJS create(String elementId, int width, int height) /*-{
+      return $wnd.Raphael(elementId, width, height);
+  }-*/;
+
+  /**
+   * determine whether Raphael is defined on the client platform
+   * NB: do not call any other methods if Raphael is not defined
+   */
+  static public final native boolean isDefined() /*-{
+    return $wnd.Raphael!=undefined;
+  }-*/;
 
   /**
    * overlay raphael class constructor - must be protected, empty, and no-argument

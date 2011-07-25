@@ -16,35 +16,29 @@ public class ConnectedShape {
 	private int x;
 	private int y;
 	private Shape shape;
-	
-	/**
-	 * 
+
+	/** 
 	 * @param shape
 	 * @param x
 	 * @param y
 	 */
-	
+
 	public ConnectedShape(Shape shape, int x, int y) {
-		
 		this.x=x;
 		this.y=y;
 		this.shape=shape;
-		
+	}
+
+	public Shape getShape() {
+		return shape;
 	}
 
 	public int getX() {
 		return x;
 	}
 
-
 	public int getY() {
 		return y;
 	}
-
-
-	public Shape getShape() {
-		return shape;
-	}
-	
 
 }

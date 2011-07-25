@@ -8,8 +8,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface RegistrationService extends RemoteService {
 	
 		
-	public Configuration register();
 	public void keepAlive();
+	public Configuration register();
 	
 	
 

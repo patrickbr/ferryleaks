@@ -1,19 +1,12 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.scheme.GoAble;
-import com.algebraweb.editor.client.scheme.NodeScheme;
-import com.algebraweb.editor.client.scheme.Value;
 import com.algebraweb.editor.client.validation.ValidationError;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.TreeItem;
 
 public class ContentNodeTreeItem extends NodeTreeItem{
 
@@ -42,21 +35,17 @@ public class ContentNodeTreeItem extends NodeTreeItem{
 
 	}
 
-	@Override
-	public void setSelected(boolean selected) {
-
-		if (selected) {
-			this.getWidget().getElement().getStyle().setBackgroundColor("#CCC");
-		}else{
-			this.getWidget().getElement().getStyle().setBackgroundColor("");
-		}
-
-	}
-
 	public NodeContent getContentNode() {
 
 		return c;
 
+	}
+
+	/**
+	 * @return the errors
+	 */
+	public ArrayList<ValidationError> getErrors() {
+		return errors;
 	}
 
 	public GoAble getScheme() {
@@ -68,11 +57,15 @@ public class ContentNodeTreeItem extends NodeTreeItem{
 
 
 
-	/**
-	 * @return the errors
-	 */
-	public ArrayList<ValidationError> getErrors() {
-		return errors;
+	@Override
+	public void setSelected(boolean selected) {
+
+		if (selected) {
+			this.getWidget().getElement().getStyle().setBackgroundColor("#CCC");
+		}else{
+			this.getWidget().getElement().getStyle().setBackgroundColor("");
+		}
+
 	}
 
 

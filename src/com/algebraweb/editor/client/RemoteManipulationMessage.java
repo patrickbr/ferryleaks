@@ -21,6 +21,11 @@ public class RemoteManipulationMessage implements IsSerializable{
 	private String action;
 	
 	
+	public RemoteManipulationMessage() {
+		
+	
+	}
+	
 	public RemoteManipulationMessage(int planid, String action, int returnCode, String message, ValidationResult res) {
 		
 		this.planid=planid;
@@ -31,14 +36,28 @@ public class RemoteManipulationMessage implements IsSerializable{
 		
 		
 	}
-	
-	public RemoteManipulationMessage() {
-		
-	
-	}
 
 	
 	
+	public String getAction() {
+		return action;
+	}
+
+	public HashMap<Integer, Coordinate> getCoordinates() {
+		return coordinates;
+	}
+	
+
+	public String getMessage() {
+		return message;
+	}
+	
+	
+
+	public ArrayList<RawNode> getNodesAffected() {
+		return nodesAffected;
+	}
+
 	public int getPlanid() {
 		return planid;
 	}
@@ -46,48 +65,29 @@ public class RemoteManipulationMessage implements IsSerializable{
 	public int getReturnCode() {
 		return returnCode;
 	}
-	
-
-	public void setReturnCode(int returnCode) {
-		this.returnCode = returnCode;
-	}
-	
-	
-
-	public HashMap<Integer, Coordinate> getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(HashMap<Integer, Coordinate> coordinates) {
-		this.coordinates = coordinates;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 	public ValidationResult getValidationResult() {
 		return validationResult;
-	}
-
-	public void setValidationResult(ValidationResult validationResult) {
-		this.validationResult = validationResult;
-	}
-
-	public String getAction() {
-		return action;
 	}
 
 	public void setAction(String action) {
 		this.action = action;
 	}
 
-	public ArrayList<RawNode> getNodesAffected() {
-		return nodesAffected;
+	public void setCoordinates(HashMap<Integer, Coordinate> coordinates) {
+		this.coordinates = coordinates;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public void setReturnCode(int returnCode) {
+		this.returnCode = returnCode;
+	}
+
+	public void setValidationResult(ValidationResult validationResult) {
+		this.validationResult = validationResult;
 	}
 	
 

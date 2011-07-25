@@ -3,14 +3,9 @@ package com.algebraweb.editor.server.logicalplan.communication;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.sql.Array;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,11 +13,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.tools.ant.types.CommandlineJava.SysProperties;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.w3c.css.sac.InputSource;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -35,10 +28,10 @@ import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvasSQLException;
 import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
+import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
 import com.algebraweb.editor.client.logicalcanvas.SessionExpiredException;
-import com.algebraweb.editor.client.logicalcanvas.SqlError;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -46,7 +39,6 @@ import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.client.node.ValGroup;
-import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
@@ -98,7 +90,207 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid) throws PlanManipulationException {
+	public RemoteManipulationMessage addEdge(int planid, Coordinate e, int pos) throws PlanManipulationException {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
+
+		XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),planid);
+
+		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
+
+		int from = (int) e.getX();
+		int to = (int) e.getY();
+
+		PlanNode fromNode = planToWork.getPlanNodeById(from);
+		PlanNode toNode = planToWork.getPlanNodeById(to);
+
+
+		fromNode.addChild(toNode, pos);
+
+
+		ret.getNodesAffected().add(xmlpl.getRawNode(fromNode));
+		try {
+			ret.setValidationResult(getValidation(planid));
+		}catch(PlanHasCycleException ee) {
+			ValidationResult r = new ValidationResult(planid);
+			r.setPlanid(planid);
+			r.addError(new ValidationError(fromNode.getId(), "Plan contains a cycle!"));
+			ret.setValidationResult(r);
+		}
+
+
+		return ret;
+	}
+
+	@Override
+	public RemoteManipulationMessage addNode(int pid,String nodeType, int x, int y) throws PlanManipulationException, PlanHasCycleException {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+
+
+
+		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
+
+		if (schemes.containsKey(nodeType)) {
+
+			if (planToWork != null) {	
+
+				PlanNode newNode = planToWork.addNode(schemes.get(nodeType));
+
+				PlanParser p = new PlanParser(getSession());
+				p.parseNodeLabelSchema(newNode, newNode.getScheme());
+
+				ValidationResult res = getValidation(pid);
+
+				RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"add", 1, "", res);
+
+				HashMap<Integer,Coordinate> coords = new HashMap<Integer,Coordinate>();
+				coords.put(newNode.getId(), new Coordinate(x,y));
+
+				rmm.setCoordinates(coords);
+
+				XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),pid);
+
+				rmm.getNodesAffected().add(xmlpl.getRawNode(newNode));
+
+				return rmm;
+
+			}else{
+
+				throw new PlanManipulationException("Plan doesn't exist in session");
+
+
+			}}else{
+
+				throw new PlanManipulationException("Scheme for type " + nodeType + " not found.");
+
+			}
+	}
+
+	@Override
+	public void copyNodes(ArrayList<PlanNodeCopyMessage> msg, int pid) throws PlanManipulationException {
+
+
+		ArrayList<ClipBoardPlanNode> clipboard = new ArrayList<ClipBoardPlanNode>();
+		QueryPlan p = getPlanToWork(pid);
+
+
+		Iterator<PlanNodeCopyMessage> it = msg.iterator();
+		double offX=Double.MAX_VALUE;
+		double offY=Double.MAX_VALUE;
+
+		while (it.hasNext()) {
+			PlanNodeCopyMessage cur = it.next();
+			if (cur.getPos().getY() < offY) {
+				offX = cur.getPos().getX();
+				offY = cur.getPos().getY();
+			}
+		}
+
+
+		it = msg.iterator();
+
+		while (it.hasNext()) {
+
+			PlanNodeCopyMessage cur = it.next();
+
+			PlanNode curNode = p.getPlanNodeById(cur.getId());
+
+			PlanNode copy = new PlanNode(curNode.getId(), curNode.getScheme(), null);
+
+
+			Iterator<PlanNode> childs = curNode.getChilds().iterator();
+			int pos=1;
+			while (childs.hasNext()) {
+				PlanNode curr = childs.next();
+				if (curr != null && listContainsNode(curr.getId(),msg)) {
+					copy.addChild(curr, pos);
+					pos++;
+				}
+			}
+
+			Iterator<NodeContent> content = curNode.getContent().iterator();
+			while (content.hasNext()) {
+				NodeContent curC = content.next();
+				if (!curC.getInternalName().equals("edge")) {
+					copy.getContent().add(curC);
+				}
+			}
+
+
+			clipboard.add(new ClipBoardPlanNode(copy, new Coordinate(cur.getPos().getX()-offX,cur.getPos().getY()-offY)));
+
+		}
+
+		String s= "";
+
+		Iterator<ClipBoardPlanNode> iter = clipboard.iterator();
+		while(iter.hasNext()) {
+			s+=iter.next().getP().getId() + ", ";
+		}
+		if (s.length()>1) s = s.substring(0, s.length()-2);
+		System.out.println("Saving nodes " + s + " to clipboard...");
+		getSession().setAttribute("clipboard",clipboard);
+
+
+	}
+
+
+	@Override
+	public Integer createNewPlan(boolean clearFirst) throws SessionExpiredException {
+
+		QueryPlanBundle b= getQueryPlanBundleFromSession();
+		if (clearFirst) b.getPlans().clear();
+		int id= b.getFreePlanId();
+		System.out.println("Adding new empty plan with id #" +  id);
+		b.addPlan(new QueryPlan(id));
+
+		return id;
+
+	}
+
+
+	@Override
+	public RemoteManipulationMessage deleteEdge(HashMap<Coordinate,Integer> edges, int planid) throws PlanManipulationException, PlanHasCycleException {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
+
+		XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),planid);
+
+		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
+
+		Iterator<Coordinate> it = edges.keySet().iterator();
+
+		while(it.hasNext()) {
+
+			Coordinate e = it.next();
+
+			int from = (int) e.getX();
+			int to = (int) e.getY();
+
+			PlanNode fromNode = planToWork.getPlanNodeById(from);
+
+			fromNode.removeChild(to,edges.get(e));
+
+
+			ret.getNodesAffected().add(xmlpl.getRawNode(fromNode));
+
+
+
+		}
+
+
+		ret.setValidationResult(getValidation(planid));
+
+		return ret;
+	}
+
+
+	@Override
+	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid) throws PlanManipulationException, PlanHasCycleException {
 
 
 		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid,"delete", 1, "", null);
@@ -142,14 +334,142 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 	@Override
-	public ValidationResult getValidation(int planid) throws PlanManipulationException {
+	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context,boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException, PlanHasCycleException {
 
-		return vm.validate(getPlanToWork(planid),  getPlanToWork(planid).getPlan());
+		if (saveContext) saveEvaluationContextForNode(nid, pid, context);
+
+		SqlEvaluator eval = new SqlEvaluator(context);
+		return eval.eval(getSQLFromPlanNode(pid,nid,context,saveContext));
 
 	}
 
 	@Override
-	public String getNodeInformationHTML(int nid, int planid) throws PlanManipulationException {
+	public ArrayList<HashMap<String, String>> evalPlan(int pid,	EvaluationContext c, boolean saveContext) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException, PlanHasCycleException {
+
+		PlanNode root = getPlanToWork(pid).getRootNode();
+		if (saveContext) getPlanToWork(pid).setEvContext(c);
+		return eval(pid, root.getId(), c, false);
+
+
+	}
+
+
+	private void fillDatabaseConfigurationFromGlobalDefault(EvaluationContext c)
+	throws SessionExpiredException {
+		c.setDatabase((String)getSession().getAttribute("database"));
+		c.setDatabasePassword((String)getSession().getAttribute("databasePw"));
+		c.setDatabasePort((getSession().getAttribute("databasePort") != null?(Integer) getSession().getAttribute("databasePort"):5432));
+		c.setDatabaseServer((getSession().getAttribute("databaseHost")!= null?(String)getSession().getAttribute("databaseHost"):"localhost"));
+		c.setDatabaseUser((String)getSession().getAttribute("databaseUser"));
+	}
+
+	private Element getDomXMLFromPlanNode(int pid, int nid) {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+
+		return npb.getXMLElementFromContentNode(nodeToWork);
+
+	}
+
+	private Element getDomXMLLogicalPlanFromRootNode(int pid, int nid, EvaluationContext c) throws PlanManipulationException, PlanHasCycleException {
+		HttpServletRequest request = this.getThreadLocalRequest();
+
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+
+		Element e = npb.getNodePlan(pid, nodeToWork,c,getServletContext());
+		return e;
+	}
+
+
+	@Override
+	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException {
+
+		EvaluationContext c = null;
+
+		if (nid == -1) {
+
+
+			c = getPlanEvaluationContext(pid);
+
+
+
+		}else{
+
+			if (getNodeToWork(pid, nid).getEvaluationContext() == null) {
+
+				c = getPlanEvaluationContext(pid);
+
+			}else{
+
+				c = getNodeToWork(pid, nid).getEvaluationContext();
+
+			}
+
+		}
+
+		if (c.getDatabase() == null && c.getDatabaseServer() == null) fillDatabaseConfigurationFromGlobalDefault(c);
+		return c;
+
+	}
+
+
+	private String getNodeContentList(ContentNode n) {
+
+
+		String ret="";
+
+
+		if (n instanceof ValGroup) {
+
+			ret +="<li class='nodeinfo-valgroup'><span class='valgroupname'>" + ((ValGroup)n).getName() + "</span>";
+		}
+
+		if (n instanceof ContentVal) {
+
+			ret +="<li class='nodeinfo-nodecontent'><span class='contentname'>" + ((NodeContent)n).getName() + "</span><div class='content-attrs'><ul>";
+
+			Iterator<Property> it = ((ContentVal)n).getAttributes().properties().iterator();
+
+			while (it.hasNext()) {
+
+				Property current = it.next();
+
+				ret+="<li>" + current.getPropertyName() + "=" + current.getPropertyVal().getVal() + "</li>";
+
+			}
+			ret +="</ul>";
+			ret +="</div>";
+
+		}
+
+
+		ret +="<ul class='nodecontentinfo-ul'>";
+
+
+		Iterator<NodeContent> i = n.getContent().iterator();
+
+		while (i.hasNext()) {
+
+			ret += getNodeContentList(i.next());
+
+		}
+
+
+		ret +="</ul>";
+		ret +="</li>";
+
+		return ret;
+
+
+	}
+
+
+	@Override
+	public String getNodeInformationHTML(int nid, int planid) throws PlanManipulationException, PlanHasCycleException {
 
 		String ret = "";
 
@@ -247,285 +567,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 
-	private String getNodeContentList(ContentNode n) {
+	private PlanNode getNodeToWork(int pid, int nid) throws PlanManipulationException {
 
+		return getPlanToWork(pid).getPlanNodeById(nid);
 
-		String ret="";
-
-
-		if (n instanceof ValGroup) {
-
-			ret +="<li class='nodeinfo-valgroup'><span class='valgroupname'>" + ((ValGroup)n).getName() + "</span>";
-		}
-
-		if (n instanceof ContentVal) {
-
-			ret +="<li class='nodeinfo-nodecontent'><span class='contentname'>" + ((NodeContent)n).getName() + "</span><div class='content-attrs'><ul>";
-
-			Iterator<Property> it = ((ContentVal)n).getAttributes().properties().iterator();
-
-			while (it.hasNext()) {
-
-				Property current = it.next();
-
-				ret+="<li>" + current.getPropertyName() + "=" + current.getPropertyVal().getVal() + "</li>";
-
-			}
-			ret +="</ul>";
-			ret +="</div>";
-
-		}
-
-
-		ret +="<ul class='nodecontentinfo-ul'>";
-
-
-		Iterator<NodeContent> i = n.getContent().iterator();
-
-		while (i.hasNext()) {
-
-			ret += getNodeContentList(i.next());
-
-		}
-
-
-		ret +="</ul>";
-		ret +="</li>";
-
-		return ret;
-
-
-	}
-
-
-	@Override
-	public PlanNode getPlanNode(int nid, int pid) throws PlanManipulationException {
-		PlanNode n = getNodeToWork(pid,nid);
-		gv.fillContentNodeWithContentValidationResults(n,n.getScheme().getSchema());
-		return n;
-	}
-
-
-	@Override
-	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml) throws PlanManipulationException {
-
-		PlanParser p = new PlanParser((HashMap<String,NodeScheme>)getServletContext().getAttribute("nodeSchemes"),getSession());
-
-
-		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-
-			InputStream s = new ByteArrayInputStream(xml.getBytes());
-
-			Document doc;
-
-			doc = db.parse(s);
-			PlanNode newNode = p.parseNode(getPlanToWork(pid), (org.w3c.dom.Element)doc.getElementsByTagName("node").item(0));
-			return updatePlanNode(nid,pid,newNode);
-
-		} catch (SAXException e) {
-			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
-		} catch (IOException e) {
-			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
-
-		} catch (ParserConfigurationException e) {
-			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
-
-		}
-
-
-
-
-	}
-
-	@Override
-	public RemoteManipulationMessage updatePlanNode(int nid, int pid, PlanNode p) throws PlanManipulationException {
-		// TODO update other things 
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-
-
-		if (nodeToWork != null) {	
-
-			nodeToWork.setContent(p.getContent());
-
-			Iterator<PlanNode> nodeIt = p.getChilds().iterator();
-			nodeToWork.getChilds().clear();
-			while (nodeIt.hasNext()) nodeToWork.getChilds().add(planToWork.getPlanNodeById(nodeIt.next().getId()));
-
-
-			ValidationResult res = getValidation(pid);
-
-
-			RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"update", 1, "", res);
-
-			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),pid);
-
-			rmm.getNodesAffected().add(xmlpl.getRawNode(nodeToWork));
-
-			return rmm;
-
-		}else{
-
-			throw new PlanManipulationException("Node doesn't exists in plan");
-
-
-		}
-
-	}
-
-	@Override
-	public ArrayList<Property> getReferencableColumnsWithoutAdded(int nid,
-			int pid) {
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-
-		return nodeToWork.getReferencableColumnsWithoutAdded();
-	}
-
-
-	@Override
-	public String getXMLFromContentNode(ContentNode c) {
-		Element e =  npb.getXMLElementFromContentNode(c);
-
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		return outputter.outputString(e);
-
-	}
-
-	@Override
-	public String getXMLFromPlanNode(int pid, int nid) {
-
-
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-		return outputter.outputString(getDomXMLFromPlanNode(pid,nid));
-
-	}
-
-	private Element getDomXMLFromPlanNode(int pid, int nid) {
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-
-		return npb.getXMLElementFromContentNode(nodeToWork);
-
-	}
-
-
-	@Override
-	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c,boolean saveContext) throws PlanManipulationException {
-
-		Element e = getDomXMLLogicalPlanFromRootNode(pid, nid,c);
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-
-
-		if (saveContext) saveEvaluationContextForNode(nid, pid, c);
-
-		return outputter.outputString(e);
-	}
-
-
-	private void saveEvaluationContextForNode(int nid, int pid, EvaluationContext c) throws PlanManipulationException {
-
-		System.out.println("Saving context for n #"+nid + ":");
-		System.out.println("Values:");
-		System.out.println("database=" + c.getDatabase());
-		System.out.println("databasePassword=" + c.getDatabasePassword());
-		System.out.println("databasePort=" + c.getDatabasePort());
-		System.out.println("databaseServer=" + c.getDatabaseServer());
-		System.out.println("databaseUser=" + c.getDatabaseUser());
-		System.out.println("itercolumnname=" + c.getIterColumnName());
-		System.out.println("iterColumnNat=" + c.getIterColumnNat());
-		System.out.println("sortColumnName=" + c.getSortColumnName());
-		System.out.println("sortOrder="+c.getSortOrder());
-		System.out.println("sortOrderColumn="+c.getSortOrderColumnOn());
-
-		if (c.isDatabaseSetGlobal()) {
-
-			saveDefaultDatabaseConfiguration(c);
-
-		}
-
-		getNodeToWork(pid, nid).setEvaluationContext(c);
-
-
-	}
-
-
-	private void saveDefaultDatabaseConfiguration(EvaluationContext c)
-	throws SessionExpiredException {
-		getSession().setAttribute("databaseHost", c.getDatabaseServer());
-		getSession().setAttribute("databasePort",  c.getDatabasePort());
-		getSession().setAttribute("databaseName", c.getDatabase());
-		getSession().setAttribute("databaseUser", c.getDatabaseUser());
-		getSession().setAttribute("databasePw", c.getDatabasePassword());
-	}
-
-
-	private Element getDomXMLLogicalPlanFromRootNode(int pid, int nid, EvaluationContext c) throws PlanManipulationException {
-		HttpServletRequest request = this.getThreadLocalRequest();
-
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
-
-		Element e = npb.getNodePlan(pid, nodeToWork,c,getServletContext());
-		return e;
-	}
-
-
-	@Override
-	public RemoteManipulationMessage addNode(int pid,String nodeType, int x, int y) throws PlanManipulationException {
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-
-
-
-		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
-
-		if (schemes.containsKey(nodeType)) {
-
-			if (planToWork != null) {	
-
-				PlanNode newNode = planToWork.addNode(schemes.get(nodeType));
-
-				PlanParser p = new PlanParser(getSession());
-				p.parseNodeLabelSchema(newNode, newNode.getScheme());
-
-				ValidationResult res = getValidation(pid);
-
-				RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"add", 1, "", res);
-
-				HashMap<Integer,Coordinate> coords = new HashMap<Integer,Coordinate>();
-				coords.put(newNode.getId(), new Coordinate(x,y));
-
-				rmm.setCoordinates(coords);
-
-				XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),pid);
-
-				rmm.getNodesAffected().add(xmlpl.getRawNode(newNode));
-
-				return rmm;
-
-			}else{
-
-				throw new PlanManipulationException("Plan doesn't exist in session");
-
-
-			}}else{
-
-				throw new PlanManipulationException("Scheme for type " + nodeType + " not found.");
-
-			}
 	}
 
 
@@ -560,64 +605,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 
-	@Override
-	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError {
+	private EvaluationContext getPlanEvaluationContext(int pid) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException, PlanHasCycleException {
 
-
-		if (saveContext) saveEvaluationContextForNode(nid, pid, c);
-
-
-		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid,c);
-
-		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder();
-
-		return sqlB.getCompiledSQL(d).get(pid);
-
-
-
-	}
-
-
-	@Override
-	public ArrayList<HashMap<String,String>> eval(int pid, int nid, EvaluationContext context,boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException {
-
-		if (saveContext) saveEvaluationContextForNode(nid, pid, context);
-
-		SqlEvaluator eval = new SqlEvaluator(context);
-		return eval.eval(getSQLFromPlanNode(pid,nid,context,saveContext));
-
-	}
-
-
-	@Override
-	public Integer createNewPlan(boolean clearFirst) throws SessionExpiredException {
-
-		QueryPlanBundle b= getQueryPlanBundleFromSession();
-		if (clearFirst) b.getPlans().clear();
-		int id= b.getFreePlanId();
-		System.out.println("Adding new empty plan with id #" +  id);
-		b.addPlan(new QueryPlan(id));
-
-		return id;
-
-	}
-
-	private QueryPlanBundle getQueryPlanBundleFromSession() throws SessionExpiredException {
-
-		QueryPlanBundle b = ((QueryPlanBundle)getSession().getAttribute("queryPlans"));		
-
-		if (b==null) {
-			b = new QueryPlanBundle();
-			getSession().setAttribute("queryPlans",b);
-		}
-
-		return b;
-	}
-
-	private EvaluationContext getPlanEvaluationContext(int pid) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException {
-		
 		System.out.println("getting ev context for plan #" + pid);
-		
+
 		if (getPlanToWork(pid).getEvContext() == null) {
 			System.out.println("Providing new evcontext for plan...");
 			EvaluationContextProvider p = new EvaluationContextProvider(getSession());
@@ -638,48 +629,40 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 
-	private void fillDatabaseConfigurationFromGlobalDefault(EvaluationContext c)
-			throws SessionExpiredException {
-		c.setDatabase((String)getSession().getAttribute("database"));
-		c.setDatabasePassword((String)getSession().getAttribute("databasePw"));
-		c.setDatabasePort((getSession().getAttribute("databasePort") != null?(Integer) getSession().getAttribute("databasePort"):5432));
-		c.setDatabaseServer((getSession().getAttribute("databaseHost")!= null?(String)getSession().getAttribute("databaseHost"):"localhost"));
-		c.setDatabaseUser((String)getSession().getAttribute("databaseUser"));
+	@Override
+	public PlanNode getPlanNode(int nid, int pid) throws PlanManipulationException {
+		PlanNode n = getNodeToWork(pid,nid);
+		gv.fillContentNodeWithContentValidationResults(n,n.getScheme().getSchema());
+		return n;
 	}
 
-	@Override
-	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException {
 
-		EvaluationContext c = null;
-		
-		if (nid == -1) {
+	private QueryPlan getPlanToWork(int pid) throws PlanManipulationException {
+
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession(false);
+
+		if (session == null) throw new SessionExpiredException();
+
+		return ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlan(pid);		
+
+	}
 
 
-			c = getPlanEvaluationContext(pid);
+	private QueryPlanBundle getQueryPlanBundleFromSession() throws SessionExpiredException {
 
+		QueryPlanBundle b = ((QueryPlanBundle)getSession().getAttribute("queryPlans"));		
 
-
-		}else{
-
-			if (getNodeToWork(pid, nid).getEvaluationContext() == null) {
-
-				c = getPlanEvaluationContext(pid);
-
-			}else{
-
-				c = getNodeToWork(pid, nid).getEvaluationContext();
-
-			}
-
+		if (b==null) {
+			b = new QueryPlanBundle();
+			getSession().setAttribute("queryPlans",b);
 		}
-		
-		if (c.getDatabase() == null && c.getDatabaseServer() == null) fillDatabaseConfigurationFromGlobalDefault(c);
-		return c;
 
+		return b;
 	}
 
 	@Override
-	public ArrayList<Property> getReferencableColumns(int nid, int pid) throws GraphNotConnectedException {
+	public ArrayList<Property> getReferencableColumns(int nid, int pid) throws GraphNotConnectedException, PlanHasCycleException {
 		HttpServletRequest request = this.getThreadLocalRequest();
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
@@ -697,179 +680,112 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return nodeToWork.getReferencableColumnsFromValues();
 	}
 
-
 	@Override
-	public RemoteManipulationMessage deleteEdge(HashMap<Coordinate,Integer> edges, int planid) throws PlanManipulationException {
+	public ArrayList<Property> getReferencableColumnsWithoutAdded(int nid,
+			int pid) throws PlanHasCycleException {
 
 		HttpServletRequest request = this.getThreadLocalRequest();
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
 
-		XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),planid);
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
 
-		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
-
-		Iterator<Coordinate> it = edges.keySet().iterator();
-
-		while(it.hasNext()) {
-
-			Coordinate e = it.next();
-
-			int from = (int) e.getX();
-			int to = (int) e.getY();
-
-			PlanNode fromNode = planToWork.getPlanNodeById(from);
-
-			fromNode.removeChild(to,edges.get(e));
-
-
-			ret.getNodesAffected().add(xmlpl.getRawNode(fromNode));
-
-
-
-		}
-
-
-		ret.setValidationResult(getValidation(planid));
-
-		return ret;
+		return nodeToWork.getReferencableColumnsWithoutAdded();
 	}
 
 
 	@Override
-	public RemoteManipulationMessage addEdge(int planid, Coordinate e, int pos) throws PlanManipulationException {
-
-		HttpServletRequest request = this.getThreadLocalRequest();
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(planid);		
-
-		XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),planid);
-
-		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
-
-		int from = (int) e.getX();
-		int to = (int) e.getY();
-
-		PlanNode fromNode = planToWork.getPlanNodeById(from);
-		PlanNode toNode = planToWork.getPlanNodeById(to);
-
-
-		fromNode.addChild(toNode, pos);
-
-
-		ret.getNodesAffected().add(xmlpl.getRawNode(fromNode));
-		ret.setValidationResult(getValidation(planid));
-
-
-		return ret;
+	public ArrayList<Property> getReferencableColumnsWithoutAddedFromPos(
+			int nid, int pid, int pos) throws PlanManipulationException, PlanHasCycleException {
+		return getNodeToWork(pid,nid).getReferencableColumnsWithoutAdded(pos);
 	}
 
-
-	private PlanNode getNodeToWork(int pid, int nid) throws PlanManipulationException {
-
-		return getPlanToWork(pid).getPlanNodeById(nid);
-
+	@Override
+	public PlanNode getRootNode(int pid)
+	throws PlanManipulationException, PathFinderCompilationError,
+	LogicalCanvasSQLException, GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException {
+		return getPlanToWork(pid).getRootNode();
 	}
 
-	private QueryPlan getPlanToWork(int pid) throws PlanManipulationException {
+	private HttpSession getSession() throws SessionExpiredException {
 
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession(false);
 
 		if (session == null) throw new SessionExpiredException();
 
-		return ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlan(pid);		
+		return session;
 
 	}
 
 
 	@Override
-	public ArrayList<Property> getReferencableColumnsWithoutAddedFromPos(
-			int nid, int pid, int pos) throws PlanManipulationException {
-		return getNodeToWork(pid,nid).getReferencableColumnsWithoutAdded(pos);
+	public String getSQLFromPlan(int pid) throws PlanManipulationException, PathFinderCompilationError, GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException {
+
+		return getSQLFromPlanNode(pid, getPlanToWork(pid).getRootNode().getId(), getPlanEvaluationContext(pid), false); 
+
+
 	}
 
 
 	@Override
-	public void copyNodes(ArrayList<PlanNodeCopyMessage> msg, int pid) throws PlanManipulationException {
+	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, PlanHasCycleException {
 
 
-		ArrayList<ClipBoardPlanNode> clipboard = new ArrayList<ClipBoardPlanNode>();
-		QueryPlan p = getPlanToWork(pid);
+		if (saveContext) saveEvaluationContextForNode(nid, pid, c);
 
 
-		Iterator<PlanNodeCopyMessage> it = msg.iterator();
-		double offX=Double.MAX_VALUE;
-		double offY=Double.MAX_VALUE;
+		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid,c);
 
-		while (it.hasNext()) {
-			PlanNodeCopyMessage cur = it.next();
-			if (cur.getPos().getY() < offY) {
-				offX = cur.getPos().getX();
-				offY = cur.getPos().getY();
-			}
-		}
+		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder();
 
+		return sqlB.getCompiledSQL(d).get(pid);
 
-		it = msg.iterator();
-
-		while (it.hasNext()) {
-
-			PlanNodeCopyMessage cur = it.next();
-
-			PlanNode curNode = p.getPlanNodeById(cur.getId());
-
-			PlanNode copy = new PlanNode(curNode.getId(), curNode.getScheme(), null);
-
-
-			Iterator<PlanNode> childs = curNode.getChilds().iterator();
-			int pos=1;
-			while (childs.hasNext()) {
-				PlanNode curr = childs.next();
-				if (curr != null && listContainsNode(curr.getId(),msg)) {
-					copy.addChild(curr, pos);
-					pos++;
-				}
-			}
-
-			Iterator<NodeContent> content = curNode.getContent().iterator();
-			while (content.hasNext()) {
-				NodeContent curC = content.next();
-				if (!curC.getInternalName().equals("edge")) {
-					copy.getContent().add(curC);
-				}
-			}
-
-
-			clipboard.add(new ClipBoardPlanNode(copy, new Coordinate(cur.getPos().getX()-offX,cur.getPos().getY()-offY)));
-
-		}
-
-		String s= "";
-
-		Iterator<ClipBoardPlanNode> iter = clipboard.iterator();
-		while(iter.hasNext()) {
-			s+=iter.next().getP().getId() + ", ";
-		}
-		s = s.substring(0, s.length()-2);
-		System.out.println("Saving nodes " + s + " to clipboard...");
-		getSession().setAttribute("clipboard",clipboard);
 
 
 	}
 
-	private boolean listContainsNode(int id, ArrayList<PlanNodeCopyMessage> nodes) {
 
-		Iterator<PlanNodeCopyMessage> it = nodes.iterator();
+	@Override
+	public ValidationResult getValidation(int planid) throws PlanManipulationException, PlanHasCycleException {
 
-		while(it.hasNext()) {
-			if (it.next().getId() == id) return true;
-		}
-
-		return false;
+		return vm.validate(getPlanToWork(planid),  getPlanToWork(planid).getPlan());
 
 	}
 
 	@Override
-	public RemoteManipulationMessage insert(int pid,int x, int y) throws PlanManipulationException {
+	public String getXMLFromContentNode(ContentNode c) {
+		Element e =  npb.getXMLElementFromContentNode(c);
+
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		return outputter.outputString(e);
+
+	}
+
+
+	@Override
+	public String getXMLFromPlanNode(int pid, int nid) {
+
+
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		return outputter.outputString(getDomXMLFromPlanNode(pid,nid));
+
+	}
+
+
+	@Override
+	public String getXMLLogicalPlanFromRootNode(int pid, int nid,EvaluationContext c,boolean saveContext) throws PlanManipulationException, PlanHasCycleException {
+
+		Element e = getDomXMLLogicalPlanFromRootNode(pid, nid,c);
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+
+
+		if (saveContext) saveEvaluationContextForNode(nid, pid, c);
+
+		return outputter.outputString(e);
+	}
+
+	@Override
+	public RemoteManipulationMessage insert(int pid,int x, int y) throws PlanManipulationException, PlanHasCycleException {
 
 		ArrayList<ClipBoardPlanNode> nodes = (ArrayList<ClipBoardPlanNode>)getSession().getAttribute("clipboard");
 
@@ -973,15 +889,15 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	}
 
+	private boolean listContainsNode(int id, ArrayList<PlanNodeCopyMessage> nodes) {
 
-	private HttpSession getSession() throws SessionExpiredException {
+		Iterator<PlanNodeCopyMessage> it = nodes.iterator();
 
-		HttpServletRequest request = this.getThreadLocalRequest();
-		HttpSession session = request.getSession(false);
+		while(it.hasNext()) {
+			if (it.next().getId() == id) return true;
+		}
 
-		if (session == null) throw new SessionExpiredException();
-
-		return session;
+		return false;
 
 	}
 
@@ -995,11 +911,40 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 
-	@Override
-	public PlanNode getRootNode(int pid)
-	throws PlanManipulationException, PathFinderCompilationError,
-	LogicalCanvasSQLException, GraphNotConnectedException, GraphIsEmptyException {
-		return getPlanToWork(pid).getRootNode();
+	private void saveDefaultDatabaseConfiguration(EvaluationContext c)
+	throws SessionExpiredException {
+		getSession().setAttribute("databaseHost", c.getDatabaseServer());
+		getSession().setAttribute("databasePort",  c.getDatabasePort());
+		getSession().setAttribute("databaseName", c.getDatabase());
+		getSession().setAttribute("databaseUser", c.getDatabaseUser());
+		getSession().setAttribute("databasePw", c.getDatabasePassword());
+	}
+
+
+	private void saveEvaluationContextForNode(int nid, int pid, EvaluationContext c) throws PlanManipulationException {
+
+		System.out.println("Saving context for n #"+nid + ":");
+		System.out.println("Values:");
+		System.out.println("database=" + c.getDatabase());
+		System.out.println("databasePassword=" + c.getDatabasePassword());
+		System.out.println("databasePort=" + c.getDatabasePort());
+		System.out.println("databaseServer=" + c.getDatabaseServer());
+		System.out.println("databaseUser=" + c.getDatabaseUser());
+		System.out.println("itercolumnname=" + c.getIterColumnName());
+		System.out.println("iterColumnNat=" + c.getIterColumnNat());
+		System.out.println("sortColumnName=" + c.getSortColumnName());
+		System.out.println("sortOrder="+c.getSortOrder());
+		System.out.println("sortOrderColumn="+c.getSortOrderColumnOn());
+
+		if (c.isDatabaseSetGlobal()) {
+
+			saveDefaultDatabaseConfiguration(c);
+
+		}
+
+		getNodeToWork(pid, nid).setEvaluationContext(c);
+
+
 	}
 
 
@@ -1008,7 +953,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		if (c.isDatabaseSetGlobal()) saveDefaultDatabaseConfiguration(c);
 		getPlanToWork(pid).setEvContext(c);
-		
+
 		System.out.println("Saving context for plan #"+pid + ":");
 		System.out.println("Values:");
 		System.out.println("database=" + c.getDatabase());
@@ -1027,22 +972,76 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	@Override
-	public ArrayList<HashMap<String, String>> evalPlan(int pid,	EvaluationContext c, boolean saveContext) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException {
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid, PlanNode p) throws PlanManipulationException, PlanHasCycleException {
+		// TODO update other things 
 
-		PlanNode root = getPlanToWork(pid).getRootNode();
-		if (saveContext) getPlanToWork(pid).setEvContext(c);
-		return eval(pid, root.getId(), c, false);
+		HttpServletRequest request = this.getThreadLocalRequest();
 
+		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
+		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+
+
+		if (nodeToWork != null) {	
+
+			nodeToWork.setContent(p.getContent());
+
+			Iterator<PlanNode> nodeIt = p.getChilds().iterator();
+			nodeToWork.getChilds().clear();
+			while (nodeIt.hasNext()) nodeToWork.getChilds().add(planToWork.getPlanNodeById(nodeIt.next().getId()));
+
+
+			ValidationResult res = getValidation(pid);
+
+
+			RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"update", 1, "", res);
+
+			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),pid);
+
+			rmm.getNodesAffected().add(xmlpl.getRawNode(nodeToWork));
+
+			return rmm;
+
+		}else{
+
+			throw new PlanManipulationException("Node doesn't exists in plan");
+
+
+		}
 
 	}
 
 
 	@Override
-	public String getSQLFromPlan(int pid) throws PlanManipulationException, PathFinderCompilationError, GraphNotConnectedException, GraphIsEmptyException {
-		
-			return getSQLFromPlanNode(pid, getPlanToWork(pid).getRootNode().getId(), getPlanEvaluationContext(pid), false); 
-		
-		
+	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml) throws PlanManipulationException, PlanHasCycleException {
+
+		PlanParser p = new PlanParser((HashMap<String,NodeScheme>)getServletContext().getAttribute("nodeSchemes"),getSession());
+
+
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+
+			InputStream s = new ByteArrayInputStream(xml.getBytes());
+
+			Document doc;
+
+			doc = db.parse(s);
+			PlanNode newNode = p.parseNode(getPlanToWork(pid), (org.w3c.dom.Element)doc.getElementsByTagName("node").item(0));
+			return updatePlanNode(nid,pid,newNode);
+
+		} catch (SAXException e) {
+			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
+		} catch (IOException e) {
+			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
+
+		} catch (ParserConfigurationException e) {
+			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
+
+		}
+
+
+
+
 	}
 
 

@@ -1,13 +1,11 @@
 package com.algebraweb.editor.server.logicalplan.validation.validators;
 
 import java.util.ArrayList;
-
 import java.util.Iterator;
 
-
+import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.Property;
-
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.algebraweb.editor.server.logicalplan.validation.Validator;
@@ -15,8 +13,28 @@ import com.algebraweb.editor.server.logicalplan.validation.Validator;
 
 public class ReferencedColumnsValidator implements Validator {
 
+	private boolean containsPropertyByVal(Property p, ArrayList<Property> props) {
+
+
+		Iterator<Property> it = props.iterator();
+
+		while (it.hasNext()) {
+
+			if (p.getPropertyVal().getVal().equals(it.next().getPropertyVal().getVal())) return true;
+
+
+		}
+
+
+		return false;
+
+
+
+	}
+
+
 	@Override
-	public void validate(ArrayList<PlanNode> ps, ArrayList<PlanNode> plan, ValidationResult r) {
+	public void validate(ArrayList<PlanNode> ps, ArrayList<PlanNode> plan, ValidationResult r) throws PlanHasCycleException {
 
 
 		Iterator<PlanNode> it = ps.iterator();
@@ -85,26 +103,6 @@ public class ReferencedColumnsValidator implements Validator {
 			}
 
 		}
-
-	}
-
-
-	private boolean containsPropertyByVal(Property p, ArrayList<Property> props) {
-
-
-		Iterator<Property> it = props.iterator();
-
-		while (it.hasNext()) {
-
-			if (p.getPropertyVal().getVal().equals(it.next().getPropertyVal().getVal())) return true;
-
-
-		}
-
-
-		return false;
-
-
 
 	}
 

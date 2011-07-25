@@ -3,6 +3,7 @@ package com.algebraweb.editor.server.logicalplan.validation;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.client.validation.ValidationError;
@@ -24,7 +25,13 @@ public class ValidationMachine {
 	
 	//TODO: make this an ValidationList
 	
-	public ValidationResult validate(QueryPlan context,ArrayList<PlanNode> ps) {
+	public void addValidator(Validator v) {
+				
+		this.validators.add(v);
+		
+	}
+	
+	public ValidationResult validate(QueryPlan context,ArrayList<PlanNode> ps) throws PlanHasCycleException {
 		
 		ValidationResult ret = new ValidationResult(context.getId());
 		
@@ -40,7 +47,9 @@ public class ValidationMachine {
 				
 	}
 	
-	public ArrayList<ValidationError> validate(QueryPlan context,PlanNode p) {
+	
+	
+	public ArrayList<ValidationError> validate(QueryPlan context,PlanNode p) throws PlanHasCycleException {
 		
 		ArrayList<PlanNode> ps = new ArrayList<PlanNode>();
 		
@@ -58,14 +67,6 @@ public class ValidationMachine {
 		
 		return ret.getErrors();
 				
-	}
-	
-	
-	
-	public void addValidator(Validator v) {
-				
-		this.validators.add(v);
-		
 	}
 	
 	

@@ -1,16 +1,23 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.algebraweb.editor.client.AlgebraEditor;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.SqlResDialog;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 
 public class ConfigurePlanDialog extends EvaluationDialog {
 
+	
+	private  GraphCanvasCommunicationCallback<Void> updateCb = new  GraphCanvasCommunicationCallback<Void>("evaluating") {
+
+		@Override
+		public void onSuccess(Void result) {
+
+			GraphCanvas.hideLoading();
+			hide();
+
+		}
+
+	};
 	
 	public ConfigurePlanDialog(int pid, RemoteManipulationServiceAsync manServ) {
 		super(pid, -1, manServ);
@@ -30,18 +37,6 @@ public class ConfigurePlanDialog extends EvaluationDialog {
 		GraphCanvas.showLoading("Saving...");
 		
 	}
-	
-	private  GraphCanvasCommunicationCallback<Void> updateCb = new  GraphCanvasCommunicationCallback<Void>("evaluating") {
-
-		@Override
-		public void onSuccess(Void result) {
-
-			GraphCanvas.hideLoading();
-			hide();
-
-		}
-
-	};
 
 
 }

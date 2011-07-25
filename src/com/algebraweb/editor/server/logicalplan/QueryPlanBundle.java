@@ -1,11 +1,6 @@
 package com.algebraweb.editor.server.logicalplan;
 
 import java.util.HashMap;
-import java.util.Iterator;
-
-/**
- * A queryplan-bundle
- */
 
 import com.algebraweb.editor.client.node.QueryPlan;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -41,6 +36,15 @@ public class QueryPlanBundle implements IsSerializable {
 
 	}
 
+	public int getFreePlanId() {
+
+		int i=0;
+		while (hasPlanWithId(i)) i++;
+		return i;
+
+	}
+
+
 	/**
 	 * Returns the plan with the specific id, null
 	 * if the bundle does not contain any such plan
@@ -52,18 +56,9 @@ public class QueryPlanBundle implements IsSerializable {
 		return plans.get(id);
 	}
 
-
 	public HashMap<Integer,QueryPlan> getPlans() {
 
 		return plans;
-	}
-
-	public int getFreePlanId() {
-
-		int i=0;
-		while (hasPlanWithId(i)) i++;
-		return i;
-
 	}
 
 	public boolean hasPlanWithId(int id) {

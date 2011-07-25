@@ -9,14 +9,14 @@ public class ClipBoardPlanNode implements IsSerializable{
 	private PlanNode p;
 	private Coordinate pos;
 
+	public ClipBoardPlanNode() {
+
+	}
+
 	public ClipBoardPlanNode(PlanNode p, Coordinate pos) {
 
 		this.p=p;
 		this.pos=pos;
-
-	}
-
-	public ClipBoardPlanNode() {
 
 	}
 

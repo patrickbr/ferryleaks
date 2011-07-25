@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ContextMenu extends PopupPanel{
 	
@@ -29,27 +28,6 @@ public class ContextMenu extends PopupPanel{
 		super.addStyleName("node-context-menu");
 		GraphCanvas.preventTextSelection(getElement(), true);
 				
-	}
-	
-	public void show(int x, int y) {
-		
-		super.setPopupPosition(x, y);
-		this.x=x;
-		this.y=y;
-			
-		this.clear();
-		this.add(rows);
-				
-		super.show();
-					
-	}
-	
-	public void addSeperator() {
-		
-		HTML sep = new HTML();
-		sep.addStyleName("node-context-line-break");
-		rows.add(sep);
-		
 	}
 	
 	public void addItem(final ContextMenuItem i) {
@@ -109,6 +87,19 @@ public class ContextMenu extends PopupPanel{
 		rows.add(tmp);
 		
 	}
+	
+	public void addSeperator() {
+		
+		HTML sep = new HTML();
+		sep.addStyleName("node-context-line-break");
+		rows.add(sep);
+		
+	}
+	
+	protected FlowPanel getRows() {
+		
+		return rows;
+	}
 
 	/**
 	 * @return the x
@@ -124,9 +115,17 @@ public class ContextMenu extends PopupPanel{
 		return y;
 	}
 	
-	protected FlowPanel getRows() {
+	public void show(int x, int y) {
 		
-		return rows;
+		super.setPopupPosition(x, y);
+		this.x=x;
+		this.y=y;
+			
+		this.clear();
+		this.add(rows);
+				
+		super.show();
+					
 	}
 	
 

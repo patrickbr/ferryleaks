@@ -1,10 +1,6 @@
 package com.algebraweb.editor.client.graphcanvas;
 
 
-import com.algebraweb.editor.client.AlgebraEditor;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -109,74 +105,58 @@ public class GraphEdge {
 
 	}
 
-	public int getOffsetFrom() {
-		return offsetFrom;
+	public Path getArrowPath() {
+		return arrowPath;
 	}
-
-	public void setOffsetFrom(int offsetFrom) {
-		this.offsetFrom = offsetFrom;
-	}
-
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
-
 
 	public int getArrowSize() {
 		return arrowSize;
 	}
 
+	public GraphCanvas getC() {
+		return c;
+	}
 
-	public void setArrowSize(int size) {
-		this.arrowSize = size;
+
+	public Path getEdgePath() {
+		return edgePath;
+	}
+
+
+	public String getEdgePathSmallString() {
+		return pathSmall;
 	}
 
 
 
-	/**
-	 * @return the snakingIn
-	 */
-	public boolean isSnakingIn() {
-		return snakingIn;
-	}
-
-	/**
-	 * @param snakingIn the snakingIn to set
-	 */
-	public void setSnakingIn(boolean snakingIn) {
-		this.snakingIn = snakingIn;
-	}
-
-	/**
-	 * @return the snakingOut
-	 */
-	public boolean isSnakingOut() {
-		return snakingOut;
+	public String getEdgePathString() {
+		return paths;
 	}
 
 	/**
-	 * @param snakingOut the snakingOut to set
+	 * @return the fixedParentPos
 	 */
-	public void setSnakingOut(boolean snakingOut) {
-		this.snakingOut = snakingOut;
+	public int getFixedParentPos() {
+		return fixedParentPos;
 	}
 
-	public int getToPosition() {
-		return toPosition;
+	public GraphNode getFrom() {
+		return fromNode;
 	}
 
 	public int getFromPosition() {
 		return fromPosition;
 	}
 
-	public void setToPosition(int pos) {
-		toPosition = pos;
+	public int getOffset() {
+
+		return offset;
+
 	}
 
-	public void setFromPosition(int pos) {
-		fromPosition= pos;
+	public int getOffsetFrom() {
+		return offsetFrom;
 	}
-
 
 	public int getOrientation() {
 		return toPosition;
@@ -187,57 +167,25 @@ public class GraphEdge {
 		return fromPosition;
 	}
 
-	public int getOffset() {
-
-		return offset;
-
-	}
-
-	public Path getEdgePath() {
-		return edgePath;
-	}
-
-	public Path getArrowPath() {
-		return arrowPath;
-	}
-
-
-	public boolean isSnakedIn() {
-		return snakedIn;
-	}
-
-	public void setSnakedIn(boolean s) {
-		snakedIn = s;
-	}
-
 
 	public Coordinate[] getP() {
 		return p;
 	}
 
-
-	public void setP(Coordinate[] p) {
-		this.p = p;
+	public GraphNode getTo() {
+		return toNode;
 	}
 
+	public int getToPosition() {
+		return toPosition;
+	}
 
 	public double getX1() {
 		return x1;
 	}
 
-
-	public void setX1(double x1) {
-		this.x1 = x1;
-	}
-
-
 	public double getX2() {
 		return x2;
-	}
-
-
-	public void setX2(double x2) {
-		this.x2 = x2;
 	}
 
 
@@ -245,19 +193,8 @@ public class GraphEdge {
 		return x3;
 	}
 
-
-	public void setX3(double x3) {
-		this.x3 = x3;
-	}
-
-
 	public double getX4() {
 		return x4;
-	}
-
-
-	public void setX4(double x4) {
-		this.x4 = x4;
 	}
 
 
@@ -266,18 +203,8 @@ public class GraphEdge {
 	}
 
 
-	public void setY1(double y1) {
-		this.y1 = y1;
-	}
-
-
 	public double getY2() {
 		return y2;
-	}
-
-
-	public void setY2(double y2) {
-		this.y2 = y2;
 	}
 
 
@@ -286,28 +213,44 @@ public class GraphEdge {
 	}
 
 
-	public void setY3(double y3) {
-		this.y3 = y3;
-	}
-
-
 	public double getY4() {
 		return y4;
 	}
 
 
-	public void setY4(double y4) {
-		this.y4 = y4;
+	public boolean isSnakedIn() {
+		return snakedIn;
 	}
 
 
-	public GraphNode getFrom() {
-		return fromNode;
+	/**
+	 * @return the snakingIn
+	 */
+	public boolean isSnakingIn() {
+		return snakingIn;
 	}
 
 
-	public GraphCanvas getC() {
-		return c;
+	/**
+	 * @return the snakingOut
+	 */
+	public boolean isSnakingOut() {
+		return snakingOut;
+	}
+
+
+	public void setAniStep(int x, int y) {
+
+	}
+
+
+	public void setArrowPath(Path ap) {
+		this.arrowPath = ap;
+	}
+
+
+	public void setArrowSize(int size) {
+		this.arrowSize = size;
 	}
 
 
@@ -321,13 +264,8 @@ public class GraphEdge {
 	}
 
 
-	public void setArrowPath(Path ap) {
-		this.arrowPath = ap;
-	}
-
-
-	public void setPathStringSmall(String pathSmall) {
-		this.pathSmall = pathSmall;
+	public void setEdgePathString(String paths) {
+		this.paths = paths;
 	}
 
 
@@ -336,8 +274,49 @@ public class GraphEdge {
 	}
 
 
-	public GraphNode getTo() {
-		return toNode;
+	public void setFromPosition(int pos) {
+		fromPosition= pos;
+	}
+
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
+
+	public void setOffsetFrom(int offsetFrom) {
+		this.offsetFrom = offsetFrom;
+	}
+
+
+	public void setP(Coordinate[] p) {
+		this.p = p;
+	}
+
+
+	public void setPathStringSmall(String pathSmall) {
+		this.pathSmall = pathSmall;
+	}
+
+
+	public void setSnakedIn(boolean s) {
+		snakedIn = s;
+	}
+
+
+	/**
+	 * @param snakingIn the snakingIn to set
+	 */
+	public void setSnakingIn(boolean snakingIn) {
+		this.snakingIn = snakingIn;
+	}
+
+
+	/**
+	 * @param snakingOut the snakingOut to set
+	 */
+	public void setSnakingOut(boolean snakingOut) {
+		this.snakingOut = snakingOut;
 	}
 
 
@@ -346,30 +325,47 @@ public class GraphEdge {
 	}
 
 
-
-
-	public String getEdgePathString() {
-		return paths;
-	}
-
-	public void setEdgePathString(String paths) {
-		this.paths = paths;
-	}
-
-	public String getEdgePathSmallString() {
-		return pathSmall;
+	public void setToPosition(int pos) {
+		toPosition = pos;
 	}
 
 
-	public void setAniStep(int x, int y) {
-
+	public void setX1(double x1) {
+		this.x1 = x1;
 	}
 
-	/**
-	 * @return the fixedParentPos
-	 */
-	public int getFixedParentPos() {
-		return fixedParentPos;
+
+	public void setX2(double x2) {
+		this.x2 = x2;
+	}
+
+
+	public void setX3(double x3) {
+		this.x3 = x3;
+	}
+
+
+
+
+	public void setX4(double x4) {
+		this.x4 = x4;
+	}
+
+	public void setY1(double y1) {
+		this.y1 = y1;
+	}
+
+	public void setY2(double y2) {
+		this.y2 = y2;
+	}
+
+
+	public void setY3(double y3) {
+		this.y3 = y3;
+	}
+
+	public void setY4(double y4) {
+		this.y4 = y4;
 	}
 
 

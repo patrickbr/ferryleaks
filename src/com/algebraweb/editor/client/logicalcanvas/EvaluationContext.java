@@ -1,6 +1,5 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import com.algebraweb.editor.client.node.Property;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class EvaluationContext implements IsSerializable {
@@ -35,66 +34,10 @@ public class EvaluationContext implements IsSerializable {
 
 
 	/**
-	 * @return the databaseServer
-	 */
-	public String getDatabaseServer() {
-		return databaseServer;
-	}
-
-
-	/**
-	 * @param databaseServer the databaseServer to set
-	 */
-	public void setDatabaseServer(String databaseServer) {
-		this.databaseServer = databaseServer;
-	}
-
-
-	/**
-	 * @return the databasePort
-	 */
-	public int getDatabasePort() {
-		return databasePort;
-	}
-
-
-	/**
-	 * @param databasePort the databasePort to set
-	 */
-	public void setDatabasePort(int databasePort) {
-		this.databasePort = databasePort;
-	}
-
-
-	/**
-	 * @return the databaseUser
-	 */
-	public String getDatabaseUser() {
-		return databaseUser;
-	}
-
-
-	/**
-	 * @param databaseUser the databaseUser to set
-	 */
-	public void setDatabaseUser(String databaseUser) {
-		this.databaseUser = databaseUser;
-	}
-
-
-	/**
 	 * @return the database
 	 */
 	public String getDatabase() {
 		return database;
-	}
-
-
-	/**
-	 * @param database the database to set
-	 */
-	public void setDatabase(String database) {
-		this.database = database;
 	}
 
 
@@ -107,106 +50,26 @@ public class EvaluationContext implements IsSerializable {
 
 
 	/**
-	 * @param databasePassword the databasePassword to set
+	 * @return the databasePort
 	 */
-	public void setDatabasePassword(String databasePassword) {
-		this.databasePassword = databasePassword;
+	public int getDatabasePort() {
+		return databasePort;
 	}
 
 
 	/**
-	 * @return the iterUseColumn
+	 * @return the databaseServer
 	 */
-	public boolean isIterUseColumn() {
-		return iterUseColumn;
+	public String getDatabaseServer() {
+		return databaseServer;
 	}
 
 
 	/**
-	 * @param iterUseColumn the iterUseColumn to set
+	 * @return the databaseUser
 	 */
-	public void setIterUseColumn(boolean iterUseColumn) {
-		this.iterUseColumn = iterUseColumn;
-	}
-
-
-	/**
-	 * @return the sortUseColumn
-	 */
-	public boolean isSortUseColumn() {
-		return sortUseColumn;
-	}
-
-
-	/**
-	 * @param sortUseColumn the sortUseColumn to set
-	 */
-	public void setSortUseColumn(boolean sortUseColumn) {
-		this.sortUseColumn = sortUseColumn;
-	}
-
-
-	/**
-	 * @return the iterColumnName
-	 */
-	public String getIterColumnName() {
-		return iterColumnName;
-	}
-
-
-	/**
-	 * @param iterColumnName the iterColumnName to set
-	 */
-	public void setIterColumnName(String iterColumnName) {
-		this.iterColumnName = iterColumnName;
-	}
-
-
-	/**
-	 * @return the iterColumnNat
-	 */
-	public int getIterColumnNat() {
-		return iterColumnNat;
-	}
-
-
-	/**
-	 * @param iterColumnNat the iterColumnNat to set
-	 */
-	public void setIterColumnNat(int iterColumnNat) {
-		this.iterColumnNat = iterColumnNat;
-	}
-
-
-	/**
-	 * @return the sortColumnName
-	 */
-	public String getSortColumnName() {
-		return sortColumnName;
-	}
-
-
-	/**
-	 * @param sortColumnName the sortColumnName to set
-	 */
-	public void setSortColumnName(String sortColumnName) {
-		this.sortColumnName = sortColumnName;
-	}
-
-
-	/**
-	 * @return the sortOrder
-	 */
-	public String getSortOrder() {
-		return sortOrder;
-	}
-
-
-	/**
-	 * @param sortOrder the sortOrder to set
-	 */
-	public void setSortOrder(String sortOrder) {
-		this.sortOrder = sortOrder;
+	public String getDatabaseUser() {
+		return databaseUser;
 	}
 
 
@@ -219,10 +82,34 @@ public class EvaluationContext implements IsSerializable {
 
 
 	/**
-	 * @param itemColumns the itemColumns to set
+	 * @return the iterColumnName
 	 */
-	public void setItemColumns(String[] itemColumns) {
-		this.itemColumns = itemColumns;
+	public String getIterColumnName() {
+		return iterColumnName;
+	}
+
+
+	/**
+	 * @return the iterColumnNat
+	 */
+	public int getIterColumnNat() {
+		return iterColumnNat;
+	}
+
+
+	/**
+	 * @return the sortColumnName
+	 */
+	public String getSortColumnName() {
+		return sortColumnName;
+	}
+
+
+	/**
+	 * @return the sortOrder
+	 */
+	public String getSortOrder() {
+		return sortOrder;
 	}
 
 
@@ -235,14 +122,6 @@ public class EvaluationContext implements IsSerializable {
 
 
 	/**
-	 * @param sortOrderColumnOn the sortOrderColumnOn to set
-	 */
-	public void setSortOrderColumnOn(String sortOrderColumnOn) {
-		this.sortOrderColumnOn = sortOrderColumnOn;
-	}
-
-
-	/**
 	 * @return the databaseSetGlobal
 	 */
 	public boolean isDatabaseSetGlobal() {
@@ -251,10 +130,130 @@ public class EvaluationContext implements IsSerializable {
 
 
 	/**
+	 * @return the iterUseColumn
+	 */
+	public boolean isIterUseColumn() {
+		return iterUseColumn;
+	}
+
+
+	/**
+	 * @return the sortUseColumn
+	 */
+	public boolean isSortUseColumn() {
+		return sortUseColumn;
+	}
+
+
+	/**
+	 * @param database the database to set
+	 */
+	public void setDatabase(String database) {
+		this.database = database;
+	}
+
+
+	/**
+	 * @param databasePassword the databasePassword to set
+	 */
+	public void setDatabasePassword(String databasePassword) {
+		this.databasePassword = databasePassword;
+	}
+
+
+	/**
+	 * @param databasePort the databasePort to set
+	 */
+	public void setDatabasePort(int databasePort) {
+		this.databasePort = databasePort;
+	}
+
+
+	/**
+	 * @param databaseServer the databaseServer to set
+	 */
+	public void setDatabaseServer(String databaseServer) {
+		this.databaseServer = databaseServer;
+	}
+
+
+	/**
 	 * @param databaseSetGlobal the databaseSetGlobal to set
 	 */
 	public void setDatabaseSetGlobal(boolean databaseSetGlobal) {
 		this.databaseSetGlobal = databaseSetGlobal;
+	}
+
+
+	/**
+	 * @param databaseUser the databaseUser to set
+	 */
+	public void setDatabaseUser(String databaseUser) {
+		this.databaseUser = databaseUser;
+	}
+
+
+	/**
+	 * @param itemColumns the itemColumns to set
+	 */
+	public void setItemColumns(String[] itemColumns) {
+		this.itemColumns = itemColumns;
+	}
+
+
+	/**
+	 * @param iterColumnName the iterColumnName to set
+	 */
+	public void setIterColumnName(String iterColumnName) {
+		this.iterColumnName = iterColumnName;
+	}
+
+
+	/**
+	 * @param iterColumnNat the iterColumnNat to set
+	 */
+	public void setIterColumnNat(int iterColumnNat) {
+		this.iterColumnNat = iterColumnNat;
+	}
+
+
+	/**
+	 * @param iterUseColumn the iterUseColumn to set
+	 */
+	public void setIterUseColumn(boolean iterUseColumn) {
+		this.iterUseColumn = iterUseColumn;
+	}
+
+
+	/**
+	 * @param sortColumnName the sortColumnName to set
+	 */
+	public void setSortColumnName(String sortColumnName) {
+		this.sortColumnName = sortColumnName;
+	}
+
+
+	/**
+	 * @param sortOrder the sortOrder to set
+	 */
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
+
+	/**
+	 * @param sortOrderColumnOn the sortOrderColumnOn to set
+	 */
+	public void setSortOrderColumnOn(String sortOrderColumnOn) {
+		this.sortOrderColumnOn = sortOrderColumnOn;
+	}
+
+
+	/**
+	 * @param sortUseColumn the sortUseColumn to set
+	 */
+	public void setSortUseColumn(boolean sortUseColumn) {
+		this.sortUseColumn = sortUseColumn;
 	}
 	
 

@@ -20,17 +20,17 @@ public class PlanNodeCopyMessage implements IsSerializable{
 	}
 
 	/**
-	 * @return the pos
-	 */
-	public Coordinate getPos() {
-		return pos;
-	}
-
-	/**
 	 * @return the id
 	 */
 	public int getId() {
 		return id;
+	}
+
+	/**
+	 * @return the pos
+	 */
+	public Coordinate getPos() {
+		return pos;
 	}
 	
 	

@@ -4,15 +4,14 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -66,6 +65,116 @@ public class GraphNode {
 	public double stepY;
 	private int color;
 
+	private MouseMoveHandler mouseMoveH = new MouseMoveHandler() {
+
+		@Override
+		public void onMouseMove(MouseMoveEvent event) {
+
+			c.setHoverNode(GraphNode.this);
+			GraphNode.this.c.openPopUp(Window.getScrollLeft() + event.getClientX(), Window.getScrollTop() + event.getClientY(),GraphNode.this.getId(),700);
+
+
+		}
+
+	};	
+
+	private MouseOutHandler mouseOutH = new MouseOutHandler() {
+
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+
+			c.setHoverNode(null);
+
+		}
+
+	};
+
+	private DoubleClickHandler doubleC = new DoubleClickHandler() {
+
+		@Override
+		public void onDoubleClick(DoubleClickEvent event) {
+
+			GraphNode.this.c.selectNodeWithSubs(GraphNode.this);
+
+		}
+	};
+
+	private ContextMenuHandler contextMenuH = new ContextMenuHandler() {
+
+		@Override
+		public void onContextMenu(ContextMenuEvent event) {
+
+			event.preventDefault();
+			if (c.getContextMenu() != null) {
+
+				c.showContextMenu(GraphNode.this, event.getNativeEvent().getClientX(), event.getNativeEvent().getClientY());
+
+			}
+
+		}
+	};
+
+	private MouseUpHandler mouseUpH = new MouseUpHandler() {
+
+		@Override
+		public void onMouseUp(MouseUpEvent event) {
+
+			if (event.getNativeButton() == NativeEvent.BUTTON_LEFT && !GraphNode.this.hasBeenDragged() && GraphNode.this.c.getSelectedNodes().containsValue(GraphNode.this)){
+
+				if (event.isControlKeyDown()) {
+					GraphNode.this.c.addNodeToSelection(GraphNode.this);
+				}else {
+					GraphNode.this.c.setSelectedNode(GraphNode.this);
+				}
+
+			}
+
+		}
+
+
+
+	};
+
+	private MouseDownHandler mouseDownH = new MouseDownHandler() {
+
+		@Override
+		public void onMouseDown(MouseDownEvent event) {
+
+			if (event.getNativeButton() != NativeEvent.BUTTON_LEFT) return;
+
+			GraphNode.this.getShape().toFront();
+
+			for (Text t : textLines) {
+				t.toFront();
+			}
+
+
+			GraphNode.this.c.getGraphNodeModifier().edgesToFront(GraphNode.this);
+
+			double rx;
+			double ry;
+
+			rx=event.getRelativeX(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()* GraphNode.this.getX()) ;
+			ry=event.getRelativeY(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()*GraphNode.this.getY()) ;
+
+			GraphNode.this.setDragged(true);
+			setHasBeenDragged(false);
+			GraphNode.this.c.registerDrag(GraphNode.this,(int)rx,(int)ry);
+
+			if (event.isControlKeyDown()) {
+				if (!GraphNode.this.c.getSelectedNodes().containsValue(GraphNode.this)) {
+					GraphNode.this.c.addNodeToSelection(GraphNode.this);
+				}else{
+					GraphNode.this.c.removeNodeFromSelection(GraphNode.this);
+				}
+			}else if (!GraphNode.this.c.getSelectedNodes().containsValue(GraphNode.this)){
+				GraphNode.this.c.setSelectedNode(GraphNode.this);
+			}
+
+		}
+
+	};
+
 	public GraphNode(GraphCanvas c, int color,int x, int y, int width, int height, String textStr,int id) {
 
 		this.id=id;
@@ -103,22 +212,35 @@ public class GraphNode {
 		getShape().addDomHandler(contextMenuH, ContextMenuEvent.getType());
 
 
-	}	
+	}
+
+	public void addEdgeFrom(GraphEdge e) {
+		this.edgesFrom.add(e);
+	}
+
+	public void addEdgeTo(GraphEdge e) {
+		this.edgesTo.add(e);
+	}
+
+	public boolean aniLock() {
+		return aniLock;
+	}
 
 	public int getColor() {
 		return color;
 	}
 
-	public void setColor(int color) {
-		this.color = color;
-	}
+
 
 	public HashMap<String, ConnectedShape> getConnectedShapes() {
 		return connectedShapes;
 	}
 
-	public int getId() {
-		return id;
+	/**
+	 * @return the connectedWidgets
+	 */
+	public HashMap<String, ConnectedWidget> getConnectedWidgets() {
+		return connectedWidgets;
 	}
 
 	public ArrayList<GraphEdge> getEdgesFrom() {
@@ -129,24 +251,91 @@ public class GraphNode {
 		return edgesTo;
 	}
 
+	/**
+	 * @return the fixedChildCount
+	 */
+	public int getFixedChildCount() {
+		return fixedChildCount;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @return the lineHeight
+	 */
+	public double getLineHeight() {
+		return lineHeight;
+	}
+
+	public Shape getShape() {
+		return this.rect;
+	}
+
 	public Text[] getText() {
 		return textLines;
+	}
+
+	public String getTextString() {
+		return textString;
 	}
 
 	public int getWidth() {
 		return width;
 	}
 
-	public void setWidth(int w) {
+	public double getX() {
+		return x;
+	}
 
-		if (w>=minWidth) {
-			width = w;
-			rect.attr("width", width);
-		}else{
-			width = minWidth;
-			rect.attr("width", width);
-		}
+	public double getY() {
+		return y;
+	}
 
+	/**
+	 * @return the hasBeenDragged
+	 */
+	public boolean hasBeenDragged() {
+		return hasBeenDragged;
+	}
+
+	public boolean isDragged() {
+		return isDragged;
+	}
+
+
+
+
+
+	public void setAniLock() {
+		this.aniLock=true;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
+	}
+
+	public void setDragged(boolean isDragged) {
+		this.isDragged = isDragged;
+	}
+
+	/**
+	 * @param fixedChildCount the fixedChildCount to set
+	 */
+	public void setFixedChildCount(int fixedChildCount) {
+		this.fixedChildCount = fixedChildCount;
+	}
+
+	/**
+	 * @param hasBeenDragged the hasBeenDragged to set
+	 */
+	public void setHasBeenDragged(boolean hasBeenDragged) {
+		this.hasBeenDragged = hasBeenDragged;
 	}
 
 	public void setHeight(int h) {
@@ -161,95 +350,6 @@ public class GraphNode {
 
 	}
 
-
-
-	public int getHeight() {
-		return height;
-	}
-
-	public double getX() {
-		return x;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	public void setX(double x) {
-		this.x=x;
-	}
-
-	public void setY(double y) {
-		this.y=y;
-	}
-
-	public void setAniLock() {
-		this.aniLock=true;
-	}
-
-	public boolean aniLock() {
-		return aniLock;
-	}
-
-	public void unsetAniLock() {
-		this.aniLock=false;
-	}
-
-	public Shape getShape() {
-		return this.rect;
-	}
-
-	public void addEdgeFrom(GraphEdge e) {
-		this.edgesFrom.add(e);
-	}
-
-	public void addEdgeTo(GraphEdge e) {
-		this.edgesTo.add(e);
-	}
-
-	public String getTextString() {
-		return textString;
-	}
-
-	public boolean isDragged() {
-		return isDragged;
-	}
-
-	public void setDragged(boolean isDragged) {
-		this.isDragged = isDragged;
-	}
-
-	/**
-	 * @return the fixedChildCount
-	 */
-	public int getFixedChildCount() {
-		return fixedChildCount;
-	}
-
-	/**
-	 * @param fixedChildCount the fixedChildCount to set
-	 */
-	public void setFixedChildCount(int fixedChildCount) {
-		this.fixedChildCount = fixedChildCount;
-	}
-
-
-
-
-
-	/**
-	 * @return the connectedWidgets
-	 */
-	public HashMap<String, ConnectedWidget> getConnectedWidgets() {
-		return connectedWidgets;
-	}
-
-	/**
-	 * @return the lineHeight
-	 */
-	public double getLineHeight() {
-		return lineHeight;
-	}
 
 	public void setText(String txt) {
 
@@ -279,6 +379,8 @@ public class GraphNode {
 		for (String line:lines) {
 
 			Text cur = c.new Text(0,0,line);
+			cur.attr("font","10px Arial");
+			cur.attr("style","text-anchor: middle; font: 10px Arial;");
 			cur.getElement().setAttribute("class", "node-text node-text-line_" + i);
 			cur.attr("text-anchor","left");
 			cur.sinkEvents(Event.MOUSEEVENTS);
@@ -323,129 +425,28 @@ public class GraphNode {
 
 	}
 
-	private MouseMoveHandler mouseMoveH = new MouseMoveHandler() {
+	public void setWidth(int w) {
 
-		@Override
-		public void onMouseMove(MouseMoveEvent event) {
-
-			c.setHoverNode(GraphNode.this);
-			GraphNode.this.c.openPopUp(Window.getScrollLeft() + event.getClientX(), Window.getScrollTop() + event.getClientY(),GraphNode.this.getId(),700);
-
-
+		if (w>=minWidth) {
+			width = w;
+			rect.attr("width", width);
+		}else{
+			width = minWidth;
+			rect.attr("width", width);
 		}
 
-	};
-
-	private MouseOutHandler mouseOutH = new MouseOutHandler() {
-
-		@Override
-		public void onMouseOut(MouseOutEvent event) {
-
-			c.setHoverNode(null);
-
-		}
-
-	};
-
-	private DoubleClickHandler doubleC = new DoubleClickHandler() {
-
-		@Override
-		public void onDoubleClick(DoubleClickEvent event) {
-
-			GraphNode.this.c.selectNodeWithSubs(GraphNode.this);
-
-		}
-	};
-
-
-	private ContextMenuHandler contextMenuH = new ContextMenuHandler() {
-
-		@Override
-		public void onContextMenu(ContextMenuEvent event) {
-
-			event.preventDefault();
-			if (c.getContextMenu() != null) {
-
-				c.showContextMenu(GraphNode.this, event.getNativeEvent().getClientX(), event.getNativeEvent().getClientY());
-
-			}
-
-		}
-	};
-
-	private MouseUpHandler mouseUpH = new MouseUpHandler() {
-
-		@Override
-		public void onMouseUp(MouseUpEvent event) {
-
-			if (event.getNativeButton() == NativeEvent.BUTTON_LEFT && !GraphNode.this.hasBeenDragged() && GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)){
-
-				if (event.isControlKeyDown()) {
-					GraphNode.this.c.addNodeToSelection(GraphNode.this);
-				}else {
-					GraphNode.this.c.setSelectedNode(GraphNode.this);
-				}
-
-			}
-
-		}
-
-
-
-	};
-
-	private MouseDownHandler mouseDownH = new MouseDownHandler() {
-
-		@Override
-		public void onMouseDown(MouseDownEvent event) {
-
-			if (event.getNativeButton() != NativeEvent.BUTTON_LEFT) return;
-
-			GraphNode.this.getShape().toFront();
-
-			for (Text t : textLines) {
-				t.toFront();
-			}
-
-
-			GraphNode.this.c.getGraphNodeModifier().edgesToFront(GraphNode.this);
-
-			double rx;
-			double ry;
-
-			rx=event.getRelativeX(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()* GraphNode.this.getX()) ;
-			ry=event.getRelativeY(GraphNode.this.c.getElement()) -(1/GraphNode.this.c.getScale()*GraphNode.this.getY()) ;
-
-			GraphNode.this.setDragged(true);
-			setHasBeenDragged(false);
-			GraphNode.this.c.registerDrag(GraphNode.this,(int)rx,(int)ry);
-
-			if (event.isControlKeyDown()) {
-				if (!GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)) {
-					GraphNode.this.c.addNodeToSelection(GraphNode.this);
-				}else{
-					GraphNode.this.c.removeNodeFromSelection(GraphNode.this);
-				}
-			}else if (!GraphNode.this.c.getSelectedNode().containsValue(GraphNode.this)){
-				GraphNode.this.c.setSelectedNode(GraphNode.this);
-			}
-
-		}
-
-	};
-
-	/**
-	 * @return the hasBeenDragged
-	 */
-	public boolean hasBeenDragged() {
-		return hasBeenDragged;
 	}
 
-	/**
-	 * @param hasBeenDragged the hasBeenDragged to set
-	 */
-	public void setHasBeenDragged(boolean hasBeenDragged) {
-		this.hasBeenDragged = hasBeenDragged;
+	public void setX(double x) {
+		this.x=x;
+	}
+
+	public void setY(double y) {
+		this.y=y;
+	}
+
+	public void unsetAniLock() {
+		this.aniLock=false;
 	}
 
 

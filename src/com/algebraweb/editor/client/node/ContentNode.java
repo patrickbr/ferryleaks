@@ -2,14 +2,11 @@ package com.algebraweb.editor.client.node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.scheme.Field;
 import com.algebraweb.editor.client.scheme.GoAble;
-import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.scheme.Value;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * A ContentNode is, contrary to a NodeContent, a Node which can <i>hold</i>
@@ -29,30 +26,9 @@ public abstract class ContentNode implements Serializable{
 	protected ArrayList<LabelOb> labelScheme = new ArrayList<LabelOb>();
 
 	
-	/**
-	 * Returns ALL values in this ContentNode with a given
-	 * internal name (as specified in the scheme XML file)
-	 * Goes into content childs!
-	 * @param name
-	 * @return
-	 */
-	public ArrayList<NodeContent> getAllContentWithValName(String name) {
+	public void addLabelOb(LabelOb ob) {
 
-		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
-
-		Iterator<NodeContent> i = childs.iterator();
-
-		while (i.hasNext()) {
-
-			NodeContent c = i.next();
-			
-			if (c.getName().equals(name)) temp.add(c);
-
-			temp.addAll(c.getAllContentWithValName(name));
-
-		}
-
-		return temp;
+		labelScheme.add(ob);
 
 	}
 
@@ -86,6 +62,82 @@ public abstract class ContentNode implements Serializable{
 
 
 	/**
+	 * Returns ALL values in this ContentNode with a given
+	 * internal name (as specified in the scheme XML file)
+	 * Goes into content childs!
+	 * @param name
+	 * @return
+	 */
+	public ArrayList<NodeContent> getAllContentWithValName(String name) {
+
+		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
+
+		Iterator<NodeContent> i = childs.iterator();
+
+		while (i.hasNext()) {
+
+			NodeContent c = i.next();
+			
+			if (c.getName().equals(name)) temp.add(c);
+
+			temp.addAll(c.getAllContentWithValName(name));
+
+		}
+
+		return temp;
+
+	}
+	
+	
+
+
+	/**
+	 * returns the contents of this ContentNode
+	 * @return
+	 */
+	public abstract ArrayList<NodeContent> getContent();
+
+	public ArrayList<NodeContent> getContentWithAttributeValue(String attr, String value) {
+
+
+		ArrayList<NodeContent> ret = new ArrayList<NodeContent>();
+
+
+		if (this instanceof NodeContent) {
+
+			Iterator<String> itP = ((NodeContent)this).getAttributes().keySet().iterator();
+
+			while (itP.hasNext()) {
+				
+				String current = itP.next();
+				
+				
+				if (current.equals(attr) && ((NodeContent)this).getAttributes().get(current).getVal().equals(value)) {
+					
+					
+					ret.add(((NodeContent)this));
+					
+				}
+				
+			}
+
+		}
+		
+
+		Iterator<NodeContent> it = this.getContent().iterator();
+
+		while (it.hasNext()) {
+
+			ret.addAll(it.next().getContentWithAttributeValue(attr, value));
+
+		}
+
+
+		return ret;
+	}
+
+
+	/**
 	 * Returns values in this ContentNode with a given
 	 * internal name (as specified in the scheme XML file)
 	 * Stays flat, does NOT go into content childs!
@@ -107,8 +159,6 @@ public abstract class ContentNode implements Serializable{
 
 		return temp;
 	}
-	
-	
 
 
 	public ArrayList<NodeContent> getDirectNodeContentByScheme(GoAble g) {
@@ -162,6 +212,12 @@ public abstract class ContentNode implements Serializable{
 		return res;
 	}
 
+
+	public abstract String getInternalName();
+	
+	
+	public abstract String getLabel();
+	
 	public boolean removeContent(NodeContent con) {
 
 
@@ -181,65 +237,6 @@ public abstract class ContentNode implements Serializable{
 		}
 
 		return false;
-
-	}
-
-
-	/**
-	 * returns the contents of this ContentNode
-	 * @return
-	 */
-	public abstract ArrayList<NodeContent> getContent();
-
-
-	public abstract String getInternalName();
-
-
-	public ArrayList<NodeContent> getContentWithAttributeValue(String attr, String value) {
-
-
-		ArrayList<NodeContent> ret = new ArrayList<NodeContent>();
-
-
-		if (this instanceof NodeContent) {
-
-			Iterator<String> itP = ((NodeContent)this).getAttributes().keySet().iterator();
-
-			while (itP.hasNext()) {
-				
-				String current = itP.next();
-				
-				
-				if (current.equals(attr) && ((NodeContent)this).getAttributes().get(current).getVal().equals(value)) {
-					
-					
-					ret.add(((NodeContent)this));
-					
-				}
-				
-			}
-
-		}
-		
-
-		Iterator<NodeContent> it = this.getContent().iterator();
-
-		while (it.hasNext()) {
-
-			ret.addAll(it.next().getContentWithAttributeValue(attr, value));
-
-		}
-
-
-		return ret;
-	}
-	
-	
-	public abstract String getLabel();
-	
-	public void addLabelOb(LabelOb ob) {
-
-		labelScheme.add(ob);
 
 	}
 	

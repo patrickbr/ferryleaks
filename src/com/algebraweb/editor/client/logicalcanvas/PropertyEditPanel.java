@@ -7,23 +7,17 @@ import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.node.PropertyValue;
 import com.algebraweb.editor.client.scheme.Field;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.Value;
 import com.algebraweb.editor.client.validation.ValidationError;
-
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PropertyEditPanel extends Composite{
 
@@ -147,8 +141,6 @@ public class PropertyEditPanel extends Composite{
 	}
 
 	public void save() {
-
-		GWT.log("Saving panel");
 
 		Iterator<PropertyEditField> it = fields.iterator();
 

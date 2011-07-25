@@ -8,7 +8,6 @@ import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback
 import com.algebraweb.editor.client.node.Property;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
@@ -24,12 +23,32 @@ public class AvailableColumnsField extends Composite {
 	private boolean markError = false;
 	private int erroneousIndex = -1;
 
+	GraphCanvasCommunicationCallback<ArrayList<Property>> cb = new GraphCanvasCommunicationCallback<ArrayList<Property>>("getting available columns") {
+
+	
+		@Override
+		public void onSuccess(ArrayList<Property> result) {
+
+
+			AvailableColumnsField.this.showResults(result);
+
+			if (projSel != null && projSel != null)
+				for (String s : projSel)
+					selectStringItem(s);
+
+
+			if (projDel != null  && projSel != null)
+				for (String s : projDel)
+					b.removeItem(selectStringItem(s));
+			received=true;
+
+		}		
+
+
+	};
+
 	public AvailableColumnsField(int pid, int nid, boolean includeThisNode,RemoteManipulationServiceAsync manServ) {
 		this(pid, nid, -1, includeThisNode, manServ, false);
-	}
-
-	public AvailableColumnsField(int pid, int nid, int position, boolean includeThisNode,RemoteManipulationServiceAsync manServ) {
-		this(pid, nid, position, includeThisNode, manServ, false);
 	}
 
 	public AvailableColumnsField(int pid, int nid, boolean includeThisNode,RemoteManipulationServiceAsync manServ, boolean allowMultipleSelection) {
@@ -37,6 +56,10 @@ public class AvailableColumnsField extends Composite {
 		this(pid, nid, -1, includeThisNode, manServ, allowMultipleSelection);
 	}
 
+
+	public AvailableColumnsField(int pid, int nid, int position, boolean includeThisNode,RemoteManipulationServiceAsync manServ) {
+		this(pid, nid, position, includeThisNode, manServ, false);
+	}
 
 	public AvailableColumnsField(int pid, int nid, int position, boolean includeThisNode,RemoteManipulationServiceAsync manServ, boolean allowMultipleSelection) {
 
@@ -78,38 +101,30 @@ public class AvailableColumnsField extends Composite {
 
 	}
 
-	public void setMarkError(boolean markError) {
-		this.markError=markError;
+	public ListBox getListBox() {
+
+		return b;
 	}
 
-	public void setProjectedSelection(String[] item) {
+	public String[] getSelectedItems() {
 
-		projSel = item;
-		if (received && item != null) {
-			for (String s : item)
-				selectStringItem(s);
+		ArrayList<String> ret = new ArrayList<String>();
+
+		for (int i=0;i<b.getItemCount();i++) {
+
+			if (b.isItemSelected(i)) ret.add(b.getItemText(i));
 
 		}
 
+
+		return ret.toArray(new String[0]);
+
 	}
 
-	public void setProjectedSelection(String item) {
+	@Override
+	public ListBox getWidget() {
 
-		String[] tmp = new String[1];
-		tmp[0] = item;
-
-		setProjectedSelection(tmp);
-	}
-
-	public void setProjectedDelete(String[] item) {
-
-		projDel = item;
-		if (received && item != null) {
-
-			for (String s : item)
-				if (selectStringItem(s)>-1) b.removeItem(selectStringItem(s));
-
-		}
+		return b;
 
 	}
 
@@ -144,6 +159,41 @@ public class AvailableColumnsField extends Composite {
 
 	}
 
+	public void setMarkError(boolean markError) {
+		this.markError=markError;
+	}
+
+	public void setProjectedDelete(String[] item) {
+
+		projDel = item;
+		if (received && item != null) {
+
+			for (String s : item)
+				if (selectStringItem(s)>-1) b.removeItem(selectStringItem(s));
+
+		}
+
+	}
+
+	public void setProjectedSelection(String item) {
+
+		String[] tmp = new String[1];
+		tmp[0] = item;
+
+		setProjectedSelection(tmp);
+	}
+
+	public void setProjectedSelection(String[] item) {
+
+		projSel = item;
+		if (received && item != null) {
+			for (String s : item)
+				selectStringItem(s);
+
+		}
+
+	}
+
 	private void showResults(ArrayList<Property> result) {
 
 		this.removeStyleName("field-loading");
@@ -160,56 +210,6 @@ public class AvailableColumnsField extends Composite {
 
 		}
 
-
-	}
-
-	public ListBox getListBox() {
-
-		return b;
-	}
-
-	GraphCanvasCommunicationCallback<ArrayList<Property>> cb = new GraphCanvasCommunicationCallback<ArrayList<Property>>("getting available columns") {
-
-	
-		@Override
-		public void onSuccess(ArrayList<Property> result) {
-
-
-			AvailableColumnsField.this.showResults(result);
-
-			if (projSel != null && projSel != null)
-				for (String s : projSel)
-					selectStringItem(s);
-
-
-			if (projDel != null  && projSel != null)
-				for (String s : projDel)
-					b.removeItem(selectStringItem(s));
-			received=true;
-
-		}		
-
-
-	};
-
-	public ListBox getWidget() {
-
-		return b;
-
-	}
-
-	public String[] getSelectedItems() {
-
-		ArrayList<String> ret = new ArrayList<String>();
-
-		for (int i=0;i<b.getItemCount();i++) {
-
-			if (b.isItemSelected(i)) ret.add(b.getItemText(i));
-
-		}
-
-
-		return ret.toArray(new String[0]);
 
 	}
 

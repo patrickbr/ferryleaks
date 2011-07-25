@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
-
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;

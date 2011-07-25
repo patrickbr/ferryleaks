@@ -2,7 +2,6 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.node.PropertyValue;
 import com.algebraweb.editor.client.scheme.Field;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -35,14 +34,14 @@ public abstract class PropertyEditField extends Composite {
 	}
 
 
+	public boolean isLocked() {
+		return locked;
+	}
+
 	public abstract void save();
 
 	public void setLocked(boolean locked) {
 		locked=locked;
-	}
-
-	public boolean isLocked() {
-		return locked;
 	}
 
 

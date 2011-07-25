@@ -1,7 +1,6 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.google.gwt.core.client.GWT;
 
 public class EditSQLListenerDialog extends AddSQListenerDIalog{
 	

@@ -1,23 +1,19 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader;
 
+import gwtupload.server.UploadAction;
+import gwtupload.server.exceptions.UploadActionException;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 
-import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
-
-import gwtupload.server.UploadAction;
-import gwtupload.server.exceptions.UploadActionException;
 
 public class XMLPlanUploadServlet extends UploadAction{
 

@@ -1,7 +1,5 @@
 package com.algebraweb.editor.client.graphcanvas;
 
-import java.util.HashMap;
-
 public abstract class NodeSelectionHandler {
 	
 	

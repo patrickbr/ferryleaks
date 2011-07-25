@@ -9,6 +9,4 @@ public interface RemoteFillingServiceAsync {
 	
 	void getRawNodes(String filler, String args,
 			AsyncCallback<ArrayList<RawNode>> callback);
-
-
 }

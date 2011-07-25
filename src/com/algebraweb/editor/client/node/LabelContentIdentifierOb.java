@@ -5,13 +5,20 @@ public class LabelContentIdentifierOb extends LabelOb{
 
 	private String identifier;
 
+	public LabelContentIdentifierOb() {
+
+	}
+
 	public LabelContentIdentifierOb(String identifier) {
 
 		this.identifier= identifier;
 
 	}
 
-	public LabelContentIdentifierOb() {
+	@Override
+	public void addChar(String e) {
+
+		identifier = identifier + e;
 
 	}
 
@@ -20,13 +27,6 @@ public class LabelContentIdentifierOb extends LabelOb{
 	 */
 	public String getIdentifier() {
 		return identifier;
-	}
-
-	@Override
-	public void addChar(String e) {
-
-		identifier = identifier + e;
-
 	}
 
 	@Override

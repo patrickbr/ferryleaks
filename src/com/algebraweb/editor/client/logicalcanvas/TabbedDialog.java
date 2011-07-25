@@ -2,7 +2,6 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -22,6 +21,8 @@ public class TabbedDialog extends DialogBox{
 		
 		super.setAnimationEnabled(true);
 		super.setModal(true);
+		super.setGlassEnabled(true);
+		
 		p = new LayoutPanel();
 		t = new TabLayoutPanel(1.5, Unit.EM);
 		
@@ -45,14 +46,14 @@ public class TabbedDialog extends DialogBox{
 	}
 	
 	
-	protected void addTab(Widget w,String title) {
-		getTabPanel().add(w, title);
-	}
-	
 	protected void addButton(Widget b) {
 		getButtonsPanel().add(b);
 		p.setWidgetBottomHeight(buttonsPanel, 0, Unit.PX, 50, Unit.PX);
 		getButtonsPanel().setCellVerticalAlignment(b, HasVerticalAlignment.ALIGN_MIDDLE);
+	}
+	
+	protected void addTab(Widget w,String title) {
+		getTabPanel().add(w, title);
 	}
 
 	/**

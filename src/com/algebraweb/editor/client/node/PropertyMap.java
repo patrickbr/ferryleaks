@@ -14,12 +14,6 @@ public class PropertyMap extends HashMap<String,PropertyValue> {
 	
 	
 	
-	public PropertyValue put(Property p) {
-				
-		return super.put(p.getPropertyName(), p.getPropertyVal());
-				
-	}
-	
 	public PropertyValue get(String key) {
 		
 		return super.get(key);
@@ -32,8 +26,6 @@ public class PropertyMap extends HashMap<String,PropertyValue> {
 		
 	}
 	
-
-
 	public Collection<Property> properties() {
 		
 		
@@ -51,6 +43,14 @@ public class PropertyMap extends HashMap<String,PropertyValue> {
 		
 		return ret;
 		
+	}
+	
+
+
+	public PropertyValue put(Property p) {
+				
+		return super.put(p.getPropertyName(), p.getPropertyVal());
+				
 	}
 	
 	

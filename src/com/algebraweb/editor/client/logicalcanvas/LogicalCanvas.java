@@ -12,31 +12,14 @@ import com.algebraweb.editor.client.graphcanvas.ConnectedWidget;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
-import com.algebraweb.editor.client.graphcanvas.GraphEdgeModifier;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
-import com.algebraweb.editor.client.graphcanvas.GraphNodeModifier;
 import com.algebraweb.editor.client.graphcanvas.NodeSelectionHandler;
-import com.algebraweb.editor.client.validation.ValidationError;
-import com.algebraweb.editor.client.validation.ValidationResult;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.ibm.icu.util.Currency;
 
 public class LogicalCanvas extends GraphCanvas{
 
@@ -119,7 +102,7 @@ public class LogicalCanvas extends GraphCanvas{
 				if (state == 3) {
 
 					setOverEdgeConnector(false);
-					
+
 					if (getHoverNode() != null && mouseOverNode(event.getClientX(),event.getClientY())) {
 
 						currentNewEdgeDrawer.moveTo(getHoverNode().getX() + getHoverNode().getWidth() / 2, getHoverNode().getY());
@@ -139,11 +122,9 @@ public class LogicalCanvas extends GraphCanvas{
 
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
-
-				GWT.log("" + isOverEdgeConnector());
 				if (!isOverEdgeConnector() && !mouseOverNode(event.getClientX(), event.getClientY()) && (state == 3 || state == 2)) {
 
-				
+
 					state = 0;
 					setPreventHoverMenu(false);
 					Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
@@ -178,24 +159,23 @@ public class LogicalCanvas extends GraphCanvas{
 	}
 
 
-	public int getId() {
-		return id;
+	public void addSQLListener(int nid, RemoteManipulationServiceAsync rmsa, EvaluationContext c) {
+
+		SQLBubble listener = new SQLBubble(nid,this.getId(),rmsa,c,this);
+		GraphNode n = getGraphNodeById(nid);
+		super.hangWidgetOntoNode("sql-listener", new ConnectedWidget(listener,n.getWidth(),0), nid);
+		sqlBubbleList.put(nid, listener);
+		listener.update();
+
 	}
 
 
-	public void setErroneous(int nid) {
+	private void clearEdgeConnectors(GraphNode n) {
 
-		if (!(super.getGraphNodeById(nid) == null) && !super.getGraphNodeById(nid).getConnectedShapes().containsKey("__logicalplan_error")) {
-
-			errorCount++;
-			myTabButton.setErrorCount(errorCount);
-			Text errorMark = new Text(0, 0,"!");
-			errorMark.getElement().setAttribute("class", "logicalplan-node-errormark-text");
-			errorMark.attr("fill","red");
-
-			super.hangShapeOntoNode("__logicalplan_error", new ConnectedShape(errorMark, -6, -8), nid);				
-
+		for (int i=0;i<n.getFixedChildCount();i++) {
+			unHangShapeFromNode("edge_circle_pos" + (i+1), n.getId());
 		}
+
 	}
 
 	public void clearErroneous() {
@@ -218,30 +198,42 @@ public class LogicalCanvas extends GraphCanvas{
 		}
 	}
 
-	private void clearEdgeConnectors(GraphNode n) {
+	private MouseUpHandler createEdgeShapeMouseHandler(final GraphNode n, final int pos) {
 
-		for (int i=0;i<n.getFixedChildCount();i++) {
-			unHangShapeFromNode("edge_circle_pos" + (i+1), n.getId());
-		}
+		return new MouseUpHandler() {
+
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+
+				state=3;
+				drawEdgeFrom = n;
+				drawEdgeFromPos = pos;
+
+				double y= n.getHeight()+3 + n.getY();
+				double x= n.getX() + (n.getWidth() / (getFreeChildEdgePositions(n).size() +1)) * pos;
+
+				currentNewEdgeDrawer = new NewEdgeDrawer(x, y, LogicalCanvas.this);
+				Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
+
+
+				while (it.hasNext()) {
+
+					GraphNode n = it.next();
+					clearEdgeConnectors(n);
+				}
+
+
+			}
+
+		};
+
 
 	}
 
 
-
-
-	public void enterNodeAddingMode(String addingModeNodeType) {
-
-		state=1;
-		this.addingModeNodeType= addingModeNodeType;
-		this.addStyleName("node-adding");
-
-	}
 
 
 	public void enterEdgeAddingMode() {
-
-		GWT.log("entering...");
-		
 
 		Iterator<GraphNode> it = super.getNodes().iterator();
 		boolean hasConnectors = false;
@@ -308,34 +300,30 @@ public class LogicalCanvas extends GraphCanvas{
 	}
 
 
-	private MouseUpHandler createEdgeShapeMouseHandler(final GraphNode n, final int pos) {
+	public void enterNodeAddingMode(String addingModeNodeType) {
 
-		return new MouseUpHandler() {
+		state=1;
+		this.addingModeNodeType= addingModeNodeType;
+		this.addStyleName("node-adding");
 
-			@Override
-			public void onMouseUp(MouseUpEvent event) {
-
-				state=3;
-				drawEdgeFrom = n;
-				drawEdgeFromPos = pos;
-
-				double y= n.getHeight()+3 + n.getY();
-				double x= n.getX() + (n.getWidth() / (getFreeChildEdgePositions(n).size() +1)) * pos;
-
-				currentNewEdgeDrawer = new NewEdgeDrawer(x, y, LogicalCanvas.this);
-				Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
-
-				
-				while (it.hasNext()) {
-
-					GraphNode n = it.next();
-					clearEdgeConnectors(n);
-				}
+	}
 
 
-			}
+	private GraphEdge getEdgeWithParentPos(ArrayList<GraphEdge> es,int p) {
 
-		};
+
+		Iterator<GraphEdge> it = es.iterator();
+
+		while (it.hasNext()) {
+
+			GraphEdge cur = it.next();
+
+			if (cur.getFixedParentPos() == p) return cur;
+
+
+		}
+
+		return null;
 
 
 	}
@@ -368,33 +356,15 @@ public class LogicalCanvas extends GraphCanvas{
 	}
 
 
-	private GraphEdge getEdgeWithParentPos(ArrayList<GraphEdge> es,int p) {
-
-
-		Iterator<GraphEdge> it = es.iterator();
-
-		while (it.hasNext()) {
-
-			GraphEdge cur = it.next();
-
-			if (cur.getFixedParentPos() == p) return cur;
-
-
-		}
-
-		return null;
-
-
+	public int getId() {
+		return id;
 	}
 
-	public void addSQLListener(int nid, RemoteManipulationServiceAsync rmsa, EvaluationContext c) {
-
-		SQLBubble listener = new SQLBubble(nid,this.getId(),rmsa,c,this);
-		GraphNode n = getGraphNodeById(nid);
-		super.hangWidgetOntoNode("sql-listener", new ConnectedWidget(listener,n.getWidth(),0), nid);
-		sqlBubbleList.put(nid, listener);
-		listener.update();
-
+	/**
+	 * @return the overEdgeConnector
+	 */
+	protected boolean isOverEdgeConnector() {
+		return overEdgeConnector;
 	}
 
 	public void removeSQLListener(SQLBubble b) {
@@ -405,21 +375,20 @@ public class LogicalCanvas extends GraphCanvas{
 
 	}
 
-	public void updateSQLListener() {
+	public void setErroneous(int nid) {
 
-		Iterator<SQLBubble> it = sqlBubbleList.values().iterator();
+		if (!(super.getGraphNodeById(nid) == null) && !super.getGraphNodeById(nid).getConnectedShapes().containsKey("__logicalplan_error")) {
 
-		while (it.hasNext()) it.next().update();
+			errorCount++;
+			myTabButton.setErrorCount(errorCount);
+			Text errorMark = new Text(0, 0,"!");
+			errorMark.getElement().setAttribute("class", "logicalplan-node-errormark-text");
+			errorMark.attr("fill","red");
+			errorMark.attr("font","35px Arial");
+			errorMark.attr("style","text-anchor: middle; font: 35px Arial;");
+			super.hangShapeOntoNode("__logicalplan_error", new ConnectedShape(errorMark, -6, -8), nid);				
 
-
-	}
-
-
-	/**
-	 * @return the overEdgeConnector
-	 */
-	protected boolean isOverEdgeConnector() {
-		return overEdgeConnector;
+		}
 	}
 
 
@@ -428,6 +397,16 @@ public class LogicalCanvas extends GraphCanvas{
 	 */
 	protected void setOverEdgeConnector(boolean overEdgeConnector) {
 		this.overEdgeConnector = overEdgeConnector;
+	}
+
+
+	public void updateSQLListener() {
+
+		Iterator<SQLBubble> it = sqlBubbleList.values().iterator();
+
+		while (it.hasNext()) it.next().update();
+
+
 	}
 
 

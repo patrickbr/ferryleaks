@@ -274,8 +274,8 @@ h1 {
 	background-position: 10px -1px;
 	background-repeat: no-repeat;
 	width: 160px;
-	white-space:nowrap;
-	overflow:hidden;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .gwt-StackLayoutPanel .gwt-StackLayoutPanelHeader {
@@ -513,7 +513,7 @@ table td,table {
 
 .controllbutton-download-plan {
 	background-image: url(icons_black.png);
-	background-position: -250px -188px;
+	background-position: -252px -188px;
 }
 
 .controllbutton-add {
@@ -549,6 +549,11 @@ table td,table {
 .controllbutton-eva {
 	background-image: url(icons_black.png);
 	background-position: -153px -220px;
+}
+
+.controllbutton-svg-plan {
+	background-image: url(icons_black.png);
+	background-position: -93px -30px;
 }
 
 #impressum {
@@ -802,57 +807,42 @@ body.hidden #loading #msg {
 
 .serialize-panel .iter-use-column,.serialize-panel .iter-use-value {
 	margin-left: 7px;
-
 }
 
 .database-panel-inner .gwt-InlineHTML {
-	
-	display:block;
-	width:150px;
-	float:left;
-	margin-left:10px;
-	
+	display: block;
+	width: 150px;
+	float: left;
+	margin-left: 10px;
 }
 
 .database-panel-inner .set-save-global-t {
-	
-
-	margin-top:30px;
-	margin-left:0px;
-	
+	margin-top: 30px;
+	margin-left: 0px;
 }
+
 .database-panel-inner .set-save-global input {
-	
-	
-	margin-top:30px;
-	
+	margin-top: 30px;
 }
 
-.database-panel-inner .gwt-TextBox,.database-panel-inner .gwt-PasswordTextBox {
-	
-	display:block
-		
+.database-panel-inner .gwt-TextBox,.database-panel-inner .gwt-PasswordTextBox
+	{
+	display: block
 }
 
 .serialize-panel  .gwt-Label,.database-panel-inner .gwt-Label {
-	
-	margin-top:10px;
-	margin-bottom:5px;
-	
+	margin-top: 10px;
+	margin-bottom: 5px;
 }
 
 .eval-item-columns-available {
-
-		margin-left:178px;	
-	
+	margin-left: 178px;
 }
 
 .iter-use-value,.iter-use-column,.sort-column-button {
-	
-	display:block;
-	width:170px;
-	float:left;	
-	
+	display: block;
+	width: 170px;
+	float: left;
 }
 
 .sort-column-button {
@@ -861,15 +851,15 @@ body.hidden #loading #msg {
 
 .use-sort-predef-button {
 	margin-left: 7px;
-	display:block;
-	width:170px;
-	float:left;
+	display: block;
+	width: 170px;
+	float: left;
 }
 
 .serialize-panel .value-text-box {
 	margin-right: 15px;
 	width: 80px;
-	display:block;
+	display: block;
 }
 
 #debuggerl {
@@ -947,7 +937,9 @@ body.hidden #loading #msg {
 }
 
 .gwt-ListBox {
+	min-width: 70px;
+}
 
-	min-width:70px;
-
+.error-inner {
+	min-width: 200px;
 }

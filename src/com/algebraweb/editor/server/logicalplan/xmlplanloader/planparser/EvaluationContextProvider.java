@@ -1,7 +1,6 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -10,24 +9,68 @@ import javax.servlet.http.HttpSession;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
+import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.node.QueryPlan;
 
 public class EvaluationContextProvider {
 
 
-	private HttpSession session;
-	
-	public EvaluationContextProvider(HttpSession session) {
-		this.session=session;
+	private class ItemCol implements Comparable<ItemCol> {
+
+
+
+		private int pos;
+		private String name;
+
+
+		public ItemCol(String name, int pos) {
+
+			this.name=name;
+			this.pos=pos;
+
+		}
+
+
+		@Override
+		public int compareTo(ItemCol arg0) {
+			return this.pos = arg0.getPos();
+		}
+
+
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+
+		/**
+		 * @return the pos
+		 */
+		public int getPos() {
+			return pos;
+		}
+
+
+
+
+
 	}
+	
+	private HttpSession session;
 
 	//TODO should be in a special pipeline kind of class
 	//maybe interface
 
-	public void fillEvaluationContext(QueryPlan p) throws GraphNotConnectedException {
+	public EvaluationContextProvider(HttpSession session) {
+		this.session=session;
+	}
+
+
+	public void fillEvaluationContext(QueryPlan p) throws GraphNotConnectedException, PlanHasCycleException {
 
 		PlanNode root;
 
@@ -111,50 +154,6 @@ public class EvaluationContextProvider {
 		}
 
 		p.setEvContext(c);
-
-
-	}
-
-
-	private class ItemCol implements Comparable<ItemCol> {
-
-
-
-		private int pos;
-		private String name;
-
-
-		public ItemCol(String name, int pos) {
-
-			this.name=name;
-			this.pos=pos;
-
-		}
-
-
-		@Override
-		public int compareTo(ItemCol arg0) {
-			return this.pos = arg0.getPos();
-		}
-
-
-		/**
-		 * @return the pos
-		 */
-		public int getPos() {
-			return pos;
-		}
-
-
-		/**
-		 * @return the name
-		 */
-		public String getName() {
-			return name;
-		}
-
-
-
 
 
 	}

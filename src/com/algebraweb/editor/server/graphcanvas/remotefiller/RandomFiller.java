@@ -12,18 +12,6 @@ public class RandomFiller implements GraphCanvasFiller {
 	private int count=0;
 	private int edgeCount =0;
 
-	@Override
-	public boolean hasNextEdge() {
-		
-		return (edgeCount < 100);
-	}
-
-	@Override
-	public boolean hasNextNode() {
-		howManyNodes--;
-		return (howManyNodes > -1);
-	}
-
 	public int getTo(int fromid) {
 		
 				
@@ -44,6 +32,29 @@ public class RandomFiller implements GraphCanvasFiller {
 	}
 
 	@Override
+	public boolean hasNextEdge() {
+		
+		return (edgeCount < 100);
+	}
+
+	@Override
+	public boolean hasNextNode() {
+		howManyNodes--;
+		return (howManyNodes > -1);
+	}
+
+	@Override
+	public void init() {
+		
+		
+		howManyNodes = 80;
+		count=0;
+	    edgeCount =0;
+		
+		
+	}
+
+	@Override
 	public RawNode nextNode() {
 		
 		count++;
@@ -58,17 +69,6 @@ public class RandomFiller implements GraphCanvasFiller {
 		
 		return n;
 	
-	}
-
-	@Override
-	public void init() {
-		
-		
-		howManyNodes = 80;
-		count=0;
-	    edgeCount =0;
-		
-		
 	}
 
 }

@@ -20,88 +20,48 @@ public class RemoteSorter implements GraphSorter {
 
 	private RemoteSorterServiceAsync commServ;
 	private ArrayList<GraphNode> nodes;
-	private ArrayList<GraphEdge> edges;
 
 	private String sorter;
 
 	public RemoteSorter(String sorter) {
-
-
 		commServ = (RemoteSorterServiceAsync) GWT.create(RemoteSorterService.class);
-
 		this.sorter=sorter;
-
 	}
-
 
 	@Override
 	public void doSort(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges,GraphManipulationCallback cb) {
 
-		
 		this.nodes=nodes;
-		this.edges=edges;
 
 		//TODO: this should be in an external class, maybe static
 
 		ArrayList<RawNode> rawNodeList = new ArrayList<RawNode>();
-
 		Iterator<GraphNode> i = nodes.iterator();
-
 		while (i.hasNext()) {
 
 			GraphNode c= i.next();
-
 			RawNode nNode = new RawNode(c.getId(),c.getTextString(),c.getColor(),c.getWidth(),c.getHeight());
-
 			Iterator<GraphEdge> u = c.getEdgesFrom().iterator();
 
 			while (u.hasNext()) {
-
 				GraphEdge current = u.next();
-
 				nNode.getEdgesToList().add(new RawEdge(current.getTo().getId(), current.getFrom().getId()));
-
 			}
-
 			rawNodeList.add(nNode);
 		}
 
 		AlgebraEditor.log("Sorting with sorter '" + sorter + "'");
 		commServ.doSort(sorter,rawNodeList, sortedCallback(cb));
-
 	}
-
 
 	private void processPositionTuples(HashMap<Integer,Coordinate> tuples, GraphManipulationCallback cb) {
-
-		
-
 		writePositionTuplesToGraphNodes(tuples,nodes);
 		cb.onComplete();
-
 	}
 
-
-	public void writePositionTuplesToGraphNodes(HashMap<Integer, Coordinate> tuples, ArrayList<GraphNode> nodes) {
-		
-		Iterator<GraphNode> i = nodes.iterator();
-
-		while (i.hasNext()) {
-
-			GraphNode current = i.next();
-
-			current.setX(tuples.get(current.getId()).getX());
-			current.setY(tuples.get(current.getId()).getY());
-
-			Iterator<GraphEdge> ei = current.getEdgesFrom().iterator();
-
-		}
-	}
-
-
+	//TODO
 	private AsyncCallback<HashMap<Integer,Coordinate>> sortedCallback(final GraphManipulationCallback cb) {
 		return new AsyncCallback<HashMap<Integer,Coordinate>>() {
-
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -110,15 +70,18 @@ public class RemoteSorter implements GraphSorter {
 
 			@Override
 			public void onSuccess(HashMap<Integer,Coordinate> result) {
-
 				processPositionTuples(result,cb);
-
 			}
-
 		};
 	}
 
+	public void writePositionTuplesToGraphNodes(HashMap<Integer, Coordinate> tuples, ArrayList<GraphNode> nodes) {
+		Iterator<GraphNode> i = nodes.iterator();
 
-
-
+		while (i.hasNext()) {
+			GraphNode current = i.next();
+			current.setX(tuples.get(current.getId()).getX());
+			current.setY(tuples.get(current.getId()).getY());
+		}
+	}
 }

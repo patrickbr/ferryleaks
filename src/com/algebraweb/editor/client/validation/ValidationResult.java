@@ -1,6 +1,5 @@
 package com.algebraweb.editor.client.validation;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -30,26 +29,26 @@ public class ValidationResult implements IsSerializable {
 		
 	}
 
-	public ArrayList<ValidationError> getErrors() {
-		return errors;
-	}
-
 	public void addError(ValidationError e){
 		this.errors.add(e);
+	}
+
+	public ArrayList<ValidationError> getErrors() {
+		return errors;
 	}
 
 	public int getPlanid() {
 		return planid;
 	}
 
-	public void setPlanid(int planid) {
-		this.planid = planid;
-	}
-	
 	public boolean hasErrors() {
 		
 		return errors.size() > 0;
 		
+	}
+	
+	public void setPlanid(int planid) {
+		this.planid = planid;
 	}
 	
 

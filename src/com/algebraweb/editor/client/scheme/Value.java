@@ -20,6 +20,11 @@ public class Value extends GoInto{
 	}
 	
 
+	public Value(String xmlObject, String howOften, String valName, String humanName) {
+		super(xmlObject, howOften,humanName);
+		this.valName=valName;
+	}
+	
 	public Value(String xmlObject, String howOften, String valName, String humanName,String nameToPrint,boolean hasVal) {
 	
 		this(xmlObject, howOften, valName, humanName);
@@ -28,25 +33,21 @@ public class Value extends GoInto{
 		
 	}
 	
-	public Value(String xmlObject, String howOften, String valName, String humanName) {
-		super(xmlObject, howOften,humanName);
-		this.valName=valName;
-	}
 	
-	
-	public boolean hasVal() {
-		return hasVal;
+	public void addField(Field f) {
+		this.fields.add(f);
 	}
 
 
+	@Override
+	public ArrayList<Field> getFields() {
+		return fields;
+	}
+	
 	public String getNameToPrint() {
 		
 		return nameToPrint;
 		
-	}
-	
-	public void addField(Field f) {
-		this.fields.add(f);
 	}
 	
 	public String getValName() {
@@ -54,21 +55,22 @@ public class Value extends GoInto{
 	}
 
 
-	public void setValName(String valName) {
-		this.valName = valName;
+	@Override
+	public boolean hasFields() {
+		return fields.size()>0;
 	}
 
+
+	public boolean hasVal() {
+		return hasVal;
+	}
 
 	public void setFields(ArrayList<Field> fields) {
 		this.fields = fields;
 	}
-
-	public ArrayList<Field> getFields() {
-		return fields;
-	}
 	
-	public boolean hasFields() {
-		return fields.size()>0;
+	public void setValName(String valName) {
+		this.valName = valName;
 	}
 	
 	
@@ -76,6 +78,7 @@ public class Value extends GoInto{
 
 
 
+	@Override
 	public String toString() {
 		
 		String ret =  "{VAL: name=" + valName + " howOften=" + super.howOften + " XMLob:" + super.xmlObject + " childs:(";

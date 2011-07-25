@@ -7,13 +7,13 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public interface GoAble extends IsSerializable  {
 	
 	
-	public ArrayList<GoAble> getSchema();
-	public boolean hasChilds();
-	public String getXmlObject();
-	public String getInternalName();
-	public String getHumanName();
-	public String getHowOften();
 	public ArrayList<Field> getFields();
+	public String getHowOften();
+	public String getHumanName();
+	public String getInternalName();
+	public ArrayList<GoAble> getSchema();
+	public String getXmlObject();
+	public boolean hasChilds();
 	
 	public boolean hasFields();
 	public boolean isEditable();

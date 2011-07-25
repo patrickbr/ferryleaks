@@ -1,7 +1,6 @@
 package com.algebraweb.editor.client.graphcanvas;
 
 import com.algebraweb.editor.client.TabContextMenuItem;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
@@ -12,10 +11,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.InlineHTML;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TabContextMenu extends ContextMenu{
 
@@ -27,17 +23,6 @@ public class TabContextMenu extends ContextMenu{
 		super();
 
 	}
-
-	public void show(int pid, int x, int y) {
-
-		GWT.log("showing...");
-		super.show(x,y);
-
-		this.pid=pid;
-
-
-	}
-
 
 	public void addItem(final TabContextMenuItem i) {
 
@@ -92,6 +77,14 @@ public class TabContextMenu extends ContextMenu{
 		tmp.add(text);
 
 		super.getRows().add(tmp);
+
+	}
+
+
+	public void show(int pid, int x, int y) {
+
+		super.show(x,y);
+		this.pid=pid;
 
 	}
 

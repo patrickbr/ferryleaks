@@ -1,16 +1,11 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
-import com.algebraweb.editor.client.RemoteManipulationService;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.NodeContent;
-import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.PropertyValue;
 import com.algebraweb.editor.client.node.ValGroup;
 import com.algebraweb.editor.client.scheme.Field;
@@ -18,9 +13,6 @@ import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.GoInto;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.scheme.Value;
-import com.algebraweb.editor.client.validation.ValidationError;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -48,15 +40,23 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 	}
 
 
-	@Override
-	public void setSelected(boolean selected) {
+	private TreeItem addContent(NodeContent current) {
+		NodeTreeItem cntt = new ContentNodeTreeItem(manServ,current,scheme);
 
-		if (selected) {
-			this.getWidget().getElement().getStyle().setBackgroundColor("#CCC");
-		}else{
-			this.getWidget().getElement().getStyle().setBackgroundColor("");
+		Iterator<GoAble> schemas = scheme.getSchema().iterator();
+
+		while (schemas.hasNext()) {
+
+			GoAble currentSchema = schemas.next();
+
+			cntt.addItem(new LogicalSchemeTreeItem(manServ,currentSchema, current));
+			cntt.setState(true, true);
+
 		}
 
+		this.addItem(cntt);
+		return cntt;
+		
 	}
 
 
@@ -101,6 +101,22 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 
 
 
+	public boolean deleteContent(ContentNodeTreeItem current) {
+		
+		boolean success = this.content.getContent().remove(current.getContentNode());
+		
+		current.remove();
+		
+		
+		return success;
+		
+		
+	}
+
+	public GoAble getScheme() {
+		return scheme;
+	}
+
 	private void processItems() {
 
 
@@ -135,39 +151,15 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 		}
 	}
 
-	public boolean deleteContent(ContentNodeTreeItem current) {
-		
-		boolean success = this.content.getContent().remove(current.getContentNode());
-		
-		current.remove();
-		
-		
-		return success;
-		
-		
-	}
+	@Override
+	public void setSelected(boolean selected) {
 
-	private TreeItem addContent(NodeContent current) {
-		NodeTreeItem cntt = new ContentNodeTreeItem(manServ,current,scheme);
-
-		Iterator<GoAble> schemas = scheme.getSchema().iterator();
-
-		while (schemas.hasNext()) {
-
-			GoAble currentSchema = schemas.next();
-
-			cntt.addItem(new LogicalSchemeTreeItem(manServ,currentSchema, current));
-			cntt.setState(true, true);
-
+		if (selected) {
+			this.getWidget().getElement().getStyle().setBackgroundColor("#CCC");
+		}else{
+			this.getWidget().getElement().getStyle().setBackgroundColor("");
 		}
 
-		this.addItem(cntt);
-		return cntt;
-		
-	}
-
-	public GoAble getScheme() {
-		return scheme;
 	}
 
 

@@ -12,13 +12,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
-
 
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
@@ -88,6 +86,75 @@ public class DotSorter implements RemoteSorter {
 	}
 	
 	/**
+	 * Returns a string containing the dot-code of the graph specified in nodes
+	 * @param nodes
+	 * @return
+	 */
+
+	private String getDotCode(ArrayList<RawNode> nodes) {
+
+		String ret = "digraph sort_graph {\n graph [ordering=out];";
+
+		Iterator<RawNode> i = nodes.iterator();
+
+		while (i.hasNext()) {
+
+			ret += getDotNodeString(i.next()) + "\n";
+
+		}
+
+		ret +="\n\n";
+		Iterator<RawNode> j = nodes.iterator();
+
+		while (j.hasNext()) {
+
+			RawNode current = j.next();
+			Iterator<RawEdge> it = current.getEdgesToList().iterator();
+
+			while (it.hasNext()) {
+
+				ret += getDotEdgeString(current.getNid(), it.next().getTo()) + "\n";
+			}
+		}
+
+		ret +="}";
+		return ret;
+	}
+	
+	/**
+	 * Returns the dot code for an edge (from,to)
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+
+	private String getDotEdgeString(int from, int to) {
+
+		return "n_" + from + " -> n_" + to + ";";
+
+	}
+
+	/**
+	 * Returns the dot code for a given RawNode 
+	 * @param n
+	 * @return
+	 */
+
+	private String getDotNodeString(RawNode n) {
+
+		double width = (n.getWidth()) * DOT_CORRECTOR; 
+		double height = (n.getHeight()) * DOT_CORRECTOR;
+
+		String ret ="";
+
+		ret += "n_" + n.getNid() + " ";
+		ret += "[shape=box fixedsize=true width=" + width + " height=" + height + " label=\"" + n.getText() + "\"];";
+
+		return ret;	
+
+	}
+	
+	/**
 	 * returns an XML-Document containing dot's generated SVG
 	 * @param dotSource
 	 * @return
@@ -141,75 +208,6 @@ public class DotSorter implements RemoteSorter {
 
 
 		return null;
-
-	}
-	
-	/**
-	 * Returns a string containing the dot-code of the graph specified in nodes
-	 * @param nodes
-	 * @return
-	 */
-
-	private String getDotCode(ArrayList<RawNode> nodes) {
-
-		String ret = "digraph sort_graph {\n graph [ordering=out];";
-
-		Iterator<RawNode> i = nodes.iterator();
-
-		while (i.hasNext()) {
-
-			ret += getDotNodeString(i.next()) + "\n";
-
-		}
-
-		ret +="\n\n";
-		Iterator<RawNode> j = nodes.iterator();
-
-		while (j.hasNext()) {
-
-			RawNode current = j.next();
-			Iterator<RawEdge> it = current.getEdgesToList().iterator();
-
-			while (it.hasNext()) {
-
-				ret += getDotEdgeString(current.getNid(), it.next().getTo()) + "\n";
-			}
-		}
-
-		ret +="}";
-		return ret;
-	}
-
-	/**
-	 * Returns the dot code for a given RawNode 
-	 * @param n
-	 * @return
-	 */
-
-	private String getDotNodeString(RawNode n) {
-
-		double width = ((double)n.getWidth()) * DOT_CORRECTOR; 
-		double height = ((double)n.getHeight()) * DOT_CORRECTOR;
-
-		String ret ="";
-
-		ret += "n_" + n.getNid() + " ";
-		ret += "[shape=box fixedsize=true width=" + width + " height=" + height + " label=\"" + n.getText() + "\"];";
-
-		return ret;	
-
-	}
-	
-	/**
-	 * Returns the dot code for an edge (from,to)
-	 * @param from
-	 * @param to
-	 * @return
-	 */
-
-	private String getDotEdgeString(int from, int to) {
-
-		return "n_" + from + " -> n_" + to + ";";
 
 	}
 

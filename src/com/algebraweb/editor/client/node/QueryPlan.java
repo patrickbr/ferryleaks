@@ -2,12 +2,12 @@ package com.algebraweb.editor.client.node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
+import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.GoInto;
 import com.algebraweb.editor.client.scheme.NodeScheme;
@@ -32,32 +32,15 @@ public class QueryPlan implements Serializable {
 	
 
 
-	public QueryPlan(int id) {
-		this.id=id;
-	}
-
 	public QueryPlan() {
 
 	}
+
+	public QueryPlan(int id) {
+		this.id=id;
+	}
 	
 	
-
-	public ArrayList<Property> getProperties() {
-		return properties;
-	}
-	public void setProperties(ArrayList<Property> properties) {
-		this.properties = properties;
-	}
-	public ArrayList<PlanNode> getPlan() {
-		return plan;
-	}
-	public void setPlan(ArrayList<PlanNode> plan) {
-		this.plan = plan;
-	}
-
-	public int getId() {
-		return id;
-	}
 
 	public PlanNode addNode(NodeScheme s) {
 
@@ -89,22 +72,25 @@ public class QueryPlan implements Serializable {
 		return n;
 
 	}
+	private void deleteChildsFromPlan(PlanNode p, ArrayList<PlanNode> plan) {
+
+		Iterator<PlanNode> it = p.getChilds().iterator();
+
+		while (it.hasNext()) {
+
+			PlanNode current = it.next();
+			plan.remove(current);
+
+		}
 
 
+	}
 	/**
 	 * @return the evContext
 	 */
 	public EvaluationContext getEvContext() {
 		return evContext;
 	}
-
-	/**
-	 * @param evContext the evContext to set
-	 */
-	public void setEvContext(EvaluationContext evContext) {
-		this.evContext = evContext;
-	}
-
 	public int getFreeId() {
 
 		return getFreeId(new ArrayList<Integer>());
@@ -125,19 +111,28 @@ public class QueryPlan implements Serializable {
 
 	}
 
-	public String toString() {
+	public int getId() {
+		return id;
+	}
 
-		String ret = "";
-		Iterator<PlanNode> i = plan.iterator();
 
-		while (i.hasNext()) {
-			
-			PlanNode cur = i.next();
-			
-			if (cur != null) ret += i.next().toString() + "\n";
+	public ArrayList<PlanNode> getParents(PlanNode n) {
+		
+		ArrayList<PlanNode> ret = new ArrayList<PlanNode>();
+		
+		Iterator<PlanNode> it = getPlan().iterator();
+		
+		while (it.hasNext()) {
+			PlanNode cur = it.next();
+			if(cur != null && cur.getChilds().contains(n)) ret.add(cur);
 		}
-
+				
 		return ret;
+		
+	}
+
+	public ArrayList<PlanNode> getPlan() {
+		return plan;
 	}
 
 	public PlanNode getPlanNodeById(int id) {
@@ -155,12 +150,16 @@ public class QueryPlan implements Serializable {
 		return null;
 
 	}
-	
-	public PlanNode getRootNode() throws GraphNotConnectedException, GraphIsEmptyException{
+
+	public ArrayList<Property> getProperties() {
+		return properties;
+	}
+
+	public PlanNode getRootNode() throws GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException{
 		return getRootNode(true);
 	}
-	
-	public PlanNode getRootNode(boolean skipSerializeRelation) throws GraphNotConnectedException, GraphIsEmptyException{
+
+	public PlanNode getRootNode(boolean skipSerializeRelation) throws GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException{
 
 		ArrayList<PlanNode> temp = new ArrayList<PlanNode>();
 
@@ -176,6 +175,8 @@ public class QueryPlan implements Serializable {
 
 		}
 		
+		if (temp.size() == 0) throw new PlanHasCycleException(this.getPlan().get(0).getId());
+		
 		if (temp.size()>1) throw new GraphNotConnectedException();
 
 		//TODO: throws error if plan has cycle
@@ -189,34 +190,36 @@ public class QueryPlan implements Serializable {
 
 	}
 	
+	/**
+	 * @param evContext the evContext to set
+	 */
+	public void setEvContext(EvaluationContext evContext) {
+		this.evContext = evContext;
+	}
+	
+	public void setPlan(ArrayList<PlanNode> plan) {
+		this.plan = plan;
+	}
+	
 
-	private void deleteChildsFromPlan(PlanNode p, ArrayList<PlanNode> plan) {
-
-		Iterator<PlanNode> it = p.getChilds().iterator();
-
-		while (it.hasNext()) {
-
-			PlanNode current = it.next();
-			plan.remove(current);
-
-		}
-
-
+	public void setProperties(ArrayList<Property> properties) {
+		this.properties = properties;
 	}
 
-	public ArrayList<PlanNode> getParents(PlanNode n) {
-		
-		ArrayList<PlanNode> ret = new ArrayList<PlanNode>();
-		
-		Iterator<PlanNode> it = getPlan().iterator();
-		
-		while (it.hasNext()) {
-			PlanNode cur = it.next();
-			if(cur != null && cur.getChilds().contains(n)) ret.add(cur);
+	@Override
+	public String toString() {
+
+		String ret = "";
+		Iterator<PlanNode> i = plan.iterator();
+
+		while (i.hasNext()) {
+			
+			PlanNode cur = i.next();
+			
+			if (cur != null) ret += i.next().toString() + "\n";
 		}
-				
+
 		return ret;
-		
 	}
 
 

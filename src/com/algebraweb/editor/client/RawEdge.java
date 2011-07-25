@@ -22,28 +22,28 @@ public class RawEdge implements IsSerializable  {
 		this.from=from;
 	}
 	
-	public int getTo() {
-		return to;
+	public double[] getAnchors() {
+		
+		return anchors;
+	}
+	
+	/**
+	 * @return the fixedParentPos
+	 */
+	public int getFixedParentPos() {
+		return fixedParentPos;
 	}
 	
 	public int getFrom() {
 		return from;
 	}
 	
-	public void setAnchors(double[] anchors) {
-		this.anchors=anchors;
-	}
-	
-	public double[] getAnchors() {
-		
-		return anchors;
+	public int getTo() {
+		return to;
 	}
 
-	/**
-	 * @return the fixedParentPos
-	 */
-	public int getFixedParentPos() {
-		return fixedParentPos;
+	public void setAnchors(double[] anchors) {
+		this.anchors=anchors;
 	}
 
 	/**
@@ -53,6 +53,4 @@ public class RawEdge implements IsSerializable  {
 		this.fixedParentPos = fixedParentPos;
 	}
 	
-	
-
 }

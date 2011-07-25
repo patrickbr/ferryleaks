@@ -2,12 +2,8 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.node.PropertyValue;
 import com.algebraweb.editor.client.scheme.Field;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,6 +34,28 @@ public class PropertyEditTextField extends PropertyEditField{
 		
 	}
 		
+	@Override
+	public void bindToPropertyVal(PropertyValue pv) {
+		
+		super.bindToPropertyVal(pv);		
+		fieldContent.setText(pv.getVal());
+		
+		
+	}
+	
+	protected Widget getInputElement() {
+		
+		return fieldContent;
+		
+	}
+		
+	@Override
+	public void save() {
+		pv.setVal(fieldContent.getText());
+		
+		
+	}
+	
 	public void setErroneous(boolean erroneous) {
 		
 		if (erroneous) {
@@ -54,12 +72,8 @@ public class PropertyEditTextField extends PropertyEditField{
 		
 	}
 	
-	protected Widget getInputElement() {
-		
-		return fieldContent;
-		
-	}
-		
+
+	@Override
 	public void setLocked(boolean locked) {
 		
 		super.setLocked(locked);
@@ -75,23 +89,6 @@ public class PropertyEditTextField extends PropertyEditField{
 			fieldContent.setReadOnly(false);
 			
 		}
-		
-	}
-	
-	public void bindToPropertyVal(PropertyValue pv) {
-		
-		super.bindToPropertyVal(pv);		
-		fieldContent.setText(pv.getVal());
-		
-		
-	}
-	
-
-	public void save() {
-		
-		GWT.log("Saving value " + fieldContent.getText());
-		pv.setVal(fieldContent.getText());
-		
 		
 	}
 	

@@ -1,10 +1,6 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class AddSQListenerDIalog extends EvaluationDialog{
 

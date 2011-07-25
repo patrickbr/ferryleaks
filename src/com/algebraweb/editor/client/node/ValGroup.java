@@ -1,12 +1,7 @@
 package com.algebraweb.editor.client.node;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-
-import com.algebraweb.editor.client.scheme.Field;
-import com.algebraweb.editor.client.scheme.GoAble;
-import com.algebraweb.editor.client.scheme.Value;
 
 /**
  * A group of node values with no own parameters. On editing 
@@ -27,6 +22,12 @@ public class ValGroup extends NodeContent {
 	
 
 		
+	public ValGroup() {
+		
+		
+		
+	}
+	
 	public ValGroup(String name) {
 		
 		this.name=name;
@@ -35,37 +36,42 @@ public class ValGroup extends NodeContent {
 		this.internalName = name;
 				
 	}
-	
-	public ValGroup() {
-		
-		
-		
-	}
 
+	@Override
 	public ArrayList<NodeContent> getContent() {
 		return childs;
 	}
 
-	public void setChilds(ArrayList<NodeContent> childs) {
-		this.childs = childs;
+	/**
+	@Override
+	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
+		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
+		
+		Iterator<NodeContent> i = childs.iterator();
+				
+		while (i.hasNext()) {
+			
+			NodeContent c = i.next();
+			if (c.getInternalName().equals(name)) temp.add(c);
+								
+		}
+		
+		return temp;
+	}
+	*/
+
+	@Override
+	public String getInternalName() {
+		
+		return internalName;
 	}
 
 
 	
 	//TODO: experimental
 	
-	public String toString() {
-		
-		String ret = "{VALGROUP '" + name + "' childs:";
-		Iterator<NodeContent> i = childs.iterator();
-				
-		while (i.hasNext()) {
-			
-			ret+=i.next().toString();
-			
-		}
-		
-		return ret + "}";
+	public void setChilds(ArrayList<NodeContent> childs) {
+		this.childs = childs;
 	}
 	
 	/**
@@ -112,28 +118,19 @@ public class ValGroup extends NodeContent {
 	}
 	**/
 
-	/**
 	@Override
-	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
-		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
+	public String toString() {
 		
+		String ret = "{VALGROUP '" + name + "' childs:";
 		Iterator<NodeContent> i = childs.iterator();
 				
 		while (i.hasNext()) {
 			
-			NodeContent c = i.next();
-			if (c.getInternalName().equals(name)) temp.add(c);
-								
+			ret+=i.next().toString();
+			
 		}
 		
-		return temp;
-	}
-	*/
-
-	@Override
-	public String getInternalName() {
-		
-		return internalName;
+		return ret + "}";
 	}
 
 	

@@ -12,15 +12,15 @@ public class Property implements IsSerializable {
 
 	ArrayList<Property> properties = new ArrayList<Property>();
 
+	public Property() {
+		
+	}
+	
 	public Property(String name, PropertyValue value) {
 
 		this.propertyName = name;
 		this.propertyVal = value;
 
-	}
-	
-	public Property() {
-		
 	}
 
 	public Property(String name, String value, String type) {
@@ -30,24 +30,24 @@ public class Property implements IsSerializable {
 
 	}
 
-	public String getPropertyName() {
-		return propertyName;
+	public ArrayList<Property> getProperties() {
+		return properties;
 	}
 
-	public void setPropertyName(String propertyName) {
-		this.propertyName = propertyName;
+	public String getPropertyName() {
+		return propertyName;
 	}
 
 	public PropertyValue getPropertyVal() {
 		return propertyVal;
 	}
 
-	public void setPropertyVal(PropertyValue propertyVal) {
-		this.propertyVal = propertyVal;
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
 	}
 
-	public ArrayList<Property> getProperties() {
-		return properties;
+	public void setPropertyVal(PropertyValue propertyVal) {
+		this.propertyVal = propertyVal;
 	}
 
 

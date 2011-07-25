@@ -6,7 +6,6 @@ import javax.servlet.http.HttpSession;
 import com.algebraweb.editor.client.Configuration;
 import com.algebraweb.editor.client.ConfigurationWithPlansInSession;
 import com.algebraweb.editor.client.RegistrationService;
-import com.algebraweb.editor.client.RemoteManipulationService;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

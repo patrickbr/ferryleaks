@@ -21,51 +21,14 @@ public class NodeScheme implements IsSerializable,GoAble{
 		this.kind=kind;
 	}
 
-	public String getKind() {
-		return kind;
-	}
-
-	public void setKind(String kind) {
-		this.kind = kind;
-	}
-
-	public String getHumanName() {
-		return "Scheme of type '"+ kind + "'";
-	}
-
-
-	public void setSchema(ArrayList<GoAble> schema) {
-		this.schema = schema;
-	}
-
-
-	public HashMap<String,String> getProperties() {
-		return properties;
-	}
-
-	public ArrayList<GoAble> getSchema() {
-		return schema;
-	}
-
 	public void addToSchema(GoAble goAble) {
 		this.schema.add(goAble);
 	}
 
-	public String toString() {
+	@Override
+	public ArrayList<Field> getFields() {
 
-		Iterator<GoAble> i = schema.iterator();
-
-		String ret ="";
-
-		while(i.hasNext()) {
-
-			ret+="\n" + i.next().toString();
-
-		}
-
-		return ret;
-
-
+		return null;
 	}
 
 	@Override
@@ -73,9 +36,27 @@ public class NodeScheme implements IsSerializable,GoAble{
 		return "1";
 	}
 
+
+	public String getHumanName() {
+		return "Scheme of type '"+ kind + "'";
+	}
+
+
 	@Override
 	public String getInternalName() {
 		return "_scheme_" + kind;
+	}
+
+	public String getKind() {
+		return kind;
+	}
+
+	public HashMap<String,String> getProperties() {
+		return properties;
+	}
+
+	public ArrayList<GoAble> getSchema() {
+		return schema;
 	}
 
 	@Override
@@ -87,12 +68,6 @@ public class NodeScheme implements IsSerializable,GoAble{
 	public boolean hasChilds() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public ArrayList<Field> getFields() {
-
-		return null;
 	}
 
 	@Override
@@ -108,6 +83,32 @@ public class NodeScheme implements IsSerializable,GoAble{
 
 	@Override
 	public void setEditable(boolean editable) {
+
+	}
+
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
+
+	public void setSchema(ArrayList<GoAble> schema) {
+		this.schema = schema;
+	}
+
+	@Override
+	public String toString() {
+
+		Iterator<GoAble> i = schema.iterator();
+
+		String ret ="";
+
+		while(i.hasNext()) {
+
+			ret+="\n" + i.next().toString();
+
+		}
+
+		return ret;
+
 
 	}
 

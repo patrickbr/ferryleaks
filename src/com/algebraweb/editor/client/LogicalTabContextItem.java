@@ -4,13 +4,9 @@ public abstract class LogicalTabContextItem implements TabContextMenuItem {
 
 	private String title;
 
-
 	public LogicalTabContextItem(String title) {
-
 		this.title=title;
-	
 	}
-
 
 	@Override
 	public String getItemTitle() {

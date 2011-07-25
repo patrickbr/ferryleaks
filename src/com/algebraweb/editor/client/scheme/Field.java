@@ -16,49 +16,10 @@ public class Field implements IsSerializable{
 	}
 	
 	
-	public String getMust_be() {
-		return must_be;
-	}
-
-	public void setMust_be(String mustBe) {
-		must_be = mustBe;
-		hasMustBe=true;
-	}
-
-
 	public Field(String type,String val) {
 		this.type=type;
 		this.val=val;
 	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getVal() {
-		return val;
-	}
-	
-	public boolean hasMustBe() {
-		return hasMustBe;
-	}
-	
-	public boolean hasCanBe() {
-		return hasCanBe;
-	}
-
-	public void setVal(String val) {
-		this.val = val;
-	}
-	
-	public String toString() {
-		return "[" + val + "=" + type +"]";
-	}
-
 
 	/**
 	 * @return the canBe
@@ -68,12 +29,52 @@ public class Field implements IsSerializable{
 	}
 
 
+	public String getMust_be() {
+		return must_be;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public String getVal() {
+		return val;
+	}
+
+	public boolean hasCanBe() {
+		return hasCanBe;
+	}
+	
+	public boolean hasMustBe() {
+		return hasMustBe;
+	}
+	
 	/**
 	 * @param canBe the canBe to set
 	 */
 	public void setCanBe(String[] canBe) {
 		this.canBe = canBe;
 		this.hasCanBe=true;
+	}
+
+	public void setMust_be(String mustBe) {
+		must_be = mustBe;
+		hasMustBe=true;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	public void setVal(String val) {
+		this.val = val;
+	}
+
+
+	@Override
+	public String toString() {
+		return "[" + val + "=" + type +"]";
 	}
 	
 	

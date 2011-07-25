@@ -15,6 +15,23 @@ public class NodeEditSourcePanel extends LayoutPanel {
 	private int nid;
 	private int pid;
 	
+	private AsyncCallback<String> xmlCb = new AsyncCallback<String>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(String result) {
+			editArea.setText(result);
+			
+		}
+		
+	};
+	
+	
 	public NodeEditSourcePanel(int nid,int pid,RemoteManipulationServiceAsync manServ,PlanModelManipulator pmm) {
 		
 		super();
@@ -40,23 +57,6 @@ public class NodeEditSourcePanel extends LayoutPanel {
 		
 		
 	}
-	
-	
-	private AsyncCallback<String> xmlCb = new AsyncCallback<String>() {
-
-		@Override
-		public void onFailure(Throwable caught) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onSuccess(String result) {
-			editArea.setText(result);
-			
-		}
-		
-	};
 	
 
 }

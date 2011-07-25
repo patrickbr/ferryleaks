@@ -34,6 +34,15 @@ import com.algebraweb.editor.client.scheme.Value;
 
 public class NodeSchemeLoader {
 
+	private class SchemeFileFilter implements FileFilter
+	{
+		public boolean accept(File file)
+		{
+			return (file.getName().toLowerCase().endsWith(".scheme.xml"));
+		}
+
+	}
+
 	private File file;
 
 	/**
@@ -45,6 +54,79 @@ public class NodeSchemeLoader {
 	public NodeSchemeLoader(String file) {
 		this.file = new File(file);
 	}
+
+	private ArrayList<Node> getDirectElementsByTagName(String t, Node e) {
+
+		NodeList n = e.getChildNodes();
+		ArrayList<Node> ret = new ArrayList<Node>();
+
+		for (int i=0;i<n.getLength();i++) {
+
+			if (n.item(i).getNodeName().equals(t)) {
+
+				ret.add(n.item(i));
+			}
+		}
+		return ret;
+	}
+
+	private Element getFirstDirectElementsByTagName(String t, Node e) {
+
+		ArrayList<Node> candidates = getDirectElementsByTagName(t,e);
+		if (candidates.size()>0) return (Element) candidates.get(0); else return null;
+
+	}
+
+	private String getTextValue(Element el) {
+
+		NodeList childs = el.getChildNodes();
+
+		for (int i=0;i<childs.getLength();i++) {
+
+			if (childs.item(i) instanceof Text) return childs.item(i).getNodeValue();
+
+		}
+
+		return "";
+
+	}
+
+
+	private boolean isGoAbleXMLOb(Node n) {
+
+		return (n.getNodeName().equals("val")) ||
+		(n.getNodeName().equals("gointo")); 
+
+	}
+
+	public void loadFields(Element e,Value v) {
+
+		Element fields = getFirstDirectElementsByTagName("fields",e);
+
+		if (fields ==null) return;
+
+		NodeList fieldList = fields.getElementsByTagName("field");
+
+		for (int i=0;i<fieldList.getLength();i++) {
+
+			Field f = new Field(fieldList.item(i).getAttributes().getNamedItem("type").getNodeValue(),
+					getTextValue((Element)fieldList.item(i)));
+
+					
+			if (((Element)fieldList.item(i)).hasAttribute("can_be")) {
+				f.setCanBe(fieldList.item(i).getAttributes().getNamedItem("can_be").getNodeValue().split(","));
+			}
+			
+			if (((Element)fieldList.item(i)).hasAttribute("must_be")) {
+				f.setMust_be(fieldList.item(i).getAttributes().getNamedItem("must_be").getNodeValue());
+			}
+
+			v.addField(f);
+
+		}
+
+	}
+
 
 	/**
 	 * Start parsing. An ArrayList containing all NodeSchemes
@@ -170,88 +252,6 @@ public class NodeSchemeLoader {
 		}
 	
 		return ret;
-
-	}
-
-	public void loadFields(Element e,Value v) {
-
-		Element fields = getFirstDirectElementsByTagName("fields",e);
-
-		if (fields ==null) return;
-
-		NodeList fieldList = fields.getElementsByTagName("field");
-
-		for (int i=0;i<fieldList.getLength();i++) {
-
-			Field f = new Field(fieldList.item(i).getAttributes().getNamedItem("type").getNodeValue(),
-					getTextValue((Element)fieldList.item(i)));
-
-					
-			if (((Element)fieldList.item(i)).hasAttribute("can_be")) {
-				f.setCanBe(fieldList.item(i).getAttributes().getNamedItem("can_be").getNodeValue().split(","));
-			}
-			
-			if (((Element)fieldList.item(i)).hasAttribute("must_be")) {
-				f.setMust_be(fieldList.item(i).getAttributes().getNamedItem("must_be").getNodeValue());
-			}
-
-			v.addField(f);
-
-		}
-
-	}
-
-
-	private String getTextValue(Element el) {
-
-		NodeList childs = el.getChildNodes();
-
-		for (int i=0;i<childs.getLength();i++) {
-
-			if (childs.item(i) instanceof Text) return childs.item(i).getNodeValue();
-
-		}
-
-		return "";
-
-	}
-
-	private boolean isGoAbleXMLOb(Node n) {
-
-		return (n.getNodeName().equals("val")) ||
-		(n.getNodeName().equals("gointo")); 
-
-	}
-
-
-	private Element getFirstDirectElementsByTagName(String t, Node e) {
-
-		ArrayList<Node> candidates = getDirectElementsByTagName(t,e);
-		if (candidates.size()>0) return (Element) candidates.get(0); else return null;
-
-	}
-
-	private ArrayList<Node> getDirectElementsByTagName(String t, Node e) {
-
-		NodeList n = e.getChildNodes();
-		ArrayList<Node> ret = new ArrayList<Node>();
-
-		for (int i=0;i<n.getLength();i++) {
-
-			if (n.item(i).getNodeName().equals(t)) {
-
-				ret.add(n.item(i));
-			}
-		}
-		return ret;
-	}
-
-	private class SchemeFileFilter implements FileFilter
-	{
-		public boolean accept(File file)
-		{
-			return (file.getName().toLowerCase().endsWith(".scheme.xml"));
-		}
 
 	}
 

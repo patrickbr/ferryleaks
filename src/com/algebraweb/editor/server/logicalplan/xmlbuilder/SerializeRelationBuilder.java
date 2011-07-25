@@ -6,14 +6,13 @@ import java.util.Iterator;
 
 import javax.servlet.ServletContext;
 
-
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.node.PropertyMap;
 import com.algebraweb.editor.client.node.PropertyValue;
-import com.algebraweb.editor.client.node.QueryPlan;
 import com.algebraweb.editor.client.node.ValGroup;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 
@@ -32,7 +31,7 @@ public class SerializeRelationBuilder {
 	}
 
 
-	public PlanNode addSerializRelation(PlanNode root) {
+	public PlanNode addSerializRelation(PlanNode root) throws PlanHasCycleException {
 
 
 		String dummyIterColumn = getFreeColumnName("iter",root);
@@ -188,6 +187,22 @@ public class SerializeRelationBuilder {
 
 
 
+	private boolean containsPropertyVal(ArrayList<Property> toCheck, String val) {
+
+
+		Iterator<Property> it = toCheck.iterator();
+
+		while (it.hasNext()) {
+
+			if (it.next().getPropertyVal().getVal().equals(val)) return true;
+
+		}
+
+		return false;		
+	}
+
+
+
 	private void createEdgeTo(PlanNode from, PlanNode to) {
 
 		from.getChilds().add(to);
@@ -203,8 +218,7 @@ public class SerializeRelationBuilder {
 	}
 
 
-
-	private String getFreeColumnName(String prefix, PlanNode n) {
+	private String getFreeColumnName(String prefix, PlanNode n) throws PlanHasCycleException {
 
 
 		ArrayList<Property> cols = n.getReferencableColumnsFromValues();
@@ -216,20 +230,5 @@ public class SerializeRelationBuilder {
 
 		return prefix + idea;
 
-	}
-
-
-	private boolean containsPropertyVal(ArrayList<Property> toCheck, String val) {
-
-
-		Iterator<Property> it = toCheck.iterator();
-
-		while (it.hasNext()) {
-
-			if (it.next().getPropertyVal().getVal().equals(val)) return true;
-
-		}
-
-		return false;		
 	}
 }

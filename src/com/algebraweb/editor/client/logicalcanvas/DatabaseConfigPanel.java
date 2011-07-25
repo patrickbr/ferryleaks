@@ -2,7 +2,6 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
@@ -57,17 +56,6 @@ public class DatabaseConfigPanel extends LayoutPanel{
 	}
 	
 	
-	public void loadEvaluationContext(EvaluationContext c) {
-		
-		serverAdress.setText(c.getDatabaseServer());
-		serverPort.setText(Integer.toString(c.getDatabasePort()));
-		dbName.setText(c.getDatabase());
-		userName.setText(c.getDatabaseUser());
-		password.setText(c.getDatabasePassword());
-			
-	}
-	
-	
 	public void fillEvaluationContext(EvaluationContext c) {
 		
 		c.setDatabaseServer(serverAdress.getText());
@@ -78,6 +66,17 @@ public class DatabaseConfigPanel extends LayoutPanel{
 		c.setDatabaseSetGlobal(saveGlobal.getValue());
 		
 		
+	}
+	
+	
+	public void loadEvaluationContext(EvaluationContext c) {
+		
+		serverAdress.setText(c.getDatabaseServer());
+		serverPort.setText(Integer.toString(c.getDatabasePort()));
+		dbName.setText(c.getDatabase());
+		userName.setText(c.getDatabaseUser());
+		password.setText(c.getDatabasePassword());
+			
 	}
 
 

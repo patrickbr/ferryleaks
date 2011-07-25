@@ -9,6 +9,19 @@ import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback
 
 public class EvaluatePlanDialog extends EvaluationDialog {
 
+	private  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>> evalCb = new  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>>("evaluating") {
+
+		@Override
+		public void onSuccess(ArrayList<HashMap<String,String>> result) {
+
+
+			new SqlResDialog(result);
+
+
+		}
+
+	};
+	
 	public EvaluatePlanDialog(int pid, RemoteManipulationServiceAsync manServ) {
 		
 		super(pid, -1, manServ);
@@ -25,19 +38,6 @@ public class EvaluatePlanDialog extends EvaluationDialog {
 		getManServ().evalPlan(getPid(), c,getSaveCurrenNodeValue(), evalCb);
 
 	}
-	
-	private  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>> evalCb = new  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>>("evaluating") {
-
-		@Override
-		public void onSuccess(ArrayList<HashMap<String,String>> result) {
-
-
-			new SqlResDialog(result);
-
-
-		}
-
-	};
 	
 	
 

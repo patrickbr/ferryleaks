@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 
 import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
+import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
 import com.algebraweb.editor.client.node.LabelAttrIdentifierOb;
@@ -53,6 +54,13 @@ public class PlanParser {
 	private HashMap<String,NodeScheme> schemes;
 	private HttpSession session;
 
+	public PlanParser(HashMap<String,NodeScheme> schemes,HttpSession session) {
+
+		this.schemes=schemes;
+		this.session=session;
+
+	}
+
 	public PlanParser(HashMap<String,NodeScheme> schemes, String file,HttpSession session) {
 
 		this.schemes=schemes;
@@ -61,17 +69,104 @@ public class PlanParser {
 
 	}
 
-	public PlanParser(HashMap<String,NodeScheme> schemes,HttpSession session) {
-
-		this.schemes=schemes;
-		this.session=session;
-
-	}
-
 	public PlanParser(HttpSession session) {
 
 		this.session=session;
 	
+	}
+
+	/**
+	 * Fills an empty PlanNode with content and attributes
+	 * @param n
+	 * @param nodeEl
+	 */
+
+	private void fillNode(PlanNode n, Element nodeEl, QueryPlan mother, PlanNode node) {
+
+		NodeScheme s = getScheme(n.getKind());
+		ArrayList<GoAble> schema = s.getSchema();
+
+		parseNodeLabelSchema(n,s);
+		parseContent(nodeEl, n.getContent(), schema, mother, node);
+
+	}
+
+
+	/**
+	 * Returns all XML objects from the parent matching the given
+	 * schema. Please note that this is not "depth-aware" for later editing
+	 * reasons. See documentation for further details.
+	 * 
+	 * @param parent
+	 * @param g
+	 * @return
+	 */
+
+	private ArrayList<Element> getElementsByScheme(Element parent, GoAble g) {
+
+
+		ArrayList<Element> retList = new ArrayList<Element>();
+		NodeList matchingTags = parent.getElementsByTagName(g.getXmlObject());
+
+		for (int a=0;a<matchingTags.getLength();a++) {
+
+			Element el = (Element) matchingTags.item(a);
+
+			if (g instanceof Value) {
+
+				ArrayList<Field> fields = ((Value)g).getFields();
+				Iterator<Field> i = fields.iterator();
+
+				boolean fail = false;
+
+				while (i.hasNext()) {
+
+					Field current = i.next();
+					String att = current.getVal();
+
+					if ((!el.hasAttribute(att)) || (current.hasMustBe() && !current.getMust_be().equals(el.getAttribute(att)))){
+						fail=true;
+					}					
+				}
+
+				if (!fail) retList.add(el);
+
+			} else {
+				retList.add(el);
+			}
+
+		}
+		return retList;
+	}
+
+	public NodeScheme getScheme(String type) {
+
+		NodeScheme s = schemes.get(type);
+
+		if (s==null && type != "__standard") {
+			System.out.println("Warning: Could not find scheme for node type '" + type + "'. Falling " +
+			"back to standard scheme!");
+			return getScheme("__standard");
+		}else if (s==null && type == "__standard") {
+
+			System.out.println("Warning: Could not find a standard scheme! Falling back...");
+			s=new NodeScheme("___empty");
+
+		}
+
+		return s;
+
+	}
+
+	private String getTextValue(Element el) {
+
+		NodeList childs = el.getChildNodes();
+
+		for (int i=0;i<childs.getLength();i++) {
+			if (childs.item(i) instanceof Text) return childs.item(i).getNodeValue();
+		}
+
+		return "";
 	}
 
 	/**
@@ -120,6 +215,9 @@ public class PlanParser {
 			
 				} catch (GraphIsEmptyException e) {
 					e.printStackTrace();
+				} catch (PlanHasCycleException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				System.out.println("garr");
@@ -134,69 +232,6 @@ public class PlanParser {
 		}
 
 		return ret;
-
-	}
-
-
-	/**
-	 * Parses all PlanNodes from a given parent DOM-element to the mother-QueryPlan
-	 * @param parent
-	 * @param mother
-	 * @return
-	 */
-	private void parseNodes(Element parent, QueryPlan mother) {
-
-		NodeList nodes = parent.getElementsByTagName("node");
-
-		ArrayList<PlanNode> planNodes = mother.getPlan();
-
-		for (int i=0;i<nodes.getLength();i++) {
-
-			if (!(nodes.item(i) instanceof Text)) {
-
-				Element el = (Element) nodes.item(i);
-
-				PlanNode newNode = parseNode(mother, el);				
-				planNodes.add(newNode);
-
-			}
-		}
-
-	}
-
-	/**
-	 * Parses a PlanNode from a single DOM-element
-	 * @param mother
-	 * @param el
-	 * @return
-	 */
-
-	public PlanNode parseNode(QueryPlan mother, Element el) {
-
-		PlanNode newNode = new PlanNode(
-				Integer.parseInt(el.getAttributes().getNamedItem("id").getNodeValue()),
-				getScheme(el.getAttributes().getNamedItem("kind").getNodeValue()),
-				mother
-
-		);
-		fillNode(newNode,el, mother, newNode);
-		return newNode;
-
-	}
-
-	/**
-	 * Fills an empty PlanNode with content and attributes
-	 * @param n
-	 * @param nodeEl
-	 */
-
-	private void fillNode(PlanNode n, Element nodeEl, QueryPlan mother, PlanNode node) {
-
-		NodeScheme s = getScheme(n.getKind());
-		ArrayList<GoAble> schema = s.getSchema();
-
-		parseNodeLabelSchema(n,s);
-		parseContent(nodeEl, n.getContent(), schema, mother, node);
 
 	}
 
@@ -219,9 +254,16 @@ public class PlanParser {
 
 			for (int i=0;i<childs.size();i++) {
 
-				retEl.add(parseGoAble((GoInto) next, childs.get(i), mother, node));
+				retEl.add(parseGoAble(next, childs.get(i), mother, node));
 			}
 		}
+
+	}
+
+	private void parseContentLabelSchema(NodeContent retEl, Value g) {
+
+		String schema = g.getNameToPrint();
+		parseLabelSchema(retEl, schema);
 
 	}
 
@@ -287,21 +329,6 @@ public class PlanParser {
 
 	}
 
-	private void parseContentLabelSchema(NodeContent retEl, Value g) {
-
-		String schema = g.getNameToPrint();
-		parseLabelSchema(retEl, schema);
-
-	}
-
-	public void parseNodeLabelSchema(PlanNode retEl, NodeScheme s) {
-
-		String schema = s.getProperties().get("label_schema");
-		if (schema == null) schema = "";
-		parseLabelSchema(retEl, schema);
-
-	}
-
 	private void parseLabelSchema(ContentNode retEl, String schema) {
 		LabelOb c = new LabelStringOb("");
 
@@ -334,85 +361,62 @@ public class PlanParser {
 	}
 
 	/**
-	 * Returns all XML objects from the parent matching the given
-	 * schema. Please note that this is not "depth-aware" for later editing
-	 * reasons. See documentation for further details.
-	 * 
-	 * @param parent
-	 * @param g
+	 * Parses a PlanNode from a single DOM-element
+	 * @param mother
+	 * @param el
 	 * @return
 	 */
 
-	private ArrayList<Element> getElementsByScheme(Element parent, GoAble g) {
+	public PlanNode parseNode(QueryPlan mother, Element el) {
 
+		PlanNode newNode = new PlanNode(
+				Integer.parseInt(el.getAttributes().getNamedItem("id").getNodeValue()),
+				getScheme(el.getAttributes().getNamedItem("kind").getNodeValue()),
+				mother
 
-		ArrayList<Element> retList = new ArrayList<Element>();
-		NodeList matchingTags = parent.getElementsByTagName(g.getXmlObject());
+		);
+		fillNode(newNode,el, mother, newNode);
+		return newNode;
 
-		for (int a=0;a<matchingTags.getLength();a++) {
-
-			Element el = (Element) matchingTags.item(a);
-
-			if (g instanceof Value) {
-
-				ArrayList<Field> fields = ((Value)g).getFields();
-				Iterator<Field> i = fields.iterator();
-
-				boolean fail = false;
-
-				while (i.hasNext()) {
-
-					Field current = i.next();
-					String att = current.getVal();
-
-					if ((!el.hasAttribute(att)) || (current.hasMustBe() && !current.getMust_be().equals(el.getAttribute(att)))){
-						fail=true;
-					}					
-				}
-
-				if (!fail) retList.add(el);
-
-			} else {
-				retList.add(el);
-			}
-
-		}
-		return retList;
 	}
 
 
 	//todo: should be somewhere central
 
-	public NodeScheme getScheme(String type) {
+	public void parseNodeLabelSchema(PlanNode retEl, NodeScheme s) {
 
-		NodeScheme s = schemes.get(type);
-
-		if (s==null && type != "__standard") {
-			System.out.println("Warning: Could not find scheme for node type '" + type + "'. Falling " +
-			"back to standard scheme!");
-			return getScheme("__standard");
-		}else if (s==null && type == "__standard") {
-
-			System.out.println("Warning: Could not find a standard scheme! Falling back...");
-			s=new NodeScheme("___empty");
-
-		}
-
-		return s;
+		String schema = s.getProperties().get("label_schema");
+		if (schema == null) schema = "";
+		parseLabelSchema(retEl, schema);
 
 	}
 
 	//TODO: nmust be a better solution
 
-	private String getTextValue(Element el) {
+	/**
+	 * Parses all PlanNodes from a given parent DOM-element to the mother-QueryPlan
+	 * @param parent
+	 * @param mother
+	 * @return
+	 */
+	private void parseNodes(Element parent, QueryPlan mother) {
 
-		NodeList childs = el.getChildNodes();
+		NodeList nodes = parent.getElementsByTagName("node");
 
-		for (int i=0;i<childs.getLength();i++) {
-			if (childs.item(i) instanceof Text) return childs.item(i).getNodeValue();
+		ArrayList<PlanNode> planNodes = mother.getPlan();
+
+		for (int i=0;i<nodes.getLength();i++) {
+
+			if (!(nodes.item(i) instanceof Text)) {
+
+				Element el = (Element) nodes.item(i);
+
+				PlanNode newNode = parseNode(mother, el);				
+				planNodes.add(newNode);
+
+			}
 		}
 
-		return "";
 	}
 
 

@@ -1,9 +1,7 @@
 package com.algebraweb.editor.client;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -14,9 +12,7 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.PushButton;
 
 public class PlanSwitcher extends AbsolutePanel{
 
@@ -55,7 +51,6 @@ public class PlanSwitcher extends AbsolutePanel{
 
 	public PlanSwitchButton addPlan(final int pid) {
 
-		GWT.log("adding new plan");
 		PlanSwitchButton newB = new PlanSwitchButton(pid);
 		buttons.put(pid,newB);
 		p.remove(addPlanButton);

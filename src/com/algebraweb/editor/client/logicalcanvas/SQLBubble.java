@@ -5,17 +5,12 @@ import java.util.HashMap;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.SqlResTable;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -31,6 +26,39 @@ public class SQLBubble extends FlowPanel {
 	final private LogicalCanvas canvas;
 
 	private FlowPanel p;
+
+	private AsyncCallback<ArrayList<HashMap<String, String>>> sqlCb = new AsyncCallback<ArrayList<HashMap<String, String>>>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			p.clear();
+			removeStyleName("loading");
+			
+			if (caught instanceof PathFinderCompilationError) {
+				p.add(new HTML("Error: SQL compilation failed."));
+				return;
+			}
+
+			if (caught instanceof SqlError) {
+				p.add(new HTML("Error: SQL qry failed on server."));
+				return;
+			}
+
+			p.add(new HTML("Error."));
+
+		}
+
+		@Override
+		public void onSuccess(ArrayList<HashMap<String, String>> result) {
+
+			removeStyleName("loading");
+			showResult(result);
+
+		}
+
+
+
+	};
 
 	public SQLBubble(int nid, int pid, final RemoteManipulationServiceAsync rmsa, EvaluationContext c, final LogicalCanvas ca) {
 
@@ -72,7 +100,6 @@ public class SQLBubble extends FlowPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				GWT.log("gurr");
 				ca.removeSQLListener(SQLBubble.this);
 
 			}
@@ -141,11 +168,13 @@ public class SQLBubble extends FlowPanel {
 		this.add(b);
 	}
 
-	public int getPid() {
-
-		return pid;
-
+	/**
+	 * @return the c
+	 */
+	public EvaluationContext getEvaluationContext() {
+		return c;
 	}
+
 
 	public int getNid() {
 
@@ -153,13 +182,18 @@ public class SQLBubble extends FlowPanel {
 
 	}
 
+	public int getPid() {
 
-	public void update() {
+		return pid;
 
-		p.clear();
-		this.addStyleName("loading");
-		rmsa.eval(pid, nid, c, false,sqlCb);
+	}
 
+
+	/**
+	 * @param c the c to set
+	 */
+	public void setEvaluationContext(EvaluationContext c) {
+		this.c = c;
 	}
 
 	private void showResult(ArrayList<HashMap<String,String>> res) {
@@ -174,52 +208,12 @@ public class SQLBubble extends FlowPanel {
 
 	}
 
+	public void update() {
 
-	private AsyncCallback<ArrayList<HashMap<String, String>>> sqlCb = new AsyncCallback<ArrayList<HashMap<String, String>>>() {
+		p.clear();
+		this.addStyleName("loading");
+		rmsa.eval(pid, nid, c, false,sqlCb);
 
-		@Override
-		public void onFailure(Throwable caught) {
-			p.clear();
-			removeStyleName("loading");
-			
-			if (caught instanceof PathFinderCompilationError) {
-				p.add(new HTML("Error: SQL compilation failed."));
-				return;
-			}
-
-			if (caught instanceof SqlError) {
-				p.add(new HTML("Error: SQL qry failed on server."));
-				return;
-			}
-
-			p.add(new HTML("Error."));
-
-		}
-
-		@Override
-		public void onSuccess(ArrayList<HashMap<String, String>> result) {
-
-			removeStyleName("loading");
-			showResult(result);
-
-		}
-
-
-
-	};
-
-	/**
-	 * @return the c
-	 */
-	public EvaluationContext getEvaluationContext() {
-		return c;
-	}
-
-	/**
-	 * @param c the c to set
-	 */
-	public void setEvaluationContext(EvaluationContext c) {
-		this.c = c;
 	}
 
 

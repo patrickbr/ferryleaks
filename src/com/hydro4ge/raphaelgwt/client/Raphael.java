@@ -1,5 +1,7 @@
 package com.hydro4ge.raphaelgwt.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.DOM;
@@ -7,69 +9,76 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
-import java.util.ArrayList;
 
 public class Raphael extends FlowPanel {
 
-  private RaphaelJS overlay;
-  private final ArrayList<Shape> shapes = new ArrayList<Shape>();
-  private final Element raphaelElement;
-
-  public Raphael(int width, int height) {
-    super();
-    Element raphaelDiv = DOM.createDiv();
-    super.getElement().appendChild(raphaelDiv);
-    raphaelElement = raphaelDiv;
-    sinkEvents(Event.KEYEVENTS);
-    overlay = RaphaelJS.create(raphaelDiv, width, height);
+  public class Circle extends Shape {
+    public Circle(double x, double y, double r) {
+      super(overlay.circle(x, y, r));
+    }
+  }
+  public class Ellipse extends Shape {
+    public Ellipse(double x, double y, double rx, double ry) {
+      super(overlay.ellipse(x, y, rx, ry));
+    }
+  }
+  public class Image extends Shape {
+    public Image(String src, double x, double y, double width, double height) {
+      super(overlay.image(src, x, y, width, height));
+    }
   }
 
-  public Element getRaphaelElement() {
-	  
-	  return raphaelElement;
-	  
+  public class Path extends Shape {
+    public Path() {
+      super(overlay.path());
+    }
+
+    public Path(PathBuilder builder) {
+      this(builder.toString());
+    }
+
+    public Path(String pathString) {
+      super(overlay.path(pathString));
+    }
+
+    public Point getPointAtLength(int length) {
+      return ((RaphaelJS.Path)el).getPointAtLength(length);
+    }
+
+    public int getTotalLength() {
+      return ((RaphaelJS.Path)el).getTotalLength();
+    }
+
+    /**
+     * doesn't seem to work
+     *
+    public String getSubpath(int from, int to) {
+      return ((RaphaelJS.Path)el).getSubpath(from, to);
+    }
+     */
+  }
+
+  public class Rect extends Shape {
+    public Rect(double x, double y, double w, double h) {
+      super(overlay.rect(x, y, w, h));
+    }
+    public Rect(double x, double y, double w, double h, double r) {
+      super(overlay.rect(x, y, w, h, r));
+    }
   }
   
-  public static boolean isSupported() {
-    return RaphaelJS.isDefined();
-  }
-
-  public void clear() {
-    overlay.clear();
-  }
-  
-  public RaphaelJS overlay() {
-	  return this.overlay;
-  }
-
-  /**
-   * detach our children explicitly here since they were
-   * attached via JavaScript outside of GWT framework
-   */
-  @Override
-  protected void doDetachChildren() {
-    super.doDetachChildren();
-    for (Shape s : shapes)
-      s.doDetach();
-  }
-
   public class Set {
     protected RaphaelJS.Set set;
     private final ArrayList<Shape> sh = new ArrayList<Shape>();
     public Set() {
       this.set = overlay.set();
     }
-    public Set push(Shape s) {
-      set.push(s.el);
-      sh.add(s);
-      return this;
-    }
-    
-    
     public Set animate(JSONObject newAttrs, int duration) {
       set.animate(newAttrs.getJavaScriptObject(), duration);
       return this;
     }
+    
+    
     public Set animate(JSONObject newAttrs, int duration, AnimationCallback callback) {
       set.animate(newAttrs.getJavaScriptObject(), duration, callback);
       return this;
@@ -82,16 +91,19 @@ public class Raphael extends FlowPanel {
       set.animate(newAttrs.getJavaScriptObject(), duration, easing, callback);
       return this;
     }
-    public Set attr(String attributeName, String value) {
-      set.attr(attributeName, value);
+    public JSONObject attr(JSONArray attributeNames) {
+      return new JSONObject(set.attr(attributeNames.getJavaScriptObject()));
+    }
+    public Set attr(JSONObject params) {
+      set.attr(params.getJavaScriptObject());
       return this;
     }
     public Set attr(String attributeName, double value) {
       set.attr(attributeName, value);
       return this;
     }
-    public Set attr(JSONObject params) {
-      set.attr(params.getJavaScriptObject());
+    public Set attr(String attributeName, String value) {
+      set.attr(attributeName, value);
       return this;
     }
     public double attrAsDouble(String name) {
@@ -100,11 +112,13 @@ public class Raphael extends FlowPanel {
     public String attrAsString(String name) {
       return set.attrAsString(name);
     }
-    public JSONObject attr(JSONArray attributeNames) {
-      return new JSONObject(set.attr(attributeNames.getJavaScriptObject()));
-    }
     public BBox getBBox() {
       return set.getBBox();
+    }
+    public Set push(Shape s) {
+      set.push(s.el);
+      sh.add(s);
+      return this;
     }
     public void remove() {
       set.remove();
@@ -134,12 +148,12 @@ public class Raphael extends FlowPanel {
       set.scale(sx, sy, cx, cy);
       return this;
     }
-    public Set toFront() {
-      set.toFront();
-      return this;
-    }
     public Set toBack() {
       set.toBack();
+      return this;
+    }
+    public Set toFront() {
+      set.toFront();
       return this;
     }
     public Set translate(double dx, double dy) {
@@ -159,37 +173,49 @@ public class Raphael extends FlowPanel {
       onAttach(); // signal that the widget has been attached
     }
 
-    /**
-     * this is ugly, but necessary for the parent Raphael
-     * widget to detach this widget from the DOM, because
-     * the onDetach() method is protected.
-     */
-    public void doDetach() {
-      onDetach();
-    }
-    
-
-    public Shape stop() {
-      el.stop();
-     
-      return this;
-    }
-
     public Shape animate(JSONObject newAttrs, int duration) {
       el.animate(newAttrs.getJavaScriptObject(), duration);
      
       return this;
     }
+    
+
     public Shape animate(JSONObject newAttrs, int duration, AnimationCallback callback) {
       el.animate(newAttrs.getJavaScriptObject(), duration, callback);
       return this;
     }
+
     public Shape animate(JSONObject newAttrs, int duration, String easing) {
       el.animate(newAttrs.getJavaScriptObject(), duration, easing);
       return this;
     }
     public Shape animate(JSONObject newAttrs, int duration, String easing, AnimationCallback callback) {
       el.animate(newAttrs.getJavaScriptObject(), duration, easing, callback);
+      return this;
+    }
+    public Shape animateAlong(Path path, int duration) {
+      el.animateAlong(path.el, duration);
+      return this;
+    }
+    public Shape animateAlong(Path path, int duration, boolean rotate) {
+      el.animateAlong(path.el, duration, rotate);
+      return this;
+    }
+
+    public Shape animateAlong(Path path, int duration, boolean rotate, AnimationCallback callback) {
+      el.animateAlong(path.el, duration, rotate, callback);
+      return this;
+    }
+    public Shape animateAlongBack(Path path, int duration) {
+      el.animateAlongBack(path.el, duration);
+      return this;
+    }
+    public Shape animateAlongBack(Path path, int duration, boolean rotate) {
+      el.animateAlongBack(path.el, duration, rotate);
+      return this;
+    }
+    public Shape animateAlongBack(Path path, int duration, boolean rotate, AnimationCallback callback) {
+      el.animateAlongBack(path.el, duration, rotate, callback);
       return this;
     }
 
@@ -205,49 +231,27 @@ public class Raphael extends FlowPanel {
       el.animateWith(shape.el, newAttrs.getJavaScriptObject(), duration, easing);
       return this;
     }
+
     public Shape animateWith(Shape shape, JSONObject newAttrs, int duration, String easing, AnimationCallback callback) {
       el.animateWith(shape.el, newAttrs.getJavaScriptObject(), duration, easing, callback);
       return this;
     }
-
-    public Shape animateAlong(Path path, int duration) {
-      el.animateAlong(path.el, duration);
-      return this;
+    public JSONObject attr(JSONArray attributeNames) {
+      return new JSONObject(el.attr(attributeNames.getJavaScriptObject()));
     }
-    public Shape animateAlong(Path path, int duration, boolean rotate) {
-      el.animateAlong(path.el, duration, rotate);
-      return this;
-    }
-    public Shape animateAlong(Path path, int duration, boolean rotate, AnimationCallback callback) {
-      el.animateAlong(path.el, duration, rotate, callback);
-      return this;
-    }
-
-    public Shape animateAlongBack(Path path, int duration) {
-      el.animateAlongBack(path.el, duration);
-      return this;
-    }
-    public Shape animateAlongBack(Path path, int duration, boolean rotate) {
-      el.animateAlongBack(path.el, duration, rotate);
-      return this;
-    }
-    public Shape animateAlongBack(Path path, int duration, boolean rotate, AnimationCallback callback) {
-      el.animateAlongBack(path.el, duration, rotate, callback);
+    public Shape attr(JSONObject params) {
+      el.attr(params.getJavaScriptObject());
       return this;
     }
     
     
 
-    public Shape attr(String attributeName, String value) {
-      el.attr(attributeName, value);
-      return this;
-    }
     public Shape attr(String attributeName, double value) {
       el.attr(attributeName, value);
       return this;
     }
-    public Shape attr(JSONObject params) {
-      el.attr(params.getJavaScriptObject());
+    public Shape attr(String attributeName, String value) {
+      el.attr(attributeName, value);
       return this;
     }
     public double attrAsDouble(String name) {
@@ -256,10 +260,14 @@ public class Raphael extends FlowPanel {
     public String attrAsString(String name) {
       return el.attrAsString(name);
     }
-    public JSONObject attr(JSONArray attributeNames) {
-      return new JSONObject(el.attr(attributeNames.getJavaScriptObject()));
+    /**
+     * this is ugly, but necessary for the parent Raphael
+     * widget to detach this widget from the DOM, because
+     * the onDetach() method is protected.
+     */
+    public void doDetach() {
+      onDetach();
     }
-
     public BBox getBBox() {
      
       return el.getBBox();
@@ -278,6 +286,7 @@ public class Raphael extends FlowPanel {
       el.rotate(degree);
       return this;
     }
+
     public Shape rotate(double degree, boolean isAbsolute) {
       if (isAbsolute)
         rot = degree;
@@ -299,27 +308,32 @@ public class Raphael extends FlowPanel {
       el.rotate(rot, cx, cy);
       return this;
     }
-
     public Shape scale(double sx, double sy) {
       el.scale(sx, sy);
       return this;
     }
+
     public Shape scale(double sx, double sy, double cx, double cy) {
       el.scale(sx, sy, cx, cy);
       return this;
     }
-
     public void show() {
       el.show();
     }
 
-    public Shape toFront() {
-      el.toFront();
+    public Shape stop() {
+      el.stop();
+     
       return this;
     }
 
     public Shape toBack() {
       el.toBack();
+      return this;
+    }
+
+    public Shape toFront() {
+      el.toFront();
       return this;
     }
 
@@ -329,68 +343,56 @@ public class Raphael extends FlowPanel {
     }
 
   }
-
-  public class Circle extends Shape {
-    public Circle(double x, double y, double r) {
-      super(overlay.circle(x, y, r));
-    }
-  }
-
+  
   public class Text extends Shape {
     public Text(double x, double y, String text) {
       super(overlay.text(x, y, text));
     }
   }
 
-  public class Rect extends Shape {
-    public Rect(double x, double y, double w, double h) {
-      super(overlay.rect(x, y, w, h));
-    }
-    public Rect(double x, double y, double w, double h, double r) {
-      super(overlay.rect(x, y, w, h, r));
-    }
+  public static boolean isSupported() {
+    return RaphaelJS.isDefined();
   }
 
-  public class Ellipse extends Shape {
-    public Ellipse(double x, double y, double rx, double ry) {
-      super(overlay.ellipse(x, y, rx, ry));
-    }
+  private RaphaelJS overlay;
+
+  private final ArrayList<Shape> shapes = new ArrayList<Shape>();
+
+  private final Element raphaelElement;
+
+  public Raphael(int width, int height) {
+    super();
+    Element raphaelDiv = DOM.createDiv();
+    super.getElement().appendChild(raphaelDiv);
+    raphaelElement = raphaelDiv;
+    sinkEvents(Event.KEYEVENTS);
+    overlay = RaphaelJS.create(raphaelDiv, width, height);
   }
 
-  public class Image extends Shape {
-    public Image(String src, double x, double y, double width, double height) {
-      super(overlay.image(src, x, y, width, height));
-    }
+  @Override
+public void clear() {
+    overlay.clear();
   }
 
-  public class Path extends Shape {
-    public Path() {
-      super(overlay.path());
-    }
+  /**
+   * detach our children explicitly here since they were
+   * attached via JavaScript outside of GWT framework
+   */
+  @Override
+  protected void doDetachChildren() {
+    super.doDetachChildren();
+    for (Shape s : shapes)
+      s.doDetach();
+  }
 
-    public Path(String pathString) {
-      super(overlay.path(pathString));
-    }
+  public Element getRaphaelElement() {
+	  
+	  return raphaelElement;
+	  
+  }
 
-    public Path(PathBuilder builder) {
-      this(builder.toString());
-    }
-
-    public int getTotalLength() {
-      return ((RaphaelJS.Path)el).getTotalLength();
-    }
-
-    public Point getPointAtLength(int length) {
-      return ((RaphaelJS.Path)el).getPointAtLength(length);
-    }
-
-    /**
-     * doesn't seem to work
-     *
-    public String getSubpath(int from, int to) {
-      return ((RaphaelJS.Path)el).getSubpath(from, to);
-    }
-     */
+  public RaphaelJS overlay() {
+	  return this.overlay;
   }
 
 }

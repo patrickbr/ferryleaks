@@ -38,24 +38,23 @@ public class GoInto implements GoAble {
 		this.childs.add(child);
 	}
 
-	public String getXmlObject() {
-		return xmlObject;
+	@Override
+	public ArrayList<Field> getFields() {
+
+		return null;
 	}
 	
-	public String getHumanName() {
-		return humanName;
-	}
-
-	public void setXmlObject(String xmlObject) {
-		this.xmlObject = xmlObject;
-	}
-
 	public String getHowOften() {
 		return howOften;
 	}
 
-	public void setHowOften(String howOften) {
-		this.howOften = howOften;
+	public String getHumanName() {
+		return humanName;
+	}
+
+	@Override
+	public String getInternalName() {
+		return xmlObject;
 	}
 
 	@Override
@@ -63,11 +62,48 @@ public class GoInto implements GoAble {
 		return childs;
 	}
 
+	public String getXmlObject() {
+		return xmlObject;
+	}
+
 	@Override
 	public boolean hasChilds() {
 		return childs.size()>0;
 	}
 
+	@Override
+	public boolean hasFields() {
+
+		return false;
+	}
+
+	/**
+	 * @return the editable
+	 */
+	public boolean isEditable() {
+		return editable;
+	}
+
+
+	/**
+	 * @param editable the editable to set
+	 */
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+
+
+	public void setHowOften(String howOften) {
+		this.howOften = howOften;
+	}
+
+
+	public void setXmlObject(String xmlObject) {
+		this.xmlObject = xmlObject;
+	}
+
+
+	@Override
 	public String toString() {
 
 		String ret =  "{GOINTO: howOften=" + howOften + " XMLob:" + xmlObject + " childs:(";
@@ -84,41 +120,6 @@ public class GoInto implements GoAble {
 
 		return ret;
 
-	}
-
-	@Override
-	public String getInternalName() {
-		return xmlObject;
-	}
-
-
-	@Override
-	public ArrayList<Field> getFields() {
-
-		return null;
-	}
-
-
-	@Override
-	public boolean hasFields() {
-
-		return false;
-	}
-
-
-	/**
-	 * @return the editable
-	 */
-	public boolean isEditable() {
-		return editable;
-	}
-
-
-	/**
-	 * @param editable the editable to set
-	 */
-	public void setEditable(boolean editable) {
-		this.editable = editable;
 	}
 
 	
