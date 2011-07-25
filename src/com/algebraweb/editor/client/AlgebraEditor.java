@@ -58,7 +58,7 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Alpha 6.10";
+	private static String VERSION = "Alpha 6.11";
 
 	private static String TITLE = "the bugFerry";
 	private static String AUTHOR = "Patrick Brosi";
