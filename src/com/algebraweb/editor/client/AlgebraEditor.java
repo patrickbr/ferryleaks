@@ -50,11 +50,11 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.01";
+	private static String VERSION = "Beta 1.02";
 
-	private static String TITLE = "the bugFerry";
+	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (July 26th)";
+	private static String YEAR = "2011 (August 4th)";
 	private static String FACILITY = "Universität Tübingen";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
@@ -80,7 +80,7 @@ public class AlgebraEditor implements EntryPoint {
 		BROWSER_VER = Navigator.getAppVersion();
 		BROWSER_OS = Navigator.getPlatform();
 
-		if (Math.random()<0.1) TITLE = "FerryLeaks";
+		if (Math.random()<0.3) TITLE = "the bugFerry";
 
 		AlgebraEditor.log("Hi! This is " + TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " " + AUTHOR);
 		AlgebraEditor.log("   running in " + BROWSER_NAME + " " + BROWSER_VER + " (" + BROWSER_OS + ") (" + (Navigator.isCookieEnabled()?"Cookies enabled":"Cookies _NOT_ enabled. Session handling will not work properly!")+ ")");
