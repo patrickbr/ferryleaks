@@ -24,7 +24,7 @@
 			
 				</fields>
 				
-				<val xmlob="value" hasval="true" name_to_print="&quot;[_val]&quot;" namefield="type" humanname="Inserted values" name="value" howoften="*">
+				<val xmlob="value" hasval="true" name_to_print="&lt;[_val]&gt;" namefield="type" humanname="Inserted values" name="value" howoften="*">
 
 				<fields>
 

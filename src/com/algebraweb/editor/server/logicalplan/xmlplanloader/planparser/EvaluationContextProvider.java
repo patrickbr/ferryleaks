@@ -114,16 +114,10 @@ public class EvaluationContextProvider {
 
 			ArrayList<ItemCol> itemCols = new ArrayList<ItemCol>();
 
-
 			while (items.hasNext()) {
-
-
 				NodeContent current = items.next();
-
 				itemCols.add(new ItemCol(current.getAttributes().get("name").getVal(), Integer.parseInt(current.getAttributes().get("position").getVal())));
-
 			}
-
 			//sort to match the position ints given in the plan
 			Collections.sort(itemCols);
 
@@ -132,14 +126,10 @@ public class EvaluationContextProvider {
 			int i=0;
 
 			while (itCol.hasNext()) {
-
 				ItemCol current = itCol.next();
-
 				colsString[i] = current.getName();
 				i++;
-
 			}
-
 			c.setItemColumns(colsString);
 
 		}else{

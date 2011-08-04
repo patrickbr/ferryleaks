@@ -14,9 +14,9 @@
 	<schema>
 	
 	
-		<gointo xmlob="content" howoften="1">
+		<gointo xmlob="content" humanname="Columns to add" howoften="1">
 
-			<val xmlob="column" name_to_print="[name]" name="column" howoften="*">
+			<val xmlob="column" humanname="Column" name_to_print="[name]" name="column" howoften="*">
 
 				<fields>
 
@@ -25,7 +25,7 @@
 			
 				</fields>
 
-				<val xmlob="value" name_to_print="&lt;[_val]&gt;" hasval="true" name="value" howoften="*">
+				<val xmlob="value" name_to_print="&lt;[_val]&gt;" humanname="Inserted values" hasval="true" name="value" howoften="*">
 
 				<fields>
 					<field type="datatype">type</field>

@@ -73,7 +73,6 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 
 			n = new ContentVal(((Value)scheme).getValName(),((Value)scheme).getXmlObject(),null);
 
-
 			Iterator<Field> it = scheme.getFields().iterator();
 
 			while (it.hasNext()) {
@@ -88,6 +87,8 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 
 			}
 			
+			if (((Value)scheme).hasVal()) ((ContentVal)n).setValue(new PropertyValue("(null)", "string"));
+							
 			parseLabelSchema(n,((Value)scheme).getNameToPrint());
 		
 		}else if (scheme instanceof GoInto) {

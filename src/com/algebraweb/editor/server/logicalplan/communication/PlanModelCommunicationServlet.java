@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -599,7 +601,9 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		}else	nodeSchemes = (HashMap<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
 
-		return nodeSchemes.keySet().toArray(new String[0]);
+		String[] schemes = nodeSchemes.keySet().toArray(new String[0]);
+		Arrays.sort(schemes);
+		return schemes;
 
 
 	}

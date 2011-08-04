@@ -10,7 +10,7 @@ public abstract class NodeContent extends ContentNode {
 
 	protected String internalName;
 	protected PropertyMap attributes = new PropertyMap();
-	
+
 	protected ArrayList<ValidationError> evalRes = new  ArrayList<ValidationError>();
 
 
@@ -44,9 +44,9 @@ public abstract class NodeContent extends ContentNode {
 			if (cur instanceof LabelAttrIdentifierOb) {
 
 				if (cur.getVal().equals("_val") && this instanceof ContentVal) {
-					
+
 					ret += ((ContentVal) this).getValue().getVal();
-					
+
 				}else if  (getAttributes().get(cur.getVal()) != null) {
 					ret += getAttributes().get(cur.getVal()).getVal();
 				}else{
@@ -94,8 +94,8 @@ public abstract class NodeContent extends ContentNode {
 		this.evalRes = evalRes;
 	}
 
-	
-	
+
+
 
 
 

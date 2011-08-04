@@ -21,7 +21,7 @@ public class EvaluationContext implements IsSerializable {
 	String sortOrder;
 	String sortOrderColumnOn;
 	
-	String[] itemColumns;
+	String[] itemColumns = new String[0];
 	
 	boolean databaseSetGlobal=false;
 	

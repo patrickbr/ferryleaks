@@ -58,21 +58,13 @@ public class NodeEditDialog extends DialogBox{
 		public void onSuccess(PlanNode result) {
 
 			node = result;
-
 			Iterator<GoAble> schemas = result.getScheme().getSchema().iterator();
 
 			while (schemas.hasNext()) {
-
 				GoAble currentSchema = schemas.next();
-
 				if (currentSchema.isEditable()) tree.addItem(new LogicalSchemeTreeItem(manServ,currentSchema, result));
-
-
 			}
-
-
 		}
-
 	};
 
 
@@ -91,11 +83,7 @@ public class NodeEditDialog extends DialogBox{
 		t.setAnimationVertical(false);
 		t.setAnimationDuration(500);
 
-
-
-
 		p.setSize("550px", "350px");
-
 
 		p.addWest(tree, 220);
 

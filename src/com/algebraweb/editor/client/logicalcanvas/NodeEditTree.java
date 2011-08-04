@@ -20,13 +20,8 @@ public class NodeEditTree extends Tree{
 	private PlanNode p;
 
 	public NodeEditTree() {
-
 		super((Resources) GWT.create(CustomImages.class));
 		super.setAnimationEnabled(true);
-
-
-
-
 	}
 
 	@Override

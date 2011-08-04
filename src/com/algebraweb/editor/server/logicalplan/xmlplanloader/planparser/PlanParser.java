@@ -219,9 +219,7 @@ public class PlanParser {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				System.out.println("garr");
-
+						
 				ret.addPlan(p);
 			}
 
