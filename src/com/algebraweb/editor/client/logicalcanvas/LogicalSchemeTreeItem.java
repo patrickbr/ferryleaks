@@ -5,6 +5,10 @@ import java.util.Iterator;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.node.ContentNode;
 import com.algebraweb.editor.client.node.ContentVal;
+import com.algebraweb.editor.client.node.LabelAttrIdentifierOb;
+import com.algebraweb.editor.client.node.LabelContentIdentifierOb;
+import com.algebraweb.editor.client.node.LabelOb;
+import com.algebraweb.editor.client.node.LabelStringOb;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PropertyValue;
 import com.algebraweb.editor.client.node.ValGroup;
@@ -13,6 +17,7 @@ import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.GoInto;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.scheme.Value;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -30,7 +35,6 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 		this.scheme=scheme;
 		this.content=content;
 		this.manServ = manServ;
-
 
 		this.setWidget(new HTML("<b>" + scheme.getHumanName() + "</b>"));
 		processItems();
@@ -80,25 +84,53 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 					((ContentVal)n).getAttributes().put(current.getVal(), new PropertyValue(current.getMust_be(), current.getType()));
 				}else{
 					((ContentVal)n).getAttributes().put(current.getVal(), new PropertyValue("(" + current.getType() + ")", current.getType()));
-
 				}
 
 			}
-
+			
+			parseLabelSchema(n,((Value)scheme).getNameToPrint());
+		
 		}else if (scheme instanceof GoInto) {
-
 			n = new ValGroup(scheme.getXmlObject());
-
 		}
 
-
 		this.content.getContent().add(n);
-
 		
 		addContent(n);
 		this.setState(true);
 	}
 
+	private void parseLabelSchema(NodeContent retEl, String schema) {
+		LabelOb c = new LabelStringOb("");
+		
+
+		for (int i=0;i<schema.length();i++) {
+
+			if (schema.substring(i, i+1).equals("{")) {
+
+				if (c!= null) retEl.addLabelOb(c);
+				c = new LabelContentIdentifierOb("");
+
+			}else if ((schema.substring(i, i+1).equals("}")) || (schema.substring(i, i+1).equals("]"))) {
+
+				if (c!= null) retEl.addLabelOb(c);
+				c = new LabelStringOb("");
+
+			}else if (schema.substring(i, i+1).equals("[")) {
+
+				if (c!= null) retEl.addLabelOb(c);
+				c = new LabelAttrIdentifierOb("");
+
+			}else{
+
+				c.addChar(schema.substring(i, i+1));
+
+			}
+
+		}
+
+		if (!(c == null) && !c.getVal().equals("")) retEl.addLabelOb(c);
+	}
 
 
 	public boolean deleteContent(ContentNodeTreeItem current) {

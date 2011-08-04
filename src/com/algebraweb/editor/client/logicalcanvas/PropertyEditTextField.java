@@ -41,6 +41,7 @@ public class PropertyEditTextField extends PropertyEditField{
 		fieldContent.setText(pv.getVal());
 		
 		
+		
 	}
 	
 	protected Widget getInputElement() {
@@ -52,6 +53,7 @@ public class PropertyEditTextField extends PropertyEditField{
 	@Override
 	public void save() {
 		pv.setVal(fieldContent.getText());
+		
 		
 		
 	}

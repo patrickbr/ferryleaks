@@ -220,8 +220,10 @@ public class PlanNode extends ContentNode {
 		Iterator<LabelOb> it = labelScheme.iterator();
 
 		while (it.hasNext()) {
-
+			
+			
 			LabelOb cur = it.next();
+			
 
 			if (cur instanceof LabelStringOb) ret += cur.getVal();
 
@@ -252,7 +254,7 @@ public class PlanNode extends ContentNode {
 			}
 
 		}
-
+		
 		if (ret == "") return getKind();
 		else return ret;
 	}

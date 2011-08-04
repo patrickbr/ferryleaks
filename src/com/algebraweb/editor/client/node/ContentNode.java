@@ -31,6 +31,12 @@ public abstract class ContentNode implements Serializable{
 		labelScheme.add(ob);
 
 	}
+	
+	public void clearLabelOb() {
+
+		labelScheme.clear();
+
+	}
 
 	
 	

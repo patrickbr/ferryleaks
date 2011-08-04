@@ -976,6 +976,8 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		// TODO update other things 
 
 		HttpServletRequest request = this.getThreadLocalRequest();
+		PlanParser parser = new PlanParser((HashMap<String,NodeScheme>)getServletContext().getAttribute("nodeSchemes"),getSession());
+
 
 		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
 		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
@@ -984,19 +986,23 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		if (nodeToWork != null) {	
 
 			nodeToWork.setContent(p.getContent());
-
+			
+	
 			Iterator<PlanNode> nodeIt = p.getChilds().iterator();
 			nodeToWork.getChilds().clear();
-			while (nodeIt.hasNext()) nodeToWork.getChilds().add(planToWork.getPlanNodeById(nodeIt.next().getId()));
+			while (nodeIt.hasNext()) {
+				PlanNode cur = nodeIt.next();
+				if (cur != null) {
+					nodeToWork.getChilds().add(planToWork.getPlanNodeById(cur.getId()));
+				}else{
+					nodeToWork.getChilds().add(null);
+				}
+			}
 
-
+		
 			ValidationResult res = getValidation(pid);
-
-
 			RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"update", 1, "", res);
-
 			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),pid);
-
 			rmm.getNodesAffected().add(xmlpl.getRawNode(nodeToWork));
 
 			return rmm;
