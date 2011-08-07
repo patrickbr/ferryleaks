@@ -8,6 +8,8 @@ import com.algebraweb.editor.client.AlgebraEditor;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
@@ -60,14 +62,9 @@ public class RemoteSorter implements GraphSorter {
 	}
 
 	//TODO
-	private AsyncCallback<HashMap<Integer,Coordinate>> sortedCallback(final GraphManipulationCallback cb) {
-		return new AsyncCallback<HashMap<Integer,Coordinate>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-			}
-
+	private GraphCanvasCommunicationCallback<HashMap<Integer,Coordinate>> sortedCallback(final GraphManipulationCallback cb) {
+		return new GraphCanvasCommunicationCallback<HashMap<Integer,Coordinate>>("sorting graph") {
+			
 			@Override
 			public void onSuccess(HashMap<Integer,Coordinate> result) {
 				processPositionTuples(result,cb);

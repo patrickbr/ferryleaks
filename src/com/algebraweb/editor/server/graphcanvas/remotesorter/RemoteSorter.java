@@ -5,11 +5,12 @@ import java.util.HashMap;
 
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
+import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
 
 
 public interface RemoteSorter {
 	
-	public HashMap<Integer,Coordinate> getCoordinateHashMap(ArrayList<RawNode> nodes);
+	public HashMap<Integer,Coordinate> getCoordinateHashMap(ArrayList<RawNode> nodes) throws RemoteIOException;
 	
 
 }

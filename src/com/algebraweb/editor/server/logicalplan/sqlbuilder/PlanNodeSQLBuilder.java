@@ -22,14 +22,13 @@ import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
 
 public class PlanNodeSQLBuilder {
 
+	private String[] args = new String[2];
 
 
-	private String pfPath = "/usr/local/bin/pf";
-	private String[] args = {pfPath, "-IS"};
-
-
-	public PlanNodeSQLBuilder() {
-
+	public PlanNodeSQLBuilder(String pfPath, String pfArgs) {
+		
+		this.args[0] = pfPath;
+		this.args[1] = pfArgs;
 
 	}
 

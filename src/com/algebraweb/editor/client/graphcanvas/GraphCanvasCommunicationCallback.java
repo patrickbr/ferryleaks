@@ -17,6 +17,7 @@ public abstract class GraphCanvasCommunicationCallback<T> implements AsyncCallba
 	@Override
 	public void onFailure(Throwable caught) {
 	
+		GraphCanvas.hideLoading();
 		new GraphCanvasErrorDialogBox("<span style='font-weight:bold;color:red'>Error while " + whileString + "!</span><br><br>" + caught.getMessage());
 		
 	}

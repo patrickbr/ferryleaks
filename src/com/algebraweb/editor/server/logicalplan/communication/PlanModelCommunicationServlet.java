@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.configuration.Configuration;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -740,11 +741,9 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid,c);
 
-		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder();
+		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder(getConfiguration().getString("server.pf.path","pf"), getConfiguration().getString("server.pf.args","-IS"));
 
 		return sqlB.getCompiledSQL(d).get(pid);
-
-
 
 	}
 
@@ -913,6 +912,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		return pid;
 	}
+	
+	private Configuration getConfiguration() {
+		return (Configuration) getServletContext().getAttribute("configuration");
+	}
 
 
 	private void saveDefaultDatabaseConfiguration(EvaluationContext c)
@@ -1053,8 +1056,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 
 	}
-
-
-
+	
 
 }

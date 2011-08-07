@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import com.algebraweb.editor.client.PlanModelManipulator;
 import com.algebraweb.editor.client.PlanSwitchButton;
+import com.algebraweb.editor.client.RemoteConfiguration;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
 import com.algebraweb.editor.client.graphcanvas.ConnectedWidget;
@@ -44,9 +45,9 @@ public class LogicalCanvas extends GraphCanvas{
 
 	private int errorCount=0;
 
-
-	public LogicalCanvas(int id,final PlanModelManipulator m,int width, int height, PlanSwitchButton myTabButton) {
-		super(width, height,true);
+	public LogicalCanvas(int id,final PlanModelManipulator m,int width, int height, RemoteConfiguration config, PlanSwitchButton myTabButton) {
+		
+		super(width, height,config.isInvertArrows());
 
 		this.id=id;
 		this.m=m;

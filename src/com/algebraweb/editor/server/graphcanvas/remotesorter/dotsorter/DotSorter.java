@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.configuration.Configuration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -21,6 +22,7 @@ import org.xml.sax.SAXException;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
+import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
 import com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSorter;
 
 /**
@@ -31,16 +33,28 @@ import com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSorter;
 
 public class DotSorter implements RemoteSorter {
 
-	private static double DOT_CORRECTOR = 0.01818;
+	private double dotCorrector = 0.01818;
+	private String dotPath = "dot";
+	private String arg = "-Tsvg";
+	
+	private Configuration c;
+	
+	public DotSorter(String dotPath, String arg, double dotCorrector) {
+		this.dotCorrector = dotCorrector;
+		this.dotPath = dotPath;
+		this.arg=arg;
+		
+	}
 	
 	/**
 	 * Returns a HashMap containing node-IDs as keys and Node-Coordinates as value
 	 * @param nodes
 	 * @return
+	 * @throws RemoteIOException 
 	 */
 	@Override
 	public HashMap<Integer, Coordinate> getCoordinateHashMap(
-			ArrayList<RawNode> nodes) {
+			ArrayList<RawNode> nodes) throws RemoteIOException {
 		
 		
 		HashMap<Integer, Coordinate> ret = new HashMap<Integer, Coordinate>();
@@ -142,8 +156,8 @@ public class DotSorter implements RemoteSorter {
 
 	private String getDotNodeString(RawNode n) {
 
-		double width = (n.getWidth()) * DOT_CORRECTOR; 
-		double height = (n.getHeight()) * DOT_CORRECTOR;
+		double width = (n.getWidth()) * dotCorrector; 
+		double height = (n.getHeight()) * dotCorrector;
 
 		String ret ="";
 
@@ -158,16 +172,15 @@ public class DotSorter implements RemoteSorter {
 	 * returns an XML-Document containing dot's generated SVG
 	 * @param dotSource
 	 * @return
+	 * @throws RemoteIOException 
 	 */
 
-	private Document getDotXml(String dotSource) {
+	private Document getDotXml(String dotSource) throws RemoteIOException {
 
 		Runtime rt = Runtime.getRuntime();
 
-		String dot_path = "dot";
-
 		//we want svg output
-		String[] args = {dot_path, "-Tsvg"};
+		String[] args = {dotPath, arg};
 
 		try {
 
@@ -196,8 +209,7 @@ public class DotSorter implements RemoteSorter {
 			return doc;
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RemoteIOException(e.getMessage());
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

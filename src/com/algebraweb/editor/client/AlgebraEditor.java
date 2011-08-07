@@ -50,11 +50,11 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.02";
+	private static String VERSION = "Beta 1.04";
 
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (August 4th)";
+	private static String YEAR = "2011 (August 8th)";
 	private static String FACILITY = "Universität Tübingen";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
@@ -63,6 +63,8 @@ public class AlgebraEditor implements EntryPoint {
 	private static boolean LOGGING=false;
 	private static RegistrationServiceAsync registor = GWT.create(RegistrationService.class);
 	private static Timer keepAliveTimer;
+	
+	private RemoteConfiguration config;
 
 	/**
 	 * genesis...
@@ -80,7 +82,7 @@ public class AlgebraEditor implements EntryPoint {
 		BROWSER_VER = Navigator.getAppVersion();
 		BROWSER_OS = Navigator.getPlatform();
 
-		if (Math.random()<0.3) TITLE = "the bugFerry";
+		if (Math.random()<0.2) TITLE = "the bugFerry";
 
 		AlgebraEditor.log("Hi! This is " + TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " " + AUTHOR);
 		AlgebraEditor.log("   running in " + BROWSER_NAME + " " + BROWSER_VER + " (" + BROWSER_OS + ") (" + (Navigator.isCookieEnabled()?"Cookies enabled":"Cookies _NOT_ enabled. Session handling will not work properly!")+ ")");
@@ -106,10 +108,10 @@ public class AlgebraEditor implements EntryPoint {
 
 		AlgebraEditor.log("Sending registration...");
 
-		registor.register(new GraphCanvasCommunicationCallback<Configuration>("registering session") {
+		registor.register(new GraphCanvasCommunicationCallback<RemoteConfiguration>("registering session") {
 
 			@Override
-			public void onSuccess(final Configuration result) {
+			public void onSuccess(final RemoteConfiguration result) {
 				processConfiguration(result);
 			}
 
@@ -205,7 +207,7 @@ public class AlgebraEditor implements EntryPoint {
 
 		if (hasCanvasWithId(id)) return getCanvas(id);
 
-		LogicalCanvas c = new LogicalCanvas(id,m,Window.getClientWidth()-30,Window.getClientHeight()-30,s.addPlan(id));
+		LogicalCanvas c = new LogicalCanvas(id,m,Window.getClientWidth()-30,Window.getClientHeight()-30,config,s.addPlan(id));
 
 		c.setGraphNodeModifier(new GraphNodeModifier(c));
 		c.setGraphEdgeModifier(new GraphEdgeModifier(c));
@@ -520,7 +522,9 @@ public class AlgebraEditor implements EntryPoint {
 		});
 	}
 
-	private void processConfiguration(final Configuration result) {
+	private void processConfiguration(final RemoteConfiguration result) {
+		
+		config=result;
 		
 		keepAliveTimer = new Timer() {
 			@Override
@@ -536,9 +540,9 @@ public class AlgebraEditor implements EntryPoint {
 			}
 		};
 
-		keepAliveTimer.scheduleRepeating(60000);
+		keepAliveTimer.scheduleRepeating(result.getKeepAliveInterval());
 
-		if (result instanceof ConfigurationWithPlansInSession) {
+		if (result instanceof RemoteConfigurationWithPlansInSession) {
 
 			AlgebraEditor.log("Found existing session on server...");
 
@@ -548,7 +552,7 @@ public class AlgebraEditor implements EntryPoint {
 				@Override
 				public void onClick(ClickEvent event) {
 					AlgebraEditor.log("Loading existing plans from previous session...");
-					for (Integer id:((ConfigurationWithPlansInSession)result).getPlanIds()) {
+					for (Integer id:((RemoteConfigurationWithPlansInSession)result).getPlanIds()) {
 						loadFinishedPlanFromServer(id);
 					}
 				}
@@ -562,7 +566,7 @@ public class AlgebraEditor implements EntryPoint {
 			});
 			ynp.center();
 			ynp.show();
-		}else{
+		}else if (result.isLoadEmptyCanvas()){
 			AlgebraEditor.log("loading empty plan...");
 			createNewPlan(true);
 		}
