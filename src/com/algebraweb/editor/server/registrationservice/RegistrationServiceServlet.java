@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 
@@ -46,7 +45,7 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 			Configuration c;
 			try {
 				c = new PropertiesConfiguration("algebraeditor.properties");
-			} catch (ConfigurationException e) {
+			} catch (Exception e) {
 				throw new RemoteConfigurationException(e.getMessage());
 			}
 			getServletContext().setAttribute("configuration", c);
