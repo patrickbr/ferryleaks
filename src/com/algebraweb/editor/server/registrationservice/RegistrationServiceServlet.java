@@ -20,6 +20,11 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 	/**
 	 * 
 	 */
+	
+	public RegistrationServiceServlet() {
+		
+	}
+	
 	private static final long serialVersionUID = -1031957668151394521L;
 
 	@Override
