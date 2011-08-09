@@ -6,7 +6,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-
 import com.algebraweb.editor.client.RemoteConfiguration;
 import com.algebraweb.editor.client.RemoteConfigurationWithPlansInSession;
 import com.algebraweb.editor.client.RegistrationService;

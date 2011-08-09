@@ -1,7 +1,5 @@
 package com.algebraweb.editor.client;
 
-import org.apache.commons.configuration.ConfigurationException;
-
 import com.algebraweb.editor.client.logicalcanvas.RemoteConfigurationException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
