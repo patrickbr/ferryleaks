@@ -3,6 +3,8 @@ package com.algebraweb.editor.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.ui.Grid;
 
@@ -23,16 +25,16 @@ public class SqlResTable extends Grid{
 
 	/**
 	 * Fills the grid with an sql result provided by a JDBC-instance
-	 * @param res the sql result as an ArrayList of HashMaps
+	 * @param result the sql result as an ArrayList of HashMaps
 	 */
-	public void fill(ArrayList<HashMap<String,String>> res) {
+	public void fill(List<Map<String, String>> result) {
 
-		if (res.size()<1) return;
+		if (result.size()<1) return;
 
 		int row=1;
 		int col=0;
 
-		Iterator<String> a = res.get(0).keySet().iterator();
+		Iterator<String> a = result.get(0).keySet().iterator();
 		while(a.hasNext()) {
 			String curS = a.next();
 			this.setHTML(0, col, "<div class='header-cell'>" + curS + "</div>");
@@ -40,9 +42,9 @@ public class SqlResTable extends Grid{
 		}
 
 		col=0;
-		Iterator<HashMap<String,String>> it = res.iterator();
+		Iterator<Map<String,String>> it = result.iterator();
 		while (it.hasNext()) {
-			HashMap<String,String> cur = it.next();
+			Map<String,String> cur = it.next();
 			Iterator<String> i = cur.keySet().iterator();
 			while(i.hasNext()) {
 				String curS = i.next();

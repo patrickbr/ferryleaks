@@ -3,6 +3,7 @@ package com.algebraweb.editor.client.node;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
@@ -24,13 +25,9 @@ public class QueryPlan implements Serializable {
 	 */
 	private static final long serialVersionUID = 2371425529625584530L;
 	int id = -1;
-	ArrayList<Property> properties = new ArrayList<Property>();
-	ArrayList<PlanNode> plan = new ArrayList<PlanNode>();
+	List<Property> properties = new ArrayList<Property>();
+	List<PlanNode> plan = new ArrayList<PlanNode>();
 	private EvaluationContext evContext;
-
-
-	
-
 
 	public QueryPlan() {
 
@@ -39,48 +36,36 @@ public class QueryPlan implements Serializable {
 	public QueryPlan(int id) {
 		this.id=id;
 	}
-	
-	
+
 
 	public PlanNode addNode(NodeScheme s) {
-
 		PlanNode n = new PlanNode(getFreeId(), s, this);
-		
+
 		//TODO: not nice
 		for (int i=0;i<n.getMaxChildCount();i++) {
-			
 			n.getChilds().add(null);
-			
 		}
-		
+
 		Iterator<GoAble> it = s.getSchema().iterator();
 
 		while (it.hasNext()) {
-			
 			GoAble cur = it.next();
-			
 			if (cur instanceof GoInto && !(cur instanceof Value)) {
-				
 				n.getContent().add(new ValGroup(((GoInto)cur).getInternalName()));
-				
 			}
-			
-			
 		}
-		
+
 		plan.add(n);
 		return n;
 
 	}
-	private void deleteChildsFromPlan(PlanNode p, ArrayList<PlanNode> plan) {
+	private void deleteChildsFromPlan(PlanNode p, List<PlanNode> temp) {
 
 		Iterator<PlanNode> it = p.getChilds().iterator();
 
 		while (it.hasNext()) {
-
 			PlanNode current = it.next();
-			plan.remove(current);
-
+			temp.remove(current);
 		}
 
 
@@ -97,61 +82,48 @@ public class QueryPlan implements Serializable {
 
 	}
 
-	public int getFreeId(ArrayList<Integer> blackList) {
+	public int getFreeId(List<Integer> nids) {
 
 		int current = 0;
 
-		while (blackList.contains(current) || getPlanNodeById(current) != null) {
-
+		while (nids.contains(current) || getPlanNodeById(current) != null) {
 			current++;
-
 		}
 
 		return current;
-
 	}
 
 	public int getId() {
 		return id;
 	}
 
-
-	public ArrayList<PlanNode> getParents(PlanNode n) {
-		
-		ArrayList<PlanNode> ret = new ArrayList<PlanNode>();
-		
+	public List<PlanNode> getParents(PlanNode n) {
+		List<PlanNode> ret = new ArrayList<PlanNode>();
 		Iterator<PlanNode> it = getPlan().iterator();
-		
+
 		while (it.hasNext()) {
 			PlanNode cur = it.next();
 			if(cur != null && cur.getChilds().contains(n)) ret.add(cur);
 		}
-				
+
 		return ret;
-		
 	}
 
-	public ArrayList<PlanNode> getPlan() {
+	public List<PlanNode> getPlan() {
 		return plan;
 	}
 
 	public PlanNode getPlanNodeById(int id) {
-
 		Iterator<PlanNode> i = plan.iterator();
-
 		while (i.hasNext()) {
-
 			PlanNode current = i.next();
 			if (current != null && current.getId() == id) return current;
-
 		}
 
-		System.out.println("Plannode with id #" + id  + " not found!");
 		return null;
-
 	}
 
-	public ArrayList<Property> getProperties() {
+	public List<Property> getProperties() {
 		return properties;
 	}
 
@@ -160,11 +132,9 @@ public class QueryPlan implements Serializable {
 	}
 
 	public PlanNode getRootNode(boolean skipSerializeRelation) throws GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException{
-
-		ArrayList<PlanNode> temp = new ArrayList<PlanNode>();
-
+		List<PlanNode> temp = new ArrayList<PlanNode>();
 		temp.addAll(this.getPlan());
-		
+
 		if (temp.size() == 0) throw new GraphIsEmptyException();
 
 		Iterator<PlanNode> itChilds = this.getPlan().iterator();
@@ -174,33 +144,31 @@ public class QueryPlan implements Serializable {
 			deleteChildsFromPlan(itChilds.next(),temp);
 
 		}
-		
+
 		if (temp.size() == 0) throw new PlanHasCycleException(this.getPlan().get(0).getId());
-		
+
 		if (temp.size()>1) throw new GraphNotConnectedException();
 
 		//TODO: throws error if plan has cycle
-		
+
 		if (skipSerializeRelation && temp.get(0).getKind().equals("serialize relation")) {
 			return temp.get(0).getChilds().get(1);
 		}else{
 			return temp.get(0);
 		}
-	
-
 	}
-	
+
 	/**
 	 * @param evContext the evContext to set
 	 */
 	public void setEvContext(EvaluationContext evContext) {
 		this.evContext = evContext;
 	}
-	
+
 	public void setPlan(ArrayList<PlanNode> plan) {
 		this.plan = plan;
 	}
-	
+
 
 	public void setProperties(ArrayList<Property> properties) {
 		this.properties = properties;
@@ -208,20 +176,13 @@ public class QueryPlan implements Serializable {
 
 	@Override
 	public String toString() {
-
 		String ret = "";
 		Iterator<PlanNode> i = plan.iterator();
 
 		while (i.hasNext()) {
-			
 			PlanNode cur = i.next();
-			
 			if (cur != null) ret += i.next().toString() + "\n";
 		}
-
 		return ret;
 	}
-
-
-
 }

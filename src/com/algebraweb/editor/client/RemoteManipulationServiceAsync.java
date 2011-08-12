@@ -3,6 +3,8 @@ package com.algebraweb.editor.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
@@ -32,21 +34,22 @@ public interface RemoteManipulationServiceAsync {
 	void addNode(int planid, String nodeType, int x, int y,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
-	void copyNodes(ArrayList<PlanNodeCopyMessage> msg, int pid,
+	void copyNodes(List<PlanNodeCopyMessage> msg, int pid,
 			AsyncCallback<Void> callback);
 
 	void createNewPlan(boolean clearFirst, AsyncCallback<Integer> callback);
 
-	void deleteEdge(HashMap<Coordinate, Integer> edges, int planid,
+	void deleteEdge(Map<Coordinate, Integer> map, int planid,
 			AsyncCallback<RemoteManipulationMessage> manipulationCallback);
 
 	void deleteNodes(Integer[] nids, int planid,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
 	void eval(int pid, int nid, EvaluationContext context, boolean saveContext,
-			AsyncCallback<ArrayList<HashMap<String, String>>> callback);
+			AsyncCallback<List<Map<String, String>>> callback);
 
-	void evalPlan(int pid, EvaluationContext c,	boolean saveCurrenNodeValue,AsyncCallback<ArrayList<HashMap<String, String>>> evalCb);
+	void evalPlan(int pid, EvaluationContext c, boolean saveCurrenNodeValue,
+			AsyncCallback<List<Map<String, String>>> evalCb);
 
 	void getEvaluationContext(int pid, int nid,
 			AsyncCallback<EvaluationContext> callback);
@@ -59,13 +62,13 @@ public interface RemoteManipulationServiceAsync {
 	void getPlanNode(int nid, int pid, AsyncCallback<PlanNode> callback);
 
 	void getReferencableColumns(int nid, int pid,
-			AsyncCallback<ArrayList<Property>> callback);
+			AsyncCallback<List<Property>> callback);
 
 	void getReferencableColumnsWithoutAdded(int nid, int pid,
-			AsyncCallback<ArrayList<Property>> callback);
+			AsyncCallback<List<Property>> callback);
 
 	void getReferencableColumnsWithoutAddedFromPos(int nid, int pid, int pos,
-			AsyncCallback<ArrayList<Property>> callback);
+			AsyncCallback<List<Property>> callback);
 
 	void getRootNode(int pid, AsyncCallback<PlanNode> callback);
 

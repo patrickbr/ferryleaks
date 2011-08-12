@@ -2,7 +2,7 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 
-public class EditSQLListenerDialog extends AddSQListenerDIalog{
+public class EditSQLListenerDialog extends AddSQListenerDialog{
 	
 	
 

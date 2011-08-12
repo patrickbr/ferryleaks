@@ -2,6 +2,7 @@ package com.algebraweb.editor.server.logicalplan.validation.validators;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
@@ -12,24 +13,18 @@ import com.algebraweb.editor.server.logicalplan.validation.Validator;
 public class ReferencedNodesValidator implements Validator {
 
 	private boolean hasChildWithId(PlanNode n, int id) {
-
 		Iterator<PlanNode> it = n.getChilds().iterator();
 
 		while (it.hasNext()) {
-
 			PlanNode current = it.next();
-
 			if (current != null && current.getId() == id) return true;
-
 		}
-
 		return false;
-
 	}
 
 
 	@Override
-	public void validate(ArrayList<PlanNode> ps, ArrayList<PlanNode> plan,
+	public void validate(List<PlanNode> ps, List<PlanNode> plan,
 			ValidationResult r) {
 
 		Iterator<PlanNode> it = ps.iterator();

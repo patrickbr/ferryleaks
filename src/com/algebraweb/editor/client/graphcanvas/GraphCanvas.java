@@ -33,7 +33,7 @@ import com.hydro4ge.raphaelgwt.client.Raphael;
  *
  */
 
-public class GraphCanvas extends Raphael  {
+public class GraphCanvas extends Raphael implements Fillable  {
 
 	private GraphNode dragNode = null;
 
@@ -223,8 +223,8 @@ public class GraphCanvas extends Raphael  {
 	 * @param quiet
 	 */
 
-	public void createEdge(GraphNode from, GraphNode to, int fixedPos,boolean quiet) {
-		GraphEdge t = new GraphEdge(this,from,to,fixedPos,quiet, !this.isNotActive());
+	public void createEdge(int from, int to, int fixedPos,boolean quiet) {
+		GraphEdge t = new GraphEdge(this,getGraphNodeById(from),getGraphNodeById(to),fixedPos,quiet, !this.isNotActive());
 		this.edges.add(t);
 	}
 
@@ -638,9 +638,9 @@ public class GraphCanvas extends Raphael  {
 		}	
 	}
 
-	public void removeEdge(GraphNode n,int to,int position) {
+	public void removeEdge(int nid,int to,int position) {
 
-		ArrayList<GraphEdge> from = n.getEdgesFrom();
+		ArrayList<GraphEdge> from = getGraphNodeById(nid).getEdgesFrom();
 		GraphEdge current;
 
 		for (int i=0;i<from.size();i++) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.algebraweb.editor.client.AlgebraEditorCanvasView;
 import com.algebraweb.editor.client.PlanModelManipulator;
 import com.algebraweb.editor.client.PlanSwitchButton;
 import com.algebraweb.editor.client.RemoteConfiguration;
@@ -15,14 +16,16 @@ import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.NodeSelectionHandler;
+import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.user.client.ui.Widget;
 
-public class LogicalCanvas extends GraphCanvas{
+public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasView{
 
 
 
@@ -407,11 +410,13 @@ public class LogicalCanvas extends GraphCanvas{
 
 		while (it.hasNext()) it.next().update();
 
-
 	}
 
 
-
+	@Override
+	public Widget getWidget() {
+		return this;
+	}
 
 
 }

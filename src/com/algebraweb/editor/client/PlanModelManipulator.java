@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
@@ -56,7 +57,7 @@ public class PlanModelManipulator {
 			if (result.getReturnCode() == 1 ) {
 
 				AlgebraEditor.log(("   received a '" + result.getAction() + "' manipulation for plan #" + result.getPlanid()));
-				LogicalCanvas c = e.getCanvas(result.getPlanid());
+				AlgebraEditorCanvasView c = e.getCanvas(result.getPlanid());
 
 				if (result.getAction().equals("delete")) {
 					Iterator<RawNode> it = result.getNodesAffected().iterator();
@@ -91,7 +92,7 @@ public class PlanModelManipulator {
 
 						while (u.hasNext()) {	
 							Integer cur = u.next();
-							c.removeEdge(from, markedForDeletion.get(cur).getId(),cur);							
+							c.removeEdge(from.getId(), markedForDeletion.get(cur).getId(),cur);							
 						}
 
 						Iterator<RawEdge> i = current.getEdgesToList().iterator();
@@ -102,7 +103,7 @@ public class PlanModelManipulator {
 							GraphNode to = e.getCanvas(result.getPlanid()).getGraphNodeById(ed.getTo());
 						
 							if (to != null && !c.hasEdge(from.getId(), to.getId(),ed.getFixedParentPos())) {
-								c.createEdge(from, to, ed.getFixedParentPos(),false);
+								c.createEdge(from.getId(), to.getId(), ed.getFixedParentPos(),false);
 							}
 						}
 						c.showEdges();
@@ -139,7 +140,7 @@ public class PlanModelManipulator {
 							RawEdge ed = i.next();
 
 							GraphNode to = c.getGraphNodeById(ed.getTo());
-							c.createEdge(from, to, ed.getFixedParentPos(),true);
+							c.createEdge(from.getId(), to.getId(), ed.getFixedParentPos(),true);
 
 						}
 						c.showEdges();
@@ -154,7 +155,7 @@ public class PlanModelManipulator {
 	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>("getting node types") {
 		@Override
 		public void onSuccess(String[] result) {
-			new NodeTypeSelector(result, AlgebraEditor.getActiveCanvas());
+			new NodeTypeSelector(result, AlgebraEditor.getActiveView());
 		}
 	};
 
@@ -189,7 +190,7 @@ public class PlanModelManipulator {
 
 	//TODO: shoudlnt be in here
 	public void blurr(boolean blur) {
-		AlgebraEditor.getActiveCanvas().setBlurred(blur);
+		AlgebraEditor.getActiveView().setBlurred(blur);
 	}
 
 	private boolean containsEdge(ArrayList<RawEdge> edges, int to, int pos) {
@@ -227,15 +228,15 @@ public class PlanModelManipulator {
 	
 	/**
 	 * Removes edges from a plan
-	 * @param edges the edges to be removed as a HashMap providing a tuple (from,to) as a key and
+	 * @param map the edges to be removed as a HashMap providing a tuple (from,to) as a key and
 	 * an position integer as a value
 	 * @param planid the plan the edges should be removed from
 	 */
-	public void deleteEdges(HashMap<Coordinate,Integer> edges, int planid) {
-		if (edges.size() == 0) return;
+	public void deleteEdges(Map<Coordinate, Integer> map, int planid) {
+		if (map.size() == 0) return;
 		AlgebraEditor.log("Deleting edge(s) from plan #" + planid);
 		GraphCanvas.showLoading("Deleting edge...");
-		manServ.deleteEdge(edges, planid, manipulationCallback);
+		manServ.deleteEdge(map, planid, manipulationCallback);
 	}
 
 	/**
@@ -315,5 +316,7 @@ public class PlanModelManipulator {
 		AlgebraEditor.log("Requesting validation for #" + planid);
 		manServ.getValidation(planid,validationCallback);
 	}
+
+
 
 }

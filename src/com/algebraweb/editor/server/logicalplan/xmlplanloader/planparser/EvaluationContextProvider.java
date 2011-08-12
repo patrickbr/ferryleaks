@@ -3,6 +3,7 @@ package com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,28 +17,20 @@ import com.algebraweb.editor.client.node.QueryPlan;
 
 public class EvaluationContextProvider {
 
-
 	private class ItemCol implements Comparable<ItemCol> {
-
-
 
 		private int pos;
 		private String name;
 
-
 		public ItemCol(String name, int pos) {
-
 			this.name=name;
 			this.pos=pos;
-
 		}
-
 
 		@Override
 		public int compareTo(ItemCol arg0) {
 			return this.pos = arg0.getPos();
 		}
-
 
 		/**
 		 * @return the name
@@ -46,18 +39,12 @@ public class EvaluationContextProvider {
 			return name;
 		}
 
-
 		/**
 		 * @return the pos
 		 */
 		public int getPos() {
 			return pos;
 		}
-
-
-
-
-
 	}
 	
 	private HttpSession session;
@@ -68,7 +55,6 @@ public class EvaluationContextProvider {
 	public EvaluationContextProvider(HttpSession session) {
 		this.session=session;
 	}
-
 
 	public void fillEvaluationContext(QueryPlan p) throws GraphNotConnectedException, PlanHasCycleException {
 
@@ -112,7 +98,7 @@ public class EvaluationContextProvider {
 
 			Iterator<NodeContent> items = root.getContentWithAttributeValue("function", "item").iterator();
 
-			ArrayList<ItemCol> itemCols = new ArrayList<ItemCol>();
+			List<ItemCol> itemCols = new ArrayList<ItemCol>();
 
 			while (items.hasNext()) {
 				NodeContent current = items.next();
@@ -133,21 +119,14 @@ public class EvaluationContextProvider {
 			c.setItemColumns(colsString);
 
 		}else{
-
 			c.setIterColumnName("");
 			c.setIterColumnNat(1);
 			c.setIterUseColumn(false);
 			c.setSortColumnName("");
 			c.setSortOrder("ASCENDING");
 			c.setSortUseColumn(false);
-
 		}
-
 		p.setEvContext(c);
-
-
 	}
-
-
 
 }

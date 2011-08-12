@@ -3,6 +3,8 @@ package com.algebraweb.editor.server.logicalplan.xmlplanloader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -17,7 +19,6 @@ import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 
 public class XMLPlanFiller implements GraphCanvasFiller{
 
-
 	private HttpSession session;
 	private ServletContext context;
 	private Iterator<RawNode> it;
@@ -31,7 +32,6 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 	}
 
 	public RawNode getRawNode(PlanNode current) {
-		System.out.println(current.getLabel());
 		RawNode temp = new RawNode(current.getId(), current.getLabel(), 0xCCCCCC, 130, 25);
 		temp.setFixedChildCount(current.getMaxChildCount());
 		Iterator<PlanNode> childs = current.getChilds().iterator();
@@ -49,17 +49,15 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 			c++;
 		}
 
-		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>) context.getAttribute("nodeSchemes"); 
-
+		Map<String,NodeScheme> schemes = (Map<String,NodeScheme>) context.getAttribute("nodeSchemes"); 
 		if (getScheme(current.getKind(),schemes).getProperties().containsKey("color")) {
 			temp.setColor(Integer.parseInt((getScheme(current.getKind(),schemes).getProperties().get("color")).split("x")[1],16));
 		}
 		return temp;
 	}
 
-
-	public ArrayList<RawNode> getRawNodes(QueryPlan qp) {
-		ArrayList<RawNode> rawNodes = new ArrayList<RawNode>();
+	public List<RawNode> getRawNodes(QueryPlan qp) {
+		List<RawNode> rawNodes = new ArrayList<RawNode>();
 		Iterator<PlanNode> it = qp.getPlan().iterator();
 
 		while (it.hasNext()) {
@@ -70,14 +68,11 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		return rawNodes;
 	}
 
-	private NodeScheme getScheme(String type,HashMap<String,NodeScheme> schemes) {
+	private NodeScheme getScheme(String type,Map<String, NodeScheme> schemes) {
 		NodeScheme s = schemes.get(type);
 		if (s==null && type != "__standard") {
-			System.out.println("Warning: Could not find scheme for node type '" + type + "'. Falling " +
-			"back to standard scheme!");
 			return getScheme("__standard",schemes);
 		}else if (s==null && type == "__standard") {
-			System.out.println("Warning: Could not find a standard scheme! Falling back...");
 			s=new NodeScheme("___empty");
 		}
 		return s;

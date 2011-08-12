@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
@@ -51,19 +53,19 @@ public class PlanParser {
 
 
 	private File file;
-	private HashMap<String,NodeScheme> schemes;
+	private Map<String,NodeScheme> schemes;
 	private HttpSession session;
 
-	public PlanParser(HashMap<String,NodeScheme> schemes,HttpSession session) {
+	public PlanParser(Map<String,NodeScheme> schemes,HttpSession session) {
 
 		this.schemes=schemes;
 		this.session=session;
 
 	}
 
-	public PlanParser(HashMap<String,NodeScheme> schemes, String file,HttpSession session) {
+	public PlanParser(Map<String, NodeScheme> nodeSchemes, String file,HttpSession session) {
 
-		this.schemes=schemes;
+		this.schemes=nodeSchemes;
 		this.file = new File(file);
 		this.session=session;
 
@@ -84,7 +86,7 @@ public class PlanParser {
 	private void fillNode(PlanNode n, Element nodeEl, QueryPlan mother, PlanNode node) {
 
 		NodeScheme s = getScheme(n.getKind());
-		ArrayList<GoAble> schema = s.getSchema();
+		List<GoAble> schema = s.getSchema();
 
 		parseNodeLabelSchema(n,s);
 		parseContent(nodeEl, n.getContent(), schema, mother, node);
@@ -240,7 +242,7 @@ public class PlanParser {
 	 * @param schema
 	 */
 
-	private void parseContent(Element e, ArrayList<NodeContent> retEl, ArrayList<GoAble> schema,QueryPlan mother, PlanNode node) {
+	private void parseContent(Element e, ArrayList<NodeContent> retEl, List<GoAble> schema,QueryPlan mother, PlanNode node) {
 
 		Iterator<GoAble> it = schema.iterator();
 
@@ -248,7 +250,7 @@ public class PlanParser {
 
 			GoAble next = it.next();
 
-			ArrayList<Element> childs=getElementsByScheme(e,next);
+			List<Element> childs=getElementsByScheme(e,next);
 
 			for (int i=0;i<childs.size();i++) {
 
@@ -284,7 +286,7 @@ public class PlanParser {
 
 			retEl = new ContentVal(((Value)g).getValName(),((Value)g).getInternalName(),new PropertyValue(getTextValue(e),"string"));
 
-			ArrayList<Field> fields = ((Value)g).getFields();
+			List<Field> fields = ((Value)g).getFields();
 
 			Iterator<Field> i = fields.iterator();
 
@@ -320,7 +322,7 @@ public class PlanParser {
 
 
 
-		ArrayList<GoAble> schema = g.getSchema();
+		List<GoAble> schema = g.getSchema();
 
 		parseContent(e, retEl.getContent(), schema, mother, node);
 		return retEl;
@@ -401,7 +403,7 @@ public class PlanParser {
 
 		NodeList nodes = parent.getElementsByTagName("node");
 
-		ArrayList<PlanNode> planNodes = mother.getPlan();
+		List<PlanNode> planNodes = mother.getPlan();
 
 		for (int i=0;i<nodes.getLength();i++) {
 

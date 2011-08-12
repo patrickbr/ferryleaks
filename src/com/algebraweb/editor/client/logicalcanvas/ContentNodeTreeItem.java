@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.node.NodeContent;
@@ -15,7 +16,7 @@ public class ContentNodeTreeItem extends NodeTreeItem{
 	private GoAble scheme;
 	protected RemoteManipulationServiceAsync manServ;
 	private String name = "";
-	private ArrayList<ValidationError> errors;
+	private List<ValidationError> errors;
 
 
 	public ContentNodeTreeItem(RemoteManipulationServiceAsync manServ,NodeContent c, GoAble scheme) {
@@ -44,7 +45,7 @@ public class ContentNodeTreeItem extends NodeTreeItem{
 	/**
 	 * @return the errors
 	 */
-	public ArrayList<ValidationError> getErrors() {
+	public List<ValidationError> getErrors() {
 		return errors;
 	}
 

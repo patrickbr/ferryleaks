@@ -89,8 +89,8 @@ public class ControlPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				m.deleteNode(getC().getSelectedNodes().keySet().toArray(new Integer[0]), AlgebraEditor.getActiveCanvas().getId());
-				m.deleteEdges(getC().getSelectedEdgesWithPos(), AlgebraEditor.getActiveCanvas().getId());
+				m.deleteNode(getC().getSelectedNodes().keySet().toArray(new Integer[0]), AlgebraEditor.getActiveView().getId());
+				m.deleteEdges(getC().getSelectedEdgesWithPos(), AlgebraEditor.getActiveView().getId());
 
 			}});
 
@@ -103,7 +103,7 @@ public class ControlPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				if (getC().getSelectedNodes().size()>0)
-					new NodeEditDialog(m,ControlPanel.this.rmsa,getC().getSelectedNodes().values().iterator().next().getId(),AlgebraEditor.getActiveCanvas().getId());
+					new NodeEditDialog(m,ControlPanel.this.rmsa,getC().getSelectedNodes().values().iterator().next().getId(),AlgebraEditor.getActiveView().getId());
 			}});
 
 		editPanel.add(editButton);
@@ -115,7 +115,7 @@ public class ControlPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				if (getC().getSelectedNodes().size()>0)
-					ControlPanel.this.rmsa.getXMLFromPlanNode(AlgebraEditor.getActiveCanvas().getId(),AlgebraEditor.getActiveCanvas().getSelectedNodes().values().iterator().next().getId(), xmlCb);
+					ControlPanel.this.rmsa.getXMLFromPlanNode(AlgebraEditor.getActiveView().getId(),AlgebraEditor.getActiveView().getSelectedNodes().values().iterator().next().getId(), xmlCb);
 			}});
 
 		editPanel.add(xmlButton);
@@ -127,7 +127,7 @@ public class ControlPanel extends AbsolutePanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				if (getC().getSelectedNodes().size()>0)
-					new CreateXMLDialog(getC().getId(),AlgebraEditor.getActiveCanvas().getSelectedNodes().keySet().toArray(new Integer[0])[0],rmsa);
+					new CreateXMLDialog(getC().getId(),AlgebraEditor.getActiveView().getSelectedNodes().keySet().toArray(new Integer[0])[0],rmsa);
 			}});
 
 		editPanel.add(xmlPlanButton);
@@ -209,7 +209,7 @@ public class ControlPanel extends AbsolutePanel{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				new TextPresentationDialog("SVG of plan #" +  getC().getId(), "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" +  getC().getRaphaelElement().getInnerHTML());
+				new TextPresentationDialog("SVG of plan #" +  getC().getId(), "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" +  ((LogicalCanvas)getC()).getRaphaelElement().getInnerHTML());
 			}});
 
 		d = new LogicialPlanUploadDialog(this,e);
@@ -240,8 +240,8 @@ public class ControlPanel extends AbsolutePanel{
 	}
 
 
-	public LogicalCanvas getC() {
-		return AlgebraEditor.getActiveCanvas();
+	public AlgebraEditorCanvasView getC() {
+		return AlgebraEditor.getActiveView();
 	}
 
 	public PlanModelManipulator getM() {

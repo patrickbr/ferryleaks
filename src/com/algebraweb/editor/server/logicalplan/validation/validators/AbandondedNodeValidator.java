@@ -1,6 +1,6 @@
 package com.algebraweb.editor.server.logicalplan.validation.validators;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.node.PlanNode;
@@ -11,19 +11,13 @@ import com.algebraweb.editor.server.logicalplan.validation.Validator;
 public class AbandondedNodeValidator implements Validator {
 
 	@Override
-	public void validate(ArrayList<PlanNode> ps, ArrayList<PlanNode> plan, ValidationResult r) {
-
-
+	public void validate(List<PlanNode> ps, List<PlanNode> plan, ValidationResult r) {
 		Iterator<PlanNode> it = ps.iterator();
-
 		while (it.hasNext()) {
-
 			PlanNode current = it.next();
 
 			if (current != null) {
-
 				boolean isChild = false;
-
 				Iterator<PlanNode> itt = plan.iterator();
 
 				while (itt.hasNext()) {
@@ -31,12 +25,7 @@ public class AbandondedNodeValidator implements Validator {
 				}
 
 				if (!isChild && current.getChilds().size() == 0) r.addError(new ValidationError(current.getId(), "Node is abandonded. It has neither parents no childs."));
-
 			}
 		}
-
-
-
 	}
-
 }

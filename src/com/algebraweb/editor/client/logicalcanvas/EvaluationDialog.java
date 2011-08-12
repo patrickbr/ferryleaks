@@ -2,6 +2,8 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.SqlResDialog;
@@ -11,10 +13,10 @@ public class EvaluationDialog extends CreateSQLDialog {
 
 	private DatabaseConfigPanel db;
 
-	private  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>> evalCb = new  GraphCanvasCommunicationCallback<ArrayList<HashMap<String,String>>>("evaluating") {
+	private  GraphCanvasCommunicationCallback<List<Map<String,String>>> evalCb = new  GraphCanvasCommunicationCallback<List<Map<String,String>>>("evaluating") {
 
 		@Override
-		public void onSuccess(ArrayList<HashMap<String,String>> result) {
+		public void onSuccess(List<Map<String,String>> result) {
 
 
 			new SqlResDialog(result);

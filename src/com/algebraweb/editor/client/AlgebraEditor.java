@@ -3,6 +3,8 @@ package com.algebraweb.editor.client;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+
 import com.algebraweb.editor.client.graphcanvas.ContextMenu;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
@@ -11,16 +13,14 @@ import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphNodeModifier;
 import com.algebraweb.editor.client.graphcanvas.NodeContextMenu;
 import com.algebraweb.editor.client.graphcanvas.TabContextMenu;
-import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFillingMachine;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFiller;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
-import com.algebraweb.editor.client.logicalcanvas.AddSQListenerDIalog;
+import com.algebraweb.editor.client.logicalcanvas.AddSQListenerDialog;
 import com.algebraweb.editor.client.logicalcanvas.ConfigurePlanDialog;
 import com.algebraweb.editor.client.logicalcanvas.CreateSQLDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluatePlanDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
-import com.algebraweb.editor.client.logicalcanvas.LogicalDragPanel;
 import com.algebraweb.editor.client.logicalcanvas.LogicalNodePopup;
 import com.algebraweb.editor.client.logicalcanvas.LogicalPlanNodeContextItem;
 import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
@@ -51,7 +51,6 @@ import com.google.gwt.user.client.ui.TextArea;
 public class AlgebraEditor implements EntryPoint {
 
 	private static String VERSION = "Beta 1.04";
-
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
 	private static String YEAR = "2011 (August 8th)";
@@ -65,6 +64,15 @@ public class AlgebraEditor implements EntryPoint {
 	private static Timer keepAliveTimer;
 	
 	private RemoteConfiguration config;
+	private List<AlgebraEditorCanvasView> canvi = new ArrayList<AlgebraEditorCanvasView>();
+	private List<EditorDragPanel> panels = new ArrayList<EditorDragPanel>();
+	private static AlgebraEditorCanvasView activeCanvas=null;
+	private PlanSwitcher s;
+	private RemoteManipulationServiceAsync rmsa;
+	private PlanModelManipulator m;
+	private NodeContextMenu nodeContextMenu = new NodeContextMenu();
+	private ContextMenu planContextMenu = new ContextMenu();
+	private TabContextMenu tabContextMenu = new TabContextMenu();
 
 	/**
 	 * genesis...
@@ -122,7 +130,7 @@ public class AlgebraEditor implements EntryPoint {
 	 * Returns the active canvas.
 	 * @return the active canvas
 	 */
-	public static LogicalCanvas getActiveCanvas() {
+	public static AlgebraEditorCanvasView getActiveView() {
 		return activeCanvas;
 	}
 	/**
@@ -142,23 +150,12 @@ public class AlgebraEditor implements EntryPoint {
 	public static void setSubTitle(String s) {
 		Window.setTitle(s + " - " + TITLE + " - " + VERSION);
 	}
-	private ArrayList<LogicalCanvas> canvi = new ArrayList<LogicalCanvas>();
-	private ArrayList<LogicalDragPanel> panels = new ArrayList<LogicalDragPanel>();
-	private static LogicalCanvas activeCanvas=null;
-	private PlanSwitcher s;
-	private RemoteManipulationServiceAsync rmsa;
-	private PlanModelManipulator m;
-
-	private NodeContextMenu nodeContextMenu = new NodeContextMenu();
-
-	private ContextMenu planContextMenu = new ContextMenu();
-
-	private TabContextMenu tabContextMenu = new TabContextMenu();
+	
 	
 	private  GraphCanvasCommunicationCallback<Integer> createCb = new  GraphCanvasCommunicationCallback<Integer>("adding new empty canvas") {
 		@Override
 		public void onSuccess(Integer result) {
-			if (addCanvas(result) != activeCanvas) changeCanvas(result);
+			if (addCanvasView(result) != activeCanvas) changeCanvas(result);
 		}
 	};
 
@@ -166,12 +163,12 @@ public class AlgebraEditor implements EntryPoint {
 		@Override
 		public void onSuccess(Integer result) {
 			if (hasCanvasWithId(result)) {
-				Iterator<LogicalDragPanel> it = panels.iterator();
+				Iterator<EditorDragPanel> it = panels.iterator();
 
 				while (it.hasNext()) {
-					LogicalDragPanel cur = it.next();
+					EditorDragPanel cur = it.next();
 					if (cur.getLogicalCanvas().getId() == result) {
-						removeLogicalCanvas(cur.getLogicalCanvas());
+						removeLogicalCanvasView(cur.getLogicalCanvas());
 						cur.clear();
 						RootPanel.get("editor").remove(cur);
 						it.remove();
@@ -203,7 +200,7 @@ public class AlgebraEditor implements EntryPoint {
 	 * @param id the id of the new canvas
 	 * @return the new canvas or the canvas with the given id if it already exists
 	 */
-	public LogicalCanvas addCanvas(int id) {
+	public AlgebraEditorCanvasView addCanvasView(int id) {
 
 		if (hasCanvasWithId(id)) return getCanvas(id);
 
@@ -217,7 +214,7 @@ public class AlgebraEditor implements EntryPoint {
 		c.setCanvasMenu(planContextMenu);
 		c.setPadding(60, 45);
 
-		LogicalDragPanel d = new LogicalDragPanel(c);
+		EditorDragPanel d = new EditorDragPanel(c);
 
 		d.hide();
 		RootPanel.get("editor").add(d);
@@ -236,12 +233,12 @@ public class AlgebraEditor implements EntryPoint {
 	public void changeCanvas(int id) {
 		AlgebraEditor.log("Changing to canvas #" + id);
 
-		Iterator<LogicalDragPanel> it = panels.iterator();
+		Iterator<EditorDragPanel> it = panels.iterator();
 		int activeCanvasId=-1;
 		if (activeCanvas!= null) activeCanvasId = activeCanvas.getId();
 
 		while (it.hasNext()) {
-			LogicalDragPanel cur = it.next();
+			EditorDragPanel cur = it.next();
 			if (cur.getLogicalCanvas().getId() == activeCanvasId) {
 				cur.hide();
 				cur.getLogicalCanvas().setNotActive(true);
@@ -250,7 +247,7 @@ public class AlgebraEditor implements EntryPoint {
 
 		it = panels.iterator();
 		while (it.hasNext()) {
-			LogicalDragPanel cur = it.next();
+			EditorDragPanel cur = it.next();
 			if (cur.getLogicalCanvas().getId() == id) {
 				activeCanvas = cur.getLogicalCanvas();
 				activeCanvas.setNotActive(false);
@@ -267,12 +264,12 @@ public class AlgebraEditor implements EntryPoint {
 	public void clearCanvases() {
 
 		AlgebraEditor.log("Clearing canvases...");
-		Iterator<LogicalDragPanel> it = panels.iterator();
+		Iterator<EditorDragPanel> it = panels.iterator();
 		canvi.clear();
 
 		while (it.hasNext()) {
-			LogicalDragPanel cur = it.next();
-			removeLogicalCanvas(cur.getLogicalCanvas());
+			EditorDragPanel cur = it.next();
+			removeLogicalCanvasView(cur.getLogicalCanvas());
 			cur.clear();
 			RootPanel.get("editor").remove(cur);
 			it.remove();
@@ -293,10 +290,10 @@ public class AlgebraEditor implements EntryPoint {
 	 * @param pid the id to look for
 	 * @return the LogicalCanvas with the specified id
 	 */
-	public LogicalCanvas getCanvas(int pid) {
-		Iterator<LogicalCanvas> it = canvi.iterator();
+	public AlgebraEditorCanvasView getCanvas(int pid) {
+		Iterator<AlgebraEditorCanvasView> it = canvi.iterator();
 		while (it.hasNext()) {
-			LogicalCanvas cur = it.next();
+			AlgebraEditorCanvasView cur = it.next();
 			if (cur.getId() == pid) return cur;
 		}
 		return null;
@@ -371,7 +368,7 @@ public class AlgebraEditor implements EntryPoint {
 			public void onClick(int nid) {
 				Integer[] nids = new Integer[1];
 				nids[0] = nid;
-				getPlanManipulator().deleteNode(nids, getActiveCanvas().getId());
+				getPlanManipulator().deleteNode(nids, getActiveView().getId());
 			}
 		});
 
@@ -379,21 +376,21 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalNodeContextItem("Select") {
 			@Override
 			public void onClick(int nid) {
-				getActiveCanvas().setSelectedNode(getActiveCanvas().getGraphNodeById(nid));
+				getActiveView().setSelectedNode(getActiveView().getGraphNodeById(nid));
 			}
 		});
 
 		m.addItem(new LogicalNodeContextItem("Select subtree") {
 			@Override
 			public void onClick(int nid) {
-				getActiveCanvas().selectNodeWithSubs(getActiveCanvas().getGraphNodeById(nid));
+				getActiveView().selectNodeWithSubs(getActiveView().getGraphNodeById(nid));
 			}
 		});
 
 		m.addItem(new LogicalNodeContextItem("Copy") {
 			@Override
 			public void onClick(int nid) {
-				getPlanManipulator().copy(getActiveCanvas().getId());
+				getPlanManipulator().copy(getActiveView().getId());
 			}
 		});
 
@@ -401,28 +398,28 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalNodeContextItem("View XML source") {
 			@Override
 			public void onClick(int nid) {
-				getManServ().getXMLFromPlanNode(getActiveCanvas().getId(), nid, xmlCb);
+				getManServ().getXMLFromPlanNode(getActiveView().getId(), nid, xmlCb);
 			}
 		});
 
 		m.addItem(new LogicalNodeContextItem("Get compiled SQL") {
 			@Override
 			public void onClick(int nid) {
-				new CreateSQLDialog(getActiveCanvas().getId(),nid,getManServ());
+				new CreateSQLDialog(getActiveView().getId(),nid,getManServ());
 			}
 		});
 
 		m.addItem(new LogicalNodeContextItem("Add SQL Listener") {
 			@Override
 			public void onClick(int nid) {
-				new AddSQListenerDIalog(nid, rmsa, getActiveCanvas());
+				new AddSQListenerDialog(nid, rmsa, getActiveView());
 			}
 		});
 
 		m.addItem(new LogicalNodeContextItem("Evaluate") {
 			@Override
 			public void onClick(int nid) {
-				new EvaluationDialog(getActiveCanvas().getId(),nid,rmsa);
+				new EvaluationDialog(getActiveView().getId(),nid,rmsa);
 			}
 		});
 
@@ -430,7 +427,7 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalNodeContextItem("Edit") {
 			@Override
 			public void onClick(int nid) {
-				new NodeEditDialog(getPlanManipulator(),rmsa,nid,getActiveCanvas().getId());
+				new NodeEditDialog(getPlanManipulator(),rmsa,nid,getActiveView().getId());
 			}
 		});
 	}
@@ -451,7 +448,7 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalPlanNodeContextItem("Paste") {
 			@Override
 			public void onClick() {
-				getPlanManipulator().paste(getActiveCanvas().getId(), (int)(m.getX()*getActiveCanvas().getScale()),  (int)(m.getY()*getActiveCanvas().getScale()));
+				getPlanManipulator().paste(getActiveView().getId(), (int)(m.getX()*getActiveView().getScale()),  (int)(m.getY()*getActiveView().getScale()));
 			}
 		});
 	}
@@ -506,9 +503,9 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void loadFinishedPlanFromServer(final Integer id) {
 
-		final LogicalCanvas c = addCanvas(id);
+		final AlgebraEditorCanvasView c = addCanvasView(id);
 
-		GraphCanvasRemoteFillingMachine f = new GraphCanvasRemoteFillingMachine(c);
+		RemoteCanvasViewFiller f = new RemoteCanvasViewFiller(c);
 
 		AlgebraEditor.log("Calling remote filler for plan #" + id);
 		f.fill(new RemoteFiller("xml",Integer.toString(id)), new GraphManipulationCallback() {
@@ -572,7 +569,7 @@ public class AlgebraEditor implements EntryPoint {
 		}
 	}
 
-	private void removeLogicalCanvas(LogicalCanvas c) {
+	private void removeLogicalCanvasView(AlgebraEditorCanvasView c) {
 		AlgebraEditor.log("Removing canvas #" + c.getId());
 		canvi.remove(c);
 		s.removePlan(c.getId());

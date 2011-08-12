@@ -3,6 +3,8 @@ package com.algebraweb.editor.server.logicalplan.xmlbuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -23,29 +25,22 @@ public class SerializeRelationBuilder {
 	private ServletContext context;
 
 	public SerializeRelationBuilder(EvaluationContext c, ServletContext context) {
-
 		this.c=c;
 		this.context=context;
-
-
 	}
 
-
 	public PlanNode addSerializRelation(PlanNode root) throws PlanHasCycleException {
-
 
 		String dummyIterColumn = getFreeColumnName("iter",root);
 		String dummySortColumn = getFreeColumnName("pos",root);
 
-		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>)context.getAttribute("nodeSchemes");
+		Map<String,NodeScheme> schemes = (HashMap<String,NodeScheme>)context.getAttribute("nodeSchemes");
 
 		PlanNode newRootNode = root;
 
-		ArrayList<Integer> nids = new ArrayList<Integer>();
+		List<Integer> nids = new ArrayList<Integer>();
 
 		if (!c.isIterUseColumn()) {
-
-
 			PlanNode attachNode = new PlanNode(root.getMother().getFreeId(nids), schemes.get("attach"),root.getMother());
 			nids.add(attachNode.getId());
 			ValGroup contentGroup = new ValGroup("content");
@@ -65,13 +60,8 @@ public class SerializeRelationBuilder {
 			attachColumnValue.setAttributes(attachColumnValueAttrs);
 			attachColumn.getContent().add(attachColumnValue);
 
-
 			createEdgeTo(attachNode, newRootNode);
 			newRootNode = attachNode;
-
-
-
-
 		}
 
 		if (!c.isSortUseColumn()) {

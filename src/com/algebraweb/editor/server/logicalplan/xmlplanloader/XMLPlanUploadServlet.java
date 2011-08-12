@@ -24,71 +24,51 @@ public class XMLPlanUploadServlet extends UploadAction{
 
 	public XMLPlanUploadServlet() {
 
-
 	}
-	
+
 	/**
 	 * Save the received file to a temp file, parse it, save it to the session variable
 	 */
-
 	@Override
 	public String executeAction(HttpServletRequest request, List<FileItem> sessionFiles) throws UploadActionException {
-	
+
 		String response = "";
-				
+
 		int cont = 0;
 		for (FileItem item : sessionFiles) {
 			if (false == item.isFormField()) {
 				cont ++;
-				try {
-			
-					//save to temp file
+				try {			
 					File file = File.createTempFile("upload-", ".bin");
 					item.write(file);
-		
-					//gwtupload needs this for upload cancelling
+
 					receivedFiles.put(item.getFieldName(), file);
 					receivedContentTypes.put(item.getFieldName(), item.getContentType());
 
-					
-					//parse the plan, store it into the session...
-				
 					HttpSession session = request.getSession();
 					XMLPlanLoader planLoader = new XMLPlanLoader();
-					
-					
+
+
 					QueryPlanBundle sessionBundle = planLoader.parsePlans(file.getAbsolutePath(),this.getServletContext(),request.getSession());
 					session.setAttribute("queryPlans",sessionBundle);
-								
+
 					System.out.println(request.getParameter("file_id"));
 					response = request.getParameter("file_id");
 					response += "!";
-					
+
 					Iterator<Integer> it = sessionBundle.getPlans().keySet().iterator();
-					
+
 					while (it.hasNext()) {
 						response += it.next() + ":";
 					}
-					
-					
-					
+
 				} catch (Exception e) {
 					throw new UploadActionException(e.getMessage());
 				}
 			}
 		}
 
-		//remove the file, it is already stored in the temp folder
 		removeSessionFileItems(request);
-		
-		System.out.println(response);
-		//TODO: responses
 		return response;
 	}
-
-
-
-
-
-
 }

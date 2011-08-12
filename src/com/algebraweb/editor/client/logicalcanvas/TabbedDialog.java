@@ -39,7 +39,7 @@ public class TabbedDialog extends DialogBox{
 		p.setSize("550px","400px");
 		
 		this.add(p);
-		AlgebraEditor.getActiveCanvas().unbugMe();
+		AlgebraEditor.getActiveView().unbugMe();
 		this.show();
 		this.center();
 		

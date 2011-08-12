@@ -1,18 +1,19 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
+import com.algebraweb.editor.client.AlgebraEditorCanvasView;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 
-public class AddSQListenerDIalog extends EvaluationDialog{
+public class AddSQListenerDialog extends EvaluationDialog{
 
-	private LogicalCanvas c;
+	private AlgebraEditorCanvasView c;
 	private int nid;
 
-	public AddSQListenerDIalog(int nid,RemoteManipulationServiceAsync manServ, LogicalCanvas c) {
-		super(c.getId(), nid, manServ);
+	public AddSQListenerDialog(int nid,RemoteManipulationServiceAsync manServ, AlgebraEditorCanvasView algebraEditorView) {
+		super(algebraEditorView.getId(), nid, manServ);
 		super.setText("Add SQL listener");
 		this.nid=nid;
 		
-		this.c=c;
+		this.c=algebraEditorView;
 	
 	}
 	

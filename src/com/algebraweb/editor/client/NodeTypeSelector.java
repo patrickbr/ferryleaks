@@ -17,7 +17,7 @@ public class NodeTypeSelector extends DialogBox {
 	private Button ok = new Button("OK");
 	private Button cancel = new Button("Cancel");
 
-	public NodeTypeSelector(String[] schemes, final LogicalCanvas c) {
+	public NodeTypeSelector(String[] schemes, final AlgebraEditorCanvasView algebraEditorView) {
 
 		this.setAnimationEnabled(true);
 		this.setModal(true);
@@ -36,7 +36,7 @@ public class NodeTypeSelector extends DialogBox {
 		ok.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				c.enterNodeAddingMode(getSelectedScheme());
+				algebraEditorView.enterNodeAddingMode(getSelectedScheme());
 				hide();
 			}
 

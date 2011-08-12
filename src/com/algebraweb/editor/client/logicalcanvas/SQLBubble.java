@@ -2,6 +2,8 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.SqlResTable;
@@ -27,7 +29,7 @@ public class SQLBubble extends FlowPanel {
 
 	private FlowPanel p;
 
-	private AsyncCallback<ArrayList<HashMap<String, String>>> sqlCb = new AsyncCallback<ArrayList<HashMap<String, String>>>() {
+	private AsyncCallback<List<Map<String, String>>> sqlCb = new AsyncCallback<List<Map<String, String>>>() {
 
 		@Override
 		public void onFailure(Throwable caught) {
@@ -49,7 +51,7 @@ public class SQLBubble extends FlowPanel {
 		}
 
 		@Override
-		public void onSuccess(ArrayList<HashMap<String, String>> result) {
+		public void onSuccess(List<Map<String, String>> result) {
 
 			removeStyleName("loading");
 			showResult(result);
@@ -196,7 +198,7 @@ public class SQLBubble extends FlowPanel {
 		this.c = c;
 	}
 
-	private void showResult(ArrayList<HashMap<String,String>> res) {
+	private void showResult(List<Map<String, String>> res) {
 
 		p.clear();
 

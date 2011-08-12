@@ -2,12 +2,14 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.node.Property;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
@@ -23,11 +25,11 @@ public class AvailableColumnsField extends Composite {
 	private boolean markError = false;
 	private int erroneousIndex = -1;
 
-	GraphCanvasCommunicationCallback<ArrayList<Property>> cb = new GraphCanvasCommunicationCallback<ArrayList<Property>>("getting available columns") {
+	AsyncCallback<List<Property>> cb = new GraphCanvasCommunicationCallback<List<Property>>("getting available columns") {
 
 	
 		@Override
-		public void onSuccess(ArrayList<Property> result) {
+		public void onSuccess(List<Property> result) {
 
 
 			AvailableColumnsField.this.showResults(result);
@@ -194,7 +196,7 @@ public class AvailableColumnsField extends Composite {
 
 	}
 
-	private void showResults(ArrayList<Property> result) {
+	private void showResults(List<Property> result) {
 
 		this.removeStyleName("field-loading");
 

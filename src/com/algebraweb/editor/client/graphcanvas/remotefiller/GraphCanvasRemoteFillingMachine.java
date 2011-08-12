@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
+import com.algebraweb.editor.client.graphcanvas.Fillable;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 
@@ -15,9 +16,9 @@ public class GraphCanvasRemoteFillingMachine {
 	 * and puts its content on the canvas.
 	 */
 
-	private GraphCanvas c;
+	private Fillable c;
 
-	public GraphCanvasRemoteFillingMachine(GraphCanvas graphCanvas) {
+	public GraphCanvasRemoteFillingMachine(Fillable graphCanvas) {
 		this.c = graphCanvas;
 	}
 
@@ -44,7 +45,7 @@ public class GraphCanvasRemoteFillingMachine {
 			Iterator<RawEdge> nf = current.getEdgesToList().iterator();
 			while (nf.hasNext()) {
 				RawEdge cur = nf.next();
-				c.createEdge(c.getGraphNodeById(current.getNid()), c.getGraphNodeById(cur.getTo()),cur.getFixedParentPos(),true);
+				c.createEdge(current.getNid(), cur.getTo(),cur.getFixedParentPos(),true);
 			}
 		}
 
