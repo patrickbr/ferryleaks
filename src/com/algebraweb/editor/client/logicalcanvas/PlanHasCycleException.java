@@ -2,6 +2,11 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 public class PlanHasCycleException extends Exception {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7980411829047802319L;
+
 	public PlanHasCycleException() {
 		
 	}

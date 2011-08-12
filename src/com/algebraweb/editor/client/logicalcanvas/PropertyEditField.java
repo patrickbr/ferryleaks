@@ -41,7 +41,7 @@ public abstract class PropertyEditField extends Composite {
 	public abstract void save();
 
 	public void setLocked(boolean locked) {
-		locked=locked;
+		this.locked=locked;
 	}
 
 

@@ -1,7 +1,7 @@
 package com.algebraweb.editor.client;
 
 import com.algebraweb.editor.client.graphcanvas.FullScreenDragPanel;
-import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
+
 
 public class EditorDragPanel extends FullScreenDragPanel {
 	

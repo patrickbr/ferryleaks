@@ -1,7 +1,5 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +23,6 @@ public class SQLBubble extends FlowPanel {
 	private EvaluationContext c;
 	private int nid;
 	private int pid;
-	final private LogicalCanvas canvas;
 
 	private FlowPanel p;
 
@@ -65,7 +62,6 @@ public class SQLBubble extends FlowPanel {
 	public SQLBubble(int nid, int pid, final RemoteManipulationServiceAsync rmsa, EvaluationContext c, final LogicalCanvas ca) {
 
 		this.rmsa = rmsa;
-		this.canvas=ca;
 		this.nid=nid;
 		this.pid=pid;
 		this.c=c;

@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.ListBox;
 
 public class AvailableColumnsField extends Composite {
 
-	private RemoteManipulationServiceAsync manServ;
 	private AbsolutePanel p;
 	final ListBox b;
 	private String[] projSel;
@@ -66,7 +65,7 @@ public class AvailableColumnsField extends Composite {
 	public AvailableColumnsField(int pid, int nid, int position, boolean includeThisNode,RemoteManipulationServiceAsync manServ, boolean allowMultipleSelection) {
 
 		super();
-		this.manServ=manServ;
+	
 		b = new ListBox(allowMultipleSelection);
 
 		p = new AbsolutePanel();

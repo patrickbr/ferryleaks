@@ -11,7 +11,6 @@ import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
-import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.validation.ValidationError;

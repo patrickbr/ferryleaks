@@ -1,6 +1,5 @@
 package com.algebraweb.editor.client;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;

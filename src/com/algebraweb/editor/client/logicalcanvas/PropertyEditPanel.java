@@ -26,7 +26,6 @@ public class PropertyEditPanel extends Composite{
 	private GoAble scheme;
 
 	private ContentNodeTreeItem treeItem;
-	private int pid;
 
 	protected RemoteManipulationServiceAsync manServ;
 	private FlowPanel p = new FlowPanel();
@@ -35,7 +34,6 @@ public class PropertyEditPanel extends Composite{
 	public PropertyEditPanel(int pid, ContentNodeTreeItem treeItem, RemoteManipulationServiceAsync manServ,NodeContent c, GoAble scheme,PlanNode nodeContext) {
 
 		this.c=c;
-		this.pid=pid;
 		this.scheme=scheme;
 		this.treeItem=treeItem;
 

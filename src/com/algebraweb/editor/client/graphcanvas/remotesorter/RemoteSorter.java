@@ -8,14 +8,13 @@ import com.algebraweb.editor.client.AlgebraEditor;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.GraphSorter;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+
 
 public class RemoteSorter implements GraphSorter {
 

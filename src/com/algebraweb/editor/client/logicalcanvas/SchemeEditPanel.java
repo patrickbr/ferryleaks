@@ -1,7 +1,6 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -14,8 +13,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class SchemeEditPanel extends Composite{
 	
 	private LogicalSchemeTreeItem treeItem;
-	private RemoteManipulationServiceAsync manServ;
-	private NodeContent c;
 	private GoAble scheme;
 	
 	private VerticalPanel p = new VerticalPanel();
@@ -26,8 +23,6 @@ public class SchemeEditPanel extends Composite{
 		
 		
 		this.treeItem = treeItem;
-		this.manServ=manServ;
-		this.c=c;
 		this.scheme=scheme;
 		
 		HTML title= new HTML(this.scheme.getHumanName());

@@ -17,7 +17,6 @@ import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.GoInto;
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.scheme.Value;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TreeItem;
 

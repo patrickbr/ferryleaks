@@ -4,9 +4,6 @@ import com.hydro4ge.raphaelgwt.client.Raphael.Path;
 
 public class NewEdgeDrawer {
 
-
-
-	private LogicalCanvas c;
 	private Path p;
 	private Path arrowPath;
 	private double x;
