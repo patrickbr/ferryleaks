@@ -18,13 +18,8 @@ public class CreateSQLDialog extends CreateEvaluationContextDialog {
 
 		@Override
 		public void onSuccess(String result) {
-
-			
 			new TextPresentationDialog("Compiled SQL",result);
-
-
 		}
-
 	};
 	
 	public CreateSQLDialog(int pid, int nid, RemoteManipulationServiceAsync manServ) {
@@ -59,10 +54,8 @@ public class CreateSQLDialog extends CreateEvaluationContextDialog {
 	
 	@Override
 	protected void submit() {
-		
 		EvaluationContext c = saveContext();
 		getManServ().getSQLFromPlanNode(getPid(), getNid(), c,cb.getValue(), sqlCb);
-				
 	}
 
 

@@ -77,6 +77,7 @@ public class EvaluationContextProvider {
 		if (root != null && root.getKind().equals("serialize relation")) {
 
 			//TODO: what about erroneous nodes?
+			System.out.println("zgur: "+root.getContentWithAttributeValue("function", "iter").size());
 			if (root.getContentWithAttributeValue("function", "iter").size() > 0) {
 				c.setIterColumnName(root.getContentWithAttributeValue("function", "iter").get(0).getAttributes().get("name").getVal());
 				c.setIterUseColumn(true);

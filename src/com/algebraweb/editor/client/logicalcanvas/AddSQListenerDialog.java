@@ -12,23 +12,14 @@ public class AddSQListenerDialog extends EvaluationDialog{
 		super(algebraEditorView.getId(), nid, manServ);
 		super.setText("Add SQL listener");
 		this.nid=nid;
-		
 		this.c=algebraEditorView;
-	
 	}
-	
-	
+
 	@Override
 	protected void submit() {
-		
-		
 		EvaluationContext c = saveContext();
-		
+		//TODO: not good...
 		this.c.addSQLListener(nid,getManServ(),c);
 		this.hide();
-		
 	}
-	
-	
-
 }

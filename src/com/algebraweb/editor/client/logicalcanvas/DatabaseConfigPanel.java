@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
@@ -64,8 +65,7 @@ public class DatabaseConfigPanel extends LayoutPanel{
 		c.setDatabaseUser(userName.getText());
 		c.setDatabasePassword(password.getText());
 		c.setDatabaseSetGlobal(saveGlobal.getValue());
-		
-		
+						
 	}
 	
 	

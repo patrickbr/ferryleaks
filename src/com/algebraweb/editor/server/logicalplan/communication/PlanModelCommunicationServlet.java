@@ -259,6 +259,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public List<Map<String,String>> eval(int pid, int nid, EvaluationContext context,boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException, PlanHasCycleException {
 		if (saveContext) saveEvaluationContextForNode(nid, pid, context);
+		if (context.isDatabaseSetGlobal()) {
+			System.out.println("tester");
+			saveDefaultDatabaseConfiguration(context);
+		}
 		SqlEvaluator eval = new SqlEvaluator(context);
 		return eval.eval(getSQLFromPlanNode(pid,nid,context,saveContext));
 	}
@@ -266,6 +270,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public List<Map<String, String>> evalPlan(int pid,	EvaluationContext c, boolean saveContext) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException, PlanHasCycleException {
 		PlanNode root = getPlanToWork(pid).getRootNode();
+		if (c.isDatabaseSetGlobal()) saveDefaultDatabaseConfiguration(c);
 		if (saveContext) getPlanToWork(pid).setEvContext(c);
 		return eval(pid, root.getId(), c, false);
 	}
@@ -525,7 +530,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, PlanHasCycleException {
 		if (saveContext) saveEvaluationContextForNode(nid, pid, c);
-
 		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid,c);
 		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder(getConfiguration().getString("server.pf.path","pf"), getConfiguration().getString("server.pf.args","-IS"));
 		return sqlB.getCompiledSQL(d).get(pid);
@@ -660,10 +664,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	}
 
 	private void saveEvaluationContextForNode(int nid, int pid, EvaluationContext c) throws PlanManipulationException {
-
-		if (c.isDatabaseSetGlobal()) {
-			saveDefaultDatabaseConfiguration(c);
-		}
+		if (c.isDatabaseSetGlobal()) saveDefaultDatabaseConfiguration(c);
 		getNodeToWork(pid, nid).setEvaluationContext(c);
 	}
 
