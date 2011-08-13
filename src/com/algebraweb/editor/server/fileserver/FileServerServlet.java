@@ -2,7 +2,6 @@ package com.algebraweb.editor.server.fileserver;
 
 import java.io.IOException;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -32,12 +31,9 @@ public class FileServerServlet extends HttpServlet {
 
 		try {
 			ServletOutputStream out = response.getOutputStream();
-			ServletContext context = getServletContext();
-
 			String filename="plan.xml";
 
 			response.setContentType("application/octet-stream");
-			//response.setContentLength((int) file.length());
 			response.setHeader("Content-Disposition", "attachement; filename=\"" + filename + "\"");
 
 			int pid = Integer.parseInt(request.getParameter("pid"));

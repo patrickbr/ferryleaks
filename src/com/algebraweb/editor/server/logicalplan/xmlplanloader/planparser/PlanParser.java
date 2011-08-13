@@ -3,7 +3,6 @@ package com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +73,7 @@ public class PlanParser {
 	public PlanParser(HttpSession session) {
 
 		this.session=session;
-	
+
 	}
 
 	/**
@@ -202,9 +201,6 @@ public class PlanParser {
 
 				parseNodes((Element)planNodes,p);
 
-
-				System.out.println("Parsed and adding plan #" + p.getId());
-
 				try {
 					ecp.fillEvaluationContext(p);
 					PlanNode root = p.getRootNode(false);
@@ -214,14 +210,13 @@ public class PlanParser {
 					}
 				} catch (GraphNotConnectedException e) {
 					e.printStackTrace();
-			
 				} catch (GraphIsEmptyException e) {
 					e.printStackTrace();
 				} catch (PlanHasCycleException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-						
+
 				ret.addPlan(p);
 			}
 
@@ -304,29 +299,17 @@ public class PlanParser {
 			}
 
 
-			// what if edge erroneous??
+			//TODO: what if edge erroneous??
 			if (((Value)g).getInternalName().equals("edge")) {
-
 				int to = Integer.parseInt(((ContentVal)retEl).getAttributes().get("to").getVal());
-
-				PlanNode pn = mother.getPlanNodeById(to);
-
 				node.getChilds().add(mother.getPlanNodeById(to));
-
-
 			}
-
 			parseContentLabelSchema(retEl, ((Value)g));
-
 		}
 
-
-
 		List<GoAble> schema = g.getSchema();
-
 		parseContent(e, retEl.getContent(), schema, mother, node);
 		return retEl;
-
 	}
 
 	private void parseLabelSchema(ContentNode retEl, String schema) {

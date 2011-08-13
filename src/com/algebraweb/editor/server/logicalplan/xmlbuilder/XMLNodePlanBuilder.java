@@ -67,6 +67,7 @@ public class XMLNodePlanBuilder {
 
 	}
 
+	@SuppressWarnings("unused")
 	private Map<Integer,Integer> getNodeIdReplacements(PlanNode rootNode,int offset) throws PlanHasCycleException {
 		HashMap<Integer,Integer> retMap = new HashMap<Integer,Integer>();
 		List<PlanNode> nodes = getAllNodesUnderThis(rootNode);

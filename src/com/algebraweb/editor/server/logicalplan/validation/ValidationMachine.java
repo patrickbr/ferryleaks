@@ -18,8 +18,6 @@ public class ValidationMachine {
 
 	}
 
-	//TODO: make this an ValidationList
-
 	public void addValidator(Validator v) {
 		this.validators.add(v);
 	}

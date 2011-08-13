@@ -1,7 +1,6 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,7 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		System.out.println("Initialized XMLPlanFiller with id=" + id);
 	}
 
+	@SuppressWarnings("unchecked")
 	public RawNode getRawNode(PlanNode current) {
 		RawNode temp = new RawNode(current.getId(), current.getLabel(), 0xCCCCCC, 130, 25);
 		temp.setFixedChildCount(current.getMaxChildCount());

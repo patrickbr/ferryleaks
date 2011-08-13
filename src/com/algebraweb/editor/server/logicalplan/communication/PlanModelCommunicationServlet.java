@@ -115,6 +115,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return ret;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public RemoteManipulationMessage addNode(int pid,String nodeType, int x, int y) throws PlanManipulationException, PlanHasCycleException {
 		HashMap<String,NodeScheme> schemes = (HashMap<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
@@ -405,26 +406,24 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return getPlanToWork(pid).getPlanNodeById(nid);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String[] getNodeTypes() {
-
 		Map<String,NodeScheme> nodeSchemes;
 
 		if (getServletContext().getAttribute("nodeSchemes") == null) {
-			//TODO: make this configurable
-			NodeSchemeLoader l = new NodeSchemeLoader(getServletContext().getRealPath("/schemes"));
+	
+			NodeSchemeLoader l = new NodeSchemeLoader(getServletContext().getRealPath(getConfiguration().getString("server.schemes.path","/schemes")));
 			nodeSchemes = new HashMap<String,NodeScheme>();
-
 			Iterator<NodeScheme> i = l.parse().iterator();
 
 			while (i.hasNext()) {
 				NodeScheme n = i.next();
 				nodeSchemes.put(n.getKind(), n);
 			}
-
 			getServletContext().setAttribute("nodeSchemes", nodeSchemes);
 
-		}else	nodeSchemes = (Map<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
+		}else nodeSchemes = (Map<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
 
 		String[] schemes = nodeSchemes.keySet().toArray(new String[0]);
 		Arrays.sort(schemes);
@@ -559,6 +558,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return outputter.outputString(e);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public RemoteManipulationMessage insert(int pid,int x, int y) throws PlanManipulationException, PlanHasCycleException {
 
@@ -705,16 +705,15 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml) throws PlanManipulationException, PlanHasCycleException {
-
 		PlanParser p = new PlanParser((HashMap<String,NodeScheme>)getServletContext().getAttribute("nodeSchemes"),getSession());
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 
 			InputStream s = new ByteArrayInputStream(xml.getBytes());
-
 			Document doc;
 
 			doc = db.parse(s);

@@ -29,6 +29,7 @@ public class SerializeRelationBuilder {
 		this.context=context;
 	}
 
+	@SuppressWarnings("unchecked")
 	public PlanNode addSerializRelation(PlanNode root) throws PlanHasCycleException {
 
 		String dummyIterColumn = getFreeColumnName("iter",root);

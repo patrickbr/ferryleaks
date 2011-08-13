@@ -145,7 +145,8 @@ public class RaphaelJS extends JavaScriptObject {
      *
      * @return the current value for the given attribute name
      */
-    public final native JsArray attr(JsArray attributeNames) /*-{
+    @SuppressWarnings("unchecked")
+	public final native JsArray attr(JsArray attributeNames) /*-{
       return this.attr(attributeNames);
     }-*/;
 

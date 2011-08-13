@@ -1,6 +1,5 @@
 package com.algebraweb.editor.server.logicalplan.validation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;

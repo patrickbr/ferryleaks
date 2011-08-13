@@ -1,8 +1,6 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.scheme.GoAble;
