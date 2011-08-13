@@ -1,12 +1,12 @@
 package com.algebraweb.editor.client.node;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.scheme.Field;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.scheme.Value;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * A ContentNode is, contrary to a NodeContent, a Node which can <i>hold</i>
@@ -15,13 +15,8 @@ import com.algebraweb.editor.client.scheme.Value;
  *
  */
 
-public abstract class ContentNode implements Serializable{
+public abstract class ContentNode implements IsSerializable{
 
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3764290466687683651L;
 	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
 	protected ArrayList<LabelOb> labelScheme = new ArrayList<LabelOb>();
 

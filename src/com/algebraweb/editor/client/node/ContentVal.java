@@ -6,14 +6,6 @@ import java.util.Set;
 
 public class ContentVal extends NodeContent {
 	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -168461026763593678L;
-
-	
-
 	private PropertyValue value;
 
 
@@ -68,7 +60,7 @@ public class ContentVal extends NodeContent {
 		
 		ret +=") attributes:";
 		
-		Set s = attributes.keySet();
+		Set<String> s = attributes.keySet();
 		
 		Iterator<String> a = s.iterator();
 		
