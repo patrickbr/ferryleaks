@@ -6,7 +6,7 @@ Experiences while developing FerryLeaks and writing a bachelor's thesis
 
 During the first two months of my hiwi job at the database group I was
 introduced to the Google Web Toolkit by George Georgidze. When hearing 
-about its possibility to cross-compile Java to Javascript I was sceptical
+about its ability to cross-compile Java to Javascript I was sceptical
 at first. Having always been an advocate of solid ground work by means of
 developing _everything_ by hand without even the slightest help of an IDE
 I instantly thought that GWT would produce bloated, buggy pieces of 
@@ -20,13 +20,13 @@ on the screen) with rates bigger than 40ms (!) without noticing any
 browser freezes.
 
 I instantly thought of making the development of the learning games
-my bachelor thesis somehow. However, with the ongoing of march and april,
+my bachelor thesis somehow. However, with the ongoing of March and April,
 I noticed that a) someone was already doing a bachelors thesis on it and
 b) that I lacked the psychological and educational insight to write about
 a learning game. So, I suspended my decision, waiting for a better topic
 to come up.
 
-Luckily I was browsing the database group site one day in april and stumbled
+Luckily I was browsing the database group site one day in April and stumbled
 over a topic requiring to create a web application. I remember that the
 original proposal for doing it was Haskell, but I immediatly thought of doing
 it with GWT on a JavaScript-only basis, without using any additional browser
@@ -36,18 +36,18 @@ I wrote an email to Manuel Mayr asking to work on that topic and got an instant
 answer telling me that it was still free. I had made very positive experiences 
 with the database group. Next to my job as a hiwi, I was part of the team 
 developing the SASL compiler (with Jan Rittinger as a supervisoer) in summer
-2010, and i recalled learning a lot back then. So I took the topic.
+2010, and I recalled learning a lot back then. So I took the topic.
 
 2. Developing FerryLeaks
 ------------------------
 
 I had completely no idea how the formalities were with bachelor thesises. I 
 was a bit surprised when Jeroen asked me to write a 7 page outline of the
-project and couldnt see the meaning of it, but looking back it helped me a lot
+project and couldn't see the meaning of it, but looking back it helped me a lot
 to comprehend what I was doing, why I was doing it and how I was planning to do it.
 
 It was quite difficult and very often frustrating to get the work started. In the
-beginning, nothing worked. I had a look a many libraries for node drawing, but they 
+beginning, nothing worked. I had a look at many libraries for node drawing, but they 
 all were more or less restricted in some way or provided bad usability. I was not
 happy with them at all. Additionally, I didn't want to dig into a library and later do
 tedious plumbing to make it do what i wanted. So, i decided to do the graph drawing
