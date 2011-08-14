@@ -93,6 +93,10 @@ public class GraphCanvas extends Raphael implements Fillable  {
 		this.width=width;
 	}
 
+	public GraphCanvas(int i, int j) {
+		this(i,j,false);
+	}
+
 	/**
 	 * Adds a new node to the canvas at (x,y). Returns the created GraphNode
 	 * @param id the id of the new node
@@ -133,6 +137,15 @@ public class GraphCanvas extends Raphael implements Fillable  {
 		return this.addNode(id,color,x,y,width,height,text,fixedChildCount);
 	}
 
+	public GraphNode addNode(int id, int color, int x, int y, int width, int height, String text) {
+		GraphNode g =  new GraphNode(this,color,x,y, width, height,text,id);
+		this.nodes.add( g);
+		g.getShape().addDomHandler(GraphNodeModifier.mouseMoveHandlerBuilder(g), MouseMoveEvent.getType());
+		g.getShape().addDomHandler(GraphNodeModifier.mouseOutHandlerBuilder(g), MouseOutEvent.getType());
+		gnm.checkDimension(g,x,y);
+		return g;		
+	}
+	
 	/**
 	 * Adds a new node selection handler to be called on a node selection.
 	 * @param h the handler to be added
@@ -226,6 +239,10 @@ public class GraphCanvas extends Raphael implements Fillable  {
 	public void createEdge(int from, int to, int fixedPos,boolean quiet) {
 		GraphEdge t = new GraphEdge(this,getGraphNodeById(from),getGraphNodeById(to),fixedPos,quiet, !this.isNotActive());
 		this.edges.add(t);
+	}
+	
+	public void createEdge(int i, int j) {
+		createEdge(i,j,1,false);
 	}
 
 	/**
@@ -990,4 +1007,6 @@ public class GraphCanvas extends Raphael implements Fillable  {
 		loadingMessagePopUp.show(msg);
 	}
 
+
+	
 }
