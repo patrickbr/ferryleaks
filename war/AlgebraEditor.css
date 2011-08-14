@@ -421,7 +421,7 @@ table td,table {
 }
 
 .gwt-SplitLayoutPanel-HDragger {
-	background: url("images/splitPanelThumb.png") no-repeat scroll center
+	background: url("dragger.png") no-repeat scroll center
 		center #AAA;
 }
 

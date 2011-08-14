@@ -56,24 +56,18 @@ public class PlanParser {
 	private HttpSession session;
 
 	public PlanParser(Map<String,NodeScheme> schemes,HttpSession session) {
-
 		this.schemes=schemes;
 		this.session=session;
-
 	}
 
 	public PlanParser(Map<String, NodeScheme> nodeSchemes, String file,HttpSession session) {
-
 		this.schemes=nodeSchemes;
 		this.file = new File(file);
 		this.session=session;
-
 	}
 
 	public PlanParser(HttpSession session) {
-
 		this.session=session;
-
 	}
 
 	/**
@@ -83,13 +77,11 @@ public class PlanParser {
 	 */
 
 	private void fillNode(PlanNode n, Element nodeEl, QueryPlan mother, PlanNode node) {
-
 		NodeScheme s = getScheme(n.getKind());
 		List<GoAble> schema = s.getSchema();
 
 		parseNodeLabelSchema(n,s);
 		parseContent(nodeEl, n.getContent(), schema, mother, node);
-
 	}
 
 
@@ -104,8 +96,6 @@ public class PlanParser {
 	 */
 
 	private ArrayList<Element> getElementsByScheme(Element parent, GoAble g) {
-
-
 		ArrayList<Element> retList = new ArrayList<Element>();
 		NodeList matchingTags = parent.getElementsByTagName(g.getXmlObject());
 
@@ -171,6 +161,8 @@ public class PlanParser {
 	}
 
 	/**
+	 * @throws SAXException 
+	 * @throws IOException 
 	 * Parse the plan given to the constructor using the specified 
 	 * node schemes. Returns a filled QueryPlan containing all the plans
 	 * found in the file. Please note that <i>no validation</i> is going on
@@ -179,7 +171,7 @@ public class PlanParser {
 	 * @return
 	 * @throws  
 	 */
-	public QueryPlanBundle parse()  {
+	public QueryPlanBundle parse() throws IOException, SAXException  {
 
 
 		QueryPlanBundle ret =new QueryPlanBundle();
@@ -220,9 +212,7 @@ public class PlanParser {
 				ret.addPlan(p);
 			}
 
-		}catch(IOException e) {e.printStackTrace();}
-		catch(SAXException e) {e.printStackTrace();} catch (ParserConfigurationException e) {
-
+		}catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
 

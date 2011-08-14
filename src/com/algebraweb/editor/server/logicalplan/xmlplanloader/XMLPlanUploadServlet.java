@@ -51,8 +51,6 @@ public class XMLPlanUploadServlet extends UploadAction{
 
 					QueryPlanBundle sessionBundle = planLoader.parsePlans(file.getAbsolutePath(),this.getServletContext(),request.getSession());
 					session.setAttribute("queryPlans",sessionBundle);
-
-					System.out.println(request.getParameter("file_id"));
 					response = request.getParameter("file_id");
 					response += "!";
 
@@ -62,7 +60,10 @@ public class XMLPlanUploadServlet extends UploadAction{
 						response += it.next() + ":";
 					}
 
-				} catch (Exception e) {
+				}
+				
+				
+				catch (Exception e) {
 					throw new UploadActionException(e.getMessage());
 				}
 			}

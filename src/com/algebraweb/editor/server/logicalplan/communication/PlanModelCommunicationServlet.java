@@ -92,7 +92,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	@Override
 	public RemoteManipulationMessage addEdge(int planid, Coordinate e, int pos) throws PlanManipulationException {
-		
+
 		XMLPlanFiller xmlpl = new XMLPlanFiller(getSession(),getServletContext(),planid);
 
 		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
@@ -168,7 +168,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			PlanNodeCopyMessage cur = it.next();
 			PlanNode curNode = p.getPlanNodeById(cur.getId());
 			PlanNode copy = new PlanNode(curNode.getId(), curNode.getScheme(), null);
-			
+
 			Iterator<PlanNode> childs = curNode.getChilds().iterator();
 			int pos=1;
 			while (childs.hasNext()) {
@@ -278,7 +278,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	private void fillDatabaseConfigurationFromGlobalDefault(EvaluationContext c)
 	throws SessionExpiredException {
-		c.setDatabase((String)getSession().getAttribute("database"));
+		c.setDatabase((String)getSession().getAttribute("databaseName"));
 		c.setDatabasePassword((String)getSession().getAttribute("databasePw"));
 		c.setDatabasePort((getSession().getAttribute("databasePort") != null?(Integer) getSession().getAttribute("databasePort"):5432));
 		c.setDatabaseServer((getSession().getAttribute("databaseHost")!= null?(String)getSession().getAttribute("databaseHost"):"localhost"));
@@ -307,7 +307,9 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 				c = getNodeToWork(pid, nid).getEvaluationContext();
 			}
 		}
-		if (c.getDatabase() == null && c.getDatabaseServer() == null) fillDatabaseConfigurationFromGlobalDefault(c);
+		if ((c.getDatabase() == null || c.getDatabase() == "")) {
+			fillDatabaseConfigurationFromGlobalDefault(c);
+		}
 		return c;
 	}
 
@@ -417,14 +419,15 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		Map<String,NodeScheme> nodeSchemes;
 
 		if (getServletContext().getAttribute("nodeSchemes") == null) {
-	
-			NodeSchemeLoader l = new NodeSchemeLoader(getServletContext().getRealPath(getConfiguration().getString("server.schemes.path","/schemes")));
+
+			NodeSchemeLoader l = new NodeSchemeLoader(getServletContext().getRealPath(getConfiguration().getString("server.schemes.hid","/schemes")));
 			nodeSchemes = new HashMap<String,NodeScheme>();
 			Iterator<NodeScheme> i = l.parse().iterator();
 
 			while (i.hasNext()) {
 				NodeScheme n = i.next();
-				nodeSchemes.put(n.getKind(), n);
+				List blackList = getConfiguration().getList("server.schemes.hide", new ArrayList());
+				if (!blackList.contains(n.getKind())) nodeSchemes.put(n.getKind(), n);
 			}
 			getServletContext().setAttribute("nodeSchemes", nodeSchemes);
 
@@ -656,6 +659,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	private void saveDefaultDatabaseConfiguration(EvaluationContext c)
 	throws SessionExpiredException {
+		System.out.println("saving default database...(" + c.getDatabase() + ")");
 		getSession().setAttribute("databaseHost", c.getDatabaseServer());
 		getSession().setAttribute("databasePort",  c.getDatabasePort());
 		getSession().setAttribute("databaseName", c.getDatabase());

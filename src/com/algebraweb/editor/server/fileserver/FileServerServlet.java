@@ -35,10 +35,8 @@ public class FileServerServlet extends HttpServlet {
 
 			response.setContentType("application/octet-stream");
 			response.setHeader("Content-Disposition", "attachement; filename=\"" + filename + "\"");
-
+		
 			int pid = Integer.parseInt(request.getParameter("pid"));
-
-			System.out.println("Requestet plan #" + pid);
 
 			Document d;
 			XMLNodePlanBuilder builder = new XMLNodePlanBuilder();
@@ -67,6 +65,7 @@ public class FileServerServlet extends HttpServlet {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 }

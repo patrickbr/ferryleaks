@@ -1,6 +1,7 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,6 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.configuration.Configuration;
+import org.xml.sax.SAXException;
 
 import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
@@ -22,10 +24,12 @@ public class XMLPlanLoader {
 	 * @param file
 	 * @param context
 	 * @return
+	 * @throws IOException 
+	 * @throws SAXException 
 	 */
 
 	@SuppressWarnings("unchecked")
-	public QueryPlanBundle parsePlans(String file,ServletContext context,HttpSession session) {
+	public QueryPlanBundle parsePlans(String file,ServletContext context,HttpSession session) throws IOException, SAXException {
 		Map<String,NodeScheme> nodeSchemes = new HashMap<String,NodeScheme>();
 
 		if (context.getAttribute("nodeSchemes") == null) {
