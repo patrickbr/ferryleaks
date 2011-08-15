@@ -11,8 +11,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class GraphCanvasErrorDialogBox extends DialogBox {
-	
-	
+		
 	public GraphCanvasErrorDialogBox(String msg) {
 		
 		AlgebraEditor.log("ERROR: " + msg);
@@ -26,8 +25,8 @@ public class GraphCanvasErrorDialogBox extends DialogBox {
 		});
 		;
 		VerticalPanel p = new VerticalPanel();
-	
-		HTML inner = new HTML(msg);
+		
+		HTML inner = new HTML("<div style='max-width:500px'>"+msg+"</div>");
 		inner.addStyleName("error-inner");
 		p.add(inner);
 		p.add(ok);
@@ -36,12 +35,7 @@ public class GraphCanvasErrorDialogBox extends DialogBox {
 
 		super.add(p);
 
-
-
 		center();
 		show();
-		
-		
 	}
-
 }

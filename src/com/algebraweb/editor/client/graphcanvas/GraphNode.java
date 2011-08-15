@@ -356,16 +356,13 @@ public class GraphNode {
 		boolean update=false;
 
 		if (textLines != null) {
-
 			update=true;
 			for (Text line:textLines) {
-
 				line.remove();
-
 			}
-
 		}
 
+		txt = "#" + getId() + " " + txt;
 
 		String[] lines = txt.split("\\\\n");
 
