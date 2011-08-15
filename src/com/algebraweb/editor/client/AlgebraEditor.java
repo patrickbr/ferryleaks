@@ -50,10 +50,10 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.04";
+	private static String VERSION = "Beta 1.14";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (August 8th)";
+	private static String YEAR = "2011 (August 15th)";
 	private static String FACILITY = "Universität Tübingen";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
