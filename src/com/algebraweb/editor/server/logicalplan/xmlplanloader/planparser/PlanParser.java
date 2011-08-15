@@ -201,12 +201,11 @@ public class PlanParser {
 						p.getPlan().remove(root);
 					}
 				} catch (GraphNotConnectedException e) {
-					e.printStackTrace();
+					System.out.println("Warning: parsed unconnected graph from input!");
 				} catch (GraphIsEmptyException e) {
-					e.printStackTrace();
+					System.out.println("Warning: parsed empty graph from input!");
 				} catch (PlanHasCycleException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Warning: parsed graph with cycles from input!");
 				}
 
 				ret.addPlan(p);

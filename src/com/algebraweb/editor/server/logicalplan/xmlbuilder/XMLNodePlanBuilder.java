@@ -89,6 +89,8 @@ public class XMLNodePlanBuilder {
 		nodePlan.setAttribute("id", Integer.toString(id));
 		Element logicalPlan = new Element("logical_query_plan");
 		logicalPlan.setAttribute("unique_names", "true");
+		
+		System.out.println("rootnode is " + rootNode.getId() + "(" + rootNode.getKind() + ")");
 
 		if (!rootNode.getKind().equals("serialize relation")) {
 			System.out.println("Adding serialize relation from eval context...");

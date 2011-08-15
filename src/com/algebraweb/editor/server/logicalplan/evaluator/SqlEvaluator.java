@@ -42,7 +42,7 @@ public class SqlEvaluator {
 
 
 	public List<Map<String, String>> eval(String qry) throws LogicalCanvasSQLException {
-
+		
 		List<Map<String, String>> res = null;
 		QueryRunner qrun = new QueryRunner();
 

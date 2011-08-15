@@ -426,14 +426,23 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 			while (i.hasNext()) {
 				NodeScheme n = i.next();
-				List blackList = getConfiguration().getList("server.schemes.hide", new ArrayList());
-				if (!blackList.contains(n.getKind())) nodeSchemes.put(n.getKind(), n);
+				nodeSchemes.put(n.getKind(), n);
 			}
 			getServletContext().setAttribute("nodeSchemes", nodeSchemes);
 
 		}else nodeSchemes = (Map<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
 
-		String[] schemes = nodeSchemes.keySet().toArray(new String[0]);
+
+		List<String> retList = new ArrayList<String>(nodeSchemes.keySet());
+
+		Iterator<String> retIt = retList.iterator();
+		while (retIt.hasNext()) {
+			String cur = retIt.next();
+			List<String> blackList = getConfiguration().getList("server.schemes.hide", new ArrayList());
+			if (blackList.contains(cur)) retIt.remove();
+		}
+
+		String[] schemes = retList.toArray(new String[0]);
 		Arrays.sort(schemes);
 		return schemes;
 	}
@@ -534,6 +543,8 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, PlanHasCycleException {
 		if (saveContext) saveEvaluationContextForNode(nid, pid, c);
 		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid,c);
+		
+		
 		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder(getConfiguration().getString("server.pf.path","pf"), getConfiguration().getString("server.pf.args","-IS"));
 		return sqlB.getCompiledSQL(d).get(pid);
 	}

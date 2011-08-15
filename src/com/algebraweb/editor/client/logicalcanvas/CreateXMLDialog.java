@@ -2,14 +2,13 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.TextPresentationDialog;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 
 public class CreateXMLDialog extends CreateEvaluationContextDialog{
 
 	
-	private int pid;
-	private int nid;
 	private CheckBox cb;
 	
 
@@ -34,6 +33,7 @@ public class CreateXMLDialog extends CreateEvaluationContextDialog{
 
 		super(pid,nid,manServ);
 		super.setText("XML generation");
+		GWT.log("id:" + nid);
 		
 		cb = new CheckBox();
 		cb.setText("Save for current node");
@@ -45,10 +45,8 @@ public class CreateXMLDialog extends CreateEvaluationContextDialog{
 		
 	@Override
 	protected void submit() {
-		
 		EvaluationContext c = saveContext();
-		getManServ().getXMLLogicalPlanFromRootNode(pid, nid, c, cb.getValue(), xmlCb);
-			
+		getManServ().getXMLLogicalPlanFromRootNode(super.getPid(), super.getNid(), c, cb.getValue(), xmlCb);
 	}
 
 

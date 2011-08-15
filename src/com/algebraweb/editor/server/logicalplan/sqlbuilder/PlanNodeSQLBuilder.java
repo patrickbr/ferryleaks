@@ -33,9 +33,9 @@ public class PlanNodeSQLBuilder {
 	}
 
 
-
 	public HashMap<Integer,String> getCompiledSQL(Element planToCompile) throws PathFinderCompilationError {
 
+			
 		HashMap<Integer,String> ret = new HashMap<Integer,String>();
 		byte[] buffer = new byte[1024];
 
@@ -53,9 +53,12 @@ public class PlanNodeSQLBuilder {
 			OutputStreamWriter w = new OutputStreamWriter(b);
 
 
-			XMLOutputter outputter = new XMLOutputter(Format.getCompactFormat());
+			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 			String XMLString = outputter.outputString(planToCompile);
 
+			XMLOutputter outputterr = new XMLOutputter(Format.getPrettyFormat());
+			System.out.println(outputterr.outputString(planToCompile));
+			
 
 			w.write(XMLString);
 			w.close();
@@ -89,7 +92,7 @@ public class PlanNodeSQLBuilder {
 				}
 			} catch (SAXException e) {
 
-
+				System.err.println(errorMsg);
 				throw new PathFinderCompilationError(errorMsg);
 
 			}

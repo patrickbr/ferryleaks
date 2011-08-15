@@ -230,21 +230,13 @@ public class NodeEditDialog extends DialogBox{
 
 			}
 
-			//TODO!!!: plan id!!
-
 			pmm.updateNodeContent(pid, node);
 		}else{
-
 			xmlEditPanel.save();
-
 		}
 
 		this.hide();
-
-
 	}
-
-
 
 
 	public void setEditWidget(Widget w) {

@@ -62,7 +62,7 @@ public class EvaluationContextProvider {
 
 		try {
 			root = p.getRootNode(false);
-		}catch(GraphIsEmptyException e) {
+		}catch(Exception e) {
 			root = null;
 		}
 		EvaluationContext c = new EvaluationContext();
