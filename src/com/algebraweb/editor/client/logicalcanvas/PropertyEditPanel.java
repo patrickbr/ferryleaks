@@ -68,17 +68,13 @@ public class PropertyEditPanel extends Composite{
 
 			@Override
 			public void onClick(ClickEvent event) {
-
 				((LogicalSchemeTreeItem)PropertyEditPanel.this.treeItem.getParentItem()).deleteContent(PropertyEditPanel.this.treeItem);
-
-
 			}
 
 		});
 
 		deleteButton.addStyleName("delete-button");
 		p.add(deleteButton);
-
 
 
 		if (this.scheme.hasFields()) {
@@ -103,12 +99,10 @@ public class PropertyEditPanel extends Composite{
 				PropertyEditField f;
 
 				if (current.getType().matches("__COLUMN[\\{]?[0-9]*[\\}]?") || current.getType().equals("__COLUMN_REMOVE")) {
-
 					f = new PropertyEditFieldAvailableColumns(pid,nodeContext.getId(), manServ, current);
-
-
-				}else{
-
+				}else if (current.getCanBe() != null){
+					f = new PropertyEditFieldWithFixedPossibilities(current);
+				}else {
 					f = new PropertyEditTextField(current);
 				}
 
@@ -122,18 +116,18 @@ public class PropertyEditPanel extends Composite{
 			}
 
 		}
-		
+
 		if (this.scheme instanceof Value && c instanceof ContentVal && ((Value)this.scheme).hasVal()) {
-			
+
 			PropertyEditField f;
 			f = new PropertyEditTextField("Value");
 			f.bindToPropertyVal(((ContentVal)c).getValue());
 			fields.add(f);
 			p.add(f);
-			
+
 		}
-		
-	
+
+
 		initWidget(p);
 
 	}

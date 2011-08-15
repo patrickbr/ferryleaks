@@ -14,13 +14,11 @@ public class PropertyEditFieldAvailableColumns extends PropertyEditField {
 		super(f);
 		
 		if (f.getType().matches("__COLUMN\\{[0-9]*\\}")) {
-
 			int num = Integer.parseInt(f.getType().split("\\{")[1].replaceAll("\\}", ""));
 			lb =  new AvailableColumnsField(pid, nid,num, false,manServ);
 		}else{
 			lb = new AvailableColumnsField(pid, nid, false,manServ);
 		}
-
 
 		lb.setMarkError(true);
 		p.add(lb);
@@ -29,22 +27,14 @@ public class PropertyEditFieldAvailableColumns extends PropertyEditField {
 
 	@Override
 	public void bindToPropertyVal(PropertyValue pv) {
-
 		super.bindToPropertyVal(pv);
 		lb.setProjectedSelection(pv.getVal());
-
 	}
 
 	@Override
 	public void save() {
-
 		pv.setVal(lb.getListBox().getValue(lb.getListBox().getSelectedIndex()));
-
-
 	}
-
-
-
 
 
 }
