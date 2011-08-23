@@ -4,8 +4,8 @@
 
 	<properties>
 	
-		<property name="color">0x00ff00</property>
-		<property name="label_schema">[_kind]\n{comparison}</property>
+		<property name="color">0x00aa00</property>
+		<property name="label_schema">[_kind]{comparison}</property>
 	
 	</properties>
 
@@ -14,7 +14,7 @@
 	
 	  	<gointo xmlob="content" humanname="Comparisons" howoften="1">
 	  	
-	  	    <val xmlob="comparison" name_to_print="({column_left}&lt;[kind]&gt;{column_right})" namefield="kind" humanname="Comparison" name="comparison" howoften="*">
+	  	    <val xmlob="comparison" name_to_print="\n({column_left} &lt;[kind]&gt; {column_right})" namefield="kind" humanname="Comparison" name="comparison" howoften="*">
 	  	    
 	  	      <fields>
 	  	         	<field can_be="eq,gt,eq,lt,le,ne" type="string">kind</field>

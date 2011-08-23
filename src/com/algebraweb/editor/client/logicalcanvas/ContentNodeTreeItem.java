@@ -5,6 +5,7 @@ import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.node.NodeContent;
 import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.validation.ValidationError;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HTML;
 
 public class ContentNodeTreeItem extends NodeTreeItem{
@@ -23,12 +24,12 @@ public class ContentNodeTreeItem extends NodeTreeItem{
 		this.scheme=scheme;
 		this.manServ=manServ;
 
-		name = c.getLabel();
-
+		name = c.getLabel().replaceAll("\\\\n", "");
+		name = SafeHtmlUtils.htmlEscape(name);
 		super.setWidget(new HTML("<span style='font-style:italic'>"+ name + "</span>"));
 		
 		if (c.getEvalRes() != null && !c.getEvalRes().isEmpty()) {
-			ContentNodeTreeItem.this.setWidget(new HTML("<span style='color:red'>" + "<span style='font-style:italic'>"+ name + "</span>" + "</span>"));
+			ContentNodeTreeItem.this.setWidget(new HTML("<span style='color:red'>" + "<span style='font-style:italic'>"+ name  + "</span>" + "</span>"));
 			errors = c.getEvalRes();
 		}
 

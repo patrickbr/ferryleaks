@@ -16,7 +16,7 @@
 	
 	  	<gointo xmlob="content" humanname="Projection" howoften="1">
 
-			<val xmlob="column" name_to_print="[old_name]:[name]" humanname="Projection columns" name="column_proj" howoften="*">
+			<val xmlob="column" name_to_print="[name]:[old_name]" humanname="Projection columns" name="column_proj" howoften="*">
 
 				<fields>
 

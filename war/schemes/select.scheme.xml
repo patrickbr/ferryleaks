@@ -5,6 +5,7 @@
 	<properties>
 	
 		<property name="color">0x00dddd</property>
+		<property name="label_schema">[_kind]\n({column})</property>
 
 	</properties>
 
@@ -13,12 +14,12 @@
 	
 		<gointo xmlob="content" howoften="1">
 
-			<val xmlob="column" name="column" howoften="1">
+			<val xmlob="column" namefield="name" name_to_print="[name]" humanname="Column" name="column" howoften="1">
 
 				<fields>
 
-					<field type="string">name</field>
-					<field type="boolean">new</field>
+					<field type="__COLUMN">name</field>
+					<field type="boolean" must_be="false" >new</field>
 			
 				</fields>
 

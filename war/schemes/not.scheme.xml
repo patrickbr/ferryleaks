@@ -5,7 +5,7 @@
 	<properties>
 	
 		<property name="color">0xc0c0c0</property>
-		<property name="label_schema">[_kind]\n({column}:{rescol})</property>
+		<property name="label_schema">[_kind]\n({rescol}:&lt;{column}&gt;)</property>
 
 	</properties>
 
