@@ -4,22 +4,16 @@
 
 	<properties>
 	
-		<property name="color">0xffa500</property>
+		<property name="color">0x000099</property>
 		
 	</properties>
 
-
 	<schema>
-		
-	  	
+			  	
 		<val xmlob="edge" name="edgeto" howoften="2">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
 
 	</schema>
