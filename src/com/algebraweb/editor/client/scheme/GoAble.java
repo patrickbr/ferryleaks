@@ -18,5 +18,6 @@ public interface GoAble extends IsSerializable  {
 	public boolean hasFields();
 	public boolean isEditable();
 	public void setEditable(boolean editable);
+	public String getNameToPrint();
 
 }

@@ -232,7 +232,8 @@ public class NodeSchemeLoader {
 		GoInto ret;
 				
 		if (e.getNodeName().equals("gointo")) {
-			ret = new GoInto(xmlOb,howOften,humanName);
+			System.out.println(xmlOb + " :: " + nameToPrint);
+			ret = new GoInto(xmlOb,howOften,humanName,nameToPrint);
 			
 		}else{
 			ret = new Value(xmlOb,howOften,name, humanName,nameToPrint,hasVals);

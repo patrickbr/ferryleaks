@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -85,7 +86,9 @@ public class NodeEditDialog extends DialogBox{
 
 		p.setSize("550px", "350px");
 
-		p.addWest(tree, 220);
+		ScrollPanel treeScroll = new ScrollPanel(tree);
+		
+		p.addWest(treeScroll, 220);
 
 
 		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {

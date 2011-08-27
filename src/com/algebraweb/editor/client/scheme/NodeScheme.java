@@ -112,6 +112,11 @@ public class NodeScheme implements IsSerializable,GoAble{
 
 	}
 
+	@Override
+	public String getNameToPrint() {
+		return kind;
+	}
+
 
 
 }

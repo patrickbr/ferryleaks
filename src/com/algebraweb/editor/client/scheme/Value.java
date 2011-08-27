@@ -9,7 +9,6 @@ public class Value extends GoInto{
 	
 	
 	String valName;
-	String nameToPrint = "";
 	private boolean hasVal=false;
 	
 	ArrayList<Field> fields = new ArrayList<Field>();
@@ -27,8 +26,8 @@ public class Value extends GoInto{
 	
 	public Value(String xmlObject, String howOften, String valName, String humanName,String nameToPrint,boolean hasVal) {
 	
-		this(xmlObject, howOften, valName, humanName);
-		this.nameToPrint=nameToPrint;
+		super(xmlObject, howOften,  humanName,nameToPrint);
+		this.valName=valName;
 		this.hasVal=hasVal;
 		
 	}
@@ -44,11 +43,6 @@ public class Value extends GoInto{
 		return fields;
 	}
 	
-	public String getNameToPrint() {
-		
-		return nameToPrint;
-		
-	}
 	
 	public String getValName() {
 		return valName;

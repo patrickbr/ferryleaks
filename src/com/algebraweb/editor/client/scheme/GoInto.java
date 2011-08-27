@@ -9,6 +9,7 @@ public class GoInto implements GoAble {
 	protected String howOften;
 	protected String humanName;
 	protected boolean editable = true;
+	protected String nameToPrint = "";
 
 	protected ArrayList<GoAble> childs = new ArrayList<GoAble>();
 
@@ -25,12 +26,26 @@ public class GoInto implements GoAble {
 		this.humanName = xmlObject;
 
 	}
+	
+	
+	public String getNameToPrint() {
+		
+		return nameToPrint;
+		
+	}
 
 	public GoInto(String xmlObject, String howOften, String humanName) {
 
 		this.xmlObject=xmlObject;
 		this.howOften = howOften;
 		this.humanName = humanName;
+		
+	}
+	
+	public GoInto(String xmlObject, String howOften, String humanName, String nameToPrint) {
+
+		this(xmlObject, howOften, humanName);
+		this.nameToPrint = nameToPrint;
 		
 	}
 

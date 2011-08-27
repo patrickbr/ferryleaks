@@ -244,7 +244,7 @@ public class PlanParser {
 
 	}
 
-	private void parseContentLabelSchema(NodeContent retEl, Value g) {
+	private void parseContentLabelSchema(NodeContent retEl, GoAble g) {
 
 		String schema = g.getNameToPrint();
 		parseLabelSchema(retEl, schema);
@@ -293,9 +293,10 @@ public class PlanParser {
 				int to = Integer.parseInt(((ContentVal)retEl).getAttributes().get("to").getVal());
 				node.getChilds().add(mother.getPlanNodeById(to));
 			}
-			parseContentLabelSchema(retEl, ((Value)g));
+
 		}
 
+		parseContentLabelSchema(retEl, g);
 		List<GoAble> schema = g.getSchema();
 		parseContent(e, retEl.getContent(), schema, mother, node);
 		return retEl;

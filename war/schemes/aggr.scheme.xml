@@ -4,7 +4,8 @@
 
 	<properties>
 	
-		<property name="color">0xeeeeee</property>
+		<property name="color">0xa0a0a0</property>
+		<property name="label_schema">[_kind] {part_column}{aggregate}</property>
 		<property name="reset_columns">true</property>
 
 	</properties>
@@ -15,7 +16,7 @@
 	
 	  	<gointo xmlob="content" humanname="Aggregate" howoften="1">
 
-			<val xmlob="column" namefield="name" humanname="Partition column" name="column" howoften="?">
+			<val xmlob="column" name_to_print=" / [name]" namefield="name" humanname="Partition column" name="part_column" howoften="?">
 
 				<fields>
 
@@ -26,7 +27,7 @@
 				</fields>
 								
 			</val>
-			<val xmlob="aggregate" namefield="kind" humanname="Functions" name="aggregate" howoften="+">
+			<val xmlob="aggregate" name_to_print="\n{rescolumn} = [kind] ({itemcolumn})" namefield="kind" humanname="Functions" name="aggregate" howoften="+">
 
 				<fields>
 
@@ -34,7 +35,7 @@
 						
 				</fields>
 				
-				<val xmlob="column" namefield="name" humanname="Result Column" name="column" howoften="1">
+				<val xmlob="column" name_to_print="[name]" namefield="name" humanname="Result Column" name="rescolumn" howoften="1">
 
 					<fields>
 
@@ -45,7 +46,7 @@
 
 				</val>
 				
-				<val xmlob="column" namefield="name" humanname="Aggr. item" name="column" howoften="?">
+				<val xmlob="column" name_to_print="[name]" namefield="name" humanname="Aggr. item" name="itemcolumn" howoften="?">
 
 					<fields>
 
