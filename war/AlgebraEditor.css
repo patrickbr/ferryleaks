@@ -421,8 +421,7 @@ table td,table {
 }
 
 .gwt-SplitLayoutPanel-HDragger {
-	background: url("dragger.png") no-repeat scroll center
-		center #AAA;
+	background: url("dragger.png") no-repeat scroll center center #AAA;
 }
 
 .gwt-PopupPanelGlass {
@@ -942,4 +941,36 @@ body.hidden #loading #msg {
 
 .error-inner {
 	min-width: 200px;
+}
+
+.zoompanel {
+	position: absolute;
+	position: fixed;
+	top: 35px;
+	right: 5px;
+}
+
+.zoompanel .gwt-Button {
+	background: transparent;
+	background-image: url(icons_black.png);
+	background-position: -65px -96px;
+	border: none;
+	font-size: 20px;
+	font-weight: bold;
+	opacity:0.3;
+	width: 30px;
+	height: 30px;
+	font-family: PTSans, Verdana, Helvetica, Arial, sans-serif;
+}
+
+.zoompanel .zoomInButton {
+	background-position: -65px -96px;
+}
+
+.zoompanel .zoomOutButton {
+	background-position: -35px -96px;
+}
+
+.zoompanel .gwt-Button:hover {
+	opacity:1;
 }

@@ -33,5 +33,7 @@ public interface AlgebraEditorCanvasView extends Fillable {
 	public void setErroneous(int nodeId);
 	public Widget getWidget();
 	public void setNotActive(boolean b);
+	public void zoomIn();
+	public void zoomOut();
 	
 }

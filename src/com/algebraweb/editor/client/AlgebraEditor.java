@@ -62,7 +62,7 @@ public class AlgebraEditor implements EntryPoint {
 	private static boolean LOGGING=false;
 	private static RegistrationServiceAsync registor = GWT.create(RegistrationService.class);
 	private static Timer keepAliveTimer;
-	
+
 	private RemoteConfiguration config;
 	private List<AlgebraEditorCanvasView> canvi = new ArrayList<AlgebraEditorCanvasView>();
 	private List<EditorDragPanel> panels = new ArrayList<EditorDragPanel>();
@@ -73,6 +73,7 @@ public class AlgebraEditor implements EntryPoint {
 	private NodeContextMenu nodeContextMenu = new NodeContextMenu();
 	private ContextMenu planContextMenu = new ContextMenu();
 	private TabContextMenu tabContextMenu = new TabContextMenu();
+	private ZoomPanel zoomPanel = new ZoomPanel();
 
 	/**
 	 * genesis...
@@ -113,6 +114,7 @@ public class AlgebraEditor implements EntryPoint {
 		initContextMenu();
 		initPlanContextMenu();
 		initTabContextMenu();
+		initZoomPanel();
 
 		AlgebraEditor.log("Sending registration...");
 
@@ -125,7 +127,26 @@ public class AlgebraEditor implements EntryPoint {
 
 		});
 	}
-	
+
+	private void initZoomPanel() {		
+		RootPanel.get("editor").add(zoomPanel);
+		zoomPanel.registerZoomInHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				getActiveView().zoomIn();			
+			}
+		});
+
+		zoomPanel.registerZoomOutHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				getActiveView().zoomOut();						
+			}
+		});
+	}
+
 	/**
 	 * Returns the active canvas.
 	 * @return the active canvas
@@ -150,8 +171,8 @@ public class AlgebraEditor implements EntryPoint {
 	public static void setSubTitle(String s) {
 		Window.setTitle(s + " - " + TITLE + " - " + VERSION);
 	}
-	
-	
+
+
 	private  GraphCanvasCommunicationCallback<Integer> createCb = new  GraphCanvasCommunicationCallback<Integer>("adding new empty canvas") {
 		@Override
 		public void onSuccess(Integer result) {
@@ -191,7 +212,7 @@ public class AlgebraEditor implements EntryPoint {
 			new TextPresentationDialog("Compiled SQL",result);
 		}
 	};
-	
+
 	/**
 	 * Add a new canvas to the editor with the given id. Note that
 	 * this will <i>not</i> add a new plan to the bundle stored on the
@@ -283,7 +304,7 @@ public class AlgebraEditor implements EntryPoint {
 	public void createNewPlan(boolean clearFirst) {
 		rmsa.createNewPlan(clearFirst,createCb);
 	}
-	
+
 	/**
 	 * Returns the canvas object with the given id or null
 	 * if no canvas with that id exists
@@ -298,7 +319,7 @@ public class AlgebraEditor implements EntryPoint {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * returns the context menu used on the canvas
 	 * @return the contextMenu
@@ -451,6 +472,20 @@ public class AlgebraEditor implements EntryPoint {
 				getPlanManipulator().paste(getActiveView().getId(), (int)(m.getX()*getActiveView().getScale()),  (int)(m.getY()*getActiveView().getScale()));
 			}
 		});
+
+		m.addSeperator();
+		m.addItem(new LogicalPlanNodeContextItem("Zoom in") {
+			@Override
+			public void onClick() {
+				getActiveView().zoomIn();
+			}
+		});
+		m.addItem(new LogicalPlanNodeContextItem("Zoom out") {
+			@Override
+			public void onClick() {
+				getActiveView().zoomOut();
+			}
+		});
 	}
 
 	private void initTabContextMenu() {
@@ -520,9 +555,9 @@ public class AlgebraEditor implements EntryPoint {
 	}
 
 	private void processConfiguration(final RemoteConfiguration result) {
-		
+
 		config=result;
-		
+
 		keepAliveTimer = new Timer() {
 			@Override
 			public void run() {

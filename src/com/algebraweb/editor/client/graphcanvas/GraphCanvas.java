@@ -605,13 +605,31 @@ public class GraphCanvas extends Raphael implements Fillable  {
 				if (event.isMetaKeyDown() || event.isAltKeyDown() || event.isShiftKeyDown() || event.isControlKeyDown()) {
 					DOM.eventGetCurrentEvent().preventDefault();
 
-					if (event.isNorth()) zoom(((1 / getScale()) * 100) + 10);
-					if (event.isSouth()) zoom(((1 / getScale()) * 100) - 10);
+					if (event.isNorth())
+						zoomIn();
+					if (event.isSouth())
+						zoomOut();
 				}
 			}
+
+
 		}, MouseWheelEvent.getType());
 	}
 
+	/**
+	 * Zooms out
+	 */
+	public void zoomOut() {
+		zoom(((1 / getScale()) * 100) - 10);
+	}
+
+	/**
+	 * Zooms in
+	 */
+	public void zoomIn() {
+		zoom(((1 / getScale()) * 100) + 10);
+	}
+	
 	public void openPopUp(final int x, final int y, final int nodeid, int delay) {
 
 

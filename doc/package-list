@@ -3,14 +3,11 @@ com.algebraweb.editor.client.graphcanvas
 com.algebraweb.editor.client.graphcanvas.remotefiller
 com.algebraweb.editor.client.graphcanvas.remotesorter
 com.algebraweb.editor.client.logicalcanvas
-com.algebraweb.editor.client.node
-com.algebraweb.editor.client.scheme
 com.algebraweb.editor.client.validation
 com.algebraweb.editor.server.fileserver
 com.algebraweb.editor.server.graphcanvas.remotefiller
 com.algebraweb.editor.server.graphcanvas.remotesorter
 com.algebraweb.editor.server.graphcanvas.remotesorter.dotsorter
-com.algebraweb.editor.server.logicalplan
 com.algebraweb.editor.server.logicalplan.communication
 com.algebraweb.editor.server.logicalplan.evaluator
 com.algebraweb.editor.server.logicalplan.sqlbuilder
@@ -21,4 +18,7 @@ com.algebraweb.editor.server.logicalplan.xmlplanloader
 com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser
 com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader
 com.algebraweb.editor.server.registrationservice
+com.algebraweb.editor.shared.logicalplan
+com.algebraweb.editor.shared.node
+com.algebraweb.editor.shared.scheme
 com.hydro4ge.raphaelgwt.client
