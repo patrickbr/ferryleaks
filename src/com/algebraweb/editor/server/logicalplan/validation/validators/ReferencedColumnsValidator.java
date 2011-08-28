@@ -1,21 +1,24 @@
 package com.algebraweb.editor.server.logicalplan.validation.validators;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.algebraweb.editor.server.logicalplan.validation.Validator;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.node.Property;
 
-
+/**
+ * A validator checking the referenced columns
+ * @author Patrick Brosi
+ *
+ */
 public class ReferencedColumnsValidator implements Validator {
 
-	private boolean containsPropertyByVal(Property p, ArrayList<Property> props) {
-		Iterator<Property> it = props.iterator();
+	private boolean containsPropertyByVal(Property p, List<Property> list) {
+		Iterator<Property> it = list.iterator();
 
 		while (it.hasNext()) {
 			if (p.getPropertyVal().getVal().equals(it.next().getPropertyVal().getVal())) return true;

@@ -5,16 +5,16 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.algebraweb.editor.client.node.ContentNode;
-import com.algebraweb.editor.client.node.NodeContent;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.scheme.Field;
-import com.algebraweb.editor.client.scheme.GoAble;
-import com.algebraweb.editor.client.scheme.NodeScheme;
-import com.algebraweb.editor.client.scheme.Value;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.algebraweb.editor.server.logicalplan.validation.Validator;
+import com.algebraweb.editor.shared.node.ContentNode;
+import com.algebraweb.editor.shared.node.NodeContent;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.scheme.Field;
+import com.algebraweb.editor.shared.scheme.GoAble;
+import com.algebraweb.editor.shared.scheme.NodeScheme;
+import com.algebraweb.editor.shared.scheme.Value;
 
 /**
  * A validator for the grammar specified in the *.scheme.xml files.
@@ -24,15 +24,12 @@ import com.algebraweb.editor.server.logicalplan.validation.Validator;
  */
 
 public class GrammarValidator implements Validator {
-
-
 	private String currentSchema = "";
 	private int currentNodeValidaded = -1;
 
 	public void fillContentNodeWithContentValidationResults(ContentNode n, List<GoAble> schema) {
 		Iterator<GoAble> it = schema.iterator();
 		while (it.hasNext()) {
-
 			GoAble cur = it.next();
 			Iterator<NodeContent> i = n.getDirectNodeContentByScheme(cur).iterator();
 
@@ -45,14 +42,13 @@ public class GrammarValidator implements Validator {
 
 	private String getErrorMsg(String howMany, GoAble g) {
 		String ret = "Expected " + howMany + " element(s) of type <span class='tt'>" + g.getXmlObject() + "</span>";
-		
-		if (g instanceof Value) {
+				if (g instanceof Value) {
 			ret += " with fields";
 			Iterator<Field> it =  ((Value)g).getFields().iterator();
 
 			while (it.hasNext()) {
 				Field current = it.next();
-				ret += " <span class='tt'>" + current.getVal();
+				ret += " <span class='tt'>" + current.getName();
 				if (current.getMust_be() != null) ret += " = " + current.getMust_be();
 				ret += "</span>,";
 			}
@@ -67,11 +63,9 @@ public class GrammarValidator implements Validator {
 		return (a.matches("[0-9]+"));
 	}
 
-
 	@Override
 	public void validate(List<PlanNode> ps, List<PlanNode> plan,
 			ValidationResult r) {
-
 		Iterator<PlanNode> it = ps.iterator();
 
 		while (it.hasNext()) {
@@ -80,29 +74,23 @@ public class GrammarValidator implements Validator {
 		}
 	}
 
-
 	public List<ValidationError> validateContentNode(ContentNode n,GoAble g) {
 		return validateContentNode(n, g, false);
 	}
 
 	public List<ValidationError> validateContentNode(ContentNode n, GoAble g, boolean stayFlat) {
-
 		List<ValidationError> res = new ArrayList<ValidationError>();
-
 		if (g instanceof Value && n instanceof NodeContent) {
-
 			Iterator<Field> it = ((Value)g).getFields().iterator();
+		
 			while (it.hasNext()) {
-
 			Field current = it.next();
-				String val = ((NodeContent) n).getAttributes().get(current.getVal()).getVal();
+				String val = ((NodeContent) n).getAttributes().get(current.getName()).getVal();
 				if (current.hasCanBe() && !Arrays.asList(current.getCanBe()).contains(val)) {
-
-					String retMsg = "Attribute " + current.getVal() + " is expected to be one of {";
+					String retMsg = "Attribute " + current.getName() + " is expected to be one of {";
 					for (String i:current.getCanBe()) {
 						retMsg += i + ", ";
 					}
-
 					retMsg += "}";
 					retMsg.replaceAll(", \\}", "}");
 					res.add(new ValidationError(currentNodeValidaded,retMsg));
@@ -114,28 +102,24 @@ public class GrammarValidator implements Validator {
 		while (it.hasNext()) {
 			GoAble current = it.next();
 			String howOften = current.getHowOften();
-
 			if (isInteger(howOften)) {
 				if (n.getDirectNodeContentByScheme(current).size() < Integer.parseInt(howOften)) {
 					res.add(new ValidationError(currentNodeValidaded, 
 							getErrorMsg("a number of " + howOften ,current)));
 				}
 			}
-
 			if (howOften.equals("?")) {
 				if (n.getDirectNodeContentByScheme(current).size() >1) {
 					res.add(new ValidationError(currentNodeValidaded, 
 							getErrorMsg("one or no",current)));
 			}
 			}
-
 			if (howOften.equals("+")) {
 				if (n.getDirectNodeContentByScheme(current).size() <1) {
 					res.add(new ValidationError(currentNodeValidaded, 
 							getErrorMsg("at least one",current)));
 				}
 			}
-
 			if (howOften.equals("*")) {}
 
 			if (howOften.matches("\\{[0-9]+,[0-9]+\\}")) {
@@ -183,10 +167,8 @@ public class GrammarValidator implements Validator {
 	public List<ValidationError> validateNode(PlanNode n) {
 		List<ValidationError> res = new  ArrayList<ValidationError>();
 		NodeScheme nodeScheme = n.getScheme();
-
 		currentNodeValidaded = n.getId();
 		currentSchema = n.getKind();
-
 		res.addAll(validateContentNode(n,nodeScheme));
 		return res;
 	}

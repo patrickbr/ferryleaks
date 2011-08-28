@@ -12,9 +12,9 @@ import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
-import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
+import com.algebraweb.editor.shared.node.PlanNode;
 
 /**
  * Handles PlanManipulation and synchronization with the server plan 

@@ -16,7 +16,7 @@ public class SerializableHandler implements ResultSetHandler<List<Map<String,Str
 
 		List<Map<String, String>> ret = new ArrayList<Map<String,String>>();
 		while(set.next()) {
-			HashMap<String,String> row = new HashMap<String,String>();
+			Map<String,String> row = new HashMap<String,String>();
 
 			for (int i=0;i<set.getMetaData().getColumnCount();i++) {
 				row.put(set.getMetaData().getColumnLabel(i+1), set.getString(i+1));

@@ -3,20 +3,20 @@ package com.algebraweb.editor.client.logicalcanvas;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.ContentNode;
-import com.algebraweb.editor.client.node.ContentVal;
-import com.algebraweb.editor.client.node.LabelAttrIdentifierOb;
-import com.algebraweb.editor.client.node.LabelContentIdentifierOb;
-import com.algebraweb.editor.client.node.LabelOb;
-import com.algebraweb.editor.client.node.LabelStringOb;
-import com.algebraweb.editor.client.node.NodeContent;
-import com.algebraweb.editor.client.node.PropertyValue;
-import com.algebraweb.editor.client.node.ValGroup;
-import com.algebraweb.editor.client.scheme.Field;
-import com.algebraweb.editor.client.scheme.GoAble;
-import com.algebraweb.editor.client.scheme.GoInto;
-import com.algebraweb.editor.client.scheme.NodeScheme;
-import com.algebraweb.editor.client.scheme.Value;
+import com.algebraweb.editor.shared.node.ContentNode;
+import com.algebraweb.editor.shared.node.ContentVal;
+import com.algebraweb.editor.shared.node.LabelAttrIdentifierOb;
+import com.algebraweb.editor.shared.node.LabelContentIdentifierOb;
+import com.algebraweb.editor.shared.node.LabelOb;
+import com.algebraweb.editor.shared.node.LabelStringOb;
+import com.algebraweb.editor.shared.node.NodeContent;
+import com.algebraweb.editor.shared.node.PropertyValue;
+import com.algebraweb.editor.shared.node.ValGroup;
+import com.algebraweb.editor.shared.scheme.Field;
+import com.algebraweb.editor.shared.scheme.GoAble;
+import com.algebraweb.editor.shared.scheme.GoInto;
+import com.algebraweb.editor.shared.scheme.NodeScheme;
+import com.algebraweb.editor.shared.scheme.Value;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -79,9 +79,9 @@ public class LogicalSchemeTreeItem extends NodeTreeItem{
 				Field current = it.next();
 
 				if (current.hasMustBe()) {
-					((ContentVal)n).getAttributes().put(current.getVal(), new PropertyValue(current.getMust_be(), current.getType()));
+					((ContentVal)n).getAttributes().put(current.getName(), new PropertyValue(current.getMust_be(), current.getType()));
 				}else{
-					((ContentVal)n).getAttributes().put(current.getVal(), new PropertyValue("(" + current.getType() + ")", current.getType()));
+					((ContentVal)n).getAttributes().put(current.getName(), new PropertyValue("(" + current.getType() + ")", current.getType()));
 				}
 
 			}

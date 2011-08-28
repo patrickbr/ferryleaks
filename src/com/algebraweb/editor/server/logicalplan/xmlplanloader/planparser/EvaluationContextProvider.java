@@ -8,54 +8,26 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
-import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
-import com.algebraweb.editor.client.node.NodeContent;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.QueryPlan;
+import com.algebraweb.editor.shared.node.NodeContent;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.node.QueryPlan;
 
 public class EvaluationContextProvider {
 
-	private class ItemCol implements Comparable<ItemCol> {
-
-		private int pos;
-		private String name;
-
-		public ItemCol(String name, int pos) {
-			this.name=name;
-			this.pos=pos;
-		}
-
-		@Override
-		public int compareTo(ItemCol arg0) {
-			return this.pos = arg0.getPos();
-		}
-
-		/**
-		 * @return the name
-		 */
-		public String getName() {
-			return name;
-		}
-
-		/**
-		 * @return the pos
-		 */
-		public int getPos() {
-			return pos;
-		}
-	}
-	
 	private HttpSession session;
-
-	//TODO should be in a special pipeline kind of class
-	//maybe interface
 
 	public EvaluationContextProvider(HttpSession session) {
 		this.session=session;
 	}
 
+	/**
+	 * Loads an evaluation context into a query plan
+	 * @param p the query plan
+	 * @throws GraphNotConnectedException
+	 * @throws PlanHasCycleException
+	 */
 	public void fillEvaluationContext(QueryPlan p) throws GraphNotConnectedException, PlanHasCycleException {
 
 		PlanNode root;
@@ -66,7 +38,6 @@ public class EvaluationContextProvider {
 			root = null;
 		}
 		EvaluationContext c = new EvaluationContext();
-
 	
 		c.setDatabase((String)session.getAttribute("databaseName"));
 		c.setDatabasePassword((String)session.getAttribute("databasePw"));
@@ -76,8 +47,6 @@ public class EvaluationContextProvider {
 
 		if (root != null && root.getKind().equals("serialize relation")) {
 
-			//TODO: what about erroneous nodes?
-			System.out.println("zgur: "+root.getContentWithAttributeValue("function", "iter").size());
 			if (root.getContentWithAttributeValue("function", "iter").size() > 0) {
 				c.setIterColumnName(root.getContentWithAttributeValue("function", "iter").get(0).getAttributes().get("name").getVal());
 				c.setIterUseColumn(true);
@@ -95,23 +64,18 @@ public class EvaluationContextProvider {
 			}
 
 			c.setSortOrder("ASCENDING");
-
-
 			Iterator<NodeContent> items = root.getContentWithAttributeValue("function", "item").iterator();
-
 			List<ItemCol> itemCols = new ArrayList<ItemCol>();
 
 			while (items.hasNext()) {
 				NodeContent current = items.next();
 				itemCols.add(new ItemCol(current.getAttributes().get("name").getVal(), Integer.parseInt(current.getAttributes().get("position").getVal())));
 			}
-			//sort to match the position ints given in the plan
+			
 			Collections.sort(itemCols);
-
 			Iterator<ItemCol> itCol = itemCols.iterator();
 			String[] colsString = new String[itemCols.size()];
 			int i=0;
-
 			while (itCol.hasNext()) {
 				ItemCol current = itCol.next();
 				colsString[i] = current.getName();
@@ -128,6 +92,43 @@ public class EvaluationContextProvider {
 			c.setSortUseColumn(false);
 		}
 		p.setEvContext(c);
+	}
+	
+	/**
+	 * A private class for comparing columns
+	 * @author patrick
+	 *
+	 */
+	private class ItemCol implements Comparable<ItemCol> {
+
+		private int pos;
+		private String name;
+
+		public ItemCol(String name, int pos) {
+			this.name=name;
+			this.pos=pos;
+		}
+
+		@Override
+		public int compareTo(ItemCol arg0) {
+			return this.pos = arg0.getPosition();
+		}
+
+		/**
+		 * Returns the name of this ItemColumn
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * Returns the position of this ItemColumn
+		 * @return the position
+		 */
+		public int getPosition() {
+			return pos;
+		}
 	}
 
 }

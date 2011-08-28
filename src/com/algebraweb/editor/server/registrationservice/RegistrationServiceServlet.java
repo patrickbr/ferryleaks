@@ -10,37 +10,37 @@ import com.algebraweb.editor.client.RemoteConfiguration;
 import com.algebraweb.editor.client.RemoteConfigurationWithPlansInSession;
 import com.algebraweb.editor.client.RegistrationService;
 import com.algebraweb.editor.client.logicalcanvas.RemoteConfigurationException;
-import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+/**
+ * A servlet for client registrations. Returns possible plans saved in the session 
+ * as well as the central server configuration
+ * @author Patrick Brosi
+ *
+ */
 public class RegistrationServiceServlet extends RemoteServiceServlet implements RegistrationService{
 
 	/**
 	 * 
 	 */
-	
-	public RegistrationServiceServlet() {
-		
-	}
-	
 	private static final long serialVersionUID = -1031957668151394521L;
+
+	public RegistrationServiceServlet() {
+
+	}
 
 	@Override
 	public void keepAlive() {
-		System.out.println("Received keep alive from "  + getThreadLocalRequest().getRemoteHost() + "(" + getThreadLocalRequest().getRemoteAddr() + ") (session " + getThreadLocalRequest().getSession(false).getId() + ")");
 	}
 
 	@Override
 	public RemoteConfiguration register() throws RemoteConfigurationException {
-
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession(false);
-		
-		
 		RemoteConfiguration remoteConfig = getRemoteConfiguration(request, session);
 
 		if (getServletContext().getAttribute("configuration") == null) {
-			System.out.println("loading configuration...");
 			Configuration c;
 			try {
 				c = new PropertiesConfiguration("algebraeditor.properties");
@@ -49,21 +49,16 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 			}
 			getServletContext().setAttribute("configuration", c);
 		}
-		
+
 		Configuration c = (Configuration) getServletContext().getAttribute("configuration");
-		
-		
-		System.out.println(c.getString("server","dotpath"));
 		remoteConfig.setKeepAliveInterval(c.getInt("client.editor.keepaliveinterval", 60000));
 		remoteConfig.setLoadEmptyCanvas(c.getBoolean("client.editor.loademptycanvas", true));
 		remoteConfig.setInvertArrows(c.getBoolean("client.canvas.invertarrows", true));
 		return remoteConfig;
 	}
 
-	private RemoteConfiguration getRemoteConfiguration(
-			HttpServletRequest request, HttpSession session) {
+	private RemoteConfiguration getRemoteConfiguration(HttpServletRequest request, HttpSession session) {
 		RemoteConfiguration tmp;
-		
 		if (session != null && ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().size()>0 &&
 				!(((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().size() == 1 && ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().values().iterator().next().getPlan().size() == 0)) {
 			tmp = new RemoteConfigurationWithPlansInSession(((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().keySet().toArray(new Integer[0]));
@@ -74,7 +69,4 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 		}
 		return tmp;
 	}
-
-
-
 }

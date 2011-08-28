@@ -2,9 +2,9 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import java.util.List;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.NodeContent;
-import com.algebraweb.editor.client.scheme.GoAble;
 import com.algebraweb.editor.client.validation.ValidationError;
+import com.algebraweb.editor.shared.node.NodeContent;
+import com.algebraweb.editor.shared.scheme.GoAble;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HTML;
 

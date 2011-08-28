@@ -3,9 +3,11 @@ package com.algebraweb.editor.server.graphcanvas.remotesorter.dotsorter;
 
 import java.io.BufferedOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -37,16 +39,16 @@ public class DotSorter implements RemoteSorter {
 	}
 
 	/**
-	 * Returns a HashMap containing node-IDs as keys and Node-Coordinates as value
-	 * @param nodes
-	 * @return
+	 * Returns a map containing node-IDs as keys and Node-Coordinates as value
+	 * @param nodes the nodes to translate
+	 * @return the map containing node coordinates
 	 * @throws RemoteIOException 
 	 */
 	@Override
-	public HashMap<Integer, Coordinate> getCoordinateHashMap(
-			ArrayList<RawNode> nodes) throws RemoteIOException {
+	public Map<Integer, Coordinate> getCoordinateHashMap(
+			List<RawNode> nodes) throws RemoteIOException {
 
-		HashMap<Integer, Coordinate> ret = new HashMap<Integer, Coordinate>();
+		Map<Integer, Coordinate> ret = new HashMap<Integer, Coordinate>();
 		Document doc = getDotXml(getDotCode(nodes));
 		Element graphEl= getNodeByTitle("sort_graph",doc.getDocumentElement());
 		Iterator<RawNode> i = nodes.iterator();
@@ -81,18 +83,16 @@ public class DotSorter implements RemoteSorter {
 
 	/**
 	 * Returns a string containing the dot-code of the graph specified in nodes
-	 * @param nodes
+	 * @param nodes the raw nodes to translate 
 	 * @return
 	 */
-
-	private String getDotCode(ArrayList<RawNode> nodes) {
+	private String getDotCode(List<RawNode> nodes) {
 		String ret = "digraph sort_graph {\n graph [ordering=out];";
 		Iterator<RawNode> i = nodes.iterator();
 
 		while (i.hasNext()) {
 			ret += getDotNodeString(i.next()) + "\n";
 		}
-
 		ret +="\n\n";
 		Iterator<RawNode> j = nodes.iterator();
 
@@ -104,28 +104,25 @@ public class DotSorter implements RemoteSorter {
 				ret += getDotEdgeString(current.getNid(), it.next().getTo()) + "\n";
 			}
 		}
-
 		ret +="}";
 		return ret;
 	}
 
 	/**
 	 * Returns the dot code for an edge (from,to)
-	 * @param from
+	 * @param from 
 	 * @param to
 	 * @return
 	 */
-
 	private String getDotEdgeString(int from, int to) {
 		return "n_" + from + " -> n_" + to + ";";
 	}
 
 	/**
 	 * Returns the dot code for a given RawNode 
-	 * @param n
+	 * @param n the raw node to translate
 	 * @return
 	 */
-
 	private String getDotNodeString(RawNode n) {
 		double width = (n.getWidth()) * dotCorrector; 
 		double height = (n.getHeight()) * dotCorrector;
@@ -139,15 +136,12 @@ public class DotSorter implements RemoteSorter {
 
 	/**
 	 * returns an XML-Document containing dot's generated SVG
-	 * @param dotSource
-	 * @return
+	 * @param dotSource the dot source to use
+	 * @return the xml document object
 	 * @throws RemoteIOException 
 	 */
-
 	private Document getDotXml(String dotSource) throws RemoteIOException {
 		Runtime rt = Runtime.getRuntime();
-
-		//we want svg output
 		String[] args = {dotPath, arg};
 
 		try {
@@ -179,11 +173,10 @@ public class DotSorter implements RemoteSorter {
 
 	/**
 	 * returns a node by it's nested title-Tag.
-	 * @param title
-	 * @param root
+	 * @param title the title tag
+	 * @param root the root element
 	 * @return
 	 */
-
 	private Element getNodeByTitle(String title, Element root) {
 		NodeList nodes = root.getElementsByTagName("g");
 

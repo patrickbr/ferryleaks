@@ -1,4 +1,4 @@
-package com.algebraweb.editor.client.node;
+package com.algebraweb.editor.shared.node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,28 +9,29 @@ import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
 import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
 import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
-import com.algebraweb.editor.client.scheme.GoAble;
-import com.algebraweb.editor.client.scheme.GoInto;
-import com.algebraweb.editor.client.scheme.NodeScheme;
-import com.algebraweb.editor.client.scheme.Value;
+import com.algebraweb.editor.shared.scheme.GoAble;
+import com.algebraweb.editor.shared.scheme.GoInto;
+import com.algebraweb.editor.shared.scheme.NodeScheme;
+import com.algebraweb.editor.shared.scheme.Value;
 
-
-
-
-
+/**
+ * Holds an entire query plan.
+ * 
+ * @author Patrick Brosi
+ *
+ */
 public class QueryPlan implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2371425529625584530L;
-	int id = -1;
-	List<Property> properties = new ArrayList<Property>();
-	List<PlanNode> plan = new ArrayList<PlanNode>();
+	private int id = -1;
+	private List<Property> properties = new ArrayList<Property>();
+	private List<PlanNode> plan = new ArrayList<PlanNode>();
 	private EvaluationContext evContext;
 
 	public QueryPlan() {
-
 	}
 
 	public QueryPlan(int id) {
@@ -45,108 +46,146 @@ public class QueryPlan implements Serializable {
 		for (int i=0;i<n.getMaxChildCount();i++) {
 			n.getChilds().add(null);
 		}
-
 		Iterator<GoAble> it = s.getSchema().iterator();
-
 		while (it.hasNext()) {
 			GoAble cur = it.next();
 			if (cur instanceof GoInto && !(cur instanceof Value)) {
 				n.getContent().add(new ValGroup(((GoInto)cur).getInternalName()));
 			}
 		}
-
 		plan.add(n);
 		return n;
-
 	}
-	private void deleteChildsFromPlan(PlanNode p, List<PlanNode> temp) {
 
+	/**
+	 * Removes a list of plan nodes from a node's childs
+	 * @param p the PlanNode the childs should be deleted from
+	 * @param remove the List of nodes to be deleted
+	 */
+	private void deleteChildsFromPlan(PlanNode p, List<PlanNode> remove) {
 		Iterator<PlanNode> it = p.getChilds().iterator();
-
 		while (it.hasNext()) {
 			PlanNode current = it.next();
-			temp.remove(current);
+			remove.remove(current);
 		}
-
-
 	}
+
 	/**
+	 * Returns the EvaluationContext of this whole plan
 	 * @return the evContext
 	 */
 	public EvaluationContext getEvContext() {
 		return evContext;
 	}
+
+	/**
+	 * Returns a free node id.
+	 * @return a free node id
+	 */
 	public int getFreeId() {
-
 		return getFreeId(new ArrayList<Integer>());
-
 	}
 
+	/**
+	 * Returns a free node id not contained in the <i>nids</i> blacklist
+	 * @param nids the blacklist
+	 * @return a free node id
+	 */
 	public int getFreeId(List<Integer> nids) {
-
 		int current = 0;
-
 		while (nids.contains(current) || getPlanNodeById(current) != null) {
 			current++;
 		}
-
 		return current;
 	}
 
+	/**
+	 * Returns the plan id
+	 * @return the plan id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Returns a nodes parents
+	 * @param n the node 
+	 * @return a list of parents
+	 */
 	public List<PlanNode> getParents(PlanNode n) {
 		List<PlanNode> ret = new ArrayList<PlanNode>();
 		Iterator<PlanNode> it = getPlan().iterator();
-
 		while (it.hasNext()) {
 			PlanNode cur = it.next();
 			if(cur != null && cur.getChilds().contains(n)) ret.add(cur);
 		}
-
 		return ret;
 	}
 
+	/**
+	 * Returns a list of all plan nodes
+	 * @return the plan node list
+	 */
 	public List<PlanNode> getPlan() {
 		return plan;
 	}
 
+	/**
+	 * Returns a plan node with a given id
+	 * @param id the id to look for
+	 * @return the plan node
+	 */
 	public PlanNode getPlanNodeById(int id) {
 		Iterator<PlanNode> i = plan.iterator();
 		while (i.hasNext()) {
 			PlanNode current = i.next();
 			if (current != null && current.getId() == id) return current;
 		}
-
 		return null;
 	}
 
+	/**
+	 * Returns all properties of this query plan as specified in 
+	 * the xml file
+	 * @return the properties
+	 */
 	public List<Property> getProperties() {
 		return properties;
 	}
 
+	/**
+	 * Returns the root node of this plan. Throws exceptions if plan has cycles,
+	 * is empty or has multiple roots.
+	 * @return the root node
+	 * @throws GraphNotConnectedException
+	 * @throws GraphIsEmptyException
+	 * @throws PlanHasCycleException
+	 */
 	public PlanNode getRootNode() throws GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException{
 		return getRootNode(true);
 	}
 
+	/**
+	 * Returns the root node of this plan. Throws exceptions if plan has cycles,
+	 * is empty or has multiple roots. Skips serialize relation if parameter is set
+	 * to true
+	 * @param skipSerializeRelation true if serialize relation should be skipped
+	 * @return the root node 
+	 * @throws GraphNotConnectedException
+	 * @throws GraphIsEmptyException
+	 * @throws PlanHasCycleException
+	 */
 	public PlanNode getRootNode(boolean skipSerializeRelation) throws GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException{
 		List<PlanNode> temp = new ArrayList<PlanNode>();
 		temp.addAll(this.getPlan());
-
 		if (temp.size() == 0) throw new GraphIsEmptyException();
-
 		Iterator<PlanNode> itChilds = this.getPlan().iterator();
 
 		while (itChilds.hasNext()) {
-
 			deleteChildsFromPlan(itChilds.next(),temp);
-
 		}
 
 		if (temp.size() == 0) throw new PlanHasCycleException(this.getPlan().get(0).getId());
-
 		if (temp.size()>1) throw new GraphNotConnectedException();
 
 		//TODO: throws error if plan has cycle
@@ -159,18 +198,26 @@ public class QueryPlan implements Serializable {
 	}
 
 	/**
+	 * Sets the evaluation context of this plan
 	 * @param evContext the evContext to set
 	 */
 	public void setEvContext(EvaluationContext evContext) {
 		this.evContext = evContext;
 	}
 
-	public void setPlan(ArrayList<PlanNode> plan) {
+	/**
+	 * Sets the plan of this query plan
+	 * @param plan the plan as a list of plan nodes
+	 */
+	public void setPlan(List<PlanNode> plan) {
 		this.plan = plan;
 	}
 
-
-	public void setProperties(ArrayList<Property> properties) {
+	/**
+	 * Sets the properties of this query plan
+	 * @param properties the properties
+	 */
+	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
 

@@ -10,12 +10,17 @@ import javax.servlet.http.HttpSession;
 
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.QueryPlan;
-import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.server.graphcanvas.remotefiller.GraphCanvasFiller;
-import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.node.QueryPlan;
+import com.algebraweb.editor.shared.scheme.NodeScheme;
 
+/**
+ * A GraphCanvasFiller for loading parsed xml files onto the client's graphcanvas
+ * @author Patrick Brosi
+ *
+ */
 public class XMLPlanFiller implements GraphCanvasFiller{
 
 	private HttpSession session;
@@ -27,14 +32,19 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 		this.session=s;
 		this.id=id;
 		this.context = context;
-		System.out.println("Initialized XMLPlanFiller with id=" + id);
 	}
 
+	/**
+	 * Translates a plan node into the raw node format that will be sent to
+	 * the client
+	 * @param node the node to translate
+	 * @return the raw node
+	 */
 	@SuppressWarnings("unchecked")
-	public RawNode getRawNode(PlanNode current) {
-		RawNode temp = new RawNode(current.getId(), current.getLabel(), 0xCCCCCC, 130, 25);
-		temp.setFixedChildCount(current.getMaxChildCount());
-		Iterator<PlanNode> childs = current.getChilds().iterator();
+	public RawNode getRawNode(PlanNode node) {
+		RawNode temp = new RawNode(node.getId(), node.getLabel(), 0xCCCCCC, 130, 25);
+		temp.setFixedChildCount(node.getMaxChildCount());
+		Iterator<PlanNode> childs = node.getChilds().iterator();
 
 		int c=1;
 
@@ -43,19 +53,23 @@ public class XMLPlanFiller implements GraphCanvasFiller{
 			if (cur != null) {
 				RawEdge tempEdge= new RawEdge(cur.getId(),temp.getNid());
 				tempEdge.setFixedParentPos(c);
-				System.out.println("XMLplanfiller: adding edge from " + tempEdge.getFrom() + " to " + tempEdge.getTo());
 				temp.getEdgesToList().add(tempEdge);
 			}
 			c++;
 		}
 
 		Map<String,NodeScheme> schemes = (Map<String,NodeScheme>) context.getAttribute("nodeSchemes"); 
-		if (getScheme(current.getKind(),schemes).getProperties().containsKey("color")) {
-			temp.setColor(Integer.parseInt((getScheme(current.getKind(),schemes).getProperties().get("color")).split("x")[1],16));
+		if (getScheme(node.getKind(),schemes).getProperties().containsKey("color")) {
+			temp.setColor(Integer.parseInt((getScheme(node.getKind(),schemes).getProperties().get("color")).split("x")[1],16));
 		}
 		return temp;
 	}
 
+	/**
+	 * Get raw nodes for a whole query plan.
+	 * @param qp the query plan to translate
+	 * @return a list of all raw nodes
+	 */
 	public List<RawNode> getRawNodes(QueryPlan qp) {
 		List<RawNode> rawNodes = new ArrayList<RawNode>();
 		Iterator<PlanNode> it = qp.getPlan().iterator();

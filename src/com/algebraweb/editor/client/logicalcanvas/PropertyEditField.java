@@ -1,7 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import com.algebraweb.editor.client.node.PropertyValue;
-import com.algebraweb.editor.client.scheme.Field;
+import com.algebraweb.editor.shared.node.PropertyValue;
+import com.algebraweb.editor.shared.scheme.Field;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -15,7 +15,7 @@ public abstract class PropertyEditField extends Composite {
 
 	public PropertyEditField(Field f) {
 
-		HTML fieldTitle = new HTML(f.getVal());
+		HTML fieldTitle = new HTML(f.getName());
 		fieldTitle.addStyleName("content-edit-field-title");
 		p.add(fieldTitle);
 

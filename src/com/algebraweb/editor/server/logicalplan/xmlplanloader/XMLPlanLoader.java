@@ -12,24 +12,27 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.configuration.Configuration;
 import org.xml.sax.SAXException;
 
-import com.algebraweb.editor.client.scheme.NodeScheme;
-import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
+import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.shared.scheme.NodeScheme;
 
 public class XMLPlanLoader {
 
 	/**
 	 * Parses the plan file into the given server context. A previously loaded 
-	 * @param file
-	 * @param context
-	 * @return
+	 * node schema will be reused
+	 * @param file the filename to use
+	 * @param context the context to load
+	 * @return the parsed query plan bundle
 	 * @throws IOException 
 	 * @throws SAXException 
+	 * @throws RemoteIOException 
 	 */
 
 	@SuppressWarnings("unchecked")
-	public QueryPlanBundle parsePlans(String file,ServletContext context,HttpSession session) throws IOException, SAXException {
+	public QueryPlanBundle parsePlans(String file,ServletContext context,HttpSession session) throws IOException, SAXException, RemoteIOException {
 		Map<String,NodeScheme> nodeSchemes = new HashMap<String,NodeScheme>();
 
 		if (context.getAttribute("nodeSchemes") == null) {

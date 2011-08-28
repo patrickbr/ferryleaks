@@ -1,8 +1,9 @@
 package com.algebraweb.editor.client.graphcanvas.remotesorter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.algebraweb.editor.client.AlgebraEditor;
 import com.algebraweb.editor.client.RawEdge;
@@ -20,8 +21,7 @@ public class RemoteSorter implements GraphSorter {
 
 
 	private RemoteSorterServiceAsync commServ;
-	private ArrayList<GraphNode> nodes;
-
+	private List<GraphNode> nodes;
 	private String sorter;
 
 	public RemoteSorter(String sorter) {
@@ -30,13 +30,9 @@ public class RemoteSorter implements GraphSorter {
 	}
 
 	@Override
-	public void doSort(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges,GraphManipulationCallback cb) {
-
+	public void doSort(List<GraphNode> nodes,List<GraphEdge> edges,GraphManipulationCallback cb) {
 		this.nodes=nodes;
-
-		//TODO: this should be in an external class, maybe static
-
-		ArrayList<RawNode> rawNodeList = new ArrayList<RawNode>();
+		List<RawNode> rawNodeList = new ArrayList<RawNode>();
 		Iterator<GraphNode> i = nodes.iterator();
 		while (i.hasNext()) {
 
@@ -55,23 +51,22 @@ public class RemoteSorter implements GraphSorter {
 		commServ.doSort(sorter,rawNodeList, sortedCallback(cb));
 	}
 
-	private void processPositionTuples(HashMap<Integer,Coordinate> tuples, GraphManipulationCallback cb) {
+	private void processPositionTuples(Map<Integer,Coordinate> tuples, GraphManipulationCallback cb) {
 		writePositionTuplesToGraphNodes(tuples,nodes);
 		cb.onComplete();
 	}
 
-	//TODO
-	private GraphCanvasCommunicationCallback<HashMap<Integer,Coordinate>> sortedCallback(final GraphManipulationCallback cb) {
-		return new GraphCanvasCommunicationCallback<HashMap<Integer,Coordinate>>("sorting graph") {
+	private GraphCanvasCommunicationCallback<Map<Integer,Coordinate>> sortedCallback(final GraphManipulationCallback cb) {
+		return new GraphCanvasCommunicationCallback<Map<Integer,Coordinate>>("sorting graph") {
 			
 			@Override
-			public void onSuccess(HashMap<Integer,Coordinate> result) {
+			public void onSuccess(Map<Integer,Coordinate> result) {
 				processPositionTuples(result,cb);
 			}
 		};
 	}
 
-	public void writePositionTuplesToGraphNodes(HashMap<Integer, Coordinate> tuples, ArrayList<GraphNode> nodes) {
+	public void writePositionTuplesToGraphNodes(Map<Integer, Coordinate> tuples, List<GraphNode> nodes) {
 		Iterator<GraphNode> i = nodes.iterator();
 
 		while (i.hasNext()) {

@@ -1,32 +1,28 @@
-package com.algebraweb.editor.client.node;
+package com.algebraweb.editor.shared.node;
 
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
-import com.algebraweb.editor.client.scheme.GoAble;
-import com.algebraweb.editor.client.scheme.NodeScheme;
+import com.algebraweb.editor.shared.scheme.GoAble;
+import com.algebraweb.editor.shared.scheme.NodeScheme;
 
-
-
+/**
+ * Represents a plan node.
+ * @author Patrick Brosi
+ *
+ */
 public class PlanNode extends ContentNode {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1765471707304843471L;
-
-
 	private PropertyMap properties = new PropertyMap();
-	private ArrayList<PlanNode> nodeChilds = new ArrayList<PlanNode>();
+	private List<PlanNode> nodeChilds = new ArrayList<PlanNode>();
 	private int id;
 	protected NodeScheme scheme;
 	private QueryPlan mother;
-
 	private EvaluationContext c;
-
 
 	public PlanNode() {
 
@@ -36,39 +32,28 @@ public class PlanNode extends ContentNode {
 		this.id=id;
 		this.mother=mother;
 		this.scheme=scheme;
-
-		System.out.println("Creating instance of node with kind=" + scheme.getKind() + " and max child count = " + getMaxChildCount());
-
-
 	}	
 
+	/**
+	 * Adds a child to this plan node
+	 * @param c the child to add
+	 * @param pos the position of this node from left to right, beginning with 1
+	 */
 	public void addChild(PlanNode c, int pos) {
-
 		while (nodeChilds.size() < pos) {
 			nodeChilds.add(null);
 		}
-		
 		nodeChilds.set(pos-1, c);
-
-
-		//first, clear all old edges
 		Iterator<NodeContent> it = getDirectContentWithInternalName("edge").iterator();
-
 		while(it.hasNext()) {
 			childs.remove(it.next());
 		}
 
 		Iterator<PlanNode> childsIt = nodeChilds.iterator();
-
 		while (childsIt.hasNext()) {
 
-
-
 			PlanNode cur = childsIt.next();
-
-
 			ContentVal edge = new ContentVal("edge", "edge", null);
-
 			PropertyMap pm = new PropertyMap();
 			Property to;
 
@@ -77,20 +62,18 @@ public class PlanNode extends ContentNode {
 
 			pm.put(to);
 			edge.setAttributes(pm);
-
 			childs.add(edge);
-
-
 		}
-
-
-
-
 	}
 
-	private void addPropertiesDistinct(ArrayList<Property> ret,	ArrayList<Property> toAdd) {
+	/**
+	 * Adds properties to this PlanNode. Single properties will
+	 * only be added if they don't exist already
+	 * @param ret the property list the new properties should be added
+	 * @param toAdd the new properties
+	 */
+	private void addPropertiesDistinct(List<Property> ret,	List<Property> toAdd) {
 		Iterator<Property> it = toAdd.iterator();
-
 		while (it.hasNext()) {
 			Property cur = it.next();
 			if (!containsColumnWithName(ret,cur)) {
@@ -99,49 +82,51 @@ public class PlanNode extends ContentNode {
 		}
 	}
 
-	private boolean containsColumnWithName(ArrayList<Property> ret, Property cur) {
+	/**
+	 * Returns true if a column with a given name is found
+	 * @param ret the list of columns to look in
+	 * @param cur the column (given as a property) to look for
+	 * @return true if a column with a given name is found
+	 */
+	private boolean containsColumnWithName(List<Property> ret, Property cur) {
 		Iterator<Property> it = ret.iterator();
 		while (it.hasNext()) if (it.next().getPropertyVal().getVal().equals(cur.getPropertyVal().getVal())) return true;
 		return false;
 	}
 
-	public ArrayList<Property> getAddedColumns() {
-
+	/**
+	 * Returns all columns that are added to the overall schema by this plan node
+	 * @return all columns that are added by this node
+	 */
+	public List<Property> getAddedColumns() {
 		String[] types = {"__COLUMN_NEW"};
-
-
-		ArrayList<Property> ret = new ArrayList<Property>();
-
+		List<Property> ret = new ArrayList<Property>();
 		Iterator<NodeContent> it = getContent().iterator();
-
 		while (it.hasNext()) {
-
 			ret.addAll(getAttributePropertiesByTypesFromValues(it.next(), types));
 		}
-
 		return ret;
-
 	}
 
-	private ArrayList<Property> getAttributePropertiesByTypesFromValues(NodeContent nc, String[] types) {
-
-		ArrayList<Property> ret = new ArrayList<Property>();
+	/**
+	 * Get all attributes of given types
+	 * @param nc the NodeContent to search in
+	 * @param types the types to look for
+	 * @return the attributes with the given types
+	 */
+	private List<Property> getAttributePropertiesByTypesFromValues(NodeContent nc, String[] types) {
+		List<Property> ret = new ArrayList<Property>();
 		PropertyMap attributes = nc.getAttributes();
 		Iterator<Property> it = attributes.properties().iterator();
-
 		while (it.hasNext()) {
-
 			Property current = it.next();
-
 			for (String type : types) {
 				if (current.getPropertyVal().getType().matches(type)) {
 					ret.add(current);
 				}
 			}
 		}
-
 		Iterator<NodeContent> childsIt = nc.getContent().iterator();
-
 		while (childsIt.hasNext()) {
 			ret.addAll(getAttributePropertiesByTypesFromValues(childsIt.next(), types));
 		}
@@ -153,7 +138,7 @@ public class PlanNode extends ContentNode {
 	 * nodes this node has edges to
 	 * @return the childs of this node
 	 */
-	public ArrayList<PlanNode> getChilds() {
+	public List<PlanNode> getChilds() {
 		return nodeChilds;
 	}
 
@@ -167,28 +152,24 @@ public class PlanNode extends ContentNode {
 	}
 
 	@Override
-	public ArrayList<NodeContent> getDirectContentWithInternalName(String name) {
-		ArrayList<NodeContent> temp = new ArrayList<NodeContent>();
-
+	public List<NodeContent> getDirectContentWithInternalName(String name) {
+		List<NodeContent> temp = new ArrayList<NodeContent>();
 		Iterator<NodeContent> i = childs.iterator();
-
 		while (i.hasNext()) {
-
 			NodeContent c = i.next();
 			if (c.getInternalName().equals(name)) temp.add(c);
-
 		}
-
 		return temp;
 	}
 
 	/**
-	 * @return the c
+	 * Returns the evaluation context hold by this plannode
+	 * @return the evaluation context
 	 */
 	public EvaluationContext getEvaluationContext() {
 		return c;
 	}
-	
+
 	/**
 	 * Returns the node id
 	 * @return the id of this node
@@ -201,7 +182,7 @@ public class PlanNode extends ContentNode {
 	public String getInternalName() {
 		return "node_" + id;
 	}
-	
+
 	/**
 	 * Returns the kind of this node as specified in
 	 * its scheme
@@ -214,94 +195,58 @@ public class PlanNode extends ContentNode {
 
 	@Override
 	public String getLabel() {
-
 		String ret="";
-
 		Iterator<LabelOb> it = labelScheme.iterator();
 
 		while (it.hasNext()) {
-			
-			
 			LabelOb cur = it.next();
-			
-
 			if (cur instanceof LabelStringOb) ret += cur.getVal();
-
 			if (cur instanceof LabelAttrIdentifierOb) {
-
 				if (cur.getVal().equals("_kind")) {
-
 					ret += getKind();
-
 				}
 			}
-
-
 			if (cur instanceof LabelContentIdentifierOb) {
-
 				Iterator<NodeContent> iter = getAllContentWithValName(cur.getVal()).iterator();
-
 				String temp ="";
-
 				while (iter.hasNext()) {
-
 					temp += iter.next().getLabel() + " ";
-
 				}
-
 				if (temp.endsWith(" ")) ret += temp.substring(0,temp.length()-1).trim();
-
 			}
-
 		}
-		
 		if (ret == "") return getKind();
 		else return ret;
 	}
 
 	/**
-	 * @return the maxChildCount
+	 * Returns the number of childs this plan node can hold.
+	 * @return the maxChildCount of this PlanNode
 	 */
 	public int getMaxChildCount() {
-
 		Iterator<GoAble> it = scheme.getSchema().iterator();
 
 		while (it.hasNext()) {
-
 			GoAble cur = it.next();
-
-
-
 			if (cur.getInternalName().equals("edge")) {
-
 				if (cur.getHowOften().equals("2") || cur.getHowOften().equals("{,2}")) {
-
 					return 2;
-
 				}
-
 				if (cur.getHowOften().equals("1") || cur.getHowOften().equals("{,1}")) {
-
 					return 1;
-
 				}
-
 			}
-
 		}
-
 		return -1;
-
 	}
-	
+
 	/**
-	 * @return the mother
+	 * Returns the mother plan of this node
+	 * @return the mother plan of this node
 	 */
 	public QueryPlan getMother() {
 		return mother;
 	}
-
-
 
 	/**
 	 * Returns the properties of this node as a PropertyMap
@@ -312,13 +257,9 @@ public class PlanNode extends ContentNode {
 		return properties;
 	}
 
-
-	public ArrayList<Property> getReferencableColumnsFromValues() throws PlanHasCycleException {
-
+	public List<Property> getReferencableColumnsFromValues() throws PlanHasCycleException {
 		return getReferencableColumnsFromValues(new ArrayList<PlanNode>());
-		
 	}
-
 
 	/**
 	 * Returns all columns referencable <b>in</b> this node.
@@ -327,31 +268,26 @@ public class PlanNode extends ContentNode {
 	 */
 
 	public ArrayList<Property> getReferencableColumnsFromValues(ArrayList<PlanNode> way) throws PlanHasCycleException {
-
 		ArrayList<Property> ret = new ArrayList<Property>();
-
 		if (!resetsColumns()) {
 			addPropertiesDistinct(ret, getReferencableColumnsWithoutAdded(way));
 			ret.removeAll(getRemovedColumns());
 		}
-
 		ret.addAll(getAddedColumns());
 		return ret;
 	}
 
+	/**
+	 * Returns all columns referencable from this plannode <b>without</b> the
+	 * columns added within this node
+	 * @return the referencable columns
+	 * @throws PlanHasCycleException
+	 */
 	public ArrayList<Property> getReferencableColumnsWithoutAdded() throws PlanHasCycleException {
 		return getReferencableColumnsWithoutAdded(new ArrayList<PlanNode>());
 	}
 
-	/**
-	 * Returns the columns referancable from this node <b>without</b>
-	 * the columns introduced
-	 * @return
-	 * @throws PlanHasCycleException 
-	 */
-
 	public ArrayList<Property> getReferencableColumnsWithoutAdded(ArrayList<PlanNode> way) throws PlanHasCycleException {
-
 		ArrayList<Property> ret = new ArrayList<Property>();
 		Iterator<PlanNode> i = this.getChilds().iterator();
 
@@ -368,27 +304,19 @@ public class PlanNode extends ContentNode {
 		return ret;
 	}
 
-	public ArrayList<Property> getReferencableColumnsWithoutAdded(int pos) throws PlanHasCycleException {
-		
+	public List<Property> getReferencableColumnsWithoutAdded(int pos) throws PlanHasCycleException {
 		return getReferencableColumnsWithoutAdded(pos,new ArrayList<PlanNode>());
-		
-		
 	}
 
-
 	/**
-	 * Returns the columns referancable from this node <b>without</b>
+	 * Returns the columns referencable from this node <b>without</b>
 	 * the columns introduced in the specifed child (left to right)
-	 * @return
+	 * @return the referencable columns
 	 * @throws PlanHasCycleException 
 	 */
-
-	public ArrayList<Property> getReferencableColumnsWithoutAdded(int pos,ArrayList<PlanNode> way) throws PlanHasCycleException {
-
-		ArrayList<Property> ret = new ArrayList<Property>();
-
+	public List<Property> getReferencableColumnsWithoutAdded(int pos,ArrayList<PlanNode> way) throws PlanHasCycleException {
+		List<Property> ret = new ArrayList<Property>();
 		if (this.getChilds().size() < pos) return ret;
-		
 		PlanNode cur = this.getChilds().get(pos-1);
 		if (cur != null) {
 			ArrayList<PlanNode> wayCopy = new ArrayList<PlanNode>();
@@ -397,106 +325,88 @@ public class PlanNode extends ContentNode {
 			wayCopy.add(cur);
 			addPropertiesDistinct(ret,cur.getReferencableColumnsFromValues(wayCopy));
 		}
-
 		return ret;
 	}
 
-	public ArrayList<Property> getReferencedColumns() {
-
+	/**
+	 * Returns all columns referenced by this node
+	 * @return the columns this node refers to.
+	 */
+	public List<Property> getReferencedColumns() {
 		String[] types = {"__COLUMN[\\{]?[0-9]*[\\}]?","__COLUMN_REMOVE"};
-
-		ArrayList<Property> ret = new ArrayList<Property>();
-
+		List<Property> ret = new ArrayList<Property>();
 		Iterator<NodeContent> it = getContent().iterator();
-
 		while (it.hasNext()) {
-
 			ret.addAll(getAttributePropertiesByTypesFromValues(it.next(), types));
 		}
-
 		return ret;
-
 	}
 
-	public ArrayList<Property> getRemovedColumns() {
-
+	/**
+	 * Returns all columns removed by this node from the
+	 * overall schema.
+	 * @return The columns removed by this node.
+	 */
+	public List<Property> getRemovedColumns() {
 		String[] types = {"__COLUMN_REMOVE"};
-
-
-		ArrayList<Property> ret = new ArrayList<Property>();
-
+		List<Property> ret = new ArrayList<Property>();
 		Iterator<NodeContent> it = getContent().iterator();
-
 		while (it.hasNext()) {
-
 			ret.addAll(getAttributePropertiesByTypesFromValues(it.next(), types));
 		}
-
 		return ret;
-
 	}
-
-
 
 	/**
 	 * Returns the nodes general scheme as specified in the
 	 * constructor
-	 * @return
+	 * @return this PlanNodes scheme
 	 */
-
 	public NodeScheme getScheme() {
 		return scheme;
 	}
 
-
+	/**
+	 * Removes a childs with a given node id
+	 * @param nid the id of the node to delete
+	 * @return true if deletion was successfull
+	 */
 	public boolean removeChild(int nid) {
-
 		int count = nodeChilds.size();
 		boolean success=false;
-
 		for (int i=0;i<count;i++) {
-
 			success=removeChild(nid,i+1);
-
 		}
-
 		return success;
-
 	}
 
-
+	/**
+	 * Removes a childs with a given node id from a specific position
+	 * @param nid the id of the node to delete
+	 * @param pos the position from left to right beginning with 1
+	 * @return true if deletion was successfull
+	 */
 	public boolean removeChild(int nid, int pos) {
-
-		System.out.println("Removing child #" + nid + "from pos " + pos);
-
 		Iterator<NodeContent> it = childs.iterator();
 		boolean success=false;
 		int count = 1;
 
 		while (it.hasNext() && !success) {
-
 			NodeContent cur = it.next();
-
 			if (cur.getInternalName().equals("edge")) {
-
 				if (count != pos) {
 					count++;
 				}else if (cur.getAttributes().get("to").getVal().equals(Integer.toString(nid))){
 					cur.getAttributes().get("to").setVal("-1");		
 					success=true;
 				}
-
 			}
-
 		}
 
 		if (success) {
 			nodeChilds.set(pos-1,null);
 		}
-
 		return success;
-
-
 	}
 
 
@@ -516,13 +426,12 @@ public class PlanNode extends ContentNode {
 	 * Sets the childs of this node. This should not be
 	 * called after node creation since synchronization with
 	 * the childs specified in the content is NOT guaranteed.
-	 * @param childs
+	 * @param childs the childs to set
 	 */
 
-	public void setChilds(ArrayList<PlanNode> childs) {
+	public void setChilds(List<PlanNode> childs) {
 		this.nodeChilds = childs;
 	}
-
 
 	/**
 	 * Sets the content of this node. This should not be
@@ -535,7 +444,8 @@ public class PlanNode extends ContentNode {
 	}
 
 	/**
-	 * @param c the c to set
+	 * Sets the evaluation context of this plan node
+	 * @param c the context to set
 	 */
 	public void setEvaluationContext(EvaluationContext c) {
 		this.c = c;
@@ -543,19 +453,11 @@ public class PlanNode extends ContentNode {
 
 	@Override
 	public String toString() {
-
 		String ret= "{NODE: id=" + id + " kind:" + scheme.getKind() + " CONTENT:[";
 		Iterator<NodeContent> i = childs.iterator();
-
 		while (i.hasNext()) {
 			ret+=i.next().toString();
 		}
-
 		return ret+"]}";
 	}
-
-
-
-
-
 }

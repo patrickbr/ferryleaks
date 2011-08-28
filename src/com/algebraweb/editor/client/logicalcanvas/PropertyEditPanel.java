@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.ContentVal;
-import com.algebraweb.editor.client.node.NodeContent;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.PropertyValue;
-import com.algebraweb.editor.client.scheme.Field;
-import com.algebraweb.editor.client.scheme.GoAble;
-import com.algebraweb.editor.client.scheme.Value;
 import com.algebraweb.editor.client.validation.ValidationError;
+import com.algebraweb.editor.shared.node.ContentVal;
+import com.algebraweb.editor.shared.node.NodeContent;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.node.PropertyValue;
+import com.algebraweb.editor.shared.scheme.Field;
+import com.algebraweb.editor.shared.scheme.GoAble;
+import com.algebraweb.editor.shared.scheme.Value;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -86,13 +86,13 @@ public class PropertyEditPanel extends Composite{
 
 				PropertyValue pv;
 
-				if (c.getAttributes().containsKey(current.getVal())) {
+				if (c.getAttributes().containsKey(current.getName())) {
 
-					pv=c.getAttributes().get(current.getVal());
+					pv=c.getAttributes().get(current.getName());
 
 				}else{
 
-					pv=c.getAttributes().put(current.getVal(), new PropertyValue("", current.getType()));
+					pv=c.getAttributes().put(current.getName(), new PropertyValue("", current.getType()));
 
 				}
 

@@ -3,11 +3,16 @@ package com.algebraweb.editor.server.logicalplan.validation.validators;
 import java.util.List;
 import java.util.Iterator;
 
-import com.algebraweb.editor.client.node.PlanNode;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.algebraweb.editor.server.logicalplan.validation.Validator;
+import com.algebraweb.editor.shared.node.PlanNode;
 
+/**
+ * A validator checking for abandonded nodes
+ * @author Patrick Brosi
+ *
+ */
 public class AbandondedNodeValidator implements Validator {
 
 	@Override

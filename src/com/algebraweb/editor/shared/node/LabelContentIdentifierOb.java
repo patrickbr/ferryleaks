@@ -1,25 +1,25 @@
-package com.algebraweb.editor.client.node;
+package com.algebraweb.editor.shared.node;
 
-public class LabelAttrIdentifierOb extends LabelOb{
-
+/**
+ * A Label object identifying child content nodes
+ * @author Patrick Brosi
+ *
+ */
+public class LabelContentIdentifierOb extends LabelOb{
 
 	private String identifier;
 
-	public LabelAttrIdentifierOb() {
+	public LabelContentIdentifierOb() {
 
 	}
 
-	public LabelAttrIdentifierOb(String identifier) {
-
+	public LabelContentIdentifierOb(String identifier) {
 		this.identifier= identifier;
-
 	}
 
 	@Override
 	public void addChar(String e) {
-
 		identifier = identifier + e;
-
 	}
 
 	/**
@@ -31,10 +31,7 @@ public class LabelAttrIdentifierOb extends LabelOb{
 
 	@Override
 	public String getVal() {
-
 		return identifier;
-
 	}
-
 
 }

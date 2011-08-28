@@ -1,8 +1,8 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.scheme.GoAble;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;

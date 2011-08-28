@@ -27,7 +27,7 @@
   
   <servlet>
     <servlet-name>PlanModelCommunicationServlet</servlet-name>
-    <servlet-class>com.algebraweb.editor.server.logicalplan.communication.PlanModelCommunicationServlet</servlet-class>
+    <servlet-class>com.algebraweb.editor.server.logicalplan.communication.PlanCommunicationServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>

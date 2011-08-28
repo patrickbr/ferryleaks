@@ -12,11 +12,12 @@ import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
 import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
+import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
 import com.algebraweb.editor.client.logicalcanvas.SessionExpiredException;
-import com.algebraweb.editor.client.node.ContentNode;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.Property;
 import com.algebraweb.editor.client.validation.ValidationResult;
+import com.algebraweb.editor.shared.node.ContentNode;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.node.Property;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -36,7 +37,7 @@ public interface RemoteManipulationService extends RemoteService {
 			boolean saveCurrenNodeValue) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException, PathFinderCompilationError, LogicalCanvasSQLException, PlanHasCycleException;
 	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException;
 	public String getNodeInformationHTML(int nid, int planid) throws PlanManipulationException, PlanHasCycleException;
-	public String[] getNodeTypes();
+	public String[] getNodeTypes() throws RemoteIOException;
 	public PlanNode getPlanNode(int nid, int pid) throws PlanManipulationException;
 	public List<Property> getReferencableColumns(int nid, int pid) throws GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException;
 	public List<Property> getReferencableColumnsWithoutAdded(int nid, int pid) throws PlanHasCycleException;

@@ -5,8 +5,8 @@ import java.util.Iterator;
 
 import com.algebraweb.editor.client.PlanModelManipulator;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.scheme.GoAble;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.scheme.GoAble;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

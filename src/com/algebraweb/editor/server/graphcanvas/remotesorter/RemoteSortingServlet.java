@@ -2,6 +2,8 @@ package com.algebraweb.editor.server.graphcanvas.remotesorter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
 
@@ -20,23 +22,18 @@ public class RemoteSortingServlet extends RemoteServiceServlet implements Remote
 	private static final long serialVersionUID = -284758450069045235L;
 	
 	public RemoteSortingServlet() {
-		
-		
+				
 	}
 
 	@Override
-	public HashMap<Integer, Coordinate> doSort(String sorter,ArrayList<RawNode> nodes) throws RemoteIOException {
+	public Map<Integer, Coordinate> doSort(String sorter,List<RawNode> nodes) throws RemoteIOException {
 			
 		RemoteSorter cs = new InlineSorter();
-		
-		
 		if (sorter.equals("dot")) {
-			
 			Configuration c = (Configuration) getServletContext().getAttribute("configuration");
 			String dotPath = c.getString("server.dot.path");
 			String dotArgs = c.getString("server.dot.args");
 			double dotCorr = c.getDouble("server.dot.corrector");
-			
 			cs = new DotSorter(dotPath, dotArgs, dotCorr);
 		}
 		
@@ -44,8 +41,5 @@ public class RemoteSortingServlet extends RemoteServiceServlet implements Remote
 		if (sorter.equals("inline")) cs = new InlineSorter();
 		
 		return cs.getCoordinateHashMap(nodes);
-
-				
 	}
-
 }

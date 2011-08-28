@@ -10,16 +10,21 @@ import javax.servlet.ServletContext;
 
 import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
-import com.algebraweb.editor.client.node.ContentVal;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.Property;
-import com.algebraweb.editor.client.node.PropertyMap;
-import com.algebraweb.editor.client.node.PropertyValue;
-import com.algebraweb.editor.client.node.ValGroup;
-import com.algebraweb.editor.client.scheme.NodeScheme;
+import com.algebraweb.editor.shared.node.ContentVal;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.node.Property;
+import com.algebraweb.editor.shared.node.PropertyMap;
+import com.algebraweb.editor.shared.node.PropertyValue;
+import com.algebraweb.editor.shared.node.ValGroup;
+import com.algebraweb.editor.shared.scheme.NodeScheme;
+
+/**
+ * Provides methods for building the serialize relation from evaluation contexts
+ * @author Patrick Brosi
+ *
+ */
 
 public class SerializeRelationBuilder {
-
 
 	private EvaluationContext c;
 	private ServletContext context;
@@ -29,16 +34,20 @@ public class SerializeRelationBuilder {
 		this.context=context;
 	}
 
+	/**
+	 * Adds a serialize relation from the evaluation context to
+	 * a plan node.
+	 * @param root the plan node the serialize relation should be
+	 * added to
+	 * @return the <b>serialize relation node</b> as a the new root node
+	 * @throws PlanHasCycleException
+	 */
 	@SuppressWarnings("unchecked")
 	public PlanNode addSerializRelation(PlanNode root) throws PlanHasCycleException {
-
 		String dummyIterColumn = getFreeColumnName("iter",root);
 		String dummySortColumn = getFreeColumnName("pos",root);
-
 		Map<String,NodeScheme> schemes = (HashMap<String,NodeScheme>)context.getAttribute("nodeSchemes");
-
 		PlanNode newRootNode = root;
-
 		List<Integer> nids = new ArrayList<Integer>();
 
 		if (!c.isIterUseColumn()) {
@@ -66,7 +75,6 @@ public class SerializeRelationBuilder {
 		}
 
 		if (!c.isSortUseColumn()) {
-
 			PlanNode rowRankNode = new PlanNode(root.getMother().getFreeId(nids), schemes.get("rowrank"),root.getMother());
 			nids.add(rowRankNode.getId());
 
@@ -96,7 +104,6 @@ public class SerializeRelationBuilder {
 			
 			createEdgeTo(rowRankNode, newRootNode);
 			newRootNode = rowRankNode;
-
 		}
 
 		PlanNode serializeRel = new PlanNode(root.getMother().getFreeId(nids), schemes.get("serialize relation"),root.getMother());
@@ -105,7 +112,6 @@ public class SerializeRelationBuilder {
 		ValGroup contentGroup = new ValGroup("content"); 
 		serializeRel.getContent().add(contentGroup);
 
-		//fill the iter column field
 		ContentVal iter = new ContentVal("column", "column", null);
 		PropertyMap attributes = new PropertyMap();
 
@@ -120,8 +126,6 @@ public class SerializeRelationBuilder {
 		iter.setAttributes(attributes);
 		contentGroup.getContent().add(iter);
 
-
-		//fill the pos column field
 		ContentVal pos = new ContentVal("column","column",null);
 		PropertyMap attributesPos = new PropertyMap();
 
@@ -134,92 +138,51 @@ public class SerializeRelationBuilder {
 			attributesPos.put(new Property("name", new PropertyValue(dummySortColumn,"string")));
 		}
 
-
 		pos.setAttributes(attributesPos);
 		contentGroup.getContent().add(pos);
 
-
-		//fill the item colum fields
-
-		//documentation wiki says 0 here, but pf wont like it...
 		int i=1;
-
 		for (String itemCol : c.getItemColumns()) {
-
 			ContentVal item = new ContentVal("column","column",null);
 			PropertyMap attributesItem = new PropertyMap();
-
 			attributesItem.put(new Property("new", new PropertyValue("false","boolean")));
 			attributesItem.put(new Property("function", new PropertyValue("item","string")));
 			attributesItem.put(new Property("position", new PropertyValue(Integer.toString(i),"int")));
 			attributesItem.put(new Property("name", new PropertyValue(itemCol,"string")));
-
 			item.setAttributes(attributesItem);
 			contentGroup.getContent().add(item);
 			i++;
-
 		}
-
 		PlanNode nilNode = new PlanNode(root.getMother().getFreeId(nids), schemes.get("nil"),root.getMother());
-
 		createEdgeTo(serializeRel, nilNode);
 		createEdgeTo(serializeRel, newRootNode);
-
-
-
 		newRootNode = serializeRel;
-
-
-
 		return newRootNode;
-
 	}
 
-
-
-
-	private boolean containsPropertyVal(ArrayList<Property> toCheck, String val) {
-
-
-		Iterator<Property> it = toCheck.iterator();
-
+	private boolean containsPropertyVal(List<Property> cols, String val) {
+		Iterator<Property> it = cols.iterator();
 		while (it.hasNext()) {
-
 			if (it.next().getPropertyVal().getVal().equals(val)) return true;
-
 		}
-
 		return false;		
 	}
 
-
-
 	private void createEdgeTo(PlanNode from, PlanNode to) {
-
 		from.getChilds().add(to);
-
 		ContentVal edge = new ContentVal("edge", "edge", null);
-
 		PropertyMap attributesItem = new PropertyMap();
 		attributesItem.put(new Property("to", new PropertyValue(Integer.toString(to.getId()),"int")));
-
 		edge.setAttributes(attributesItem);
 		from.getContent().add(edge);
-
 	}
 
-
 	private String getFreeColumnName(String prefix, PlanNode n) throws PlanHasCycleException {
-
-
-		ArrayList<Property> cols = n.getReferencableColumnsFromValues();
+		List<Property> cols = n.getReferencableColumnsFromValues();
 		String idea = Integer.toString((int) (Math.random() * 99999999));
-
 		while (containsPropertyVal(cols, prefix + idea)) {			
 			idea = Integer.toString((int) (Math.random() * 99999999));
 		}
-
 		return prefix + idea;
-
 	}
 }

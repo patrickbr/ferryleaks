@@ -1,15 +1,19 @@
-package com.algebraweb.editor.client.node;
+package com.algebraweb.editor.shared.node;
 
-public class LabelContentIdentifierOb extends LabelOb{
-
+/**
+ * A Label object identfying XML attributes
+ * @author Patrick Brosi
+ *
+ */
+public class LabelAttrIdentifierOb extends LabelOb{
 
 	private String identifier;
 
-	public LabelContentIdentifierOb() {
+	public LabelAttrIdentifierOb() {
 
 	}
 
-	public LabelContentIdentifierOb(String identifier) {
+	public LabelAttrIdentifierOb(String identifier) {
 		this.identifier= identifier;
 	}
 
@@ -29,6 +33,4 @@ public class LabelContentIdentifierOb extends LabelOb{
 	public String getVal() {
 		return identifier;
 	}
-
-
 }

@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.Property;
+import com.algebraweb.editor.shared.node.Property;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;

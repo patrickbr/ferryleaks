@@ -1,11 +1,11 @@
 package com.algebraweb.editor.client.graphcanvas;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 
 public interface GraphSorter {
 		
-	public void doSort(ArrayList<GraphNode> nodes,ArrayList<GraphEdge> edges, GraphManipulationCallback cb);
+	public void doSort(List<GraphNode> nodes,List<GraphEdge> edges, GraphManipulationCallback cb);
 	
 }

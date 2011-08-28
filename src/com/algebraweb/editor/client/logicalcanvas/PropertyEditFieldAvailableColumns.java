@@ -1,8 +1,8 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.node.PropertyValue;
-import com.algebraweb.editor.client.scheme.Field;
+import com.algebraweb.editor.shared.node.PropertyValue;
+import com.algebraweb.editor.shared.scheme.Field;
 
 public class PropertyEditFieldAvailableColumns extends PropertyEditField {
 

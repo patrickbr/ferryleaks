@@ -35,19 +35,10 @@ import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
 import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
+import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
 import com.algebraweb.editor.client.logicalcanvas.SessionExpiredException;
-import com.algebraweb.editor.client.node.ContentNode;
-import com.algebraweb.editor.client.node.ContentVal;
-import com.algebraweb.editor.client.node.NodeContent;
-import com.algebraweb.editor.client.node.PlanNode;
-import com.algebraweb.editor.client.node.Property;
-import com.algebraweb.editor.client.node.QueryPlan;
-import com.algebraweb.editor.client.node.ValGroup;
-import com.algebraweb.editor.client.scheme.NodeScheme;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
-import com.algebraweb.editor.server.logicalplan.ClipBoardPlanNode;
-import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.server.logicalplan.evaluator.SqlEvaluator;
 import com.algebraweb.editor.server.logicalplan.sqlbuilder.PlanNodeSQLBuilder;
 import com.algebraweb.editor.server.logicalplan.validation.ValidationMachine;
@@ -60,6 +51,16 @@ import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.EvaluationContextProvider;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
+import com.algebraweb.editor.shared.logicalplan.ClipBoardPlanNode;
+import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.shared.node.ContentNode;
+import com.algebraweb.editor.shared.node.ContentVal;
+import com.algebraweb.editor.shared.node.NodeContent;
+import com.algebraweb.editor.shared.node.PlanNode;
+import com.algebraweb.editor.shared.node.Property;
+import com.algebraweb.editor.shared.node.QueryPlan;
+import com.algebraweb.editor.shared.node.ValGroup;
+import com.algebraweb.editor.shared.scheme.NodeScheme;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -68,20 +69,18 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  *
  */
 
-public class PlanModelCommunicationServlet extends RemoteServiceServlet implements RemoteManipulationService {
+public class PlanCommunicationServlet extends RemoteServiceServlet implements RemoteManipulationService {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3178031477829024689L;
 
-
 	private ValidationMachine vm;
 	private GrammarValidator gv = new GrammarValidator();
 	private XMLNodePlanBuilder npb = new XMLNodePlanBuilder();
 
-
-	public PlanModelCommunicationServlet() {
+	public PlanCommunicationServlet() {
 		vm = new ValidationMachine();
 		vm.addValidator(new ReferencedColumnsValidator());
 		vm.addValidator(new AbandondedNodeValidator());
@@ -89,12 +88,9 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		vm.addValidator(new ReferencedNodesValidator());
 	}
 
-
 	@Override
 	public RemoteManipulationMessage addEdge(int planid, Coordinate e, int pos) throws PlanManipulationException {
-
 		XMLPlanFiller xmlpl = new XMLPlanFiller(getSession(),getServletContext(),planid);
-
 		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
 
 		int from = (int) e.getX();
@@ -140,7 +136,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			}else{
 				throw new PlanManipulationException("Plan doesn't exist in session");
 			}}else{
-
 				throw new PlanManipulationException("Scheme for type " + nodeType + " not found.");
 			}
 	}
@@ -164,7 +159,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		it = msg.iterator();
 
 		while (it.hasNext()) {
-
 			PlanNodeCopyMessage cur = it.next();
 			PlanNode curNode = p.getPlanNodeById(cur.getId());
 			PlanNode copy = new PlanNode(curNode.getId(), curNode.getScheme(), null);
@@ -193,7 +187,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		Iterator<ClipBoardPlanNode> iter = clipboard.iterator();
 		while(iter.hasNext()) {
-			s+=iter.next().getP().getId() + ", ";
+			s+=iter.next().getPlanNode().getId() + ", ";
 		}
 		if (s.length()>1) s = s.substring(0, s.length()-2);
 		getSession().setAttribute("clipboard",clipboard);
@@ -209,12 +203,10 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return id;
 	}
 
-
 	@Override
 	public RemoteManipulationMessage deleteEdge(Map<Coordinate,Integer> edges, int planid) throws PlanManipulationException, PlanHasCycleException {
 		XMLPlanFiller xmlpl = new XMLPlanFiller(getSession(),getServletContext(),planid);
 		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid, "update", 1, "", null);
-
 		Iterator<Coordinate> it = edges.keySet().iterator();
 
 		while(it.hasNext()) {
@@ -230,7 +222,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return ret;
 	}
 
-
 	@Override
 	public RemoteManipulationMessage deleteNodes(Integer[] nids, int planid) throws PlanManipulationException, PlanHasCycleException {
 		RemoteManipulationMessage ret = new RemoteManipulationMessage(planid,"delete", 1, "", null);
@@ -244,14 +235,12 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 				PlanNode current = it.next();
 				current.removeChild(nid);
 			}
-
 			if (getPlanToWork(planid).getPlan().remove(nodeToWork)) {	
 				ret.getNodesAffected().add(new RawNode(nid));
 			}else{
 				throw new PlanManipulationException( "Node doesn't exists in plan");
 			}
 		}
-
 		ret.setValidationResult(getValidation(planid));
 		return ret;
 	}
@@ -275,7 +264,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return eval(pid, root.getId(), c, false);
 	}
 
-
 	private void fillDatabaseConfigurationFromGlobalDefault(EvaluationContext c)
 	throws SessionExpiredException {
 		c.setDatabase((String)getSession().getAttribute("databaseName"));
@@ -293,11 +281,9 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return npb.getNodePlan(pid, getNodeToWork(pid, nid),c,getServletContext());
 	}
 
-
 	@Override
 	public EvaluationContext getEvaluationContext(int pid, int nid) throws PlanManipulationException, GraphNotConnectedException, GraphIsEmptyException, PlanHasCycleException {
 		EvaluationContext c = null;
-
 		if (nid == -1) {
 			c = getPlanEvaluationContext(pid);
 		}else{
@@ -347,7 +333,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public String getNodeInformationHTML(int nid, int planid) throws PlanManipulationException, PlanHasCycleException {
 		String ret = "";
-
 		List<ValidationError> vErrors;
 
 		if ((vErrors = vm.validate(getPlanToWork(planid), getNodeToWork(planid,nid))).size() > 0) {
@@ -359,7 +344,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			}
 			ret +="</div>";
 		}
-
 		ret += "<div class='nodeinfo-block'><h4>Id:</h4>" + nid + "</div>";
 		ret += "<div class='nodeinfo-block'><h4>Type:</h4>"+  getNodeToWork(planid,nid).getKind() +"</div>";
 		ret += "<div class='nodeinfo-block'><h4>Referencable columns:</h4>";
@@ -370,7 +354,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			ret += it.next().getPropertyVal().getVal();
 			if (it.hasNext()) ret+= ", ";
 		}
-
 		ret+="</div>";
 		ret += "<div class='nodeinfo-block'><h4>Referenced columns:</h4>";
 
@@ -380,7 +363,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			ret += it.next().getPropertyVal().getVal();
 			if (it.hasNext()) ret+= ", ";
 		}
-
 		ret+="</div>";
 		ret += "<div class='nodeinfo-block'><h4>Columns introduced:</h4>";
 
@@ -415,7 +397,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String[] getNodeTypes() {
+	public String[] getNodeTypes() throws RemoteIOException {
 		Map<String,NodeScheme> nodeSchemes;
 
 		if (getServletContext().getAttribute("nodeSchemes") == null) {
@@ -432,7 +414,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 		}else nodeSchemes = (Map<String,NodeScheme>) getServletContext().getAttribute("nodeSchemes");
 
-
 		List<String> retList = new ArrayList<String>(nodeSchemes.keySet());
 
 		Iterator<String> retIt = retList.iterator();
@@ -441,25 +422,20 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			List<String> blackList = getConfiguration().getList("server.schemes.hide", new ArrayList());
 			if (blackList.contains(cur)) retIt.remove();
 		}
-
 		String[] schemes = retList.toArray(new String[0]);
 		Arrays.sort(schemes);
 		return schemes;
 	}
-
 
 	private EvaluationContext getPlanEvaluationContext(int pid) throws GraphNotConnectedException, GraphIsEmptyException, PlanManipulationException, PlanHasCycleException {
 		if (getPlanToWork(pid).getEvContext() == null) {
 			EvaluationContextProvider p = new EvaluationContextProvider(getSession());
 			p.fillEvaluationContext(getPlanToWork(pid));
 		}
-
 		EvaluationContext c = getPlanToWork(pid).getEvContext();
-
 		if (c.getDatabase() == null && c.getDatabaseServer() == null) {
 			fillDatabaseConfigurationFromGlobalDefault(c);
 		}
-
 		return getPlanToWork(pid).getEvContext();
 	}
 
@@ -512,7 +488,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return nodeToWork.getReferencableColumnsWithoutAdded();
 	}
 
-
 	@Override
 	public List<Property> getReferencableColumnsWithoutAddedFromPos(
 			int nid, int pid, int pos) throws PlanManipulationException, PlanHasCycleException {
@@ -538,17 +513,13 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return getSQLFromPlanNode(pid, getPlanToWork(pid).getRootNode().getId(), getPlanEvaluationContext(pid), false); 
 	}
 
-
 	@Override
 	public String getSQLFromPlanNode(int pid, int nid,EvaluationContext c, boolean saveContext) throws PlanManipulationException, PathFinderCompilationError, PlanHasCycleException {
 		if (saveContext) saveEvaluationContextForNode(nid, pid, c);
 		Element d = getDomXMLLogicalPlanFromRootNode(pid,nid,c);
-		
-		
-		PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder(getConfiguration().getString("server.pf.path","pf"), getConfiguration().getString("server.pf.args","-IS"));
+				PlanNodeSQLBuilder sqlB = new PlanNodeSQLBuilder(getConfiguration().getString("server.pf.path","pf"), getConfiguration().getString("server.pf.args","-IS"));
 		return sqlB.getCompiledSQL(d).get(pid);
 	}
-
 
 	@Override
 	public ValidationResult getValidation(int planid) throws PlanManipulationException, PlanHasCycleException {
@@ -579,7 +550,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@SuppressWarnings("unchecked")
 	@Override
 	public RemoteManipulationMessage insert(int pid,int x, int y) throws PlanManipulationException, PlanHasCycleException {
-
 		List<ClipBoardPlanNode> nodes = (List<ClipBoardPlanNode>)getSession().getAttribute("clipboard");
 
 		if (nodes != null) {
@@ -591,7 +561,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			List<Integer> blackList = new ArrayList<Integer>();
 
 			while (it.hasNext()) {
-				PlanNode cur = it.next().getP();
+				PlanNode cur = it.next().getPlanNode();
 				int newId = p.getFreeId(blackList);
 				blackList.add(newId);
 				idReplacements.put(cur.getId(),newId);
@@ -600,7 +570,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			it = nodes.iterator();
 
 			while (it.hasNext()) {
-				PlanNode cur = it.next().getP();
+				PlanNode cur = it.next().getPlanNode();
 				PlanNode newNode = new PlanNode(idReplacements.get(cur.getId()), cur.getScheme(), p);
 
 				PlanParser pa = new PlanParser(getSession());
@@ -619,7 +589,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 			it = nodes.iterator();
 			while (it.hasNext()) {
-				PlanNode cur = it.next().getP();
+				PlanNode cur = it.next().getPlanNode();
 				Iterator<PlanNode> childs = cur.getChilds().iterator();
 				int pos=1;
 
@@ -637,7 +607,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 			while (newNodesIt.hasNext()) {
 				ClipBoardPlanNode cur = newNodesIt.next();
-				PlanNode curNode = p.getPlanNodeById(idReplacements.get(cur.getP().getId()));
+				PlanNode curNode = p.getPlanNodeById(idReplacements.get(cur.getPlanNode().getId()));
 				res.getNodesAffected().add(xmlpl.getRawNode(curNode));
 				coords.put(curNode.getId(),new Coordinate(cur.getPos().getX()+x,cur.getPos().getY()+y));
 			}
@@ -657,7 +627,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 		return false;
 	}
 
-
 	@Override
 	public Integer removePlan(int pid) throws SessionExpiredException {
 		getQueryPlanBundleFromSession().getPlans().remove(pid);
@@ -670,7 +639,6 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 
 	private void saveDefaultDatabaseConfiguration(EvaluationContext c)
 	throws SessionExpiredException {
-		System.out.println("saving default database...(" + c.getDatabase() + ")");
 		getSession().setAttribute("databaseHost", c.getDatabaseServer());
 		getSession().setAttribute("databasePort",  c.getDatabasePort());
 		getSession().setAttribute("databaseName", c.getDatabase());
@@ -692,8 +660,8 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 	@Override
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid, PlanNode p) throws PlanManipulationException, PlanHasCycleException {
 		HttpServletRequest request = this.getThreadLocalRequest();
-		QueryPlan planToWork = ((QueryPlanBundle)request.getSession(true).getAttribute("queryPlans")).getPlan(pid);		
-		PlanNode nodeToWork = planToWork.getPlanNodeById(nid);
+		QueryPlan planToWork = getPlanToWork(pid);
+		PlanNode nodeToWork = getNodeToWork(pid, nid);
 
 		if (nodeToWork != null) {	
 			nodeToWork.setContent(p.getContent());
@@ -713,9 +681,7 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			RemoteManipulationMessage rmm= new RemoteManipulationMessage(pid,"update", 1, "", res);
 			XMLPlanFiller xmlpl = new XMLPlanFiller(request.getSession(),getServletContext(),pid);
 			rmm.getNodesAffected().add(xmlpl.getRawNode(nodeToWork));
-
 			return rmm;
-
 		}else{
 			throw new PlanManipulationException("Node doesn't exists in plan");
 		}
@@ -740,10 +706,8 @@ public class PlanModelCommunicationServlet extends RemoteServiceServlet implemen
 			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
 		} catch (IOException e) {
 			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
-
 		} catch (ParserConfigurationException e) {
 			throw new PlanManipulationException( "Error while parsing XML: " + e.getMessage());
-
 		}
 	}
 }

@@ -12,9 +12,9 @@ import org.jdom.Document;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import com.algebraweb.editor.client.node.QueryPlan;
-import com.algebraweb.editor.server.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.server.logicalplan.xmlbuilder.XMLNodePlanBuilder;
+import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
+import com.algebraweb.editor.shared.node.QueryPlan;
 
 public class FileServerServlet extends HttpServlet {
 

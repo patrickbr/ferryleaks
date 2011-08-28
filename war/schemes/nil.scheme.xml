@@ -14,7 +14,7 @@
 	<schema>
 		
 	  	
-		<val xmlob="edge" name="edgeto" howoften="*">
+		<val xmlob="edge" name="edgeto" howoften="0">
 		
 				<fields>
 
