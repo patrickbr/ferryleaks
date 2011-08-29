@@ -52,7 +52,7 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.18";
+	private static String VERSION = "Beta 1.2";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
 	private static String YEAR = "2011 (August 29th)";
