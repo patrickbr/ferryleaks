@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.algebraweb.editor.client.exampleplanloadre.ExamplePlanLoaderCommunicationService;
+import com.algebraweb.editor.client.exampleplanloadre.ExamplePlanLoaderCommunicationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.ContextMenu;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
@@ -554,6 +556,28 @@ public class AlgebraEditor implements EntryPoint {
 		});
 	}
 
+	/**
+	 * loads an example plan from the server
+	 * @param path the (relative) path of the example plan
+	 */
+	public void loadExamplePlanFromServer(String path) {
+		ExamplePlanLoaderCommunicationServiceAsync exComm = GWT.create(ExamplePlanLoaderCommunicationService.class);
+		
+		AlgebraEditor.log("Loading example plan from server...");
+		exComm.loadExamplePlan(path, new GraphCanvasCommunicationCallback<Integer[]>("loading example plan") {
+
+			@Override
+			public void onSuccess(Integer[] result) {
+				clearCanvases();
+				AlgebraEditor.log("Example plan loaded successfull!");
+				for (int i : result) {
+					loadFinishedPlanFromServer(i);
+				}
+			}
+		});
+		
+	}
+	
 	private void processConfiguration(final RemoteConfiguration result) {
 
 		config=result;

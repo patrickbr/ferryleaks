@@ -120,6 +120,11 @@ h1 {
 	padding: 15px;
 }
 
+.dialogMiddleCenterInner .GWTUpld {
+	padding-bottom: 0px;
+}
+
+
 .prgbar-msg {
 	position: absolute;
 	top: 0px;
@@ -973,4 +978,19 @@ body.hidden #loading #msg {
 
 .zoompanel .gwt-Button:hover {
 	opacity:1;
+}
+
+.examplebutton {
+
+	font-size:11px;
+	color:#777;
+	display:inline;
+	margin-left:7px;
+}
+
+.examplebutton:hover {
+
+
+	color:#333;
+
 }

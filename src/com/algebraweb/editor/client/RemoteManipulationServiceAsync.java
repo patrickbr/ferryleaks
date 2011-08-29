@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
 import com.algebraweb.editor.client.validation.ValidationResult;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.algebraweb.editor.shared.node.ContentNode;
 import com.algebraweb.editor.shared.node.PlanNode;
 import com.algebraweb.editor.shared.node.Property;

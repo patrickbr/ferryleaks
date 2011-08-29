@@ -6,7 +6,7 @@ import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.Fillable;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.GraphSorter;
-import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.user.client.ui.Widget;
 
 public interface AlgebraEditorCanvasView extends Fillable {

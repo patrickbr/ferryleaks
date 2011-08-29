@@ -1,7 +1,5 @@
 package com.algebraweb.editor.server.graphcanvas.remotesorter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,8 +8,8 @@ import org.apache.commons.configuration.Configuration;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorterService;
-import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
 import com.algebraweb.editor.server.graphcanvas.remotesorter.dotsorter.DotSorter;
+import com.algebraweb.editor.shared.exceptions.RemoteIOException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class RemoteSortingServlet extends RemoteServiceServlet implements RemoteSorterService  {

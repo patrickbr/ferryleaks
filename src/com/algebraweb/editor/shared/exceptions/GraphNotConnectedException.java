@@ -1,4 +1,4 @@
-package com.algebraweb.editor.client.logicalcanvas;
+package com.algebraweb.editor.shared.exceptions;
 
 public class GraphNotConnectedException extends Exception{
 	
@@ -10,7 +10,4 @@ public class GraphNotConnectedException extends Exception{
 	public GraphNotConnectedException() {
 		super("Graph is not connected!");
 	}
-	
-
-
 }

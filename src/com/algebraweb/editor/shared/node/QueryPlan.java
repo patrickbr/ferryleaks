@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
-import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
-import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
-import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
+import com.algebraweb.editor.shared.exceptions.GraphIsEmptyException;
+import com.algebraweb.editor.shared.exceptions.GraphNotConnectedException;
+import com.algebraweb.editor.shared.exceptions.PlanHasCycleException;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.algebraweb.editor.shared.scheme.GoAble;
 import com.algebraweb.editor.shared.scheme.GoInto;
 import com.algebraweb.editor.shared.scheme.NodeScheme;

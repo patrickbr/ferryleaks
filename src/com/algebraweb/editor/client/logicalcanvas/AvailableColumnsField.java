@@ -1,26 +1,23 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.shared.node.Property;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
 
+/**
+ * A dropdown menu providing available columns as options
+ * @author Patrick Brosi
+ *
+ */
 public class AvailableColumnsField extends FixedPossibilitiesField {
 
 	private String[] projSel;
 	private String[] projDel;
 	private boolean received = false;
-
-	AsyncCallback<List<Property>> cb = new GraphCanvasCommunicationCallback<List<Property>>("getting available columns") {
+	private AsyncCallback<List<Property>> cb = new GraphCanvasCommunicationCallback<List<Property>>("getting available columns") {
 
 		@Override
 		public void onSuccess(List<Property> result) {
@@ -50,10 +47,7 @@ public class AvailableColumnsField extends FixedPossibilitiesField {
 	}
 
 	public AvailableColumnsField(int pid, int nid, int position, boolean includeThisNode,RemoteManipulationServiceAsync manServ, boolean allowMultipleSelection) {
-
 		super(allowMultipleSelection);
-
-
 		if(includeThisNode){
 			manServ.getReferencableColumns(nid, pid, cb);
 		}else{
@@ -63,6 +57,9 @@ public class AvailableColumnsField extends FixedPossibilitiesField {
 		}
 	}
 
+	/**
+	 * Returns the wrapped list box
+	 */
 	public ListBox getListBox() {
 		return super.getListBox();
 	}
@@ -72,14 +69,26 @@ public class AvailableColumnsField extends FixedPossibilitiesField {
 		return getListBox();
 	}
 	
-	public void setProjectedDelete(String[] item) {
-		projDel = item;
-		if (received && item != null) {
-			for (String s : item)
+	/**
+	 * Set an array of item strings that will be deleted as soon
+	 * as this field is loaded. If the field is already loaded, they
+	 * will be removed immediately
+	 * @param items the items to remove
+	 */
+	public void setProjectedDelete(String[] items) {
+		projDel = items;
+		if (received && items != null) {
+			for (String s : items)
 				if (selectStringItem(s)>-1) getListBox().removeItem(selectStringItem(s));
 		}
 	}
 
+	/**
+	 * Set a single item that will be selected as soon
+	 * as this field is loaded. If the field is already loaded, it
+	 * will be selected immediately
+	 * @param item the item to select
+	 */
 	public void setProjectedSelection(String item) {
 
 		String[] tmp = new String[1];
@@ -87,11 +96,16 @@ public class AvailableColumnsField extends FixedPossibilitiesField {
 		setProjectedSelection(tmp);
 	}
 
-	public void setProjectedSelection(String[] item) {
-
-		projSel = item;
+	/**
+	 * Set an array of items that will be selected as soon
+	 * as this field is loaded. If the field is already loaded, they
+	 * will be selected immediately
+	 * @param item the item to select
+	 */
+	public void setProjectedSelection(String[] items) {
+		projSel = items;
 		if (received) {
-			super.setSelection(item);
+			super.setSelection(items);
 		}
 	}
 }

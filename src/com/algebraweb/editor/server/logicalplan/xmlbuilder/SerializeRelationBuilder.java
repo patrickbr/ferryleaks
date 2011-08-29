@@ -8,8 +8,8 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
-import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
+import com.algebraweb.editor.shared.exceptions.PlanHasCycleException;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.algebraweb.editor.shared.node.ContentVal;
 import com.algebraweb.editor.shared.node.PlanNode;
 import com.algebraweb.editor.shared.node.Property;

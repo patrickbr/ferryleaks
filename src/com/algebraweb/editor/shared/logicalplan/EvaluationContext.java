@@ -1,37 +1,33 @@
-package com.algebraweb.editor.client.logicalcanvas;
+package com.algebraweb.editor.shared.logicalplan;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * An evaluation context. Hold information on how to assemble
+ * the serialize relation node as well as database configurations.
+ * @author Patrick Brosi
+ *
+ */
 public class EvaluationContext implements IsSerializable {
-	
-	
-		
-	String databaseServer;
-	int databasePort;
-	String databaseUser;
-	String database;
-	String databasePassword;
-	
-	boolean iterUseColumn;
-	boolean sortUseColumn;
-	
-	String iterColumnName;
-	int iterColumnNat;
-	String sortColumnName;
-	String sortOrder;
-	String sortOrderColumnOn;
-	
-	String[] itemColumns = new String[0];
-	
-	boolean databaseSetGlobal=false;
-	
-	
-	
-	
+			
+	private String databaseServer;
+	private int databasePort;
+	private String databaseUser;
+	private String database;
+	private String databasePassword;
+	private boolean iterUseColumn;
+	private boolean sortUseColumn;
+	private String iterColumnName;
+	private int iterColumnNat;
+	private String sortColumnName;
+	private String sortOrder;
+	private String sortOrderColumnOn;
+	private String[] itemColumns = new String[0];
+	private boolean databaseSetGlobal=false;
+			
 	public EvaluationContext() {
 		
 	}
-
 
 	/**
 	 * @return the database

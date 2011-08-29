@@ -1,4 +1,4 @@
-package com.algebraweb.editor.client.logicalcanvas;
+package com.algebraweb.editor.shared.exceptions;
 
 public class LogicalCanvasSQLException extends Exception{
 	
@@ -14,5 +14,4 @@ public class LogicalCanvasSQLException extends Exception{
 	public LogicalCanvasSQLException(String msg) {
 		super(msg);
 	}
-
 }

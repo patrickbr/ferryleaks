@@ -13,11 +13,11 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Text;
 
-import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
-import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
-import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
-import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
-import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
+import com.algebraweb.editor.shared.exceptions.GraphIsEmptyException;
+import com.algebraweb.editor.shared.exceptions.GraphNotConnectedException;
+import com.algebraweb.editor.shared.exceptions.PlanHasCycleException;
+import com.algebraweb.editor.shared.exceptions.PlanManipulationException;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.shared.node.ContentNode;
 import com.algebraweb.editor.shared.node.ContentVal;

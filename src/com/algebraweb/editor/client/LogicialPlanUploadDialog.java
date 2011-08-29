@@ -9,8 +9,10 @@ import com.algebraweb.editor.client.graphcanvas.GraphCanvasErrorDialogBox;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -22,7 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class LogicialPlanUploadDialog extends DialogBox {
 
-	private AlgebraEditor e;
+	private final AlgebraEditor e;
 	private String awaitingFileUpload;
 
 	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
@@ -70,7 +72,7 @@ public class LogicialPlanUploadDialog extends DialogBox {
 		}
 	};
 
-	public LogicialPlanUploadDialog(ControlPanel p,AlgebraEditor e) {
+	public LogicialPlanUploadDialog(ControlPanel p,final AlgebraEditor e) {
 		super();
 		super.setModal(false);
 		super.setAnimationEnabled(true);
@@ -89,6 +91,34 @@ public class LogicialPlanUploadDialog extends DialogBox {
 
 		VerticalPanel v = new VerticalPanel();
 		v.add(defaultUploader);
+
+		Anchor example1Button = new Anchor("Example 1");
+		Anchor example2Button = new Anchor("Example 2");
+
+		example1Button.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				e.loadExamplePlanFromServer("/examples/example1.xml");
+				hide();
+			}
+		});
+
+		example2Button.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				e.loadExamplePlanFromServer("/examples/example2.xml");
+				hide();
+			}
+		});
+
+		FlowPanel pp = new FlowPanel();
+		example1Button.addStyleName("examplebutton");
+		example2Button.addStyleName("examplebutton");
+		pp.add(example1Button);
+		pp.add(example2Button);
+		v.add(pp);
 
 		Button cancelButton = new Button("Cancel");
 		cancelButton.addClickHandler(new ClickHandler() {

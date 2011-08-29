@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.SqlResTable;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;

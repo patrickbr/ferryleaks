@@ -27,16 +27,8 @@ import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.RemoteManipulationMessage;
 import com.algebraweb.editor.client.RemoteManipulationService;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
-import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
-import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
-import com.algebraweb.editor.client.logicalcanvas.LogicalCanvasSQLException;
 import com.algebraweb.editor.client.logicalcanvas.PathFinderCompilationError;
-import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
-import com.algebraweb.editor.client.logicalcanvas.PlanManipulationException;
 import com.algebraweb.editor.client.logicalcanvas.PlanNodeCopyMessage;
-import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
-import com.algebraweb.editor.client.logicalcanvas.SessionExpiredException;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
 import com.algebraweb.editor.server.logicalplan.evaluator.SqlEvaluator;
@@ -51,7 +43,15 @@ import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.EvaluationContextProvider;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
+import com.algebraweb.editor.shared.exceptions.GraphIsEmptyException;
+import com.algebraweb.editor.shared.exceptions.GraphNotConnectedException;
+import com.algebraweb.editor.shared.exceptions.LogicalCanvasSQLException;
+import com.algebraweb.editor.shared.exceptions.PlanHasCycleException;
+import com.algebraweb.editor.shared.exceptions.PlanManipulationException;
+import com.algebraweb.editor.shared.exceptions.RemoteIOException;
+import com.algebraweb.editor.shared.exceptions.SessionExpiredException;
 import com.algebraweb.editor.shared.logicalplan.ClipBoardPlanNode;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.shared.node.ContentNode;
 import com.algebraweb.editor.shared.node.ContentVal;
@@ -386,7 +386,7 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements Re
 			}
 		}
 		ret+="</div>";
-		ret +=getNodeContentList(getNodeToWork(planid,nid));
+		//ret +=getNodeContentList(getNodeToWork(planid,nid));
 
 		return ret;
 	}

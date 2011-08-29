@@ -3,8 +3,6 @@ package com.algebraweb.editor.client.logicalcanvas;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.node.Property;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -12,30 +10,28 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
 
+/**
+ * A drop field item displaying only given values as options
+ * @author Patrick Brosi
+ *
+ */
 public class FixedPossibilitiesField extends Composite{
 
 	private ListBox b;
 	private int erroneousIndex;
 	private boolean markError = false;
 	private AbsolutePanel p;
-	private String[] projSel;
-	private String[] projDel;
-	
-	public FixedPossibilitiesField(boolean allowMultipleSelection) {
 
+	public FixedPossibilitiesField(boolean allowMultipleSelection) {
 		b = new ListBox(allowMultipleSelection);
-		
 		p = new AbsolutePanel();
 		p.addStyleName("field-loading");
-
 		this.initWidget(p);
 		this.addStyleName("available-columns-selector");
 		
 		b.addChangeHandler(new ChangeHandler() {
-
 			@Override
 			public void onChange(ChangeEvent event) {
-
 				if (erroneousIndex > -1 && b.getSelectedIndex() != erroneousIndex) {
 					FixedPossibilitiesField.this.removeStyleName("erroneous");
 					b.removeItem(erroneousIndex);
@@ -43,17 +39,13 @@ public class FixedPossibilitiesField extends Composite{
 				}
 			}
 		});
-		
 	}
-	
-	
+		
 	protected ListBox getListBox() {
 		return b;
 	}
-
 	public String[] getSelectedItems() {
-
-		ArrayList<String> ret = new ArrayList<String>();
+		List<String> ret = new ArrayList<String>();
 		for (int i=0;i<b.getItemCount();i++) {
 			if (b.isItemSelected(i)) ret.add(b.getItemText(i));
 		}
@@ -61,14 +53,12 @@ public class FixedPossibilitiesField extends Composite{
 	}
 	
 	protected int selectStringItem(String item) {
-
 		for (int i=0;i<b.getItemCount();i++) {
 			if (b.getValue(i).equals(item)) {
 				b.setItemSelected(i, true);
 				return i;
 			}
 		}
-
 		if (markError && !b.isMultipleSelect()) {
 			b.addItem(item);
 			b.setSelectedIndex(b.getItemCount()-1);;
@@ -83,10 +73,8 @@ public class FixedPossibilitiesField extends Composite{
 	}
 	
 	protected void showResults(List<Property> result) {
-
 		this.removeStyleName("field-loading");
 		p.add(b);
-
 		Iterator<Property> it = result.iterator();
 
 		while (it.hasNext()) {
@@ -95,7 +83,6 @@ public class FixedPossibilitiesField extends Composite{
 	}
 	
 	protected void showResults(String[] result) {
-
 		this.removeStyleName("field-loading");
 		p.add(b);
 
@@ -105,8 +92,6 @@ public class FixedPossibilitiesField extends Composite{
 	}
 	
 	public void setSelection(String[] item) {
-
-		projSel = item;
 		if (item != null) {
 			for (String s : item)
 				selectStringItem(s);
@@ -114,10 +99,8 @@ public class FixedPossibilitiesField extends Composite{
 	}
 	
 	public void setSelection(String item) {
-
 		String[] tmp = new String[1];
 		tmp[0] = item;
-
 		setSelection(tmp);
 	}
 

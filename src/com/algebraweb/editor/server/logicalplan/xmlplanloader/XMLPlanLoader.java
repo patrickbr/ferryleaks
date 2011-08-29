@@ -12,9 +12,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.configuration.Configuration;
 import org.xml.sax.SAXException;
 
-import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser.PlanParser;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader.NodeSchemeLoader;
+import com.algebraweb.editor.shared.exceptions.RemoteIOException;
 import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.shared.scheme.NodeScheme;
 

@@ -18,9 +18,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
-import com.algebraweb.editor.client.logicalcanvas.GraphIsEmptyException;
-import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
-import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
+import com.algebraweb.editor.shared.exceptions.GraphIsEmptyException;
+import com.algebraweb.editor.shared.exceptions.GraphNotConnectedException;
+import com.algebraweb.editor.shared.exceptions.PlanHasCycleException;
 import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.shared.node.ContentNode;
 import com.algebraweb.editor.shared.node.ContentVal;

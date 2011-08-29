@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
-import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
+import com.algebraweb.editor.shared.exceptions.RemoteIOException;
 import com.algebraweb.editor.shared.scheme.Field;
 import com.algebraweb.editor.shared.scheme.GoAble;
 import com.algebraweb.editor.shared.scheme.GoInto;

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
+import com.algebraweb.editor.shared.exceptions.RemoteIOException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 

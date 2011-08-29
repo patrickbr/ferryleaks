@@ -7,9 +7,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
-import com.algebraweb.editor.client.logicalcanvas.GraphNotConnectedException;
-import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
+import com.algebraweb.editor.shared.exceptions.GraphNotConnectedException;
+import com.algebraweb.editor.shared.exceptions.PlanHasCycleException;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.algebraweb.editor.shared.node.NodeContent;
 import com.algebraweb.editor.shared.node.PlanNode;
 import com.algebraweb.editor.shared.node.QueryPlan;

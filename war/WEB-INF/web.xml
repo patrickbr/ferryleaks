@@ -55,6 +55,16 @@
     <url-pattern>/algebraeditor/fileserver</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>XMLExamplePlanLoader</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLExamplePlanLoader</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>XMLExamplePlanLoader</servlet-name>
+    <url-pattern>/algebraeditor/example</url-pattern>
+  </servlet-mapping>
+  
   
   
 

@@ -3,6 +3,7 @@ package com.algebraweb.editor.client.logicalcanvas;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.algebraweb.editor.client.AlgebraEditorCanvasView;
 import com.algebraweb.editor.client.PlanModelManipulator;
@@ -16,6 +17,7 @@ import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.NodeSelectionHandler;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -24,44 +26,37 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * A wrapper for the GraphCanvas. Provides methods needed for the
+ * editor's view
+ * @author Patrick Brosi
+ *
+ */
 public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasView{
-
-
 
 	private int state = 0;
 	private int id;
-	final private PlanModelManipulator m;
+	private final PlanModelManipulator m;
 	private String addingModeNodeType;
-
 	private GraphNode drawEdgeTo;
 	private GraphNode drawEdgeFrom;
 	private int drawEdgeFromPos;
-
 	private NewEdgeDrawer currentNewEdgeDrawer;
-
 	private PlanSwitchButton myTabButton;
-
 	private boolean overEdgeConnector=false;
-
-	private HashMap<Integer,SQLBubble> sqlBubbleList = new HashMap<Integer,SQLBubble>();
-
+	private Map<Integer,SQLBubble> sqlBubbleList = new HashMap<Integer,SQLBubble>();
 	private int errorCount=0;
 
 	public LogicalCanvas(int id,final PlanModelManipulator m,int width, int height, RemoteConfiguration config, PlanSwitchButton myTabButton) {
-
 		super(width, height,config.isInvertArrows());
-
 		this.id=id;
 		this.m=m;
 		this.myTabButton = myTabButton;
 
 		super.addNodeSelectionHandler(new NodeSelectionHandler() {
-
 			@Override
 			public boolean isSelected(GraphNode node) {
-
 				switch (state) {
-
 				case 2:
 					break;
 				case 3:
@@ -71,14 +66,12 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 					currentNewEdgeDrawer.getArrowPath().remove();
 					state=0;
 					setPreventHoverMenu(false);
-
 					Iterator<GraphNode> it = LogicalCanvas.this.getNodes().iterator();
 
 					while (it.hasNext()) {
 						GraphNode n = it.next();
 						clearEdgeConnectors(n);
 					}
-
 					m.addEdge(new Coordinate(drawEdgeFrom.getId(),drawEdgeTo.getId()), LogicalCanvas.this.getId(), drawEdgeFromPos);
 					return false;
 				}
@@ -86,13 +79,10 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 			}
 		});
 
-
 		super.addDomHandler(new MouseMoveHandler() {
-
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 				if (state == 3) {
-
 					setOverEdgeConnector(false);
 					if (getHoverNode() != null && mouseOverNode(event.getClientX(),event.getClientY())) {
 						currentNewEdgeDrawer.moveTo(getHoverNode().getX() + getHoverNode().getWidth() / 2, getHoverNode().getY());
@@ -101,12 +91,9 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 					}
 				}
 			}
-
 		},MouseMoveEvent.getType());
 
-
 		super.addDomHandler(new MouseUpHandler() {
-
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				if (!isOverEdgeConnector() && !mouseOverNode(event.getClientX(), event.getClientY()) && (state == 3 || state == 2)) {
@@ -122,11 +109,9 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 						clearEdgeConnectors(n);
 					}
 				}
-
 				if (state == 1) {
 					state = 0;
 					LogicalCanvas.this.removeStyleName("node-adding");
-
 					int x=-marginLeft+(int)(getScale() * (event.getRelativeX(LogicalCanvas.super.getElement())));
 					int y=-marginTop+(int)(getScale() * (event.getRelativeY(LogicalCanvas.super.getElement())));
 					LogicalCanvas.this.m.addNode(LogicalCanvas.this.getId(), addingModeNodeType, x,y);
@@ -143,7 +128,6 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 		sqlBubbleList.put(nid, listener);
 		listener.update();
 	}
-
 
 	private void clearEdgeConnectors(GraphNode n) {
 		for (int i=0;i<n.getFixedChildCount();i++) {
@@ -169,7 +153,6 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
-
 				state=3;
 				drawEdgeFrom = n;
 				drawEdgeFromPos = pos;
@@ -189,7 +172,6 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 	}
 
 	public void enterEdgeAddingMode() {
-
 		Iterator<GraphNode> it = super.getNodes().iterator();
 		boolean hasConnectors = false;
 
@@ -279,7 +261,6 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 	}
 
 	public void setErroneous(int nid) {
-
 		if (!(super.getGraphNodeById(nid) == null) && !super.getGraphNodeById(nid).getConnectedShapes().containsKey("__logicalplan_error")) {
 			errorCount++;
 			myTabButton.setErrorCount(errorCount);
@@ -308,5 +289,4 @@ public class LogicalCanvas extends GraphCanvas implements AlgebraEditorCanvasVie
 	public Widget getWidget() {
 		return this;
 	}
-
 }

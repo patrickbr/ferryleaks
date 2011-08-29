@@ -9,7 +9,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import com.algebraweb.editor.client.RemoteConfiguration;
 import com.algebraweb.editor.client.RemoteConfigurationWithPlansInSession;
 import com.algebraweb.editor.client.RegistrationService;
-import com.algebraweb.editor.client.logicalcanvas.RemoteConfigurationException;
+import com.algebraweb.editor.shared.exceptions.RemoteConfigurationException;
 import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -32,6 +32,7 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 
 	@Override
 	public void keepAlive() {
+		System.out.println("Received keep alive from " + this.getThreadLocalRequest().getRemoteAddr() + " (" + this.getThreadLocalRequest().getSession().getId() + ")");
 	}
 
 	@Override

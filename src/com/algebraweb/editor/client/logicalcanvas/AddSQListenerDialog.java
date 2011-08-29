@@ -2,7 +2,13 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.AlgebraEditorCanvasView;
 import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 
+/**
+ * The dialog for adding SQL listeners.
+ * @author Patrick Brosi
+ *
+ */
 public class AddSQListenerDialog extends EvaluationDialog{
 
 	private AlgebraEditorCanvasView c;
@@ -18,7 +24,6 @@ public class AddSQListenerDialog extends EvaluationDialog{
 	@Override
 	protected void submit() {
 		EvaluationContext c = saveContext();
-		//TODO: not good...
 		this.c.addSQLListener(nid,getManServ(),c);
 		this.hide();
 	}

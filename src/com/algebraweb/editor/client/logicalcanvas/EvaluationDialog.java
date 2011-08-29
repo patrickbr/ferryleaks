@@ -7,7 +7,13 @@ import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.SqlResDialog;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 
+/**
+ * A basic evaluation dialog for plan evaluation.
+ * @author Patrick Brosi
+ *
+ */
 public class EvaluationDialog extends CreateSQLDialog {
 
 	private DatabaseConfigPanel db;

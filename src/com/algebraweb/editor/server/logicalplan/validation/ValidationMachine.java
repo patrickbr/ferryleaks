@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.algebraweb.editor.client.logicalcanvas.PlanHasCycleException;
 import com.algebraweb.editor.client.validation.ValidationError;
 import com.algebraweb.editor.client.validation.ValidationResult;
+import com.algebraweb.editor.shared.exceptions.PlanHasCycleException;
 import com.algebraweb.editor.shared.node.PlanNode;
 import com.algebraweb.editor.shared.node.QueryPlan;
 

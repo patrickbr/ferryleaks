@@ -17,8 +17,8 @@ import org.w3c.dom.Text;
 import com.algebraweb.editor.client.RawEdge;
 import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.Coordinate;
-import com.algebraweb.editor.client.logicalcanvas.RemoteIOException;
 import com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSorter;
+import com.algebraweb.editor.shared.exceptions.RemoteIOException;
 
 /**
  * A simple dot-sorter using the SVG/XML output of dot

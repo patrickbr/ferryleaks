@@ -1,4 +1,4 @@
-package com.algebraweb.editor.client.logicalcanvas;
+package com.algebraweb.editor.shared.exceptions;
 
 public class RemoteConfigurationException extends Exception{
 

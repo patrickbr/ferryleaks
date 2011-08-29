@@ -1,4 +1,5 @@
 com.algebraweb.editor.client
+com.algebraweb.editor.client.exampleplanloadre
 com.algebraweb.editor.client.graphcanvas
 com.algebraweb.editor.client.graphcanvas.remotefiller
 com.algebraweb.editor.client.graphcanvas.remotesorter
@@ -18,6 +19,7 @@ com.algebraweb.editor.server.logicalplan.xmlplanloader
 com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser
 com.algebraweb.editor.server.logicalplan.xmlplanloader.schemeloader
 com.algebraweb.editor.server.registrationservice
+com.algebraweb.editor.shared.exceptions
 com.algebraweb.editor.shared.logicalplan
 com.algebraweb.editor.shared.node
 com.algebraweb.editor.shared.scheme

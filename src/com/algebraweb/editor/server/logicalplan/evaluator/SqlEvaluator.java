@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.apache.commons.dbutils.QueryRunner;
 
-import com.algebraweb.editor.client.logicalcanvas.EvaluationContext;
-import com.algebraweb.editor.client.logicalcanvas.LogicalCanvasSQLException;
+import com.algebraweb.editor.shared.exceptions.LogicalCanvasSQLException;
+import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 
 /**
  * Evaluates an SQL query against a back end database
