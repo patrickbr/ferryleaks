@@ -1,6 +1,6 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
+import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
-public class DatabaseConfigPanel extends LayoutPanel{
+public class DatabaseConfigPanel extends LayoutPanel {
 
 	private final TextBox serverAdress = new TextBox();
 	private final TextBox serverPort = new TextBox();
@@ -19,7 +19,8 @@ public class DatabaseConfigPanel extends LayoutPanel{
 	private final PasswordTextBox password = new PasswordTextBox();
 	private final CheckBox saveGlobal = new CheckBox();
 
-	public DatabaseConfigPanel(int pid, int nid, RemoteManipulationServiceAsync manServ) {
+	public DatabaseConfigPanel(int pid, int nid,
+			RemoteManipulationServiceAsync manServ) {
 		super();
 
 		FlowPanel mainPanel = new FlowPanel();
@@ -46,7 +47,6 @@ public class DatabaseConfigPanel extends LayoutPanel{
 		this.add(mainPanel);
 	}
 
-
 	protected void fillEvaluationContext(EvaluationContext c) {
 		c.setDatabaseServer(serverAdress.getText());
 		c.setDatabasePort(Integer.parseInt(serverPort.getText()));
@@ -55,7 +55,6 @@ public class DatabaseConfigPanel extends LayoutPanel{
 		c.setDatabasePassword(password.getText());
 		c.setDatabaseSetGlobal(saveGlobal.getValue());
 	}
-
 
 	protected void loadEvaluationContext(EvaluationContext c) {
 		serverAdress.setText(c.getDatabaseServer());

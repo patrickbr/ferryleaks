@@ -2,11 +2,11 @@ package com.algebraweb.editor.client.validation;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-
 /**
  * A validation error encountered during validation
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class ValidationError implements IsSerializable {
 
@@ -18,7 +18,7 @@ public class ValidationError implements IsSerializable {
 	private String errorMsg;
 
 	public ValidationError() {
-		
+
 	}
 
 	public ValidationError(int nodeId, String errorMsg) {
@@ -28,6 +28,7 @@ public class ValidationError implements IsSerializable {
 
 	/**
 	 * Returns the human readable error message of this error
+	 * 
 	 * @return the error message
 	 */
 	public String getErrorMsg() {
@@ -36,6 +37,7 @@ public class ValidationError implements IsSerializable {
 
 	/**
 	 * Returns the affected node's id
+	 * 
 	 * @return the node id
 	 */
 	public int getNodeId() {
@@ -44,7 +46,9 @@ public class ValidationError implements IsSerializable {
 
 	/**
 	 * Sets the human readable error message
-	 * @param errorMsg the error message to set
+	 * 
+	 * @param errorMsg
+	 *            the error message to set
 	 */
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
@@ -52,7 +56,9 @@ public class ValidationError implements IsSerializable {
 
 	/**
 	 * Set the affected node's id
-	 * @param nodeId the node id to ste
+	 * 
+	 * @param nodeId
+	 *            the node id to ste
 	 */
 	public void setNodeId(int nodeId) {
 		this.nodeId = nodeId;

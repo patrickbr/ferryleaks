@@ -1,14 +1,15 @@
 package com.algebraweb.editor.shared.scheme;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 /**
- * A GoAble that can't hold any fields of its own. Will be parsed
- * to an internal wrapper class accumulating elements which hold fields.
+ * A GoAble that can't hold any fields of its own. Will be parsed to an internal
+ * wrapper class accumulating elements which hold fields.
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class GoInto implements GoAble {
 
@@ -23,30 +24,28 @@ public class GoInto implements GoAble {
 	}
 
 	public GoInto(String xmlObject, String howOften) {
-		this.xmlObject=xmlObject;
+		this.xmlObject = xmlObject;
 		this.howOften = howOften;
 		this.humanName = xmlObject;
 	}
 
 	public GoInto(String xmlObject, String howOften, String humanName) {
-		this.xmlObject=xmlObject;
+		this.xmlObject = xmlObject;
 		this.howOften = howOften;
 		this.humanName = humanName;
 	}
 
-	public GoInto(String xmlObject, String howOften, String humanName, String nameToPrint) {
+	public GoInto(String xmlObject, String howOften, String humanName,
+			String nameToPrint) {
 		this(xmlObject, howOften, humanName);
 		this.nameToPrint = nameToPrint;
-	}
-	
-	@Override
-	public String getNameToPrint() {
-		return nameToPrint;
 	}
 
 	/**
 	 * Adds a child element to this object
-	 * @param child the child to ad
+	 * 
+	 * @param child
+	 *            the child to ad
 	 */
 	public void addChild(GoAble child) {
 		this.childs.add(child);
@@ -73,15 +72,14 @@ public class GoInto implements GoAble {
 	}
 
 	@Override
+	public String getNameToPrint() {
+		return nameToPrint;
+	}
+
+	@Override
 	public List<GoAble> getSchema() {
 		return childs;
 	}
-	
-	@Override
-	public void setSchema(List<GoAble> schema) {
-		this.childs = schema;
-	}
-
 
 	@Override
 	public String getXmlObject() {
@@ -90,7 +88,7 @@ public class GoInto implements GoAble {
 
 	@Override
 	public boolean hasChilds() {
-		return childs.size()>0;
+		return childs.size() > 0;
 	}
 
 	@Override
@@ -113,18 +111,24 @@ public class GoInto implements GoAble {
 		this.howOften = howOften;
 	}
 
+	@Override
+	public void setSchema(List<GoAble> schema) {
+		this.childs = schema;
+	}
+
 	public void setXmlObject(String xmlObject) {
 		this.xmlObject = xmlObject;
 	}
 
 	@Override
 	public String toString() {
-		String ret =  "{GOINTO: howOften=" + howOften + " XMLob:" + xmlObject + " childs:(";
+		String ret = "{GOINTO: howOften=" + howOften + " XMLob:" + xmlObject
+				+ " childs:(";
 		Iterator<GoAble> i = childs.iterator();
-		while(i.hasNext()) {
-			ret +=i.next().toString();
+		while (i.hasNext()) {
+			ret += i.next().toString();
 		}
-		ret +=")}";
+		ret += ")}";
 		return ret;
 	}
 }

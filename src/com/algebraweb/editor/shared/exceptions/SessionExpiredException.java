@@ -1,6 +1,6 @@
 package com.algebraweb.editor.shared.exceptions;
 
-public class SessionExpiredException extends PlanManipulationException{
+public class SessionExpiredException extends PlanManipulationException {
 
 	/**
 	 * 

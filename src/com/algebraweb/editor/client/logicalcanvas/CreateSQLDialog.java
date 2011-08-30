@@ -1,15 +1,16 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
-import com.algebraweb.editor.client.TextPresentationDialog;
+import com.algebraweb.editor.client.dialogs.TextPresentationDialog;
+import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 
 /**
  * The dialog for SQL compilation
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class CreateSQLDialog extends CreateEvaluationContextDialog {
 
@@ -21,12 +22,13 @@ public class CreateSQLDialog extends CreateEvaluationContextDialog {
 
 		@Override
 		public void onSuccess(String result) {
-			new TextPresentationDialog("Compiled SQL",result);
+			new TextPresentationDialog("Compiled SQL", result);
 		}
 	};
 
-	public CreateSQLDialog(int pid, int nid, RemoteManipulationServiceAsync manServ) {
-		super(pid,nid,manServ);
+	public CreateSQLDialog(int pid, int nid,
+			RemoteManipulationServiceAsync manServ) {
+		super(pid, nid, manServ);
 		super.setText("SQL generation");
 		cb = new CheckBox();
 		cb.setText("Save for current node");
@@ -50,6 +52,8 @@ public class CreateSQLDialog extends CreateEvaluationContextDialog {
 	@Override
 	protected void submit() {
 		EvaluationContext c = saveContext();
-		getManServ().getSQLFromPlanNode(getPid(), getNid(), c,cb.getValue(), sqlCb);
+		getManServ().getSQLFromPlanNode(getPid(), getNid(), c, cb.getValue(),
+				sqlCb);
+		hide();
 	}
 }

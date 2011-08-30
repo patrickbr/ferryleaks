@@ -5,8 +5,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.algebraweb.editor.client.exampleplanloadre.ExamplePlanLoaderCommunicationService;
-import com.algebraweb.editor.client.exampleplanloadre.ExamplePlanLoaderCommunicationServiceAsync;
+import com.algebraweb.editor.client.dialogs.EditorDragPanel;
+import com.algebraweb.editor.client.dialogs.TextPresentationDialog;
+import com.algebraweb.editor.client.dialogs.YesNoPanel;
+import com.algebraweb.editor.client.dialogs.ZoomPanel;
+import com.algebraweb.editor.client.exampleplanloader.ExamplePlanLoaderCommunicationService;
+import com.algebraweb.editor.client.exampleplanloader.ExamplePlanLoaderCommunicationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.ContextMenu;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
@@ -24,8 +28,12 @@ import com.algebraweb.editor.client.logicalcanvas.EvaluatePlanDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluationDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
 import com.algebraweb.editor.client.logicalcanvas.LogicalNodePopup;
-import com.algebraweb.editor.client.logicalcanvas.LogicalPlanNodeContextItem;
-import com.algebraweb.editor.client.logicalcanvas.NodeEditDialog;
+import com.algebraweb.editor.client.logicalcanvas.editpanel.LogicalPlanNodeContextItem;
+import com.algebraweb.editor.client.logicalcanvas.editpanel.NodeEditDialog;
+import com.algebraweb.editor.client.services.RegistrationService;
+import com.algebraweb.editor.client.services.RegistrationServiceAsync;
+import com.algebraweb.editor.client.services.RemoteManipulationService;
+import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
@@ -39,150 +47,93 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 
-
 /**
  * <b>the bugFerry</b><br>
- * A Web-Based (Debugging) Editor for the Table Algebra
- * <br><i>
- * see readme for information on how to compile this application</i>
+ * A Web-Based (Debugging) Editor for the Table Algebra <br>
+ * <i> see readme for information on how to compile this application</i>
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.2";
+	private static String VERSION = "Beta 1.21";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (August 29th)";
+	private static String YEAR = "2011 (August 30th)";
 	private static String FACILITY = "Universität Tübingen";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
 	private static String BROWSER_VER = "";
 	private static String BROWSER_OS = "";
-	private static boolean LOGGING=false;
-	private static RegistrationServiceAsync registor = GWT.create(RegistrationService.class);
+	private static boolean LOGGING = false;
+	private static RegistrationServiceAsync registor = GWT
+			.create(RegistrationService.class);
 	private static Timer keepAliveTimer;
-
-	private RemoteConfiguration config;
-	private List<AlgebraEditorCanvasView> canvi = new ArrayList<AlgebraEditorCanvasView>();
-	private List<EditorDragPanel> panels = new ArrayList<EditorDragPanel>();
-	private static AlgebraEditorCanvasView activeCanvas=null;
-	private PlanSwitcher s;
-	private RemoteManipulationServiceAsync rmsa;
-	private PlanModelManipulator m;
-	private NodeContextMenu nodeContextMenu = new NodeContextMenu();
-	private ContextMenu planContextMenu = new ContextMenu();
-	private TabContextMenu tabContextMenu = new TabContextMenu();
-	private ZoomPanel zoomPanel = new ZoomPanel();
-
-	/**
-	 * genesis...
-	 */
-	public void onModuleLoad() {
-
-		if (Window.Location.getParameter("logger") != null) {
-			RootPanel.get("debugger").add(AlgebraEditor.log);
-			RootPanel.get("debugger").getElement().getStyle().setDisplay(Display.BLOCK);
-			LOGGING=true;
-			AlgebraEditor.log.setReadOnly(true);
-		}
-
-		BROWSER_NAME = Navigator.getAppCodeName();
-		BROWSER_VER = Navigator.getAppVersion();
-		BROWSER_OS = Navigator.getPlatform();
-
-		if (Math.random()<0.2) TITLE = "the bugFerry";
-
-		AlgebraEditor.log("Hi! This is " + TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " " + AUTHOR);
-		AlgebraEditor.log("   running in " + BROWSER_NAME + " " + BROWSER_VER + " (" + BROWSER_OS + ") (" + (Navigator.isCookieEnabled()?"Cookies enabled":"Cookies _NOT_ enabled. Session handling will not work properly!")+ ")");
-		AlgebraEditor.log("   servlet on " + GWT.getModuleBaseURL() + " running in " + (GWT.isProdMode()?"production":"development") + " mode");
-		Window.setTitle(TITLE + " - " + VERSION);
-
-		AlgebraEditor.log("initializing remote manupulation service...");
-		rmsa = (RemoteManipulationServiceAsync) GWT.create(RemoteManipulationService.class);
-
-		m = new PlanModelManipulator(rmsa);
-		m.setEditor(this);
-		s= new PlanSwitcher(this);
-
-		AlgebraEditor.log("initializing controll panel...");
-		RootPanel.get("editor").add(new ControlPanel(this,m,300,300,rmsa));
-		RootPanel.get("editor").add(s);
-		RootPanel.get("impressum").getElement().setInnerHTML(TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " " + AUTHOR); 
-		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE); 
-
-		initContextMenu();
-		initPlanContextMenu();
-		initTabContextMenu();
-		initZoomPanel();
-
-		AlgebraEditor.log("Sending registration...");
-
-		registor.register(new GraphCanvasCommunicationCallback<RemoteConfiguration>("registering session") {
-
-			@Override
-			public void onSuccess(final RemoteConfiguration result) {
-				processConfiguration(result);
-			}
-
-		});
-	}
-
-	private void initZoomPanel() {		
-		RootPanel.get("editor").add(zoomPanel);
-		zoomPanel.registerZoomInHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				getActiveView().zoomIn();			
-			}
-		});
-
-		zoomPanel.registerZoomOutHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				getActiveView().zoomOut();						
-			}
-		});
-	}
 
 	/**
 	 * Returns the active canvas.
+	 * 
 	 * @return the active canvas
 	 */
 	public static AlgebraEditorCanvasView getActiveView() {
 		return activeCanvas;
 	}
+
 	/**
 	 * Write something to the log. A timestamp will be added.
-	 * @param s the message to log
+	 * 
+	 * @param s
+	 *            the message to log
 	 */
 	public static void log(String s) {
-		if (!LOGGING) return;
+		if (!LOGGING) {
+			return;
+		}
 		Date today = new Date();
-		log.setText(log.getText() + "\n" + DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.TIME_MEDIUM).format(today) + " "  + s);
+		log.setText(log.getText()
+				+ "\n"
+				+ DateTimeFormat.getFormat(
+						DateTimeFormat.PredefinedFormat.TIME_MEDIUM).format(
+						today) + " " + s);
 		log.setCursorPos(log.getText().length());
 	}
+
 	/**
 	 * change the subtitle of the browser window
+	 * 
 	 * @param s
 	 */
 	public static void setSubTitle(String s) {
 		Window.setTitle(s + " - " + TITLE + " - " + VERSION);
 	}
 
+	private RemoteConfiguration config;
+	private List<AlgebraEditorCanvasView> canvi = new ArrayList<AlgebraEditorCanvasView>();
+	private List<EditorDragPanel> panels = new ArrayList<EditorDragPanel>();
+	private static AlgebraEditorCanvasView activeCanvas = null;
+	private PlanSwitcher s;
+	private RemoteManipulationServiceAsync rmsa;
+	private PlanModelManipulator m;
+	private NodeContextMenu nodeContextMenu = new NodeContextMenu();
 
-	private  GraphCanvasCommunicationCallback<Integer> createCb = new  GraphCanvasCommunicationCallback<Integer>("adding new empty canvas") {
+	private ContextMenu planContextMenu = new ContextMenu();
+
+	private TabContextMenu tabContextMenu = new TabContextMenu();
+
+	private ZoomPanel zoomPanel = new ZoomPanel();
+	private GraphCanvasCommunicationCallback<Integer> createCb = new GraphCanvasCommunicationCallback<Integer>(
+			"adding new empty canvas") {
 		@Override
 		public void onSuccess(Integer result) {
-			if (addCanvasView(result) != activeCanvas) changeCanvas(result);
+			if (addCanvasView(result) != activeCanvas) {
+				changeCanvas(result);
+			}
 		}
 	};
-
-	private  GraphCanvasCommunicationCallback<Integer> removeCb = new  GraphCanvasCommunicationCallback<Integer>("removing canvas") {
+	private GraphCanvasCommunicationCallback<Integer> removeCb = new GraphCanvasCommunicationCallback<Integer>(
+			"removing canvas") {
 		@Override
 		public void onSuccess(Integer result) {
 			if (hasCanvasWithId(result)) {
@@ -201,38 +152,47 @@ public class AlgebraEditor implements EntryPoint {
 		}
 	};
 
-	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>("getting XML") {
+	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>(
+			"getting XML") {
 		@Override
 		public void onSuccess(String result) {
-			new TextPresentationDialog("XML source",result);
+			new TextPresentationDialog("XML source", result);
 		}
 	};
 
-	private GraphCanvasCommunicationCallback<String> sqlCb = new GraphCanvasCommunicationCallback<String>("compiling SQL") {
+	private GraphCanvasCommunicationCallback<String> sqlCb = new GraphCanvasCommunicationCallback<String>(
+			"compiling SQL") {
 		@Override
 		public void onSuccess(String result) {
-			new TextPresentationDialog("Compiled SQL",result);
+			new TextPresentationDialog("Compiled SQL", result);
 		}
 	};
 
 	/**
-	 * Add a new canvas to the editor with the given id. Note that
-	 * this will <i>not</i> add a new plan to the bundle stored on the
-	 * server! Use createNewPlan(id) for this.
-	 * If a canvas with the given id already exists, it is returned
-	 * @param id the id of the new canvas
-	 * @return the new canvas or the canvas with the given id if it already exists
+	 * Add a new canvas to the editor with the given id. Note that this will
+	 * <i>not</i> add a new plan to the bundle stored on the server! Use
+	 * createNewPlan(id) for this. If a canvas with the given id already exists,
+	 * it is returned
+	 * 
+	 * @param id
+	 *            the id of the new canvas
+	 * @return the new canvas or the canvas with the given id if it already
+	 *         exists
 	 */
 	public AlgebraEditorCanvasView addCanvasView(int id) {
 
-		if (hasCanvasWithId(id)) return getCanvas(id);
+		if (hasCanvasWithId(id)) {
+			return getCanvas(id);
+		}
 
-		LogicalCanvas c = new LogicalCanvas(id,m,Window.getClientWidth()-30,Window.getClientHeight()-30,config,s.addPlan(id));
+		LogicalCanvas c = new LogicalCanvas(id, m,
+				Window.getClientWidth() - 30, Window.getClientHeight() - 30,
+				config, s.addPlan(id));
 
 		c.setGraphNodeModifier(new GraphNodeModifier(c));
 		c.setGraphEdgeModifier(new GraphEdgeModifier(c));
 
-		c.setPopup(new LogicalNodePopup(c,rmsa));
+		c.setPopup(new LogicalNodePopup(c, rmsa));
 		c.setContextMenu(nodeContextMenu);
 		c.setCanvasMenu(planContextMenu);
 		c.setPadding(60, 45);
@@ -244,21 +204,27 @@ public class AlgebraEditor implements EntryPoint {
 
 		canvi.add(c);
 		panels.add(d);
-		if (canvi.size() == 1) changeCanvas(id);
+		if (canvi.size() == 1) {
+			changeCanvas(id);
+		}
 
 		return c;
 	}
 
 	/**
 	 * Switches to the canvas with the given id
-	 * @param id the id of the canvas to switch to
+	 * 
+	 * @param id
+	 *            the id of the canvas to switch to
 	 */
 	public void changeCanvas(int id) {
 		AlgebraEditor.log("Changing to canvas #" + id);
 
 		Iterator<EditorDragPanel> it = panels.iterator();
-		int activeCanvasId=-1;
-		if (activeCanvas!= null) activeCanvasId = activeCanvas.getId();
+		int activeCanvasId = -1;
+		if (activeCanvas != null) {
+			activeCanvasId = activeCanvas.getId();
+		}
 
 		while (it.hasNext()) {
 			EditorDragPanel cur = it.next();
@@ -281,8 +247,8 @@ public class AlgebraEditor implements EntryPoint {
 	}
 
 	/**
-	 * Clear all canvases. <i>Note</i>, however, that this will
-	 * not affect the query bundle stored on the server.
+	 * Clear all canvases. <i>Note</i>, however, that this will not affect the
+	 * query bundle stored on the server.
 	 */
 	public void clearCanvases() {
 
@@ -301,29 +267,36 @@ public class AlgebraEditor implements EntryPoint {
 
 	/**
 	 * Adds a new plan to the bundle
-	 * @param clearFirst if true, all other plans will be removed first
+	 * 
+	 * @param clearFirst
+	 *            if true, all other plans will be removed first
 	 */
 	public void createNewPlan(boolean clearFirst) {
-		rmsa.createNewPlan(clearFirst,createCb);
+		rmsa.createNewPlan(clearFirst, createCb);
 	}
 
 	/**
-	 * Returns the canvas object with the given id or null
-	 * if no canvas with that id exists
-	 * @param pid the id to look for
+	 * Returns the canvas object with the given id or null if no canvas with
+	 * that id exists
+	 * 
+	 * @param pid
+	 *            the id to look for
 	 * @return the LogicalCanvas with the specified id
 	 */
 	public AlgebraEditorCanvasView getCanvas(int pid) {
 		Iterator<AlgebraEditorCanvasView> it = canvi.iterator();
 		while (it.hasNext()) {
 			AlgebraEditorCanvasView cur = it.next();
-			if (cur.getId() == pid) return cur;
+			if (cur.getId() == pid) {
+				return cur;
+			}
 		}
 		return null;
 	}
 
 	/**
 	 * returns the context menu used on the canvas
+	 * 
 	 * @return the contextMenu
 	 */
 	public ContextMenu getContextMenu() {
@@ -332,16 +305,20 @@ public class AlgebraEditor implements EntryPoint {
 
 	/**
 	 * Returns an integer not yet used as a canvas id
+	 * 
 	 * @return an integer that can be safely used as an id for a new canvas
 	 */
 	public int getFreeCanvasId() {
-		int i=0;
-		while (hasCanvasWithId(i)) i++;
+		int i = 0;
+		while (hasCanvasWithId(i)) {
+			i++;
+		}
 		return i;
 	}
 
 	/**
 	 * returns the manipulation service
+	 * 
 	 * @return the manipulation service
 	 */
 	public RemoteManipulationServiceAsync getManServ() {
@@ -350,6 +327,7 @@ public class AlgebraEditor implements EntryPoint {
 
 	/**
 	 * returns the context menu used on nodes
+	 * 
 	 * @return the nodeContextMenu
 	 */
 	public NodeContextMenu getNodeContextMenu() {
@@ -358,6 +336,7 @@ public class AlgebraEditor implements EntryPoint {
 
 	/**
 	 * returns the plan manipulator
+	 * 
 	 * @return the plan manipulator
 	 */
 	public PlanModelManipulator getPlanManipulator() {
@@ -366,6 +345,7 @@ public class AlgebraEditor implements EntryPoint {
 
 	/**
 	 * returns the context menu used on the tabs
+	 * 
 	 * @return the contextMenu
 	 */
 	public TabContextMenu getTabContextMenu() {
@@ -374,7 +354,9 @@ public class AlgebraEditor implements EntryPoint {
 
 	/**
 	 * Checks whether a canvas with the given id exists
-	 * @param i the id to look for
+	 * 
+	 * @param i
+	 *            the id to look for
 	 * @return true if a canvas with the given id exists
 	 */
 	public boolean hasCanvasWithId(int i) {
@@ -399,14 +381,16 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalNodeContextItem("Select") {
 			@Override
 			public void onClick(int nid) {
-				getActiveView().setSelectedNode(getActiveView().getGraphNodeById(nid));
+				getActiveView().setSelectedNode(
+						getActiveView().getGraphNodeById(nid));
 			}
 		});
 
 		m.addItem(new LogicalNodeContextItem("Select subtree") {
 			@Override
 			public void onClick(int nid) {
-				getActiveView().selectNodeWithSubs(getActiveView().getGraphNodeById(nid));
+				getActiveView().selectNodeWithSubs(
+						getActiveView().getGraphNodeById(nid));
 			}
 		});
 
@@ -421,14 +405,15 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalNodeContextItem("View XML source") {
 			@Override
 			public void onClick(int nid) {
-				getManServ().getXMLFromPlanNode(getActiveView().getId(), nid, xmlCb);
+				getManServ().getXMLFromPlanNode(getActiveView().getId(), nid,
+						xmlCb);
 			}
 		});
 
 		m.addItem(new LogicalNodeContextItem("Get compiled SQL") {
 			@Override
 			public void onClick(int nid) {
-				new CreateSQLDialog(getActiveView().getId(),nid,getManServ());
+				new CreateSQLDialog(getActiveView().getId(), nid, getManServ());
 			}
 		});
 
@@ -442,7 +427,7 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalNodeContextItem("Evaluate") {
 			@Override
 			public void onClick(int nid) {
-				new EvaluationDialog(getActiveView().getId(),nid,rmsa);
+				new EvaluationDialog(getActiveView().getId(), nid, rmsa);
 			}
 		});
 
@@ -450,7 +435,8 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalNodeContextItem("Edit") {
 			@Override
 			public void onClick(int nid) {
-				new NodeEditDialog(getPlanManipulator(),rmsa,nid,getActiveView().getId());
+				new NodeEditDialog(getPlanManipulator(), rmsa, nid,
+						getActiveView().getId());
 			}
 		});
 	}
@@ -471,7 +457,9 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalPlanNodeContextItem("Paste") {
 			@Override
 			public void onClick() {
-				getPlanManipulator().paste(getActiveView().getId(), (int)(m.getX()*getActiveView().getScale()),  (int)(m.getY()*getActiveView().getScale()));
+				getPlanManipulator().paste(getActiveView().getId(),
+						(int) (m.getX() * getActiveView().getScale()),
+						(int) (m.getY() * getActiveView().getScale()));
 			}
 		});
 
@@ -497,7 +485,7 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalTabContextItem("Evaluate") {
 			@Override
 			public void onClick(final int pid) {
-				new EvaluatePlanDialog(pid,rmsa);
+				new EvaluatePlanDialog(pid, rmsa);
 			}
 		});
 
@@ -512,7 +500,8 @@ public class AlgebraEditor implements EntryPoint {
 			@Override
 			public void onClick(int pid) {
 				GraphCanvas.showLoading("Preparing file...");
-				Window.open(GWT.getModuleBaseURL() + "fileserver?pid="+pid, "_self", "");
+				Window.open(GWT.getModuleBaseURL() + "fileserver?pid=" + pid,
+						"_self", "");
 				GraphCanvas.hideLoading();
 			}
 		});
@@ -521,7 +510,7 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalTabContextItem("Configure") {
 			@Override
 			public void onClick(final int pid) {
-				new ConfigurePlanDialog(pid,rmsa);
+				new ConfigurePlanDialog(pid, rmsa);
 			}
 		});
 
@@ -534,53 +523,151 @@ public class AlgebraEditor implements EntryPoint {
 		});
 	}
 
-	/**
-	 * load a plan stored on the server into the view
-	 * @param id the id of the plan to load
-	 */
-	public void loadFinishedPlanFromServer(final Integer id) {
-
-		final AlgebraEditorCanvasView c = addCanvasView(id);
-
-		RemoteCanvasViewFiller f = new RemoteCanvasViewFiller(c);
-
-		AlgebraEditor.log("Calling remote filler for plan #" + id);
-		f.fill(new RemoteFiller("xml",Integer.toString(id)), new GraphManipulationCallback() {
+	private void initZoomPanel() {
+		RootPanel.get("editor").add(zoomPanel);
+		zoomPanel.registerZoomInHandler(new ClickHandler() {
 
 			@Override
-			public void onComplete() {
-				AlgebraEditor.log("Remote filler for plan #" + id + " finished. Calling validator...");
-				c.sort(new RemoteSorter("dot"));
-				getPlanManipulator().validate(id);
+			public void onClick(ClickEvent event) {
+				getActiveView().zoomIn();
+			}
+		});
+
+		zoomPanel.registerZoomOutHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				getActiveView().zoomOut();
 			}
 		});
 	}
 
 	/**
 	 * loads an example plan from the server
-	 * @param path the (relative) path of the example plan
+	 * 
+	 * @param path
+	 *            the (relative) path of the example plan
 	 */
 	public void loadExamplePlanFromServer(String path) {
-		ExamplePlanLoaderCommunicationServiceAsync exComm = GWT.create(ExamplePlanLoaderCommunicationService.class);
-		
-		AlgebraEditor.log("Loading example plan from server...");
-		exComm.loadExamplePlan(path, new GraphCanvasCommunicationCallback<Integer[]>("loading example plan") {
+		ExamplePlanLoaderCommunicationServiceAsync exComm = GWT
+				.create(ExamplePlanLoaderCommunicationService.class);
 
-			@Override
-			public void onSuccess(Integer[] result) {
-				clearCanvases();
-				AlgebraEditor.log("Example plan loaded successfull!");
-				for (int i : result) {
-					loadFinishedPlanFromServer(i);
-				}
-			}
-		});
-		
+		AlgebraEditor.log("Loading example plan from server...");
+		exComm.loadExamplePlan(path,
+				new GraphCanvasCommunicationCallback<Integer[]>(
+						"loading example plan") {
+
+					@Override
+					public void onSuccess(Integer[] result) {
+						clearCanvases();
+						AlgebraEditor.log("Example plan loaded successfull!");
+						for (int i : result) {
+							loadFinishedPlanFromServer(i);
+						}
+					}
+				});
 	}
-	
+
+	/**
+	 * load a plan stored on the server into the view
+	 * 
+	 * @param id
+	 *            the id of the plan to load
+	 */
+	public void loadFinishedPlanFromServer(final Integer id) {
+		final AlgebraEditorCanvasView c = addCanvasView(id);
+		RemoteCanvasViewFiller f = new RemoteCanvasViewFiller(c);
+		AlgebraEditor.log("Calling remote filler for plan #" + id);
+		f.fill(new RemoteFiller("xml", Integer.toString(id)),
+				new GraphManipulationCallback() {
+
+					@Override
+					public void onComplete() {
+						AlgebraEditor.log("Remote filler for plan #" + id
+								+ " finished. Calling validator...");
+						c.sort(new RemoteSorter("dot"));
+						getPlanManipulator().validate(id);
+					}
+				});
+	}
+
+	/**
+	 * genesis...
+	 */
+	public void onModuleLoad() {
+
+		if (Window.Location.getParameter("logger") != null) {
+			RootPanel.get("debugger").add(AlgebraEditor.log);
+			RootPanel.get("debugger").getElement().getStyle().setDisplay(
+					Display.BLOCK);
+			LOGGING = true;
+			AlgebraEditor.log.setReadOnly(true);
+		}
+
+		BROWSER_NAME = Navigator.getAppCodeName();
+		BROWSER_VER = Navigator.getAppVersion();
+		BROWSER_OS = Navigator.getPlatform();
+
+		if (Math.random() < 0.2) {
+			TITLE = "the bugFerry";
+		}
+
+		AlgebraEditor.log("Hi! This is " + TITLE + " " + VERSION + " - "
+				+ FACILITY + " - " + YEAR + " " + AUTHOR);
+		AlgebraEditor
+				.log("   running in "
+						+ BROWSER_NAME
+						+ " "
+						+ BROWSER_VER
+						+ " ("
+						+ BROWSER_OS
+						+ ") ("
+						+ (Navigator.isCookieEnabled() ? "Cookies enabled"
+								: "Cookies _NOT_ enabled. Session handling will not work properly!")
+						+ ")");
+		AlgebraEditor.log("   servlet on " + GWT.getModuleBaseURL()
+				+ " running in "
+				+ (GWT.isProdMode() ? "production" : "development") + " mode");
+		Window.setTitle(TITLE + " - " + VERSION);
+
+		AlgebraEditor.log("initializing remote manupulation service...");
+		rmsa = (RemoteManipulationServiceAsync) GWT
+				.create(RemoteManipulationService.class);
+
+		m = new PlanModelManipulator(rmsa);
+		m.setEditor(this);
+		s = new PlanSwitcher(this);
+
+		AlgebraEditor.log("initializing controll panel...");
+		RootPanel.get("editor").add(new ControlPanel(this, m, 300, 300, rmsa));
+		RootPanel.get("editor").add(s);
+		RootPanel.get("impressum").getElement().setInnerHTML(
+				TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " "
+						+ AUTHOR);
+		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE);
+
+		initContextMenu();
+		initPlanContextMenu();
+		initTabContextMenu();
+		initZoomPanel();
+
+		AlgebraEditor.log("Sending registration...");
+
+		registor
+				.register(new GraphCanvasCommunicationCallback<RemoteConfiguration>(
+						"registering session") {
+
+					@Override
+					public void onSuccess(final RemoteConfiguration result) {
+						processConfiguration(result);
+					}
+
+				});
+	}
+
 	private void processConfiguration(final RemoteConfiguration result) {
 
-		config=result;
+		config = result;
 
 		keepAliveTimer = new Timer() {
 			@Override
@@ -590,9 +677,11 @@ public class AlgebraEditor implements EntryPoint {
 					@Override
 					public void onFailure(Throwable caught) {
 					}
+
 					@Override
 					public void onSuccess(Void result) {
-					}});
+					}
+				});
 			}
 		};
 
@@ -602,13 +691,17 @@ public class AlgebraEditor implements EntryPoint {
 
 			AlgebraEditor.log("Found existing session on server...");
 
-			YesNoPanel ynp = new YesNoPanel("A previous session has been found on the server. Do you want to load it?","Information");
+			YesNoPanel ynp = new YesNoPanel(
+					"A previous session has been found on the server. Do you want to load it?",
+					"Information");
 			ynp.registerYesClickHandler(new ClickHandler() {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					AlgebraEditor.log("Loading existing plans from previous session...");
-					for (Integer id:((RemoteConfigurationWithPlansInSession)result).getPlanIds()) {
+					AlgebraEditor
+							.log("Loading existing plans from previous session...");
+					for (Integer id : ((RemoteConfigurationWithPlansInSession) result)
+							.getPlanIds()) {
 						loadFinishedPlanFromServer(id);
 					}
 				}
@@ -622,7 +715,7 @@ public class AlgebraEditor implements EntryPoint {
 			});
 			ynp.center();
 			ynp.show();
-		}else if (result.isLoadEmptyCanvas()){
+		} else if (result.isLoadEmptyCanvas()) {
 			AlgebraEditor.log("loading empty plan...");
 			createNewPlan(true);
 		}
@@ -636,8 +729,10 @@ public class AlgebraEditor implements EntryPoint {
 
 	/**
 	 * Removes a plan from the bundle
-	 * @param id the id of the plan to be added. See the servlet for
-	 * a more detailed information on how this works.
+	 * 
+	 * @param id
+	 *            the id of the plan to be added. See the servlet for a more
+	 *            detailed information on how this works.
 	 */
 	public void removePlan(int id) {
 		rmsa.removePlan(id, removeCb);

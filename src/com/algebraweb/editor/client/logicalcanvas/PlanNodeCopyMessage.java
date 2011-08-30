@@ -1,22 +1,22 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import com.algebraweb.editor.client.graphcanvas.Coordinate;
+import com.algebraweb.editor.client.graphcanvas.Tuple;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class PlanNodeCopyMessage implements IsSerializable{
+public class PlanNodeCopyMessage implements IsSerializable {
 
-	private Coordinate pos;
+	private Tuple pos;
 	private int id;
 
 	public PlanNodeCopyMessage() {
 
 	}
 
-	public PlanNodeCopyMessage(int id, Coordinate pos) {
+	public PlanNodeCopyMessage(int id, Tuple pos) {
 
-		this.pos=pos;
-		this.id=id;
-			
+		this.pos = pos;
+		this.id = id;
+
 	}
 
 	/**
@@ -29,10 +29,8 @@ public class PlanNodeCopyMessage implements IsSerializable{
 	/**
 	 * @return the pos
 	 */
-	public Coordinate getPos() {
+	public Tuple getPos() {
 		return pos;
 	}
-	
-	
 
 }

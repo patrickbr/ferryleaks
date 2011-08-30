@@ -1,22 +1,24 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.NodePopup;
+import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.google.gwt.user.client.ui.HTML;
 
-public class LogicalNodePopup extends NodePopup{
+public class LogicalNodePopup extends NodePopup {
 
 	private LogicalCanvas c;
 	private RemoteManipulationServiceAsync rmsa;
-	
-	
-	private GraphCanvasCommunicationCallback<String> nodeInfoCallback = new GraphCanvasCommunicationCallback<String>("getting node info") {
+
+	private GraphCanvasCommunicationCallback<String> nodeInfoCallback = new GraphCanvasCommunicationCallback<String>(
+			"getting node info") {
 
 		@Override
 		public void onFailure(Throwable caught) {
 			LogicalNodePopup.this.clear();
-			LogicalNodePopup.this.add(new HTML("<span style='color:red'>Error:</span> " + caught.getMessage()));
+			LogicalNodePopup.this.add(new HTML(
+					"<span style='color:red'>Error:</span> "
+							+ caught.getMessage()));
 		}
 
 		@Override
@@ -29,25 +31,23 @@ public class LogicalNodePopup extends NodePopup{
 		}
 
 	};
-	
+
 	public LogicalNodePopup(LogicalCanvas c, RemoteManipulationServiceAsync rmsa) {
-		
+
 		super();
-		this.c=c;
-		this.rmsa=rmsa;
+		this.c = c;
+		this.rmsa = rmsa;
 		super.setWidth("400px");
-		
-		
+
 	}
-	
+
 	@Override
 	protected void render() {
-		
+
 		super.add(new HTML("<img src='loading.gif'>"));
-		rmsa.getNodeInformationHTML(super.getNodeId(), c.getId(), nodeInfoCallback);
-		
+		rmsa.getNodeInformationHTML(super.getNodeId(), c.getId(),
+				nodeInfoCallback);
+
 	}
-	
-	
-	
+
 }

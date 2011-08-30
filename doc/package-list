@@ -1,9 +1,12 @@
 com.algebraweb.editor.client
-com.algebraweb.editor.client.exampleplanloadre
+com.algebraweb.editor.client.dialogs
+com.algebraweb.editor.client.exampleplanloader
 com.algebraweb.editor.client.graphcanvas
 com.algebraweb.editor.client.graphcanvas.remotefiller
 com.algebraweb.editor.client.graphcanvas.remotesorter
 com.algebraweb.editor.client.logicalcanvas
+com.algebraweb.editor.client.logicalcanvas.editpanel
+com.algebraweb.editor.client.services
 com.algebraweb.editor.client.validation
 com.algebraweb.editor.server.fileserver
 com.algebraweb.editor.server.graphcanvas.remotefiller

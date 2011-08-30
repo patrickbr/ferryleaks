@@ -1,6 +1,6 @@
 package com.algebraweb.editor.shared.node;
 
-public class LabelStringOb extends LabelOb{
+public class LabelStringOb extends LabelOb {
 
 	private String stringOb;
 
@@ -8,7 +8,7 @@ public class LabelStringOb extends LabelOb{
 	}
 
 	public LabelStringOb(String stringOb) {
-		this.stringOb= stringOb;
+		this.stringOb = stringOb;
 	}
 
 	@Override

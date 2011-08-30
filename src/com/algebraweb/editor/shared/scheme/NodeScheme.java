@@ -1,4 +1,5 @@
 package com.algebraweb.editor.shared.scheme;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,29 +9,30 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * A GoAble class holding the actual NodeScheme specified withing the
- * nodeScheme tags.
+ * A GoAble class holding the actual NodeScheme specified withing the nodeScheme
+ * tags.
  * 
  * @author Patrick Brosi
- *
+ * 
  */
-public class NodeScheme implements IsSerializable,GoAble{
+public class NodeScheme implements IsSerializable, GoAble {
 
 	private String kind;
-	private Map<String,String> properties = new HashMap<String,String>();
+	private Map<String, String> properties = new HashMap<String, String>();
 	private List<GoAble> schema = new ArrayList<GoAble>();
-
 
 	public NodeScheme() {
 	}
 
 	public NodeScheme(String kind) {
-		this.kind=kind;
+		this.kind = kind;
 	}
 
 	/**
 	 * Add a GoAble to the overall schema
-	 * @param goAble the GoAble to add
+	 * 
+	 * @param goAble
+	 *            the GoAble to add
 	 */
 	public void addToSchema(GoAble goAble) {
 		this.schema.add(goAble);
@@ -46,12 +48,8 @@ public class NodeScheme implements IsSerializable,GoAble{
 		return "1";
 	}
 
-	@Override
-	public void setHowOften(String howOften) {
-	}
-
 	public String getHumanName() {
-		return "Scheme of type '"+ kind + "'";
+		return "Scheme of type '" + kind + "'";
 	}
 
 	@Override
@@ -61,27 +59,25 @@ public class NodeScheme implements IsSerializable,GoAble{
 
 	/**
 	 * Return the node kind this schema describes
+	 * 
 	 * @return the node kind as a string
 	 */
 	public String getKind() {
 		return kind;
 	}
 
-	/**
-	 * Set the identifier of the node kind this NodeScheme
-	 * describes
-	 * @param kind the identifiert as a string
-	 */
-	public void setKind(String kind) {
-		this.kind = kind;
+	@Override
+	public String getNameToPrint() {
+		return kind;
 	}
 
 	/**
-	 * Return the properties of the NodeScheme as specified within
-	 * the properties-tag
+	 * Return the properties of the NodeScheme as specified within the
+	 * properties-tag
+	 * 
 	 * @return the properties as a Map holding identifiert and value
 	 */
-	public Map<String,String> getProperties() {
+	public Map<String, String> getProperties() {
 		return properties;
 	}
 
@@ -116,6 +112,20 @@ public class NodeScheme implements IsSerializable,GoAble{
 	}
 
 	@Override
+	public void setHowOften(String howOften) {
+	}
+
+	/**
+	 * Set the identifier of the node kind this NodeScheme describes
+	 * 
+	 * @param kind
+	 *            the identifiert as a string
+	 */
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
+
+	@Override
 	public void setSchema(List<GoAble> schema) {
 		this.schema = schema;
 	}
@@ -123,15 +133,10 @@ public class NodeScheme implements IsSerializable,GoAble{
 	@Override
 	public String toString() {
 		Iterator<GoAble> i = schema.iterator();
-		String ret ="";
-		while(i.hasNext()) {
-			ret+="\n" + i.next().toString();
+		String ret = "";
+		while (i.hasNext()) {
+			ret += "\n" + i.next().toString();
 		}
 		return ret;
-	}
-
-	@Override
-	public String getNameToPrint() {
-		return kind;
 	}
 }

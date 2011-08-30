@@ -18,23 +18,25 @@ import com.algebraweb.editor.shared.node.QueryPlan;
 
 /**
  * A servlet which provides methods for download assembled XML plans
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class FileServerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4356636877078339046L;
-	
+
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
+			throws ServletException, IOException {
 
 		try {
 			ServletOutputStream out = response.getOutputStream();
-			String filename="plan.xml";
+			String filename = "plan.xml";
 
 			response.setContentType("application/octet-stream");
-			response.setHeader("Content-Disposition", "attachement; filename=\"" + filename + "\"");
+			response.setHeader("Content-Disposition",
+					"attachement; filename=\"" + filename + "\"");
 
 			int pid = Integer.parseInt(request.getParameter("pid"));
 
@@ -42,17 +44,18 @@ public class FileServerServlet extends HttpServlet {
 			XMLNodePlanBuilder builder = new XMLNodePlanBuilder();
 
 			if (pid == -1) {
-				QueryPlanBundle b = ((QueryPlanBundle)request.getSession().getAttribute("queryPlans"));
-				d = builder.getPlanBundle(b,getServletContext());
-			}else{
-				QueryPlan planToWork = ((QueryPlanBundle)request.getSession().getAttribute("queryPlans")).getPlan(pid);		
-				d = builder.getNodePlan(planToWork,getServletContext());
+				QueryPlanBundle b = (QueryPlanBundle) request.getSession()
+						.getAttribute("queryPlans");
+				d = builder.getPlanBundle(b, getServletContext());
+			} else {
+				QueryPlan planToWork = ((QueryPlanBundle) request.getSession()
+						.getAttribute("queryPlans")).getPlan(pid);
+				d = builder.getNodePlan(planToWork, getServletContext());
 			}
 			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 			outputter.output(d, out);
 			out.close();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

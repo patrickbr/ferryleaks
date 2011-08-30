@@ -1,7 +1,7 @@
 package com.algebraweb.editor.shared.exceptions;
 
 public class RemoteIOException extends Exception {
-	
+
 	/**
 	 * 
 	 */

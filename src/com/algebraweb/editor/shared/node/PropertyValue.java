@@ -4,10 +4,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Holds a value as well as the value's type
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
-public class PropertyValue implements IsSerializable{
+public class PropertyValue implements IsSerializable {
 
 	private String val;
 	private String type;
@@ -23,6 +24,7 @@ public class PropertyValue implements IsSerializable{
 
 	/**
 	 * Returns the type of this value
+	 * 
 	 * @return the type of this value
 	 */
 	public String getType() {
@@ -31,6 +33,7 @@ public class PropertyValue implements IsSerializable{
 
 	/**
 	 * Returns the actual value of this PropertyValue
+	 * 
 	 * @return the value as a string
 	 */
 	public String getVal() {
@@ -39,7 +42,9 @@ public class PropertyValue implements IsSerializable{
 
 	/**
 	 * Set the type of this PropertyValue
-	 * @param type the type to set
+	 * 
+	 * @param type
+	 *            the type to set
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -47,7 +52,9 @@ public class PropertyValue implements IsSerializable{
 
 	/**
 	 * Sets the value of this PropertyValue
-	 * @param val the value as a string
+	 * 
+	 * @param val
+	 *            the value as a string
 	 */
 	public void setVal(String val) {
 		this.val = val;

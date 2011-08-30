@@ -11,8 +11,9 @@ import com.algebraweb.editor.shared.node.PlanNode;
 
 /**
  * A validator checking for referenced nodes
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class ReferencedNodesValidator implements Validator {
 
@@ -21,7 +22,9 @@ public class ReferencedNodesValidator implements Validator {
 
 		while (it.hasNext()) {
 			PlanNode current = it.next();
-			if (current != null && current.getId() == id) return true;
+			if (current != null && current.getId() == id) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -34,13 +37,18 @@ public class ReferencedNodesValidator implements Validator {
 		while (it.hasNext()) {
 			PlanNode current = it.next();
 			if (current != null) {
-				Iterator<NodeContent> edges = current.getDirectContentWithInternalName("edge").iterator();
+				Iterator<NodeContent> edges = current
+						.getDirectContentWithInternalName("edge").iterator();
 
 				while (edges.hasNext()) {
-					int curId = Integer.parseInt(edges.next().getAttributes().get("to").getVal());
-					if (!hasChildWithId(current,curId) && curId > -1) {
-						String errorMsg = "Node wishes to be the loving mother of node #" + curId + ", but the child couldn't be found. Maybe you referred to a node introduced after this?";
-						r.addError(new ValidationError(current.getId(), errorMsg));
+					int curId = Integer.parseInt(edges.next().getAttributes()
+							.get("to").getVal());
+					if (!hasChildWithId(current, curId) && curId > -1) {
+						String errorMsg = "Node wishes to be the loving mother of node #"
+								+ curId
+								+ ", but the child couldn't be found. Maybe you referred to a node introduced after this?";
+						r.addError(new ValidationError(current.getId(),
+								errorMsg));
 					}
 				}
 			}

@@ -12,22 +12,25 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
 
-public class NodeContextMenu extends ContextMenu{
+/**
+ * The node context menu.
+ * 
+ * @author Patrick Brosi
+ *
+ */
+public class NodeContextMenu extends ContextMenu {
 
 	private GraphNode n;
 
-
 	public NodeContextMenu() {
-
 		super();
-
 	}
 
 	public void addItem(final NodeContextMenuItem i) {
 
 		final FlowPanel tmp = new FlowPanel();
 		GraphCanvas.preventTextSelection(tmp.getElement(), true);
-		
+
 		tmp.addStyleName("node-context-menu-item");
 		tmp.addDomHandler(new ClickHandler() {
 
@@ -49,7 +52,7 @@ public class NodeContextMenu extends ContextMenu{
 				tmp.addStyleName("hover");
 
 			}
-		},MouseMoveEvent.getType());
+		}, MouseMoveEvent.getType());
 
 		tmp.addDomHandler(new ContextMenuHandler() {
 
@@ -58,7 +61,7 @@ public class NodeContextMenu extends ContextMenu{
 				event.preventDefault();
 
 			}
-		},ContextMenuEvent.getType());
+		}, ContextMenuEvent.getType());
 
 		tmp.addDomHandler(new MouseOutHandler() {
 
@@ -67,7 +70,7 @@ public class NodeContextMenu extends ContextMenu{
 				tmp.removeStyleName("hover");
 
 			}
-		},MouseOutEvent.getType());
+		}, MouseOutEvent.getType());
 
 		InlineHTML text = new InlineHTML(i.getItemTitle());
 		text.sinkEvents(Event.MOUSEEVENTS);
@@ -78,15 +81,12 @@ public class NodeContextMenu extends ContextMenu{
 
 	}
 
-
 	public void show(GraphNode n, int x, int y) {
 
-		super.show(x,y);
+		super.show(x, y);
 
-		this.n=n;
-
+		this.n = n;
 
 	}
-
 
 }

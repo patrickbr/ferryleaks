@@ -1,8 +1,13 @@
 package com.algebraweb.editor.client;
 
+/**
+ * A RemoteConfiguration holding information on already loaded plans on the server
+ * @author Patrick Brosi
+ *
+ */
 public class RemoteConfigurationWithPlansInSession extends RemoteConfiguration {
 
-	Integer pids[];
+	private Integer pids[];
 
 	public RemoteConfigurationWithPlansInSession() {
 		super();
@@ -10,7 +15,7 @@ public class RemoteConfigurationWithPlansInSession extends RemoteConfiguration {
 
 	public RemoteConfigurationWithPlansInSession(Integer[] pids) {
 		super();
-		this.pids=pids;
+		this.pids = pids;
 	}
 
 	public Integer[] getPlanIds() {

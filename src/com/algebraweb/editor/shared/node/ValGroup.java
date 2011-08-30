@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * A group of node values with no own parameters. On editing 
- * a node, the corresponding GoInto will be presented by an
- * own tab in the editor window and this group will be filled
- * with the values provided there.
+ * A group of node values with no own parameters. On editing a node, the
+ * corresponding GoInto will be presented by an own tab in the editor window and
+ * this group will be filled with the values provided there.
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 
 public class ValGroup extends NodeContent {
@@ -19,12 +19,12 @@ public class ValGroup extends NodeContent {
 	 */
 	private static final long serialVersionUID = -4630462466854800864L;
 
-	public ValGroup() {		
+	public ValGroup() {
 
 	}
 
 	public ValGroup(String name) {
-		this.name=name;
+		this.name = name;
 		this.internalName = name;
 	}
 
@@ -48,8 +48,8 @@ public class ValGroup extends NodeContent {
 		Iterator<NodeContent> i = childs.iterator();
 
 		while (i.hasNext()) {
-			ret+=i.next().toString();
+			ret += i.next().toString();
 		}
 		return ret + "}";
-}
+	}
 }

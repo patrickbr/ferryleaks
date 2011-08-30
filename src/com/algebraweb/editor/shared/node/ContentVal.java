@@ -7,8 +7,9 @@ import java.util.Set;
 /**
  * 
  * A node content object that holds a semantic value
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 
 public class ContentVal extends NodeContent {
@@ -18,9 +19,9 @@ public class ContentVal extends NodeContent {
 	public ContentVal() {
 	}
 
-	public ContentVal(String name, String internalName,PropertyValue value) {
-		this.name=name;
-		this.value=value;
+	public ContentVal(String name, String internalName, PropertyValue value) {
+		this.name = name;
+		this.value = value;
 		this.internalName = internalName;
 	}
 
@@ -36,6 +37,7 @@ public class ContentVal extends NodeContent {
 
 	/**
 	 * Returns the value of this ContentValue
+	 * 
 	 * @return the value of this ContentValue
 	 */
 	public PropertyValue getValue() {
@@ -44,6 +46,7 @@ public class ContentVal extends NodeContent {
 
 	/**
 	 * Sets the content childs of this content node
+	 * 
 	 * @param childs
 	 */
 	public void setChilds(ArrayList<NodeContent> childs) {
@@ -52,7 +55,9 @@ public class ContentVal extends NodeContent {
 
 	/**
 	 * Sets the value of this ContentVal
-	 * @param value the PropertyValue to be set
+	 * 
+	 * @param value
+	 *            the PropertyValue to be set
 	 */
 	public void setValue(PropertyValue value) {
 		this.value = value;
@@ -63,16 +68,16 @@ public class ContentVal extends NodeContent {
 		String ret = "[CONTENTVAL '" + name + "' value:" + value + " childs:(";
 		Iterator<NodeContent> i = childs.iterator();
 		while (i.hasNext()) {
-			ret+=i.next().toString();
+			ret += i.next().toString();
 		}
 
-		ret +=") attributes:";
+		ret += ") attributes:";
 		Set<String> s = attributes.keySet();
 		Iterator<String> a = s.iterator();
 		while (a.hasNext()) {
 			String n = a.next();
-			ret+="{" + n + "="  + attributes.get(n) + "}";
+			ret += "{" + n + "=" + attributes.get(n) + "}";
 		}
-		return ret+"]";
-	}	
+		return ret + "]";
+	}
 }

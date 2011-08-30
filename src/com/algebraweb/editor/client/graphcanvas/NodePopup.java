@@ -4,8 +4,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupPanel;
 
+/**
+ * A popup appearing on node hovering.
+ * @author Patrick Brosi
+ *
+ */
 public class NodePopup extends PopupPanel {
-
 
 	private int nodeid = -1;
 
@@ -17,14 +21,15 @@ public class NodePopup extends PopupPanel {
 
 	protected void correctPosition() {
 
-		int top = this.getPopupTop()-Window.getScrollTop();
-		int left = this.getPopupLeft()-Window.getScrollLeft();
+		int top = this.getPopupTop() - Window.getScrollTop();
+		int left = this.getPopupLeft() - Window.getScrollLeft();
 
 		if (this.getOffsetHeight() + top > Window.getClientHeight()) {
 
 			int l = this.getElement().getAbsoluteLeft();
-			int h = this.getElement().getAbsoluteTop();			
-			super.getElement().getStyle().setTop(h-this.getOffsetHeight(), Unit.PX);
+			int h = this.getElement().getAbsoluteTop();
+			super.getElement().getStyle().setTop(h - this.getOffsetHeight(),
+					Unit.PX);
 			super.getElement().getStyle().setLeft(l, Unit.PX);
 
 		}
@@ -33,8 +38,9 @@ public class NodePopup extends PopupPanel {
 			int l = super.getAbsoluteLeft();
 			int h = this.getAbsoluteTop();
 
-			super.setPopupPosition(super.getAbsoluteLeft()-this.getOffsetWidth(), this.getAbsoluteTop());
-			super.setPopupPosition(l-this.getOffsetWidth(), h);
+			super.setPopupPosition(super.getAbsoluteLeft()
+					- this.getOffsetWidth(), this.getAbsoluteTop());
+			super.setPopupPosition(l - this.getOffsetWidth(), h);
 
 		}
 	}
@@ -43,20 +49,13 @@ public class NodePopup extends PopupPanel {
 		return nodeid;
 	}
 
-
 	@Override
 	public void hide() {
-
-		this.nodeid=-1;
+		this.nodeid = -1;
 		super.hide();
-
 	}
 
-
 	protected void render() {
-
-
-
 	}
 
 	public void setNodeId(int id) {
@@ -64,14 +63,9 @@ public class NodePopup extends PopupPanel {
 	}
 
 	public void showAt(int x, int y) {
-
 		super.clear();
 		render();
 		super.setPopupPosition(x, y);
 		super.show();
-
-		//correctPosition();
-
 	}
 }
-

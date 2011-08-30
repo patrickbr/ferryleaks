@@ -12,8 +12,9 @@ import com.algebraweb.editor.shared.node.Property;
 
 /**
  * A validator checking the referenced columns
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class ReferencedColumnsValidator implements Validator {
 
@@ -21,13 +22,17 @@ public class ReferencedColumnsValidator implements Validator {
 		Iterator<Property> it = list.iterator();
 
 		while (it.hasNext()) {
-			if (p.getPropertyVal().getVal().equals(it.next().getPropertyVal().getVal())) return true;
+			if (p.getPropertyVal().getVal().equals(
+					it.next().getPropertyVal().getVal())) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
-	public void validate(List<PlanNode> ps, List<PlanNode> plan, ValidationResult r) throws PlanHasCycleException {
+	public void validate(List<PlanNode> ps, List<PlanNode> plan,
+			ValidationResult r) throws PlanHasCycleException {
 		Iterator<PlanNode> it = ps.iterator();
 
 		while (it.hasNext()) {
@@ -39,23 +44,41 @@ public class ReferencedColumnsValidator implements Validator {
 				while (refIt.hasNext()) {
 					Property currentCol = refIt.next();
 
-					if (currentCol.getPropertyVal().getType().matches("__COLUMN\\{[0-9]*\\}")) {
-						int num = Integer.parseInt(currentCol.getPropertyVal().getType().split("\\{")[1].replaceAll("\\}", ""));
-						if (!(containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded(num)))) {
-							String errorMsg = "Node referers to non existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
-							if (current.getChilds().size() > num-1 && current.getChilds().get(num-1) != null) {
-								errorMsg += " expected in node <span class='tt'>#" + current.getChilds().get(num-1).getId() + "</span> of type <span class='tt'>" + current.getChilds().get(num-1).getKind()+ "</span>";
-							}else{
-								errorMsg += " expected in child node <span class='tt'>#" + num + "</span>";
+					if (currentCol.getPropertyVal().getType().matches(
+							"__COLUMN\\{[0-9]*\\}")) {
+						int num = Integer.parseInt(currentCol.getPropertyVal()
+								.getType().split("\\{")[1]
+								.replaceAll("\\}", ""));
+						if (!containsPropertyByVal(currentCol, current
+								.getReferencableColumnsWithoutAdded(num))) {
+							String errorMsg = "Node referers to non existing column <span class='tt'>"
+									+ currentCol.getPropertyVal().getVal()
+									+ "</span>";
+							if (current.getChilds().size() > num - 1
+									&& current.getChilds().get(num - 1) != null) {
+								errorMsg += " expected in node <span class='tt'>#"
+										+ current.getChilds().get(num - 1)
+												.getId()
+										+ "</span> of type <span class='tt'>"
+										+ current.getChilds().get(num - 1)
+												.getKind() + "</span>";
+							} else {
+								errorMsg += " expected in child node <span class='tt'>#"
+										+ num + "</span>";
 							}
-							r.addError(new ValidationError(current.getId(),errorMsg));
+							r.addError(new ValidationError(current.getId(),
+									errorMsg));
 						}
-					}else
+					} else
 
-						if (!(containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
-							String errorMsg = "Node referers to non existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
-							r.addError(new ValidationError(current.getId(),errorMsg));
-						}
+					if (!containsPropertyByVal(currentCol, current
+							.getReferencableColumnsWithoutAdded())) {
+						String errorMsg = "Node referers to non existing column <span class='tt'>"
+								+ currentCol.getPropertyVal().getVal()
+								+ "</span>";
+						r.addError(new ValidationError(current.getId(),
+								errorMsg));
+					}
 				}
 			}
 
@@ -64,15 +87,16 @@ public class ReferencedColumnsValidator implements Validator {
 
 			while (itIntroCols.hasNext()) {
 				Property currentCol = itIntroCols.next();
-				if ((!current.resetsColumns() && !containsPropertyByVal(currentCol,current.getRemovedColumns()) && containsPropertyByVal(currentCol,current.getReferencableColumnsWithoutAdded()))) {
-					String errorMsg = "Node introduces already existing column <span class='tt'>" + currentCol.getPropertyVal().getVal() + "</span>";
-					r.addError(new ValidationError(current.getId(),errorMsg));
+				if (!current.resetsColumns()
+						&& !containsPropertyByVal(currentCol, current
+								.getRemovedColumns())
+						&& containsPropertyByVal(currentCol, current
+								.getReferencableColumnsWithoutAdded())) {
+					String errorMsg = "Node introduces already existing column <span class='tt'>"
+							+ currentCol.getPropertyVal().getVal() + "</span>";
+					r.addError(new ValidationError(current.getId(), errorMsg));
 				}
 			}
 		}
 	}
 }
-
-
-
-

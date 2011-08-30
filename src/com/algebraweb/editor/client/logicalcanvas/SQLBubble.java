@@ -3,8 +3,10 @@ package com.algebraweb.editor.client.logicalcanvas;
 import java.util.List;
 import java.util.Map;
 
-import com.algebraweb.editor.client.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.client.SqlResTable;
+import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
+import com.algebraweb.editor.shared.exceptions.PathFinderCompilationErrorException;
+import com.algebraweb.editor.shared.exceptions.SqlErrorException;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -34,12 +36,12 @@ public class SQLBubble extends FlowPanel {
 			p.clear();
 			removeStyleName("loading");
 
-			if (caught instanceof PathFinderCompilationError) {
+			if (caught instanceof PathFinderCompilationErrorException) {
 				p.add(new HTML("Error: SQL compilation failed."));
 				return;
 			}
 
-			if (caught instanceof SqlError) {
+			if (caught instanceof SqlErrorException) {
 				p.add(new HTML("Error: SQL qry failed on server."));
 				return;
 			}
@@ -54,12 +56,14 @@ public class SQLBubble extends FlowPanel {
 		}
 	};
 
-	public SQLBubble(int nid, int pid, final RemoteManipulationServiceAsync rmsa, EvaluationContext c, final LogicalCanvas ca) {
+	public SQLBubble(int nid, int pid,
+			final RemoteManipulationServiceAsync rmsa, EvaluationContext c,
+			final LogicalCanvas ca) {
 
 		this.rmsa = rmsa;
-		this.nid=nid;
-		this.pid=pid;
-		this.c=c;
+		this.nid = nid;
+		this.pid = pid;
+		this.c = c;
 		this.addStyleName("sql-bubble");
 		p = new FlowPanel();
 		this.add(p);
@@ -71,7 +75,7 @@ public class SQLBubble extends FlowPanel {
 			public void onMouseMove(MouseMoveEvent event) {
 				addStyleName("hover");
 			}
-		},MouseMoveEvent.getType());
+		}, MouseMoveEvent.getType());
 
 		this.addDomHandler(new MouseOutHandler() {
 
@@ -81,7 +85,7 @@ public class SQLBubble extends FlowPanel {
 				removeStyleName("hover");
 
 			}
-		},MouseOutEvent.getType());
+		}, MouseOutEvent.getType());
 
 		b.addStyleName("sql-bubble-close");
 		b.addClickHandler(new ClickHandler() {
@@ -99,10 +103,9 @@ public class SQLBubble extends FlowPanel {
 			public void onMouseMove(MouseMoveEvent event) {
 				addStyleName("hover");
 			}
-		},MouseMoveEvent.getType());
+		}, MouseMoveEvent.getType());
 
-
-		Button d= new Button("");
+		Button d = new Button("");
 		d.addStyleName("sql-bubble-edit");
 		d.addClickHandler(new ClickHandler() {
 
@@ -118,9 +121,9 @@ public class SQLBubble extends FlowPanel {
 			public void onMouseMove(MouseMoveEvent event) {
 				addStyleName("hover");
 			}
-		},MouseMoveEvent.getType());
+		}, MouseMoveEvent.getType());
 
-		Button refresh= new Button("");
+		Button refresh = new Button("");
 		refresh.addStyleName("sql-bubble-refresh");
 		refresh.addClickHandler(new ClickHandler() {
 
@@ -136,7 +139,7 @@ public class SQLBubble extends FlowPanel {
 			public void onMouseMove(MouseMoveEvent event) {
 				addStyleName("hover");
 			}
-		},MouseMoveEvent.getType());
+		}, MouseMoveEvent.getType());
 		this.add(d);
 		this.add(refresh);
 		this.add(b);
@@ -158,7 +161,8 @@ public class SQLBubble extends FlowPanel {
 	}
 
 	/**
-	 * @param c the c to set
+	 * @param c
+	 *            the c to set
 	 */
 	public void setEvaluationContext(EvaluationContext c) {
 		this.c = c;
@@ -166,7 +170,7 @@ public class SQLBubble extends FlowPanel {
 
 	private void showResult(List<Map<String, String>> res) {
 		p.clear();
-		t= new SqlResTable(res.size()+1,res.get(0).size());
+		t = new SqlResTable(res.size() + 1, res.get(0).size());
 		p.add(t);
 		t.fill(res);
 	}
@@ -174,7 +178,7 @@ public class SQLBubble extends FlowPanel {
 	public void update() {
 		p.clear();
 		this.addStyleName("loading");
-		rmsa.eval(pid, nid, c, false,sqlCb);
+		rmsa.eval(pid, nid, c, false, sqlCb);
 	}
 
 }

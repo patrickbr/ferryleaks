@@ -1,7 +1,7 @@
 package com.algebraweb.editor.shared.exceptions;
 
-public class GraphIsEmptyException extends Exception{
-	
+public class GraphIsEmptyException extends Exception {
+
 	/**
 	 * 
 	 */

@@ -2,10 +2,11 @@ package com.algebraweb.editor.shared.node;
 
 /**
  * A Label object identifying child content nodes
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
-public class LabelContentIdentifierOb extends LabelOb{
+public class LabelContentIdentifierOb extends LabelOb {
 
 	private String identifier;
 
@@ -14,7 +15,7 @@ public class LabelContentIdentifierOb extends LabelOb{
 	}
 
 	public LabelContentIdentifierOb(String identifier) {
-		this.identifier= identifier;
+		this.identifier = identifier;
 	}
 
 	@Override

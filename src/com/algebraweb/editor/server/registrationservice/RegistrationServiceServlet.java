@@ -8,18 +8,20 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.algebraweb.editor.client.RemoteConfiguration;
 import com.algebraweb.editor.client.RemoteConfigurationWithPlansInSession;
-import com.algebraweb.editor.client.RegistrationService;
+import com.algebraweb.editor.client.services.RegistrationService;
 import com.algebraweb.editor.shared.exceptions.RemoteConfigurationException;
 import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * A servlet for client registrations. Returns possible plans saved in the session 
- * as well as the central server configuration
+ * A servlet for client registrations. Returns possible plans saved in the
+ * session as well as the central server configuration
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
-public class RegistrationServiceServlet extends RemoteServiceServlet implements RegistrationService{
+public class RegistrationServiceServlet extends RemoteServiceServlet implements
+		RegistrationService {
 
 	/**
 	 * 
@@ -30,16 +32,42 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 
 	}
 
+	private RemoteConfiguration getRemoteConfiguration(
+			HttpServletRequest request, HttpSession session) {
+		RemoteConfiguration tmp;
+		if (session != null
+				&& ((QueryPlanBundle) session.getAttribute("queryPlans"))
+						.getPlans().size() > 0
+				&& !(((QueryPlanBundle) session.getAttribute("queryPlans"))
+						.getPlans().size() == 1 && ((QueryPlanBundle) session
+						.getAttribute("queryPlans")).getPlans().values()
+						.iterator().next().getPlan().size() == 0)) {
+			tmp = new RemoteConfigurationWithPlansInSession(
+					((QueryPlanBundle) session.getAttribute("queryPlans"))
+							.getPlans().keySet().toArray(new Integer[0]));
+		} else {
+			if (session == null) {
+				session = request.getSession(true);
+			}
+			session.setAttribute("queryPlans", new QueryPlanBundle());
+			tmp = new RemoteConfiguration();
+		}
+		return tmp;
+	}
+
 	@Override
 	public void keepAlive() {
-		System.out.println("Received keep alive from " + this.getThreadLocalRequest().getRemoteAddr() + " (" + this.getThreadLocalRequest().getSession().getId() + ")");
+		System.out.println("Received keep alive from "
+				+ this.getThreadLocalRequest().getRemoteAddr() + " ("
+				+ this.getThreadLocalRequest().getSession().getId() + ")");
 	}
 
 	@Override
 	public RemoteConfiguration register() throws RemoteConfigurationException {
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession(false);
-		RemoteConfiguration remoteConfig = getRemoteConfiguration(request, session);
+		RemoteConfiguration remoteConfig = getRemoteConfiguration(request,
+				session);
 
 		if (getServletContext().getAttribute("configuration") == null) {
 			Configuration c;
@@ -51,23 +79,14 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements 
 			getServletContext().setAttribute("configuration", c);
 		}
 
-		Configuration c = (Configuration) getServletContext().getAttribute("configuration");
-		remoteConfig.setKeepAliveInterval(c.getInt("client.editor.keepaliveinterval", 60000));
-		remoteConfig.setLoadEmptyCanvas(c.getBoolean("client.editor.loademptycanvas", true));
-		remoteConfig.setInvertArrows(c.getBoolean("client.canvas.invertarrows", true));
+		Configuration c = (Configuration) getServletContext().getAttribute(
+				"configuration");
+		remoteConfig.setKeepAliveInterval(c.getInt(
+				"client.editor.keepaliveinterval", 60000));
+		remoteConfig.setLoadEmptyCanvas(c.getBoolean(
+				"client.editor.loademptycanvas", true));
+		remoteConfig.setInvertArrows(c.getBoolean("client.canvas.invertarrows",
+				true));
 		return remoteConfig;
-	}
-
-	private RemoteConfiguration getRemoteConfiguration(HttpServletRequest request, HttpSession session) {
-		RemoteConfiguration tmp;
-		if (session != null && ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().size()>0 &&
-				!(((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().size() == 1 && ((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().values().iterator().next().getPlan().size() == 0)) {
-			tmp = new RemoteConfigurationWithPlansInSession(((QueryPlanBundle)session.getAttribute("queryPlans")).getPlans().keySet().toArray(new Integer[0]));
-		}else{
-			if (session == null) session = request.getSession(true);
-			session.setAttribute("queryPlans", new QueryPlanBundle());
-			tmp = new RemoteConfiguration();
-		}
-		return tmp;
 	}
 }

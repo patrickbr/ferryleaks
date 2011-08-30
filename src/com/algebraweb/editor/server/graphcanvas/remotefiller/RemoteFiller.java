@@ -5,17 +5,19 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import com.algebraweb.editor.client.RawNode;
 import com.algebraweb.editor.client.graphcanvas.remotefiller.RemoteFillingService;
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanFiller;
+import com.algebraweb.editor.shared.node.RawNode;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
  * Servlet for the remote filling class
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
-public class RemoteFiller extends RemoteServiceServlet implements RemoteFillingService {
+public class RemoteFiller extends RemoteServiceServlet implements
+		RemoteFillingService {
 
 	/**
 	 * 
@@ -32,8 +34,9 @@ public class RemoteFiller extends RemoteServiceServlet implements RemoteFillingS
 		final GraphCanvasFiller filler;
 
 		if (fillingMachine.equals("xml")) {
-			filler = new XMLPlanFiller(session,this.getServletContext(), Integer.parseInt(args));
-		}else {
+			filler = new XMLPlanFiller(session, this.getServletContext(),
+					Integer.parseInt(args));
+		} else {
 			filler = new RandomFiller();
 		}
 		filler.init();

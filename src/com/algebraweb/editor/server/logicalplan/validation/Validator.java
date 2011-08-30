@@ -7,5 +7,6 @@ import com.algebraweb.editor.shared.exceptions.PlanHasCycleException;
 import com.algebraweb.editor.shared.node.PlanNode;
 
 public interface Validator {
-	public void validate(List<PlanNode> ps,List<PlanNode> plan, ValidationResult r) throws PlanHasCycleException;
+	public void validate(List<PlanNode> ps, List<PlanNode> plan,
+			ValidationResult r) throws PlanHasCycleException;
 }

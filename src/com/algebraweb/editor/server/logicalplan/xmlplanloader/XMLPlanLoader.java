@@ -1,6 +1,5 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader;
 
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,23 +20,31 @@ import com.algebraweb.editor.shared.scheme.NodeScheme;
 public class XMLPlanLoader {
 
 	/**
-	 * Parses the plan file into the given server context. A previously loaded 
+	 * Parses the plan file into the given server context. A previously loaded
 	 * node schema will be reused
-	 * @param file the filename to use
-	 * @param context the context to load
+	 * 
+	 * @param file
+	 *            the filename to use
+	 * @param context
+	 *            the context to load
 	 * @return the parsed query plan bundle
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws RemoteIOException 
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws RemoteIOException
 	 */
 
 	@SuppressWarnings("unchecked")
-	public QueryPlanBundle parsePlans(String file,ServletContext context,HttpSession session) throws IOException, SAXException, RemoteIOException {
-		Map<String,NodeScheme> nodeSchemes = new HashMap<String,NodeScheme>();
+	public QueryPlanBundle parsePlans(String file, ServletContext context,
+			HttpSession session) throws IOException, SAXException,
+			RemoteIOException {
+		Map<String, NodeScheme> nodeSchemes = new HashMap<String, NodeScheme>();
 
 		if (context.getAttribute("nodeSchemes") == null) {
 
-			NodeSchemeLoader l = new NodeSchemeLoader(context.getRealPath(((Configuration)context.getAttribute("configuration")).getString("server.schemes.path","/schemes")));
+			NodeSchemeLoader l = new NodeSchemeLoader(context
+					.getRealPath(((Configuration) context
+							.getAttribute("configuration")).getString(
+							"server.schemes.path", "/schemes")));
 			Iterator<NodeScheme> i = l.parse().iterator();
 
 			while (i.hasNext()) {
@@ -46,9 +53,12 @@ public class XMLPlanLoader {
 			}
 			context.setAttribute("nodeSchemes", nodeSchemes);
 
-		}else nodeSchemes = (Map<String,NodeScheme>) context.getAttribute("nodeSchemes");
-		
-		PlanParser p = new PlanParser(nodeSchemes,file,session);
+		} else {
+			nodeSchemes = (Map<String, NodeScheme>) context
+					.getAttribute("nodeSchemes");
+		}
+
+		PlanParser p = new PlanParser(nodeSchemes, file, session);
 		QueryPlanBundle qpb = p.parse();
 		return qpb;
 	}
