@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
  * A context menu.
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class ContextMenu extends PopupPanel {
 
@@ -98,6 +98,7 @@ public class ContextMenu extends PopupPanel {
 
 	/**
 	 * Returns the X position of this menu
+	 * 
 	 * @return the x position
 	 */
 	public int getX() {
@@ -106,6 +107,7 @@ public class ContextMenu extends PopupPanel {
 
 	/**
 	 * Returns the Y position of this menu
+	 * 
 	 * @return the y position
 	 */
 	public int getY() {

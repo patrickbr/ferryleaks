@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.algebraweb.editor.client.AlgebraEditor;
-import com.algebraweb.editor.client.graphcanvas.Tuple;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.GraphSorter;
+import com.algebraweb.editor.client.graphcanvas.Tuple;
 import com.algebraweb.editor.shared.node.RawEdge;
 import com.algebraweb.editor.shared.node.RawNode;
 import com.google.gwt.core.client.GWT;
@@ -60,9 +60,9 @@ public class RemoteSorter implements GraphSorter {
 		cb.onComplete();
 	}
 
-	private GraphCanvasCommunicationCallback<Map<Integer, Tuple>> sortedCallback(
+	private EditorCommunicationCallback<Map<Integer, Tuple>> sortedCallback(
 			final GraphManipulationCallback cb) {
-		return new GraphCanvasCommunicationCallback<Map<Integer, Tuple>>(
+		return new EditorCommunicationCallback<Map<Integer, Tuple>>(
 				"sorting graph") {
 
 			@Override
@@ -72,8 +72,8 @@ public class RemoteSorter implements GraphSorter {
 		};
 	}
 
-	public void writePositionTuplesToGraphNodes(
-			Map<Integer, Tuple> tuples, List<GraphNode> nodes) {
+	public void writePositionTuplesToGraphNodes(Map<Integer, Tuple> tuples,
+			List<GraphNode> nodes) {
 		Iterator<GraphNode> i = nodes.iterator();
 
 		while (i.hasNext()) {

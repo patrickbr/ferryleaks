@@ -4,8 +4,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Holds the server configuration.
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class RemoteConfiguration implements IsSerializable {
 
@@ -18,6 +19,7 @@ public class RemoteConfiguration implements IsSerializable {
 
 	/**
 	 * The keep alive internval in ms.
+	 * 
 	 * @return the keepAliveInterval
 	 */
 	public int getKeepAliveInterval() {
@@ -26,6 +28,7 @@ public class RemoteConfiguration implements IsSerializable {
 
 	/**
 	 * If canvas arrows should be inverted
+	 * 
 	 * @return the invertArrows
 	 */
 	public boolean isInvertArrows() {
@@ -34,6 +37,7 @@ public class RemoteConfiguration implements IsSerializable {
 
 	/**
 	 * Tells whether a empty canvas should be loaded on start
+	 * 
 	 * @return the loadEmptyCanvas
 	 */
 	public boolean isLoadEmptyCanvas() {

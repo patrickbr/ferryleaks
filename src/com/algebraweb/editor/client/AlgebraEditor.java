@@ -12,8 +12,8 @@ import com.algebraweb.editor.client.dialogs.ZoomPanel;
 import com.algebraweb.editor.client.exampleplanloader.ExamplePlanLoaderCommunicationService;
 import com.algebraweb.editor.client.exampleplanloader.ExamplePlanLoaderCommunicationServiceAsync;
 import com.algebraweb.editor.client.graphcanvas.ContextMenu;
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphEdgeModifier;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphNodeModifier;
@@ -58,10 +58,10 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.21";
+	private static String VERSION = "Beta 1.22";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (August 30th)";
+	private static String YEAR = "2011 (August 31th)";
 	private static String FACILITY = "Universität Tübingen";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
@@ -123,7 +123,7 @@ public class AlgebraEditor implements EntryPoint {
 	private TabContextMenu tabContextMenu = new TabContextMenu();
 
 	private ZoomPanel zoomPanel = new ZoomPanel();
-	private GraphCanvasCommunicationCallback<Integer> createCb = new GraphCanvasCommunicationCallback<Integer>(
+	private EditorCommunicationCallback<Integer> createCb = new EditorCommunicationCallback<Integer>(
 			"adding new empty canvas") {
 		@Override
 		public void onSuccess(Integer result) {
@@ -132,7 +132,7 @@ public class AlgebraEditor implements EntryPoint {
 			}
 		}
 	};
-	private GraphCanvasCommunicationCallback<Integer> removeCb = new GraphCanvasCommunicationCallback<Integer>(
+	private EditorCommunicationCallback<Integer> removeCb = new EditorCommunicationCallback<Integer>(
 			"removing canvas") {
 		@Override
 		public void onSuccess(Integer result) {
@@ -152,7 +152,7 @@ public class AlgebraEditor implements EntryPoint {
 		}
 	};
 
-	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>(
+	private EditorCommunicationCallback<String> xmlCb = new EditorCommunicationCallback<String>(
 			"getting XML") {
 		@Override
 		public void onSuccess(String result) {
@@ -160,7 +160,7 @@ public class AlgebraEditor implements EntryPoint {
 		}
 	};
 
-	private GraphCanvasCommunicationCallback<String> sqlCb = new GraphCanvasCommunicationCallback<String>(
+	private EditorCommunicationCallback<String> sqlCb = new EditorCommunicationCallback<String>(
 			"compiling SQL") {
 		@Override
 		public void onSuccess(String result) {
@@ -554,7 +554,7 @@ public class AlgebraEditor implements EntryPoint {
 
 		AlgebraEditor.log("Loading example plan from server...");
 		exComm.loadExamplePlan(path,
-				new GraphCanvasCommunicationCallback<Integer[]>(
+				new EditorCommunicationCallback<Integer[]>(
 						"loading example plan") {
 
 					@Override
@@ -653,16 +653,15 @@ public class AlgebraEditor implements EntryPoint {
 
 		AlgebraEditor.log("Sending registration...");
 
-		registor
-				.register(new GraphCanvasCommunicationCallback<RemoteConfiguration>(
-						"registering session") {
+		registor.register(new EditorCommunicationCallback<RemoteConfiguration>(
+				"registering session") {
 
-					@Override
-					public void onSuccess(final RemoteConfiguration result) {
-						processConfiguration(result);
-					}
+			@Override
+			public void onSuccess(final RemoteConfiguration result) {
+				processConfiguration(result);
+			}
 
-				});
+		});
 	}
 
 	private void processConfiguration(final RemoteConfiguration result) {

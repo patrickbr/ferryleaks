@@ -2,7 +2,7 @@ package com.algebraweb.editor.client.logicalcanvas;
 
 import java.util.List;
 
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.node.Property;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,7 +19,7 @@ public class AvailableColumnsField extends FixedPossibilitiesField {
 	private String[] projSel;
 	private String[] projDel;
 	private boolean received = false;
-	private AsyncCallback<List<Property>> cb = new GraphCanvasCommunicationCallback<List<Property>>(
+	private AsyncCallback<List<Property>> cb = new EditorCommunicationCallback<List<Property>>(
 			"getting available columns") {
 
 		@Override
@@ -73,7 +73,6 @@ public class AvailableColumnsField extends FixedPossibilitiesField {
 		}
 	}
 
-	
 	@Override
 	public ListBox getListBox() {
 		return super.getListBox();

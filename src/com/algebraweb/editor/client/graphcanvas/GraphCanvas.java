@@ -1,9 +1,10 @@
 package com.algebraweb.editor.client.graphcanvas;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.dom.client.Element;
@@ -30,6 +31,8 @@ import com.hydro4ge.raphaelgwt.client.Raphael;
  * A widget to draw directed graphs. Uses the Raphaël-Library
  * (http://raphaeljs.com/) and its GWT-wrapper raphaelgwt
  * (http://code.google.com/p/raphaelgwt/)
+ * 
+ * Version Beta 0.6
  * 
  * @author Patrick Brosi
  * 
@@ -75,50 +78,38 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	private GraphNode dragNode = null;
 	private int dragOffsetX = 0;
-
 	private int dragOffsetY = 0;
-
-	private ArrayList<NodeSelectionHandler> selectionHandlers = new ArrayList<NodeSelectionHandler>();
+	private List<NodeSelectionHandler> selectionHandlers = new ArrayList<NodeSelectionHandler>();
 	private double scale = 1;
-
 	private Timer popupDelay;
 	private boolean mouseOverNode = false;
 	private boolean mouseOverEdge = false;
 	private NodePopup popup;
 	private boolean isNotActive = true;
-
 	private boolean sortOnActivation = false;
 	private static LoadingMessagePopUp loadingMessagePopUp = new LoadingMessagePopUp();
 	private int oldWidth = 0;
 	private int oldHeight = 0;
 	private int oldScrollX = 0;
-
 	private int oldScrollY = 0;
-
 	private GraphNodeModifier gnm;
 	private GraphEdgeModifier gem;
-
 	private boolean invertArrows = false;
-
-	private HashMap<Integer, GraphNode> selected = new HashMap<Integer, GraphNode>();
-	private HashMap<Tuple, GraphEdge> selectedEdges = new HashMap<Tuple, GraphEdge>();
-
+	private Map<Integer, GraphNode> selected = new HashMap<Integer, GraphNode>();
+	private Map<Tuple, GraphEdge> selectedEdges = new HashMap<Tuple, GraphEdge>();
 	private GraphNode hoverNode = null;
-
 	private NodeContextMenu m;
 	private ContextMenu canvasMenu;
-
 	private boolean preventHoverMenu = false;
 	private int height;
-
 	private int width;
 	protected int marginTop = 0;
 
 	protected int marginLeft = 0;
 
-	private ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();
+	private List<GraphNode> nodes = new ArrayList<GraphNode>();
 
-	private ArrayList<GraphEdge> edges = new ArrayList<GraphEdge>();
+	private List<GraphEdge> edges = new ArrayList<GraphEdge>();
 
 	public GraphCanvas(int i, int j) {
 		this(i, j, false);
@@ -430,7 +421,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	 * @return the nodes on the canvas
 	 */
 
-	public ArrayList<GraphNode> getNodes() {
+	public List<GraphNode> getNodes() {
 		return this.nodes;
 	}
 
@@ -475,7 +466,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	 * 
 	 * @return the selected edges as a HashMap
 	 */
-	public HashMap<Tuple, GraphEdge> getSelectedEdges() {
+	public Map<Tuple, GraphEdge> getSelectedEdges() {
 		return selectedEdges;
 	}
 
@@ -491,8 +482,8 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 		while (it.hasNext()) {
 			GraphEdge cur = it.next();
-			ret.put(new Tuple(cur.getFrom().getId(), cur.getTo().getId()),
-					cur.getFixedParentPos());
+			ret.put(new Tuple(cur.getFrom().getId(), cur.getTo().getId()), cur
+					.getFixedParentPos());
 		}
 		return ret;
 	}
@@ -502,7 +493,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	 * 
 	 * @return the nodes selected as a HashMap
 	 */
-	public HashMap<Integer, GraphNode> getSelectedNodes() {
+	public Map<Integer, GraphNode> getSelectedNodes() {
 		return selected;
 	}
 
@@ -957,11 +948,9 @@ public class GraphCanvas extends Raphael implements Fillable {
 	}
 
 	public void setSelectedEdge(GraphEdge n) {
-
 		ArrayList<GraphEdge> t = new ArrayList<GraphEdge>();
 		t.add(n);
 		setSelectedEdges(t);
-
 	}
 
 	public void setSelectedEdges(ArrayList<GraphEdge> edges) {
@@ -969,8 +958,8 @@ public class GraphCanvas extends Raphael implements Fillable {
 		Iterator<GraphEdge> it = edges.iterator();
 		while (it.hasNext()) {
 			GraphEdge e = it.next();
-			this.selectedEdges.put(new Tuple(e.getFrom().getId(), e
-					.getTo().getId()), e);
+			this.selectedEdges.put(new Tuple(e.getFrom().getId(), e.getTo()
+					.getId()), e);
 			getGraphEdgeModifier().setSelected(e);
 		}
 	}

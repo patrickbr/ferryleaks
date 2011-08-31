@@ -37,6 +37,9 @@ public interface RemoteManipulationServiceAsync {
 
 	void createNewPlan(boolean clearFirst, AsyncCallback<Integer> callback);
 
+	void deleteEdges(Map<Tuple, Integer> map, int planid,
+			AsyncCallback<RemoteManipulationMessage> callback);
+
 	void deleteNodes(Integer[] nids, int planid,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
@@ -93,9 +96,6 @@ public interface RemoteManipulationServiceAsync {
 			AsyncCallback<RemoteManipulationMessage> callback);
 
 	void updatePlanNode(int nid, int pid, String xml,
-			AsyncCallback<RemoteManipulationMessage> callback);
-
-	void deleteEdges(Map<Tuple, Integer> map, int planid,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
 }

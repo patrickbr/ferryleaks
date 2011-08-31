@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
  * A popup displaying a "loading" message
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class LoadingMessagePopUp extends PopupPanel {
 

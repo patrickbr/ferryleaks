@@ -23,32 +23,42 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
- * The Remote Manipulation Service. The main class for editing communications. 
+ * The Remote Manipulation Service. The main class for editing communications.
  * Provides methods for changed to plan model on the server.
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 @RemoteServiceRelativePath("manipulate")
 public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Adds an edge to the plan model.
-	 * @param planid The plan to use
-	 * @param fromTo the tuple (from,to)
-	 * @param pos the child position
+	 * 
+	 * @param planid
+	 *            The plan to use
+	 * @param fromTo
+	 *            the tuple (from,to)
+	 * @param pos
+	 *            the child position
 	 * @return a RemoteManipulationMessage
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
 	 */
-	public RemoteManipulationMessage addEdge(int planid, Tuple fromTo,
-			int pos) throws PlanManipulationException, PlanHasCycleException;
+	public RemoteManipulationMessage addEdge(int planid, Tuple fromTo, int pos)
+			throws PlanManipulationException, PlanHasCycleException;
 
 	/**
 	 * Adds a new node to the plan.
-	 * @param planid The plan to use
-	 * @param nodeType the type of the node to add
-	 * @param x the x position of the new node
-	 * @param y the y position of the new node
+	 * 
+	 * @param planid
+	 *            The plan to use
+	 * @param nodeType
+	 *            the type of the node to add
+	 * @param x
+	 *            the x position of the new node
+	 * @param y
+	 *            the y position of the new node
 	 * @return a RemoteManipulationMessage
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
@@ -59,8 +69,11 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Copy nodes to the clipboard
-	 * @param msg the PlanNodeCopyMessage
-	 * @param pid the plan to use
+	 * 
+	 * @param msg
+	 *            the PlanNodeCopyMessage
+	 * @param pid
+	 *            the plan to use
 	 * @throws SessionExpiredException
 	 * @throws PlanManipulationException
 	 */
@@ -69,7 +82,9 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Create a new plan on the server.
-	 * @param clearFirst set to true of old plans should be cleared first.
+	 * 
+	 * @param clearFirst
+	 *            set to true of old plans should be cleared first.
 	 * @return the id of the added plan
 	 * @throws SessionExpiredException
 	 */
@@ -78,9 +93,12 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Delete edges.
-	 * @param map a map of all edges that should be deleted. Key is tuple (from,to),
-	 * value is the child position.
-	 * @param planid the plan to use
+	 * 
+	 * @param map
+	 *            a map of all edges that should be deleted. Key is tuple
+	 *            (from,to), value is the child position.
+	 * @param planid
+	 *            the plan to use
 	 * @return A RemoteManipulationMessage
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
@@ -90,8 +108,11 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Delete nodes.
-	 * @param nids an integer array of all node ids to be deleted
-	 * @param planid the plan to sue
+	 * 
+	 * @param nids
+	 *            an integer array of all node ids to be deleted
+	 * @param planid
+	 *            the plan to sue
 	 * @return A RemoteManipulationMessage
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
@@ -101,10 +122,15 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Evaluate a node.
-	 * @param pid the plan to use
-	 * @param nid the node to evaluate
-	 * @param context the evaluation context to use
-	 * @param saveContext true of the eval context should be saved 
+	 * 
+	 * @param pid
+	 *            the plan to use
+	 * @param nid
+	 *            the node to evaluate
+	 * @param context
+	 *            the evaluation context to use
+	 * @param saveContext
+	 *            true of the eval context should be saved
 	 * @return a SQL result
 	 * @throws PlanManipulationException
 	 * @throws PathFinderCompilationErrorException
@@ -113,15 +139,19 @@ public interface RemoteManipulationService extends RemoteService {
 	 */
 	public List<Map<String, String>> eval(int pid, int nid,
 			EvaluationContext context, boolean saveContext)
-			throws PlanManipulationException, PathFinderCompilationErrorException,
-			LogicalCanvasSQLException, PlanHasCycleException;
+			throws PlanManipulationException,
+			PathFinderCompilationErrorException, LogicalCanvasSQLException,
+			PlanHasCycleException;
 
 	/**
 	 * Evaluate a whole plan
-	 * @param pid the plan's id
-	 * @param c the evaluation context to use
-	 * @param saveCurrenNodeValue true of the evaluation context should be saved
-	 * for this plan
+	 * 
+	 * @param pid
+	 *            the plan's id
+	 * @param c
+	 *            the evaluation context to use
+	 * @param saveCurrenNodeValue
+	 *            true of the evaluation context should be saved for this plan
 	 * @return an SQL result
 	 * @throws GraphNotConnectedException
 	 * @throws GraphIsEmptyException
@@ -138,8 +168,11 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Get the (saved) evaluation context for a node
-	 * @param pid the node's id
-	 * @param nid the plan to use
+	 * 
+	 * @param pid
+	 *            the node's id
+	 * @param nid
+	 *            the plan to use
 	 * @return the evaluation context
 	 * @throws PlanManipulationException
 	 * @throws GraphNotConnectedException
@@ -152,8 +185,11 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Get a HTML representation of the node information
-	 * @param nid the node's id
-	 * @param planid the plan to use
+	 * 
+	 * @param nid
+	 *            the node's id
+	 * @param planid
+	 *            the plan to use
 	 * @return a string containing raw HTML.
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
@@ -163,6 +199,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns all node types loaded on the server.
+	 * 
 	 * @return a string array of node types
 	 * @throws RemoteIOException
 	 */
@@ -170,8 +207,11 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns a plan node object for editing
-	 * @param nid the node's id
-	 * @param pid the plan to use
+	 * 
+	 * @param nid
+	 *            the node's id
+	 * @param pid
+	 *            the plan to use
 	 * @return a loaded plan node
 	 * @throws PlanManipulationException
 	 */
@@ -180,8 +220,11 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns a list of all referencable columns within a node
-	 * @param nid the node's id
-	 * @param pid the plan to use
+	 * 
+	 * @param nid
+	 *            the node's id
+	 * @param pid
+	 *            the plan to use
 	 * @return a list of columns (as properties)
 	 * @throws GraphNotConnectedException
 	 * @throws GraphIsEmptyException
@@ -192,10 +235,13 @@ public interface RemoteManipulationService extends RemoteService {
 			PlanHasCycleException;
 
 	/**
-	 * Returns a list of referencable columns without the columns
-	 * added within this node
-	 * @param nid the node's id
-	 * @param pid the plan to use
+	 * Returns a list of referencable columns without the columns added within
+	 * this node
+	 * 
+	 * @param nid
+	 *            the node's id
+	 * @param pid
+	 *            the plan to use
 	 * @return a list of columns (as properties)
 	 * @throws PlanHasCycleException
 	 */
@@ -208,7 +254,9 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns a plan's root node
-	 * @param pid the plan to use
+	 * 
+	 * @param pid
+	 *            the plan to use
 	 * @return the root node
 	 * @throws PlanManipulationException
 	 * @throws PathFinderCompilationErrorException
@@ -224,7 +272,9 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the compiled SQL for plan
-	 * @param pid the plan's id
+	 * 
+	 * @param pid
+	 *            the plan's id
 	 * @return the SQL query as a string
 	 * @throws PlanManipulationException
 	 * @throws PathFinderCompilationErrorException
@@ -238,10 +288,15 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the compiled SQL for a plan node
-	 * @param pid the plan to use
-	 * @param nid the node's id
-	 * @param c the evaluation context to use
-	 * @param saveContext true if the eval context should be saved
+	 * 
+	 * @param pid
+	 *            the plan to use
+	 * @param nid
+	 *            the node's id
+	 * @param c
+	 *            the evaluation context to use
+	 * @param saveContext
+	 *            true if the eval context should be saved
 	 * @return the SQL query as a string
 	 * @throws PlanManipulationException
 	 * @throws PathFinderCompilationErrorException
@@ -253,7 +308,9 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the validation of a plan. The plan is revalidated.
-	 * @param planid the plan's id
+	 * 
+	 * @param planid
+	 *            the plan's id
 	 * @return the ValidationResult
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
@@ -263,15 +320,20 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the XML of a ContentNode (for editing purposes)
-	 * @param c the ContentNoe
+	 * 
+	 * @param c
+	 *            the ContentNoe
 	 * @return the XML string
 	 */
 	public String getXMLFromContentNode(ContentNode c);
 
 	/**
 	 * Returns the XML of a PlanNode
-	 * @param pid the plan to use
-	 * @param nid the node's id
+	 * 
+	 * @param pid
+	 *            the plan to use
+	 * @param nid
+	 *            the node's id
 	 * @return the XML as a string
 	 * @throws PlanManipulationException
 	 */
@@ -280,10 +342,15 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the XML for a whole plan, beginning with the root node
-	 * @param pid the plan's id
-	 * @param nid the root node's id
-	 * @param c the evaluation context to use
-	 * @param saveContext true if the eval context should be saved
+	 * 
+	 * @param pid
+	 *            the plan's id
+	 * @param nid
+	 *            the root node's id
+	 * @param c
+	 *            the evaluation context to use
+	 * @param saveContext
+	 *            true if the eval context should be saved
 	 * @return the XML as a string
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
@@ -294,9 +361,13 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Pastes the clipboard into a plan at a given position
-	 * @param pid the plan's id
-	 * @param x the x position
-	 * @param y the y position
+	 * 
+	 * @param pid
+	 *            the plan's id
+	 * @param x
+	 *            the x position
+	 * @param y
+	 *            the y position
 	 * @return a RemoteManipulationMessage
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
@@ -306,7 +377,9 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Removes a plan from the serve
-	 * @param pid the plan's id
+	 * 
+	 * @param pid
+	 *            the plan's id
 	 * @return the removed plan's id
 	 * @throws SessionExpiredException
 	 */
@@ -314,8 +387,11 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Updates the evaluation context of a plan
-	 * @param c the evaluation context
-	 * @param pid the plan's id
+	 * 
+	 * @param c
+	 *            the evaluation context
+	 * @param pid
+	 *            the plan's id
 	 * @throws PlanManipulationException
 	 */
 	public void updatePlanEvaluationContext(EvaluationContext c, int pid)
@@ -323,9 +399,13 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Updates a plan node. Changes to ID and type will be ignored.
-	 * @param nid the node's id
-	 * @param pid the plan to use
-	 * @param p the new plan node
+	 * 
+	 * @param nid
+	 *            the node's id
+	 * @param pid
+	 *            the plan to use
+	 * @param p
+	 *            the new plan node
 	 * @return a RemoteManipulationMessage
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException
@@ -334,10 +414,15 @@ public interface RemoteManipulationService extends RemoteService {
 			throws PlanManipulationException, PlanHasCycleException;
 
 	/**
-	 * Updates a plan node from XML source. Changes to ID and type will be ignored.
-	 * @param nid the node's id
-	 * @param pid the plan to use
-	 * @param xml the XML source
+	 * Updates a plan node from XML source. Changes to ID and type will be
+	 * ignored.
+	 * 
+	 * @param nid
+	 *            the node's id
+	 * @param pid
+	 *            the plan to use
+	 * @param xml
+	 *            the XML source
 	 * @return a RemoteManipulationMessage
 	 * @throws PlanManipulationException
 	 * @throws PlanHasCycleException

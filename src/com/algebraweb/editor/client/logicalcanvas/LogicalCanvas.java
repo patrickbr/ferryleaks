@@ -11,11 +11,11 @@ import com.algebraweb.editor.client.PlanSwitchButton;
 import com.algebraweb.editor.client.RemoteConfiguration;
 import com.algebraweb.editor.client.graphcanvas.ConnectedShape;
 import com.algebraweb.editor.client.graphcanvas.ConnectedWidget;
-import com.algebraweb.editor.client.graphcanvas.Tuple;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.NodeSelectionHandler;
+import com.algebraweb.editor.client.graphcanvas.Tuple;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
@@ -149,13 +149,14 @@ public class LogicalCanvas extends GraphCanvas implements
 	}
 
 	public void addSQLListener(int nid, EvaluationContext c) {
-		SQLBubble listener = new SQLBubble(nid, this.getId(), m.getManipulationService(), c, this);
+		SQLBubble listener = new SQLBubble(nid, this.getId(), m
+				.getManipulationService(), c, this);
 		GraphNode n = getGraphNodeById(nid);
 		super.hangWidgetOntoNode("sql-listener", new ConnectedWidget(listener,
 				n.getWidth(), 0), nid);
 		sqlBubbleList.put(nid, listener);
 		listener.update();
-		
+
 	}
 
 	private void clearEdgeConnectors(GraphNode n) {

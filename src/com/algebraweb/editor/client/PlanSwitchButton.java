@@ -7,8 +7,9 @@ import com.google.gwt.user.client.ui.HTML;
 
 /**
  * A plan's tab bar button
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class PlanSwitchButton extends Composite {
 

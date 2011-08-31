@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.InlineHTML;
  * The node context menu.
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class NodeContextMenu extends ContextMenu {
 
@@ -48,9 +48,7 @@ public class NodeContextMenu extends ContextMenu {
 
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-
 				tmp.addStyleName("hover");
-
 			}
 		}, MouseMoveEvent.getType());
 
@@ -76,17 +74,12 @@ public class NodeContextMenu extends ContextMenu {
 		text.sinkEvents(Event.MOUSEEVENTS);
 
 		tmp.add(text);
-
 		super.getRows().add(tmp);
-
 	}
 
 	public void show(GraphNode n, int x, int y) {
-
 		super.show(x, y);
-
 		this.n = n;
-
 	}
 
 }

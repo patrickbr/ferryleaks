@@ -1,7 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 
@@ -13,7 +13,7 @@ import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
  */
 public class ConfigurePlanDialog extends EvaluationDialog {
 
-	private GraphCanvasCommunicationCallback<Void> updateCb = new GraphCanvasCommunicationCallback<Void>(
+	private EditorCommunicationCallback<Void> updateCb = new EditorCommunicationCallback<Void>(
 			"evaluating") {
 		@Override
 		public void onSuccess(Void result) {

@@ -1,55 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the THETAJOIN node -->
+
+
 <nodeschema kind="thetajoin">
 
 	<properties>
-	
 		<property name="color">0x00aa00</property>
 		<property name="label_schema">[_kind]{comparison}</property>
-	
 	</properties>
 
 
 	<schema>
 	
 	  	<gointo xmlob="content" humanname="Comparisons" howoften="1">
-	  	
 	  	    <val xmlob="comparison" name_to_print="\n({column_left} &lt;[kind]&gt; {column_right})" namefield="kind" humanname="Comparison" name="comparison" howoften="*">
 	  	    
 	  	      <fields>
 	  	         	<field can_be="eq,gt,eq,lt,le,ne" type="string">kind</field>
 	  	      </fields>
-	  	      
-	  	      
-	  	      <val xmlob="column" name_to_print="[name]" namefield="name" humanname="Left column" name="column_left" howoften="1">
+	  	    	  	      
+	  	     	 <val xmlob="column" name_to_print="[name]" namefield="name" humanname="Left column" name="column_left" howoften="1">
 	  	     	      <fields>
 	  	    				<field type="__COLUMN{1}">name</field>
 	  	    				<field type="boolean" must_be="false">new</field>
 	  	    				<field type="integer" must_be="1">position</field>
 	  	   	  	      </fields>
-	  	     </val>
+	  	    	 </val>
 	  	      
-	  	      <val xmlob="column" name_to_print="[name]" namefield="name" humanname="Right column" name="column_right" howoften="1">
-	  	     	      <fields>
-	  	    				<field type="__COLUMN{2}">name</field>
+	  	     	 <val xmlob="column" name_to_print="[name]" namefield="name" humanname="Right column" name="column_right" howoften="1">
+	  	    	 	      <fields>
+	  	   	 				<field type="__COLUMN{2}">name</field>
 	  	    				<field type="boolean" must_be="false">new</field>
-	  	    				<field type="integer" must_be="2">position</field>
-	  	   	  	      </fields>
-	  	     </val>
-	  	     
-	  	    
+	  	  	  				<field type="integer" must_be="2">position</field>
+	  	   		  	      </fields>
+	  	     	</val>
+	  	     	  	    
 	  	    </val>
 	  		  	    
 		</gointo>
 	
 		<val xmlob="edge" humanname="Childs" namefield="to" name="edgeto" howoften="2">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
 
 	</schema>

@@ -2,8 +2,9 @@ package com.algebraweb.editor.client.graphcanvas;
 
 /**
  * A callback called after manipulations have finished
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public abstract class GraphManipulationCallback {
 

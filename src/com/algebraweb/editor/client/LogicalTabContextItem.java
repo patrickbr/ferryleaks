@@ -4,7 +4,7 @@ package com.algebraweb.editor.client;
  * An item within the tab context menu
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public abstract class LogicalTabContextItem implements TabContextMenuItem {
 

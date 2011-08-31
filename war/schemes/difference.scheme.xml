@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the DIFFERENCE node -->
+
+
 <nodeschema kind="difference">
 
 	<properties>
-	
 		<property name="color">0xffa500</property>
-
 	</properties>
 
-
 	<schema>
-	
-			
 		<val xmlob="edge" name="edgeto" howoften="2">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
 
 	</schema>
-
 </nodeschema>

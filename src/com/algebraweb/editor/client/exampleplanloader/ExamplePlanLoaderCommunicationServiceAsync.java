@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * (see ExamplePlanLoaderCommunicationService)
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public interface ExamplePlanLoaderCommunicationServiceAsync {
 

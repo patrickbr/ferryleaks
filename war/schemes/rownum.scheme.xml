@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the ROWNUM node -->
+
+
 <nodeschema kind="rownum">
 
 	<properties>
-	
 		<property name="color">0xff0000</property>
 		<property name="label_schema">[_kind]\n({column_res}: &lt;{column_rank}&gt;)</property>
-	
-	
 	</properties>
 
-
 	<schema>
-	
-	
 	  	<gointo xmlob="content" howoften="1">
 	  	
 	  	    <val xmlob="column" name_to_print="[name]" humanname="Result column" name="column_res" howoften="1">
 	  	    
 	  	      <fields>
-	  	    
-	  	    	<field type="__COLUMN_NEW">name</field>
+	   	    	<field type="__COLUMN_NEW">name</field>
 	  	    	<field type="boolean" must_be="true">new</field>
-	  	    	
-	  	      </fields>
+	   	      </fields>
 	  	    
 	  	    </val>
 	  	    
@@ -48,27 +43,16 @@
 					<field type="__COLUMN">name</field>
 					<field type="boolean" must_be="false">new</field>
 					<field type="string" must_be="partition">function</field>
-					
-			
-				</fields>
 						
+				</fields>
 			</val>
-	
-
-		
-
 		</gointo>
 	
 		<val xmlob="edge" name="edgeto" howoften="1">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
-
 	</schema>
 
 </nodeschema>

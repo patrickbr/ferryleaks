@@ -1,9 +1,11 @@
 package com.algebraweb.editor.client;
 
 /**
- * A RemoteConfiguration holding information on already loaded plans on the server
+ * A RemoteConfiguration holding information on already loaded plans on the
+ * server
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class RemoteConfigurationWithPlansInSession extends RemoteConfiguration {
 

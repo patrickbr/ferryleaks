@@ -1,7 +1,7 @@
 package com.algebraweb.editor.client.graphcanvas;
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import com.algebraweb.editor.client.AlgebraEditor;
 import com.google.gwt.user.client.Window;
@@ -114,8 +114,8 @@ public class GraphNodeLayoutingMachine {
 	 * @param sorter
 	 */
 
-	public void sortGraph(List<GraphNode> nodes,
-			List<GraphEdge> edges, GraphSorter sorter, final boolean layout) {
+	public void sortGraph(List<GraphNode> nodes, List<GraphEdge> edges,
+			GraphSorter sorter, final boolean layout) {
 
 		this.nodes = nodes;
 		this.edges = edges;

@@ -30,9 +30,8 @@ public class CircleSorter implements RemoteSorter {
 
 		while (i.hasNext()) {
 			current = i.next();
-			Tuple cord = new Tuple(x + Math.sin(c) * rad
-					- current.getWidth() / 2, y + Math.cos(c) * rad
-					+ current.getHeight() / 2);
+			Tuple cord = new Tuple(x + Math.sin(c) * rad - current.getWidth()
+					/ 2, y + Math.cos(c) * rad + current.getHeight() / 2);
 			ret.put(current.getNid(), cord);
 			c = c + Math.PI * 2 / nodes.size();
 		}

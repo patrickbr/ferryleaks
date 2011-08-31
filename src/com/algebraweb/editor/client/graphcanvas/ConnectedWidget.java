@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Widget;
  * A widget connected to a plan node.
  * 
  * @author Patrick brosi
- *
+ * 
  */
 public class ConnectedWidget extends FlowPanel {
 
@@ -37,6 +37,7 @@ public class ConnectedWidget extends FlowPanel {
 
 	/**
 	 * Returns the relative x position of this widget
+	 * 
 	 * @return the x position
 	 */
 	public int getX() {
@@ -45,6 +46,7 @@ public class ConnectedWidget extends FlowPanel {
 
 	/**
 	 * Returns the relative y position of this widget
+	 * 
 	 * @return the y position
 	 */
 	public int getY() {

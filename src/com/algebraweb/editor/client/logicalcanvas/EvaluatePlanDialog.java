@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.algebraweb.editor.client.dialogs.SqlResDialog;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public class EvaluatePlanDialog extends EvaluationDialog {
 
-	private AsyncCallback<List<Map<String, String>>> evalCb = new GraphCanvasCommunicationCallback<List<Map<String, String>>>(
+	private AsyncCallback<List<Map<String, String>>> evalCb = new EditorCommunicationCallback<List<Map<String, String>>>(
 			"evaluating") {
 
 		@Override

@@ -16,7 +16,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * See client.
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class XMLExamplePlanLoader extends RemoteServiceServlet implements
 		ExamplePlanLoaderCommunicationService {
@@ -44,7 +44,7 @@ public class XMLExamplePlanLoader extends RemoteServiceServlet implements
 			throw new RemoteIOException(e.getMessage());
 		}
 		session.setAttribute("queryPlans", sessionBundle);
-		
+
 		return sessionBundle.getPlans().keySet().toArray(new Integer[0]);
 	}
 }

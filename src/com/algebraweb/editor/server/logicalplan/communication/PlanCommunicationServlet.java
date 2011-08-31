@@ -197,8 +197,8 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 					copy.getContent().add(curC);
 				}
 			}
-			clipboard.add(new ClipBoardPlanNode(copy, new Tuple(cur
-					.getPos().getX()
+			clipboard.add(new ClipBoardPlanNode(copy, new Tuple(cur.getPos()
+					.getX()
 					- offX, cur.getPos().getY() - offY)));
 		}
 
@@ -280,8 +280,9 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 	@Override
 	public List<Map<String, String>> eval(int pid, int nid,
 			EvaluationContext context, boolean saveContext)
-			throws PlanManipulationException, PathFinderCompilationErrorException,
-			LogicalCanvasSQLException, PlanHasCycleException {
+			throws PlanManipulationException,
+			PathFinderCompilationErrorException, LogicalCanvasSQLException,
+			PlanHasCycleException {
 		if (saveContext) {
 			saveEvaluationContextForNode(nid, pid, context);
 		}
@@ -744,8 +745,8 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 				PlanNode curNode = p.getPlanNodeById(idReplacements.get(cur
 						.getPlanNode().getId()));
 				res.getNodesAffected().add(xmlpl.getRawNode(curNode));
-				coords.put(curNode.getId(), new Tuple(cur.getPos().getX()
-						+ x, cur.getPos().getY() + y));
+				coords.put(curNode.getId(), new Tuple(cur.getPos().getX() + x,
+						cur.getPos().getY() + y));
 			}
 
 			res.setCoordinates(coords);

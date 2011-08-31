@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the NOT node -->
+
 <nodeschema kind="not">
 
-	<properties>
-	
+	<properties>	
 		<property name="color">0xc0c0c0</property>
 		<property name="label_schema">[_kind]\n({rescol}:&lt;{column}&gt;)</property>
-
 	</properties>
 
-
 	<schema>
-		
 		<gointo xmlob="content" howoften="1">
 
 			<val xmlob="column" name_to_print="[name]" name="rescol" namefield="name" humanname="Result col" howoften="1">
@@ -31,13 +29,9 @@
 		</gointo>
 		
 		<val xmlob="edge" name="edgeto" howoften="1">
-		
 				<fields>
 					<field type="__NID">to</field>
 				</fields>
-				
 		</val>
-
 	</schema>
-
 </nodeschema>

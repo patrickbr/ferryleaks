@@ -1,65 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the CAST node -->
+
 <nodeschema kind="cast">
 
 	<properties>
-	
 		<property name="color">0xc0c0c0</property>
-
 	</properties>
 
-
 	<schema>
-	
-	
 		<gointo xmlob="content" howoften="1">
 
 			<val xmlob="column" name="column" howoften="1">
-
 				<fields>
-
 					<field type="__COLUMN_NEW">name</field>
 					<field type="boolean" must_be="true">new</field>
-			
 				</fields>
-
 				
 			</val>
 			<val xmlob="column" name="column" howoften="1">
-
 				<fields>
-
 					<field type="__COLUMN">name</field>
 					<field type="boolean" must_be="false">new</field>
-			
 				</fields>
-
 				
 			</val>
 			<val xmlob="type" name="type" howoften="1">
-
 				<fields>
-
-					
 					<field type="datatype">name</field>
-			
 				</fields>
-
-				
 			</val>
 
 		</gointo>
 		
 		<val xmlob="edge" name="edgeto" howoften="1">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
 
 	</schema>
-
 </nodeschema>

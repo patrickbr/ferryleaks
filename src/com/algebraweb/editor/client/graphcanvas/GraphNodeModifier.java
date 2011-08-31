@@ -16,14 +16,14 @@ import com.hydro4ge.raphaelgwt.client.AnimationCallback;
 import com.hydro4ge.raphaelgwt.client.Raphael.Circle;
 import com.hydro4ge.raphaelgwt.client.Raphael.Text;
 
+/**
+ * Provides methods for basic graph node manipulation on the canvas.
+ * 
+ * @author Patrick Brosi
+ * 
+ */
 public class GraphNodeModifier {
 
-	private GraphCanvas c;
-
-	public GraphNodeModifier(GraphCanvas c) {
-		this.c = c;
-	}
-	
 	public static MouseMoveHandler mouseMoveHandlerBuilder(final GraphNode n) {
 		return new MouseMoveHandler() {
 			@Override
@@ -42,6 +42,12 @@ public class GraphNodeModifier {
 				n.getShape().attr("fill-opacity", 1);
 			}
 		};
+	}
+
+	private GraphCanvas c;
+
+	public GraphNodeModifier(GraphCanvas c) {
+		this.c = c;
 	}
 
 	protected void animateTo(GraphNode n, double x, double y) {
@@ -65,7 +71,6 @@ public class GraphNodeModifier {
 			newAttrsText.put("x", new JSONNumber(x + n.getWidth() / 2));
 			newAttrsText.put("y", new JSONNumber(y + n.getLineHeight() / 2 + 5
 					+ i * n.getLineHeight()));
-
 			t.animate(newAttrsText, 1000, "backIn");
 			i++;
 		}
@@ -77,7 +82,6 @@ public class GraphNodeModifier {
 				.iterator();
 
 		while (it.hasNext()) {
-
 			ConnectedShape current = it.next();
 			JSONObject newAttrsShape = new JSONObject();
 			if (current.getShape() instanceof Circle) {
@@ -111,7 +115,6 @@ public class GraphNodeModifier {
 		return new AnimationCallback() {
 			@Override
 			public void onComplete() {
-				// update(n,true);
 				n.unsetAniLock();
 				showEdges(n, true);
 			}
@@ -121,15 +124,15 @@ public class GraphNodeModifier {
 	protected void checkDimension(GraphNode n, double x, double y) {
 		if (x / c.getScale() + n.getWidth() / c.getScale() > c.getWidth()) {
 			c
-					.setWidth((int) (c.getWidth() + 50 / c.getScale() + (x
+					.setWidth((int) (c.getWidth() + 50 / c.getScale() + x
 							/ c.getScale() + n.getWidth() / c.getScale() - c
-							.getWidth())));
+							.getWidth()));
 		}
 
 		if (y / c.getScale() + n.getHeight() / c.getScale() > c.getHeight()) {
-			c.setHeight((int) (c.getHeight() + 50 / c.getScale() + (y
+			c.setHeight((int) (c.getHeight() + 50 / c.getScale() + y
 					/ c.getScale() + n.getHeight() / c.getScale() - c
-					.getHeight())));
+					.getHeight()));
 		}
 	}
 
@@ -138,15 +141,11 @@ public class GraphNodeModifier {
 		n.getConnectedShapes().put(identifier, s);
 
 		if (s.getShape() instanceof Circle) {
-
 			s.getShape().attr("cx", n.getX() + s.getX());
 			s.getShape().attr("cy", n.getY() + s.getY());
-
 		} else {
-
 			s.getShape().attr("x", n.getX() + s.getX());
 			s.getShape().attr("y", n.getY() + s.getY());
-
 		}
 	}
 
@@ -223,7 +222,6 @@ public class GraphNodeModifier {
 	}
 
 	private int getGurrByOrientation(GraphNode n, int o) {
-
 		if (o == 0 || o == 1) {
 			return (int) n.getShape().getBBox().width();
 		} else {
@@ -433,7 +431,7 @@ public class GraphNodeModifier {
 	protected void setSelected(GraphNode n) {
 		JSONObject newAttrs = new JSONObject();
 		newAttrs.put("stroke-width", new JSONNumber(3));
-	n.getShape().animate(newAttrs, 300);
+		n.getShape().animate(newAttrs, 300);
 
 		Iterator<GraphEdge> i = n.getEdgesTo().iterator();
 		Iterator<GraphEdge> j = n.getEdgesFrom().iterator();

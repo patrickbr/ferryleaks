@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.algebraweb.editor.client.dialogs.SqlResDialog;
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 
@@ -19,7 +19,7 @@ public class EvaluationDialog extends CreateSQLDialog {
 
 	private DatabaseConfigPanel db;
 
-	private GraphCanvasCommunicationCallback<List<Map<String, String>>> evalCb = new GraphCanvasCommunicationCallback<List<Map<String, String>>>(
+	private EditorCommunicationCallback<List<Map<String, String>>> evalCb = new EditorCommunicationCallback<List<Map<String, String>>>(
 			"evaluating") {
 
 		@Override

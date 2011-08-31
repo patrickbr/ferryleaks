@@ -2,12 +2,21 @@ package com.algebraweb.editor.client.graphcanvas;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public abstract class GraphCanvasCommunicationCallback<T> implements
+/**
+ * An extension to GWT's standard AsyncCallback class. Already ships with a
+ * standard error handling mechanism.
+ * 
+ * @author Patrick Brosi
+ * 
+ * @param <T>
+ *            the type of the RPC answer
+ */
+public abstract class EditorCommunicationCallback<T> implements
 		AsyncCallback<T> {
 
 	private String whileString;
 
-	public GraphCanvasCommunicationCallback(String errorWhileString) {
+	public EditorCommunicationCallback(String errorWhileString) {
 		this.whileString = errorWhileString;
 	}
 

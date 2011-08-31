@@ -3,10 +3,10 @@ package com.algebraweb.editor.client;
 import com.algebraweb.editor.client.graphcanvas.NodeContextMenuItem;
 
 /**
- * An item within the node's context menu 
+ * An item within the node's context menu
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public abstract class LogicalNodeContextItem implements NodeContextMenuItem {
 

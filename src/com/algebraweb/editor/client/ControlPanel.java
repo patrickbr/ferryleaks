@@ -3,8 +3,8 @@ package com.algebraweb.editor.client;
 import com.algebraweb.editor.client.dialogs.LogicialPlanUploadDialog;
 import com.algebraweb.editor.client.dialogs.NumberedStackLayoutPanel;
 import com.algebraweb.editor.client.dialogs.TextPresentationDialog;
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 import com.algebraweb.editor.client.logicalcanvas.CreateXMLDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluatePlanDialog;
@@ -36,7 +36,7 @@ public class ControlPanel extends AbsolutePanel {
 	private PlanModelManipulator m;
 	private RemoteManipulationServiceAsync rmsa;
 
-	private GraphCanvasCommunicationCallback<String> xmlCb = new GraphCanvasCommunicationCallback<String>(
+	private EditorCommunicationCallback<String> xmlCb = new EditorCommunicationCallback<String>(
 			"getting XML") {
 
 		@Override
@@ -46,7 +46,7 @@ public class ControlPanel extends AbsolutePanel {
 
 	};
 
-	private GraphCanvasCommunicationCallback<String> sqlCb = new GraphCanvasCommunicationCallback<String>(
+	private EditorCommunicationCallback<String> sqlCb = new EditorCommunicationCallback<String>(
 			"compiling SQL") {
 
 		@Override

@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the POS_SELECT node -->
+
+
 <nodeschema kind="pos_select">
 
 	<properties>
-	
 		<property name="color">0x3600ff</property>
 		<property name="label_schema">pos select\n{position}: ({sort_column}) {part_column}</property>
-		
-	
 	</properties>
 
-
 	<schema>
-	
-	
 	  	<gointo xmlob="content" howoften="1">
 	  	
 	  	    <val xmlob="position" humanname="Position" hasval="true" name_to_print="[_val]" name="position" howoften="1">
 	  	    </val>
 	  	    
 	  	    <val xmlob="column" humanname="Sort columns" name_to_print="[name]([position],[direction])" name="sort_column" howoften="+">
-	  	    
 	  	    	<fields>
 	  	    		<field type="__COLUMN">name</field>
 	  	   	 		<field type="boolean" must_be="false">new</field>
@@ -28,34 +24,21 @@
 	  	   	 		<field type="string" must_be="sort">function</field>
 	  	   	 		<field type="int">position</field>
 	  	    	</fields>
-	  	    
 	  	    </val>
 
 			<val xmlob="column" humanname="Partition" name_to_print="[name]" name="part_column" howoften="?">
-
 				<fields>
-
 					<field type="__COLUMN">name</field>
 					<field type="boolean" must_be="false">new</field>
 					<field type="string" must_be="partition">function</field>
-							
 				</fields>
-						
 			</val>
-	
-
-		
-
 		</gointo>
 	
 		<val xmlob="edge" name="edgeto" howoften="1">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
 
 	</schema>

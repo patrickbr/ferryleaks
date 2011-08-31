@@ -2,10 +2,10 @@ package com.algebraweb.editor.client;
 
 import java.util.Map;
 
-import com.algebraweb.editor.client.graphcanvas.Tuple;
 import com.algebraweb.editor.client.graphcanvas.Fillable;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.GraphSorter;
+import com.algebraweb.editor.client.graphcanvas.Tuple;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
  * Declares methods a view for the editor has to implement.
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public interface AlgebraEditorCanvasView extends Fillable {
 

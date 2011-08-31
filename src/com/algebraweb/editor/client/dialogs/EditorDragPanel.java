@@ -7,7 +7,7 @@ import com.algebraweb.editor.client.graphcanvas.FullScreenDragPanel;
  * The editors drag panel
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class EditorDragPanel extends FullScreenDragPanel {
 

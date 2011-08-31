@@ -1,66 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the OR node -->
+
+
 <nodeschema kind="or">
 
 	<properties>
-	
 		<property name="color">0x00dddd</property>
 		<property name="label_schema">[_kind]\n({column}:&lt;{columna}, {columnb}&gt;)</property>
-
 	</properties>
 
 
 	<schema>
-	
-	
 		<gointo xmlob="content" howoften="1">
 
 			<val xmlob="column" name_to_print="[name]" namefield="name" humanname="Result column" name="column" howoften="1">
-
 				<fields>
-
 					<field type="__COLUMN_NEW">name</field>
 					<field type="boolean" must_be="true">new</field>
-			
 				</fields>
-
-				
 			</val>
 			<val xmlob="column" name_to_print="[name]" humanname="Left Column" name="columna" howoften="1">
 
 				<fields>
-
 					<field type="__COLUMN">name</field>
 					<field type="boolean" must_be="false">new</field>
 					<field type="int" must_be="1">position</field>
-			
 				</fields>
-
 				
 			</val>
 				<val xmlob="column" name_to_print="[name]" humanname="Right Column" name="columnb" howoften="1">
 
 				<fields>
-
 					<field type="__COLUMN">name</field>
 					<field type="boolean" must_be="false">new</field>
 					<field type="int" must_be="2">position</field>
-			
 				</fields>
-
-				
+			
 			</val>
 
 		</gointo>
 		
 		<val xmlob="edge" name="edgeto" howoften="1">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
 
 	</schema>

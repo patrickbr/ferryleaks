@@ -15,10 +15,10 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 /**
- * The plan switcher (the tab bar). Lets the user change and close loaded
- * plans.
+ * The plan switcher (the tab bar). Lets the user change and close loaded plans.
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class PlanSwitcher extends AbsolutePanel {
 
@@ -52,7 +52,9 @@ public class PlanSwitcher extends AbsolutePanel {
 	/**
 	 * Adds a plan to the tab bar. A new tab item will be created, labelled
 	 * "Plan [pid]".
-	 * @param pid The plans id
+	 * 
+	 * @param pid
+	 *            The plans id
 	 * @return the added PlanSwitchButton
 	 */
 	public PlanSwitchButton addPlan(final int pid) {
@@ -100,7 +102,9 @@ public class PlanSwitcher extends AbsolutePanel {
 
 	/**
 	 * Remove a plan from the tab bar
-	 * @param pid the plan to remove
+	 * 
+	 * @param pid
+	 *            the plan to remove
 	 */
 	public void removePlan(int pid) {
 		p.remove(buttons.get(pid));
@@ -112,7 +116,9 @@ public class PlanSwitcher extends AbsolutePanel {
 
 	/**
 	 * Sets a tab active
-	 * @param pid the plan id of the tab to set active
+	 * 
+	 * @param pid
+	 *            the plan id of the tab to set active
 	 */
 	public void setActive(int pid) {
 		if (active != -1) {

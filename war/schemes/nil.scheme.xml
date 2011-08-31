@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the NIL node -->
+
 <nodeschema kind="nil">
 
 	<properties>
-	
 		<property name="color">0xffa500</property>
 		<property name="label_schema">[_kind]</property>
-		
-		
 	</properties>
 
 
 	<schema>
-		
-	  	
 		<val xmlob="edge" name="edgeto" howoften="0">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
-
 	</schema>
 
 </nodeschema>

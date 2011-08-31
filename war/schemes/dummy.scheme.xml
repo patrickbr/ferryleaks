@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the DUMMY node -->
+
+
 <nodeschema kind="dummy">
 
 	<properties>
-	
 		<property name="color">0x7a8aff</property>
 		<property name="label_schema">[_kind]\n{comment}</property>
-		
-
 	</properties>
 
-
 	<schema>
-	
 		<gointo xmlob="content" howoften="1">
-	
 			<val xmlob="comment" hasval="true" name_to_print="'[_val]'" humanname="Comments"  howoften="*">
-										
 			</val>
 		</gointo>
 		
 		<val xmlob="edge" humanname="Childs" namefield="to" name="edgeto" howoften="1">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
 		
 	</schema>
-
 </nodeschema>

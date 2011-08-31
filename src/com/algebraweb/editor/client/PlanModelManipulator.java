@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphEdge;
 import com.algebraweb.editor.client.graphcanvas.GraphNode;
 import com.algebraweb.editor.client.graphcanvas.Tuple;
@@ -37,7 +37,7 @@ public class PlanModelManipulator {
 	private RemoteManipulationServiceAsync manServ;
 	private AlgebraEditor e;
 
-	private GraphCanvasCommunicationCallback<ValidationResult> validationCallback = new GraphCanvasCommunicationCallback<ValidationResult>(
+	private EditorCommunicationCallback<ValidationResult> validationCallback = new EditorCommunicationCallback<ValidationResult>(
 			"validating plan") {
 		@Override
 		public void onSuccess(ValidationResult result) {
@@ -45,7 +45,7 @@ public class PlanModelManipulator {
 		}
 	};
 
-	private GraphCanvasCommunicationCallback<RemoteManipulationMessage> manipulationCallback = new GraphCanvasCommunicationCallback<RemoteManipulationMessage>(
+	private EditorCommunicationCallback<RemoteManipulationMessage> manipulationCallback = new EditorCommunicationCallback<RemoteManipulationMessage>(
 			"manipulating logical plan") {
 
 		@Override
@@ -173,7 +173,7 @@ public class PlanModelManipulator {
 		}
 	};
 
-	private GraphCanvasCommunicationCallback<String[]> nodeTypesCb = new GraphCanvasCommunicationCallback<String[]>(
+	private EditorCommunicationCallback<String[]> nodeTypesCb = new EditorCommunicationCallback<String[]>(
 			"getting node types") {
 		@Override
 		public void onSuccess(String[] result) {
@@ -257,12 +257,12 @@ public class PlanModelManipulator {
 					cur.getY())));
 		}
 
-		manServ.copyNodes(msg, planid,
-				new GraphCanvasCommunicationCallback<Void>("copying node(s)") {
-					@Override
-					public void onSuccess(Void result) {
-					}
-				});
+		manServ.copyNodes(msg, planid, new EditorCommunicationCallback<Void>(
+				"copying node(s)") {
+			@Override
+			public void onSuccess(Void result) {
+			}
+		});
 	}
 
 	/**

@@ -1,57 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- The node schema file for the EQJOIN node -->
+
+
 <nodeschema kind="eqjoin">
 
-	<properties>
-	
+	<properties>	
 		<property name="color">0x00ff00</property>
 		<property name="label_schema">[_kind]\n({column_left} = {column_right})</property>
-	
 	</properties>
 
-
 	<schema>
-	
-	
 	  	<gointo xmlob="content" humanname="Join on columns" howoften="1">
 	  	
 	  	    <val xmlob="column" name_to_print="[name]" namefield="name" humanname="Left column" name="column_left" howoften="1">
-	  	    
 	  	      <fields>
-	  	    
-	  	    	<field type="__COLUMN{1}">name</field>
+	  	   	  	<field type="__COLUMN{1}">name</field>
 	  	    	<field type="boolean" must_be="false">new</field>
 	  	    	<field type="integer" must_be="1">position</field>
-	  	    	
 	  	      </fields>
-	  	    
 	  	    </val>
 	  	    
 	  	     <val xmlob="column" name_to_print="[name]" namefield="name" humanname="Right column" name="column_right" howoften="1">
-	  	    
 	  	      <fields>
-	  	    
-	  	    	<field type="__COLUMN{2}">name</field>
+	  	       	<field type="__COLUMN{2}">name</field>
 	  	    	<field type="boolean" must_be="false">new</field>
 	  	    	<field type="integer" must_be="2">position</field>
-	  	    	
 	  	      </fields>
-	  	    
-	  	    </val>
-	  	    
-	  	    
-		</gointo>
+	  	     </val>
+	  </gointo>
 	
 		<val xmlob="edge" humanname="Childs" namefield="to" name="edgeto" howoften="2">
-		
 				<fields>
-
 					<field type="__NID">to</field>
-							
 				</fields>
-				
 		</val>
-
 	</schema>
-
 </nodeschema>

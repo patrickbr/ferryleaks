@@ -39,7 +39,7 @@ public class XMLNodePlanBuilder {
 	}
 
 	private List<PlanNode> getAllNodesUnderThis(PlanNode rootNode)
-	throws PlanHasCycleException {
+			throws PlanHasCycleException {
 		return getAllNodesUnderThis(rootNode, new ArrayList<PlanNode>());
 	}
 
@@ -63,7 +63,7 @@ public class XMLNodePlanBuilder {
 			}
 			wayCopy.add(cur);
 			Iterator<PlanNode> i = getAllNodesUnderThis(cur, wayCopy)
-			.iterator();
+					.iterator();
 
 			while (i.hasNext()) {
 				PlanNode current = i.next();
@@ -135,7 +135,7 @@ public class XMLNodePlanBuilder {
 
 		while (it.hasNext()) {
 			logicalPlan
-			.addContent(getXMLElementFromContentNode(it.next(), repl));
+					.addContent(getXMLElementFromContentNode(it.next(), repl));
 		}
 
 		nodePlan.addContent(logicalPlan);
@@ -156,8 +156,8 @@ public class XMLNodePlanBuilder {
 	 * @throws PlanHasCycleException
 	 */
 	public Document getNodePlan(QueryPlan p, ServletContext context)
-	throws PlanManipulationException, GraphNotConnectedException,
-	GraphIsEmptyException, PlanHasCycleException {
+			throws PlanManipulationException, GraphNotConnectedException,
+			GraphIsEmptyException, PlanHasCycleException {
 		Document d = new Document();
 		d.addContent(getNodePlan(p.getId(), p.getRootNode(), p.getEvContext(),
 				context));
@@ -178,8 +178,8 @@ public class XMLNodePlanBuilder {
 	 * @throws PlanHasCycleException
 	 */
 	public Document getPlanBundle(QueryPlanBundle b, ServletContext context)
-	throws PlanManipulationException, GraphNotConnectedException,
-	GraphIsEmptyException, PlanHasCycleException {
+			throws PlanManipulationException, GraphNotConnectedException,
+			GraphIsEmptyException, PlanHasCycleException {
 		Element planBundle = new Element("query_plan_bundle");
 		Iterator<QueryPlan> it = b.getPlans().values().iterator();
 
@@ -225,14 +225,14 @@ public class XMLNodePlanBuilder {
 						.get(((PlanNode) n).getId())));
 			} else {
 				ret
-				.setAttribute("id", Integer.toString(((PlanNode) n)
-						.getId()));
+						.setAttribute("id", Integer.toString(((PlanNode) n)
+								.getId()));
 			}
 			ret.setAttribute("kind", ((PlanNode) n).getKind());
 		} else {
 			ret = new Element(n.getInternalName());
 			Iterator<Property> it = ((NodeContent) n).getAttributes()
-			.properties().iterator();
+					.properties().iterator();
 
 			while (it.hasNext()) {
 				Property c = it.next();

@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
  * A tabbed dialog window.
  * 
  * @author Patrick Brosi
- *
+ * 
  */
 public abstract class TabbedDialog extends DialogBox {
 

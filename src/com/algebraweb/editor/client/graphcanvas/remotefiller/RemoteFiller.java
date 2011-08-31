@@ -3,7 +3,7 @@ package com.algebraweb.editor.client.graphcanvas.remotefiller;
 import java.util.List;
 
 import com.algebraweb.editor.client.AlgebraEditor;
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.GraphManipulationCallback;
 import com.algebraweb.editor.shared.node.RawNode;
 import com.google.gwt.core.client.GWT;
@@ -18,7 +18,7 @@ public class RemoteFiller {
 	private String filler;
 	private String args = "";
 
-	private GraphCanvasCommunicationCallback<List<RawNode>> nodeCallback = new GraphCanvasCommunicationCallback<List<RawNode>>(
+	private EditorCommunicationCallback<List<RawNode>> nodeCallback = new EditorCommunicationCallback<List<RawNode>>(
 			"getting graph from server") {
 		@Override
 		public void onSuccess(List<RawNode> result) {

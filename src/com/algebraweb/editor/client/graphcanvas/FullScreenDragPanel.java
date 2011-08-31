@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.Widget;
  */
 
 public class FullScreenDragPanel extends FlowPanel {
-
 	private static int mainDragOffsetX = -1;
 	private static int mainDragOffsetY = -1;
 
@@ -59,13 +58,9 @@ public class FullScreenDragPanel extends FlowPanel {
 	}
 
 	private int mainDragOffsetLeft = -1;
-
 	private int mainDragOffsetTop = -1;
-
 	private static boolean dragPreventer = false;
-
 	private boolean lockMainDrag = false;
-
 	private Tuple scrollPosition = new Tuple();
 
 	private MouseUpHandler mouseUpHandler = new MouseUpHandler() {
@@ -192,5 +187,4 @@ public class FullScreenDragPanel extends FlowPanel {
 		mainDragOffsetTop = Window.getScrollTop();
 		mainDragOffsetY = y;
 	}
-
 }

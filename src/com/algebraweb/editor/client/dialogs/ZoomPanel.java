@@ -6,8 +6,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 /**
  * The panel holding the zoom buttons.
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class ZoomPanel extends FlowPanel {
 

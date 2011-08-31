@@ -1,9 +1,9 @@
 package com.algebraweb.editor.client.graphcanvas;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.json.client.JSONNumber;
@@ -12,8 +12,8 @@ import com.google.gwt.json.client.JSONString;
 import com.hydro4ge.raphaelgwt.client.AnimationCallback;
 
 /**
- * Provides certain edge manipulation methodes. This class uses the
- * algorithm from http://raphaeljs.com/graffle.html for edge calculation.
+ * Provides certain edge manipulation methodes. This class uses the algorithm
+ * from http://raphaeljs.com/graffle.html for edge calculation.
  * 
  * @author Patrick Brosi
  * 
@@ -55,8 +55,8 @@ public class GraphEdgeModifier {
 		p[1] = new Tuple(fromX + fromWidth / 2, fromY + fromHeight + 1
 				+ offSetFrom);
 		p[2] = new Tuple(fromX - 1 - offSetFrom, fromY + fromHeight / 2);
-		p[3] = new Tuple(fromX + fromWidth + 1 + offSetFrom, fromY
-				+ fromHeight / 2);
+		p[3] = new Tuple(fromX + fromWidth + 1 + offSetFrom, fromY + fromHeight
+				/ 2);
 
 		p[4] = new Tuple(toX + toWidth / 2, toY - 1 - offSetTo);
 		p[5] = new Tuple(toX + toWidth / 2, toY + toHeight + 1 + offSetTo);
@@ -264,8 +264,7 @@ public class GraphEdgeModifier {
 				+ e.getOffsetFrom());
 
 		p[4] = new Tuple(toX + e.getOffset(), toY - 1 - offSetTo);
-		p[5] = new Tuple(toX + e.getOffset(), toY + toHeight + 1
-				+ offSetTo);
+		p[5] = new Tuple(toX + e.getOffset(), toY + toHeight + 1 + offSetTo);
 		p[6] = new Tuple(toX - 1 - offSetTo, toY + e.getOffset());
 		p[7] = new Tuple(toX + toWidth + 1 + offSetTo, toY + e.getOffset());
 

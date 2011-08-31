@@ -59,7 +59,8 @@ public class PlanNodeSQLBuilder {
 			OutputStreamWriter w = new OutputStreamWriter(b);
 			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 			String XMLString = outputter.outputString(planToCompile);
-			// XMLOutputter outputterr = new XMLOutputter(Format.getPrettyFormat());
+			// XMLOutputter outputterr = new
+			// XMLOutputter(Format.getPrettyFormat());
 			// System.out.println(outputterr.outputString(planToCompile));
 			w.write(XMLString);
 			w.close();

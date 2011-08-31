@@ -6,8 +6,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 /**
  * The tab bar button for adding a new plan
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class PlanAddButton extends Composite {
 

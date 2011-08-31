@@ -15,8 +15,9 @@ import com.google.gwt.user.client.ui.InlineHTML;
 
 /**
  * The context menu for tab bar items.
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class TabContextMenu extends ContextMenu {
 
@@ -26,13 +27,16 @@ public class TabContextMenu extends ContextMenu {
 		super();
 	}
 
+	/**
+	 * Adds a new item to this context menu.
+	 * 
+	 * @param i
+	 *            the item to add
+	 */
 	public void addItem(final TabContextMenuItem i) {
-
 		final FlowPanel tmp = new FlowPanel();
 		GraphCanvas.preventTextSelection(tmp.getElement(), true);
-
 		tmp.addStyleName("node-context-menu-item");
-
 		tmp.addDomHandler(new ClickHandler() {
 
 			@Override
@@ -46,12 +50,9 @@ public class TabContextMenu extends ContextMenu {
 		}, ClickEvent.getType());
 
 		tmp.addDomHandler(new MouseMoveHandler() {
-
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-
 				tmp.addStyleName("hover");
-
 			}
 		}, MouseMoveEvent.getType());
 
@@ -60,7 +61,6 @@ public class TabContextMenu extends ContextMenu {
 			@Override
 			public void onContextMenu(ContextMenuEvent event) {
 				event.preventDefault();
-
 			}
 		}, ContextMenuEvent.getType());
 
@@ -69,24 +69,17 @@ public class TabContextMenu extends ContextMenu {
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 				tmp.removeStyleName("hover");
-
 			}
 		}, MouseOutEvent.getType());
 
 		InlineHTML text = new InlineHTML(i.getItemTitle());
 		text.sinkEvents(Event.MOUSEEVENTS);
-
 		tmp.add(text);
-
 		super.getRows().add(tmp);
-
 	}
 
 	public void show(int pid, int x, int y) {
-
 		super.show(x, y);
 		this.pid = pid;
-
 	}
-
 }

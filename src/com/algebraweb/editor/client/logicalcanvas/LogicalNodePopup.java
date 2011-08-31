@@ -1,6 +1,6 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
-import com.algebraweb.editor.client.graphcanvas.GraphCanvasCommunicationCallback;
+import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
 import com.algebraweb.editor.client.graphcanvas.NodePopup;
 import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.google.gwt.user.client.ui.HTML;
@@ -10,7 +10,7 @@ public class LogicalNodePopup extends NodePopup {
 	private LogicalCanvas c;
 	private RemoteManipulationServiceAsync rmsa;
 
-	private GraphCanvasCommunicationCallback<String> nodeInfoCallback = new GraphCanvasCommunicationCallback<String>(
+	private EditorCommunicationCallback<String> nodeInfoCallback = new EditorCommunicationCallback<String>(
 			"getting node info") {
 
 		@Override

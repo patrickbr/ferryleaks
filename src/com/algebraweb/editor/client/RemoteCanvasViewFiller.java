@@ -4,8 +4,9 @@ import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFi
 
 /**
  * A CanvasFiller using remote content
+ * 
  * @author Patrick Brosi
- *
+ * 
  */
 public class RemoteCanvasViewFiller extends GraphCanvasRemoteFillingMachine {
 
