@@ -1,6 +1,7 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,12 +34,33 @@ public class XMLPlanLoader {
 	 * @throws RemoteIOException
 	 */
 
-	@SuppressWarnings("unchecked")
 	public QueryPlanBundle parsePlans(String file, ServletContext context,
 			HttpSession session) throws IOException, SAXException,
 			RemoteIOException {
 		Map<String, NodeScheme> nodeSchemes = new HashMap<String, NodeScheme>();
 
+		nodeSchemes = initialize(context, nodeSchemes);
+
+		PlanParser p = new PlanParser(nodeSchemes, file, session);
+		QueryPlanBundle qpb = p.parse();
+		return qpb;
+	}
+	
+	public QueryPlanBundle parsePlans(InputStream inputStream, ServletContext context,
+			HttpSession session) throws IOException, SAXException,
+			RemoteIOException {
+		Map<String, NodeScheme> nodeSchemes = new HashMap<String, NodeScheme>();
+
+		nodeSchemes = initialize(context, nodeSchemes);
+
+		PlanParser p = new PlanParser(nodeSchemes, inputStream, session);
+		QueryPlanBundle qpb = p.parse();
+		return qpb;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, NodeScheme> initialize(ServletContext context,
+			Map<String, NodeScheme> nodeSchemes) throws RemoteIOException {
 		if (context.getAttribute("nodeSchemes") == null) {
 
 			NodeSchemeLoader l = new NodeSchemeLoader(context
@@ -57,9 +79,6 @@ public class XMLPlanLoader {
 			nodeSchemes = (Map<String, NodeScheme>) context
 					.getAttribute("nodeSchemes");
 		}
-
-		PlanParser p = new PlanParser(nodeSchemes, file, session);
-		QueryPlanBundle qpb = p.parse();
-		return qpb;
+		return nodeSchemes;
 	}
 }

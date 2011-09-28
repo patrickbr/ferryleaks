@@ -58,10 +58,10 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.22";
+	private static String VERSION = "Beta 1.25";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (August 31th)";
+	private static String YEAR = "2011 (September 28th)";
 	private static String FACILITY = "Universität Tübingen";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
@@ -69,7 +69,7 @@ public class AlgebraEditor implements EntryPoint {
 	private static String BROWSER_OS = "";
 	private static boolean LOGGING = false;
 	private static RegistrationServiceAsync registor = GWT
-			.create(RegistrationService.class);
+	.create(RegistrationService.class);
 	private static Timer keepAliveTimer;
 
 	/**
@@ -96,7 +96,7 @@ public class AlgebraEditor implements EntryPoint {
 				+ "\n"
 				+ DateTimeFormat.getFormat(
 						DateTimeFormat.PredefinedFormat.TIME_MEDIUM).format(
-						today) + " " + s);
+								today) + " " + s);
 		log.setCursorPos(log.getText().length());
 	}
 
@@ -124,7 +124,7 @@ public class AlgebraEditor implements EntryPoint {
 
 	private ZoomPanel zoomPanel = new ZoomPanel();
 	private EditorCommunicationCallback<Integer> createCb = new EditorCommunicationCallback<Integer>(
-			"adding new empty canvas") {
+	"adding new empty canvas") {
 		@Override
 		public void onSuccess(Integer result) {
 			if (addCanvasView(result) != activeCanvas) {
@@ -133,7 +133,7 @@ public class AlgebraEditor implements EntryPoint {
 		}
 	};
 	private EditorCommunicationCallback<Integer> removeCb = new EditorCommunicationCallback<Integer>(
-			"removing canvas") {
+	"removing canvas") {
 		@Override
 		public void onSuccess(Integer result) {
 			if (hasCanvasWithId(result)) {
@@ -153,7 +153,7 @@ public class AlgebraEditor implements EntryPoint {
 	};
 
 	private EditorCommunicationCallback<String> xmlCb = new EditorCommunicationCallback<String>(
-			"getting XML") {
+	"getting XML") {
 		@Override
 		public void onSuccess(String result) {
 			new TextPresentationDialog("XML source", result);
@@ -161,7 +161,7 @@ public class AlgebraEditor implements EntryPoint {
 	};
 
 	private EditorCommunicationCallback<String> sqlCb = new EditorCommunicationCallback<String>(
-			"compiling SQL") {
+	"compiling SQL") {
 		@Override
 		public void onSuccess(String result) {
 			new TextPresentationDialog("Compiled SQL", result);
@@ -550,12 +550,12 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void loadExamplePlanFromServer(String path) {
 		ExamplePlanLoaderCommunicationServiceAsync exComm = GWT
-				.create(ExamplePlanLoaderCommunicationService.class);
+		.create(ExamplePlanLoaderCommunicationService.class);
 
 		AlgebraEditor.log("Loading example plan from server...");
 		exComm.loadExamplePlan(path,
 				new EditorCommunicationCallback<Integer[]>(
-						"loading example plan") {
+				"loading example plan") {
 
 					@Override
 					public void onSuccess(Integer[] result) {
@@ -581,14 +581,14 @@ public class AlgebraEditor implements EntryPoint {
 		f.fill(new RemoteFiller("xml", Integer.toString(id)),
 				new GraphManipulationCallback() {
 
-					@Override
-					public void onComplete() {
-						AlgebraEditor.log("Remote filler for plan #" + id
-								+ " finished. Calling validator...");
-						c.sort(new RemoteSorter("dot"));
-						getPlanManipulator().validate(id);
-					}
-				});
+			@Override
+			public void onComplete() {
+				AlgebraEditor.log("Remote filler for plan #" + id
+						+ " finished. Calling validator...");
+				c.sort(new RemoteSorter("dot"));
+				getPlanManipulator().validate(id);
+			}
+		});
 	}
 
 	/**
@@ -615,15 +615,15 @@ public class AlgebraEditor implements EntryPoint {
 		AlgebraEditor.log("Hi! This is " + TITLE + " " + VERSION + " - "
 				+ FACILITY + " - " + YEAR + " " + AUTHOR);
 		AlgebraEditor
-				.log("   running in "
-						+ BROWSER_NAME
-						+ " "
-						+ BROWSER_VER
-						+ " ("
-						+ BROWSER_OS
-						+ ") ("
-						+ (Navigator.isCookieEnabled() ? "Cookies enabled"
-								: "Cookies _NOT_ enabled. Session handling will not work properly!")
+		.log("   running in "
+				+ BROWSER_NAME
+				+ " "
+				+ BROWSER_VER
+				+ " ("
+				+ BROWSER_OS
+				+ ") ("
+				+ (Navigator.isCookieEnabled() ? "Cookies enabled"
+						: "Cookies _NOT_ enabled. Session handling will not work properly!")
 						+ ")");
 		AlgebraEditor.log("   servlet on " + GWT.getModuleBaseURL()
 				+ " running in "
@@ -632,7 +632,7 @@ public class AlgebraEditor implements EntryPoint {
 
 		AlgebraEditor.log("initializing remote manupulation service...");
 		rmsa = (RemoteManipulationServiceAsync) GWT
-				.create(RemoteManipulationService.class);
+		.create(RemoteManipulationService.class);
 
 		m = new PlanModelManipulator(rmsa);
 		m.setEditor(this);
@@ -643,7 +643,7 @@ public class AlgebraEditor implements EntryPoint {
 		RootPanel.get("editor").add(s);
 		RootPanel.get("impressum").getElement().setInnerHTML(
 				TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " "
-						+ AUTHOR);
+				+ AUTHOR);
 		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE);
 
 		initContextMenu();
@@ -654,7 +654,7 @@ public class AlgebraEditor implements EntryPoint {
 		AlgebraEditor.log("Sending registration...");
 
 		registor.register(new EditorCommunicationCallback<RemoteConfiguration>(
-				"registering session") {
+		"registering session") {
 
 			@Override
 			public void onSuccess(final RemoteConfiguration result) {
@@ -690,30 +690,41 @@ public class AlgebraEditor implements EntryPoint {
 
 			AlgebraEditor.log("Found existing session on server...");
 
-			YesNoPanel ynp = new YesNoPanel(
-					"A previous session has been found on the server. Do you want to load it?",
-					"Information");
-			ynp.registerYesClickHandler(new ClickHandler() {
+			if (((RemoteConfigurationWithPlansInSession)result).isFromPost()) {
+				AlgebraEditor.log("Existing session is from POST request...");
+				AlgebraEditor
+				.log("Loading POST plan...");
+				for (Integer id : ((RemoteConfigurationWithPlansInSession) result)
+						.getPlanIds()) {
+					loadFinishedPlanFromServer(id);
+				}
+			}else{
 
-				@Override
-				public void onClick(ClickEvent event) {
-					AlgebraEditor
-							.log("Loading existing plans from previous session...");
-					for (Integer id : ((RemoteConfigurationWithPlansInSession) result)
-							.getPlanIds()) {
-						loadFinishedPlanFromServer(id);
+				YesNoPanel ynp = new YesNoPanel(
+						"A previous session has been found on the server. Do you want to load it?",
+				"Information");
+				ynp.registerYesClickHandler(new ClickHandler() {
+
+					@Override
+					public void onClick(ClickEvent event) {
+						AlgebraEditor
+						.log("Loading existing plans from previous session...");
+						for (Integer id : ((RemoteConfigurationWithPlansInSession) result)
+								.getPlanIds()) {
+							loadFinishedPlanFromServer(id);
+						}
 					}
-				}
-			});
-			ynp.registerNoClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					AlgebraEditor.log("loading empty plan...");
-					createNewPlan(true);
-				}
-			});
-			ynp.center();
-			ynp.show();
+				});
+				ynp.registerNoClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						AlgebraEditor.log("loading empty plan...");
+						createNewPlan(true);
+					}
+				});
+				ynp.center();
+				ynp.show();
+			}
 		} else if (result.isLoadEmptyCanvas()) {
 			AlgebraEditor.log("loading empty plan...");
 			createNewPlan(true);

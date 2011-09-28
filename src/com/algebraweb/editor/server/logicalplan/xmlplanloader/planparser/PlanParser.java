@@ -1,7 +1,10 @@
 package com.algebraweb.editor.server.logicalplan.xmlplanloader.planparser;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -50,7 +53,7 @@ import com.algebraweb.editor.shared.scheme.Value;
 
 public class PlanParser {
 
-	private File file;
+	private InputStream inputStream;
 	private Map<String, NodeScheme> schemes;
 	private HttpSession session;
 
@@ -64,9 +67,16 @@ public class PlanParser {
 	}
 
 	public PlanParser(Map<String, NodeScheme> nodeSchemes, String file,
-			HttpSession session) {
+			HttpSession session) throws FileNotFoundException {
 		this.schemes = nodeSchemes;
-		this.file = new File(file);
+		this.inputStream = new FileInputStream(new File(file));
+		this.session = session;
+	}
+	
+	public PlanParser(Map<String, NodeScheme> nodeSchemes, InputStream inputStream,
+			HttpSession session) throws FileNotFoundException {
+		this.schemes = nodeSchemes;
+		this.inputStream = inputStream;
 		this.session = session;
 	}
 
@@ -177,7 +187,7 @@ public class PlanParser {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(file);
+			Document doc = db.parse(inputStream);
 			NodeList plans = doc.getElementsByTagName("query_plan");
 
 			for (int i = 0; i < plans.getLength(); i++) {

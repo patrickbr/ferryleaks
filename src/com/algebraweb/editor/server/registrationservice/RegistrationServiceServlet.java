@@ -42,9 +42,18 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements
 						.getPlans().size() == 1 && ((QueryPlanBundle) session
 						.getAttribute("queryPlans")).getPlans().values()
 						.iterator().next().getPlan().size() == 0)) {
+			
+			boolean fromPost = false;
+			
+			if (session.getAttribute("loadedFromPost") != null && 
+					((Boolean)session.getAttribute("loadedFromPost"))) {
+				fromPost = true;
+				session.setAttribute("loadedFromPost",false);
+			}
+			
 			tmp = new RemoteConfigurationWithPlansInSession(
 					((QueryPlanBundle) session.getAttribute("queryPlans"))
-							.getPlans().keySet().toArray(new Integer[0]));
+							.getPlans().keySet().toArray(new Integer[0]), fromPost);
 		} else {
 			if (session == null) {
 				session = request.getSession(true);
