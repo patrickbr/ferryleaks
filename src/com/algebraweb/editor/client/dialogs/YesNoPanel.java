@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class YesNoPanel extends DialogBox {
 
-	private Button yes = new Button("Yes");
-	private Button no = new Button("No");
+	protected Button yes = new Button("Yes");
+	protected Button no = new Button("No");
 
 	/**
 	 * @param msg

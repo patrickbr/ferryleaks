@@ -21,7 +21,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * 
  */
 public class RegistrationServiceServlet extends RemoteServiceServlet implements
-		RegistrationService {
+RegistrationService {
 
 	/**
 	 * 
@@ -37,23 +37,27 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements
 		RemoteConfiguration tmp;
 		if (session != null
 				&& ((QueryPlanBundle) session.getAttribute("queryPlans"))
-						.getPlans().size() > 0
+				.getPlans().size() > 0
 				&& !(((QueryPlanBundle) session.getAttribute("queryPlans"))
 						.getPlans().size() == 1 && ((QueryPlanBundle) session
-						.getAttribute("queryPlans")).getPlans().values()
-						.iterator().next().getPlan().size() == 0)) {
-			
+								.getAttribute("queryPlans")).getPlans().values()
+								.iterator().next().getPlan().size() == 0)) {
+
 			boolean fromPost = false;
-			
-			if (session.getAttribute("loadedFromPost") != null && 
-					((Boolean)session.getAttribute("loadedFromPost"))) {
-				fromPost = true;
-				session.setAttribute("loadedFromPost",false);
+
+			try {
+				if (session.getAttribute("loadedFromPost") != null && 
+						((Boolean)session.getAttribute("loadedFromPost"))) {
+					fromPost = true;
+					session.setAttribute("loadedFromPost",false);
+				}
+			}catch(Exception e) {
+				fromPost=false;
 			}
-			
+
 			tmp = new RemoteConfigurationWithPlansInSession(
 					((QueryPlanBundle) session.getAttribute("queryPlans"))
-							.getPlans().keySet().toArray(new Integer[0]), fromPost);
+					.getPlans().keySet().toArray(new Integer[0]), fromPost);
 		} else {
 			if (session == null) {
 				session = request.getSession(true);
@@ -89,7 +93,7 @@ public class RegistrationServiceServlet extends RemoteServiceServlet implements
 		}
 
 		Configuration c = (Configuration) getServletContext().getAttribute(
-				"configuration");
+		"configuration");
 		remoteConfig.setKeepAliveInterval(c.getInt(
 				"client.editor.keepaliveinterval", 60000));
 		remoteConfig.setLoadEmptyCanvas(c.getBoolean(

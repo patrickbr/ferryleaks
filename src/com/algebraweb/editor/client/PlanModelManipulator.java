@@ -319,6 +319,7 @@ public class PlanModelManipulator {
 	 *            the y position the top node should be inserted at
 	 */
 	public void paste(int planid, int x, int y) {
+		GraphCanvas.showLoading("Pasting...");
 		manServ.insert(planid, x, y, manipulationCallback);
 	}
 

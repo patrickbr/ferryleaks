@@ -9,6 +9,7 @@ import com.algebraweb.editor.client.graphcanvas.remotesorter.RemoteSorter;
 import com.algebraweb.editor.client.logicalcanvas.CreateXMLDialog;
 import com.algebraweb.editor.client.logicalcanvas.EvaluatePlanDialog;
 import com.algebraweb.editor.client.logicalcanvas.LogicalCanvas;
+import com.algebraweb.editor.client.dialogs.OkPanel;
 import com.algebraweb.editor.client.logicalcanvas.editpanel.NodeEditDialog;
 import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.google.gwt.core.client.GWT;
@@ -41,6 +42,7 @@ public class ControlPanel extends AbsolutePanel {
 
 		@Override
 		public void onSuccess(String result) {
+			GraphCanvas.hideLoading();
 			new TextPresentationDialog("XML source", result);
 		}
 
@@ -51,6 +53,7 @@ public class ControlPanel extends AbsolutePanel {
 
 		@Override
 		public void onSuccess(String result) {
+			GraphCanvas.hideLoading();
 			new TextPresentationDialog("Compiled SQL", result);
 		}
 	};
@@ -114,6 +117,11 @@ public class ControlPanel extends AbsolutePanel {
 					new NodeEditDialog(m, ControlPanel.this.rmsa, getC()
 							.getSelectedNodes().values().iterator().next()
 							.getId(), AlgebraEditor.getActiveView().getId());
+				}else{
+					OkPanel p = new OkPanel("No node(s) selected!", "Warning"); 
+					p.center();
+					p.show();
+					
 				}
 			}
 		});
@@ -126,10 +134,15 @@ public class ControlPanel extends AbsolutePanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (getC().getSelectedNodes().size() > 0) {
+					GraphCanvas.showLoading("Getting XML...");
 					ControlPanel.this.rmsa.getXMLFromPlanNode(AlgebraEditor
 							.getActiveView().getId(), AlgebraEditor
 							.getActiveView().getSelectedNodes().values()
 							.iterator().next().getId(), xmlCb);
+				}else{
+					OkPanel p = new OkPanel("No node(s) selected!","Warning"); 
+					p.show();
+					p.center();
 				}
 			}
 		});
@@ -145,6 +158,10 @@ public class ControlPanel extends AbsolutePanel {
 					new CreateXMLDialog(getC().getId(), AlgebraEditor
 							.getActiveView().getSelectedNodes().keySet()
 							.toArray(new Integer[0])[0], rmsa);
+				}else{
+					OkPanel p = new OkPanel("No node(s) selected!", "Warning"); 
+					p.center();
+					p.show();
 				}
 			}
 		});
@@ -156,6 +173,7 @@ public class ControlPanel extends AbsolutePanel {
 		sqlButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				GraphCanvas.showLoading("Getting SQL...");
 				rmsa.getSQLFromPlan(getC().getId(), sqlCb);
 			}
 		});

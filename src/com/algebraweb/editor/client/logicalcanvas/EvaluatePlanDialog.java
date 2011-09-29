@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.algebraweb.editor.client.dialogs.SqlResDialog;
 import com.algebraweb.editor.client.graphcanvas.EditorCommunicationCallback;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,6 +23,7 @@ public class EvaluatePlanDialog extends EvaluationDialog {
 
 		@Override
 		public void onSuccess(List<Map<String, String>> result) {
+			GraphCanvas.hideLoading();
 			new SqlResDialog(result);
 		}
 
@@ -35,6 +37,7 @@ public class EvaluatePlanDialog extends EvaluationDialog {
 	@Override
 	protected void submit() {
 		EvaluationContext c = saveContext();
+		GraphCanvas.showLoading("Evaluating...");
 		getManServ().evalPlan(getPid(), c, getSaveCurrenNodeValue(), evalCb);
 		hide();
 	}

@@ -1,6 +1,7 @@
 package com.algebraweb.editor.client.logicalcanvas;
 
 import com.algebraweb.editor.client.dialogs.TextPresentationDialog;
+import com.algebraweb.editor.client.graphcanvas.GraphCanvas;
 import com.algebraweb.editor.client.services.RemoteManipulationServiceAsync;
 import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,6 +23,7 @@ public class CreateXMLDialog extends CreateEvaluationContextDialog {
 
 		@Override
 		public void onSuccess(String result) {
+			GraphCanvas.hideLoading();
 			new TextPresentationDialog("XML source", result);
 		}
 	};
@@ -38,6 +40,7 @@ public class CreateXMLDialog extends CreateEvaluationContextDialog {
 	@Override
 	protected void submit() {
 		EvaluationContext c = saveContext();
+		GraphCanvas.showLoading("Getting XML...");
 		getManServ().getXMLLogicalPlanFromRootNode(super.getPid(),
 				super.getNid(), c, cb.getValue(), xmlCb);
 		hide();
