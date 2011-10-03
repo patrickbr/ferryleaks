@@ -1,18 +1,24 @@
 package com.algebraweb.editor.shared.logicalplan;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.algebraweb.editor.shared.node.QueryPlan;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class QueryPlanBundle implements IsSerializable {
+public class QueryPlanBundle implements IsSerializable,Serializable, Cloneable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3431461437145187991L;
 	private Map<Integer, QueryPlan> plans = new HashMap<Integer, QueryPlan>();
 
 	public QueryPlanBundle() {
 
 	}
+
 
 	/**
 	 * Adds a plan p to this bundle. Returns true if adding was successful,
@@ -64,6 +70,7 @@ public class QueryPlanBundle implements IsSerializable {
 	public Map<Integer, QueryPlan> getPlans() {
 		return plans;
 	}
+
 
 	/**
 	 * Returns true if the bundle holds a plan with a given id

@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class Value extends GoInto {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5611386374550666723L;
 	private String valName;
 	private boolean hasVal = false;
 	private List<Field> fields = new ArrayList<Field>();

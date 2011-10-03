@@ -58,10 +58,10 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.28";
+	private static String VERSION = "Beta 1.34";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (September 29th)";
+	private static String YEAR = "2011 (October 3rd)";
 	private static String FACILITY = "Universität Tübingen";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
@@ -653,15 +653,33 @@ public class AlgebraEditor implements EntryPoint {
 
 		AlgebraEditor.log("Sending registration...");
 
-		registor.register(new EditorCommunicationCallback<RemoteConfiguration>(
-		"registering session") {
+		if (Window.Location.getParameter("autoload") != null &&
+				Window.Location.getParameter("autoload") != "") {
 
-			@Override
-			public void onSuccess(final RemoteConfiguration result) {
-				processConfiguration(result);
-			}
+			registor.register(Window.Location.getParameter("autoload"),new EditorCommunicationCallback<RemoteConfiguration>(
+			"registering session") {
 
-		});
+				@Override
+				public void onSuccess(final RemoteConfiguration result) {
+					processConfiguration(result);
+				}
+
+			});
+
+
+		}else{
+
+			registor.register(new EditorCommunicationCallback<RemoteConfiguration>(
+					"registering session") {
+
+				@Override
+				public void onSuccess(final RemoteConfiguration result) {
+					processConfiguration(result);
+				}
+
+			});
+
+		}
 	}
 
 	private void processConfiguration(final RemoteConfiguration result) {
@@ -688,17 +706,19 @@ public class AlgebraEditor implements EntryPoint {
 
 		if (result instanceof RemoteConfigurationWithPlansInSession) {
 
-			AlgebraEditor.log("Found existing session on server...");
 
-			if (((RemoteConfigurationWithPlansInSession)result).isFromPost()) {
-				AlgebraEditor.log("Existing session is from POST request...");
+			if (Window.Location.getParameter("autoload") != null) {
+
 				AlgebraEditor
-				.log("Loading POST plan...");
+				.log("Loading existing plans from previous session...");
 				for (Integer id : ((RemoteConfigurationWithPlansInSession) result)
 						.getPlanIds()) {
 					loadFinishedPlanFromServer(id);
 				}
+
 			}else{
+
+				AlgebraEditor.log("Found existing session on server...");
 
 				YesNoPanel ynp = new YesNoPanel(
 						"A previous session has been found on the server. Do you want to load it?",
@@ -724,7 +744,9 @@ public class AlgebraEditor implements EntryPoint {
 				});
 				ynp.center();
 				ynp.show();
+
 			}
+
 		} else if (result.isLoadEmptyCanvas()) {
 			AlgebraEditor.log("loading empty plan...");
 			createNewPlan(true);

@@ -14,6 +14,10 @@ import com.algebraweb.editor.client.validation.ValidationError;
  */
 public abstract class NodeContent extends ContentNode {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 121588202610463857L;
 	protected String internalName;
 	protected PropertyMap attributes = new PropertyMap();
 	protected List<ValidationError> evalRes = new ArrayList<ValidationError>();

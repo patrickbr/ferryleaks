@@ -8,6 +8,10 @@ package com.algebraweb.editor.shared.node;
  */
 public class LabelAttrIdentifierOb extends LabelOb {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4676624034679551103L;
 	private String identifier;
 
 	public LabelAttrIdentifierOb() {

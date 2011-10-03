@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class GoInto implements GoAble {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5191485854733606095L;
 	protected String xmlObject;
 	protected String howOften;
 	protected String humanName;

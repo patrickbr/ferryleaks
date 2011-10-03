@@ -14,6 +14,10 @@ import java.util.Set;
 
 public class ContentVal extends NodeContent {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 940954145318097812L;
 	private PropertyValue value;
 
 	public ContentVal() {

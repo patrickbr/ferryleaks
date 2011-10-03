@@ -17,6 +17,10 @@ import com.algebraweb.editor.shared.scheme.NodeScheme;
  */
 public class PlanNode extends ContentNode {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1564622892393796345L;
 	private PropertyMap properties = new PropertyMap();
 	private List<PlanNode> nodeChilds = new ArrayList<PlanNode>();
 	private int id;
@@ -34,6 +38,7 @@ public class PlanNode extends ContentNode {
 		this.scheme = scheme;
 	}
 
+		
 	/**
 	 * Adds a child to this plan node
 	 * 

@@ -1,5 +1,6 @@
 package com.algebraweb.editor.shared.node;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Patrick Brosi
  * 
  */
-public class Property implements IsSerializable {
+public class Property implements IsSerializable,Serializable, Cloneable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 60118871698032614L;
 	String propertyName;
 	PropertyValue propertyVal;
 	List<Property> properties = new ArrayList<Property>();

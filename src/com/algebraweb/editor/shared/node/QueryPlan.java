@@ -20,7 +20,7 @@ import com.algebraweb.editor.shared.scheme.Value;
  * @author Patrick Brosi
  * 
  */
-public class QueryPlan implements Serializable {
+public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * 

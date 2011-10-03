@@ -1,5 +1,7 @@
 package com.algebraweb.editor.shared.logicalplan;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -9,8 +11,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Patrick Brosi
  * 
  */
-public class EvaluationContext implements IsSerializable {
+public class EvaluationContext implements IsSerializable,Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String databaseServer;
 	private int databasePort;
 	private String databaseUser;
@@ -28,6 +34,29 @@ public class EvaluationContext implements IsSerializable {
 
 	public EvaluationContext() {
 
+	}
+	
+	public EvaluationContext copy() {
+		
+		EvaluationContext copy = new EvaluationContext();
+		
+		copy.database = this.database;
+		copy.databaseServer = this.databaseServer;
+		copy.databaseUser = this.databaseUser;
+		copy.databasePassword = this.databasePassword;
+		copy.databasePort = this.databasePort;
+		copy.itemColumns = this.itemColumns;
+		copy.iterColumnName = this.iterColumnName;
+		copy.iterColumnNat = this.iterColumnNat;
+		copy.iterUseColumn = this.iterUseColumn;
+		copy.sortUseColumn = this.sortUseColumn;
+		copy.sortColumnName = this.sortColumnName;
+		copy.sortOrder = this.sortOrder;
+		copy.sortOrderColumnOn = this.sortOrderColumnOn;
+		copy.databaseSetGlobal = this.databaseSetGlobal;
+		
+		return copy;
+		
 	}
 
 	/**

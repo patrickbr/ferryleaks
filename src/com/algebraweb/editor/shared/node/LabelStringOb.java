@@ -2,6 +2,10 @@ package com.algebraweb.editor.shared.node;
 
 public class LabelStringOb extends LabelOb {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6131445738532838707L;
 	private String stringOb;
 
 	public LabelStringOb() {

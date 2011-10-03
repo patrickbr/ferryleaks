@@ -1,5 +1,6 @@
 package com.algebraweb.editor.server.registrationservice;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -35,7 +36,8 @@ RegistrationService {
 	private RemoteConfiguration getRemoteConfiguration(
 			HttpServletRequest request, HttpSession session) {
 		RemoteConfiguration tmp;
-		if (session != null
+		if (session != null 
+				&& ((QueryPlanBundle) session.getAttribute("queryPlans")) != null
 				&& ((QueryPlanBundle) session.getAttribute("queryPlans"))
 				.getPlans().size() > 0
 				&& !(((QueryPlanBundle) session.getAttribute("queryPlans"))
@@ -43,29 +45,22 @@ RegistrationService {
 								.getAttribute("queryPlans")).getPlans().values()
 								.iterator().next().getPlan().size() == 0)) {
 
-			boolean fromPost = false;
-
-			try {
-				if (session.getAttribute("loadedFromPost") != null && 
-						((Boolean)session.getAttribute("loadedFromPost"))) {
-					fromPost = true;
-					session.setAttribute("loadedFromPost",false);
-				}
-			}catch(Exception e) {
-				fromPost=false;
-			}
-
 			tmp = new RemoteConfigurationWithPlansInSession(
 					((QueryPlanBundle) session.getAttribute("queryPlans"))
-					.getPlans().keySet().toArray(new Integer[0]), fromPost);
+					.getPlans().keySet().toArray(new Integer[0]));
 		} else {
-			if (session == null) {
-				session = request.getSession(true);
-			}
-			session.setAttribute("queryPlans", new QueryPlanBundle());
+			initSession(request, session);
 			tmp = new RemoteConfiguration();
 		}
 		return tmp;
+	}
+
+	private HttpSession initSession(HttpServletRequest request, HttpSession session) {
+		if (session == null) {
+			session = request.getSession(true);
+		}
+		session.setAttribute("queryPlans", new QueryPlanBundle());
+		return session;
 	}
 
 	@Override
@@ -75,10 +70,27 @@ RegistrationService {
 				+ this.getThreadLocalRequest().getSession().getId() + ")");
 	}
 
+
+
 	@Override
-	public RemoteConfiguration register() throws RemoteConfigurationException {
+	public RemoteConfiguration register()
+	throws RemoteConfigurationException {
+		return register(null);
+	}
+
+
+	@Override
+	public RemoteConfiguration register(String id) throws RemoteConfigurationException {
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession(false);
+
+		if (id != null) {
+			if (getServletContext().getAttribute("postplan" + id) == null) throw new RemoteConfigurationException("Plan not found.");
+			QueryPlanBundle b = (QueryPlanBundle) getServletContext().getAttribute("postplan" + id); 
+			session = initSession(request, session);			
+			session.setAttribute("queryPlans", SerializationClone.clone(b));
+		}
+
 		RemoteConfiguration remoteConfig = getRemoteConfiguration(request,
 				session);
 
@@ -92,6 +104,7 @@ RegistrationService {
 			getServletContext().setAttribute("configuration", c);
 		}
 
+
 		Configuration c = (Configuration) getServletContext().getAttribute(
 		"configuration");
 		remoteConfig.setKeepAliveInterval(c.getInt(
@@ -102,4 +115,5 @@ RegistrationService {
 				true));
 		return remoteConfig;
 	}
+
 }

@@ -10,24 +10,19 @@ package com.algebraweb.editor.client;
 public class RemoteConfigurationWithPlansInSession extends RemoteConfiguration {
 
 	private Integer pids[];
-	private boolean fromPost = false;
 
 	public RemoteConfigurationWithPlansInSession() {
 		super();
 	}
 
-	public RemoteConfigurationWithPlansInSession(Integer[] pids, boolean fromPost) {
+	public RemoteConfigurationWithPlansInSession(Integer[] pids) {
 		super();
 		this.pids = pids;
-		this.fromPost=fromPost;
 	}
 
 	public Integer[] getPlanIds() {
 		return pids;
 	}
 	
-	public boolean isFromPost() {
-		return fromPost;
-	}
 
 }

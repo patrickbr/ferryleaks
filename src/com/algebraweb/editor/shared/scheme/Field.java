@@ -1,5 +1,7 @@
 package com.algebraweb.editor.shared.scheme;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -8,8 +10,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Patrick Brosi
  * 
  */
-public class Field implements IsSerializable {
+public class Field implements IsSerializable, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8064773679553711457L;
 	private String type;
 	private String name;
 	private String must_be;

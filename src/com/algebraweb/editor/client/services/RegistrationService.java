@@ -27,5 +27,7 @@ public interface RegistrationService extends RemoteService {
 	 * @throws RemoteConfigurationException
 	 */
 	public RemoteConfiguration register() throws RemoteConfigurationException;
+	
+	public RemoteConfiguration register(String id) throws RemoteConfigurationException;
 
 }

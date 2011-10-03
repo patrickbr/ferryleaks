@@ -1,8 +1,15 @@
 package com.algebraweb.editor.shared.node;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public abstract class LabelOb implements IsSerializable {
+public abstract class LabelOb implements IsSerializable,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1081809815989674171L;
 
 	public LabelOb() {
 	}

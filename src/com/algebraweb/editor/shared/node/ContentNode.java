@@ -1,5 +1,6 @@
 package com.algebraweb.editor.shared.node;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,8 +18,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * 
  */
 
-public abstract class ContentNode implements IsSerializable {
+public abstract class ContentNode implements IsSerializable,Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3587617554315766060L;
 	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
 	protected ArrayList<LabelOb> labelScheme = new ArrayList<LabelOb>();
 

@@ -1,15 +1,14 @@
 package com.algebraweb.editor.server.postinterface;
 
+import java.util.UUID;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -18,7 +17,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanLoader;
-import com.algebraweb.editor.shared.exceptions.RemoteConfigurationException;
 import com.algebraweb.editor.shared.exceptions.RemoteIOException;
 import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 
@@ -48,29 +46,30 @@ public class PostInterfaceServlet extends HttpServlet  {
 
 		}
 
-		HttpSession session = request.getSession();
 		XMLPlanLoader planLoader = new XMLPlanLoader();
 
 		InputStream s = new ByteArrayInputStream(xmlplan.getBytes());
 
-		QueryPlanBundle sessionBundle;
+		QueryPlanBundle bundle;
+		UUID id;
 		try {
-			sessionBundle = planLoader.parsePlans(s, this.getServletContext(),	request.getSession());
-			session.setAttribute("queryPlans", sessionBundle);
-			session.setAttribute("loadedFromPost", true);
+			bundle = planLoader.parsePlans(s, this.getServletContext(),	request.getSession());
+
+			id = UUID.randomUUID();
+			this.getServletContext().setAttribute("postplan" + id.toString(), bundle);
 
 			if (redirect != null &&redirect.equals("false")) {
 				if (log != null && log.equals("true")) {
-					res.getWriter().print("0::" + request.getContextPath() + "/?autoload&logger");
+					res.getWriter().print("0::" + request.getContextPath() + "/?autoload=" +id.toString() +"&logger");
 				}else{
-					res.getWriter().print("0::" + request.getContextPath() + "/?autoload");	
+					res.getWriter().print("0::" + request.getContextPath() + "/?autoload=" +id.toString());	
 				}
 			}else{
 				res.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
 				if (log != null && log.equals("true")) {
-					res.setHeader("Location", request.getContextPath() + "/?logger");
+					res.setHeader("Location", request.getContextPath() + "/?autoload=" +id.toString() +"&logger");
 				}else{
-					res.setHeader("Location", request.getContextPath() + "/");	
+					res.setHeader("Location", request.getContextPath() + "/?autoload=" +id.toString());	
 				}
 			}
 

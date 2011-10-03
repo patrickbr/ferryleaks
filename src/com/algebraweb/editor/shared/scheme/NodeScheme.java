@@ -17,6 +17,10 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class NodeScheme implements IsSerializable, GoAble {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1144608405518784236L;
 	private String kind;
 	private Map<String, String> properties = new HashMap<String, String>();
 	private List<GoAble> schema = new ArrayList<GoAble>();

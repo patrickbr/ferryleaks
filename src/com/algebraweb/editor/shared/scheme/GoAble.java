@@ -1,5 +1,6 @@
 package com.algebraweb.editor.shared.scheme;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -11,7 +12,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author Patrick Brosi
  * 
  */
-public interface GoAble extends IsSerializable {
+public interface GoAble extends IsSerializable, Serializable{
 
 	/**
 	 * Returns all fields of the underlying XML element
