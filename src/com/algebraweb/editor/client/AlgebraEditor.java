@@ -58,11 +58,13 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.34";
+	private static String VERSION = "Beta 1.36";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (October 3rd)";
+	private static String YEAR = "2011 (December 19th)";
+	private static String AUTHORURL = "http://www.patrickbrosi.de/";
 	private static String FACILITY = "Universität Tübingen";
+	private static String FACILITYURL = "http://www.uni-tuebingen.de/";
 	private static TextArea log = new TextArea();
 	private static String BROWSER_NAME = "";
 	private static String BROWSER_VER = "";
@@ -71,6 +73,7 @@ public class AlgebraEditor implements EntryPoint {
 	private static RegistrationServiceAsync registor = GWT
 	.create(RegistrationService.class);
 	private static Timer keepAliveTimer;
+	private HelpMessage hm;
 
 	/**
 	 * Returns the active canvas.
@@ -184,6 +187,7 @@ public class AlgebraEditor implements EntryPoint {
 		if (hasCanvasWithId(id)) {
 			return getCanvas(id);
 		}
+		
 
 		LogicalCanvas c = new LogicalCanvas(id, m,
 				Window.getClientWidth() - 30, Window.getClientHeight() - 30,
@@ -219,7 +223,7 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void changeCanvas(int id) {
 		AlgebraEditor.log("Changing to canvas #" + id);
-
+	
 		Iterator<EditorDragPanel> it = panels.iterator();
 		int activeCanvasId = -1;
 		if (activeCanvas != null) {
@@ -252,6 +256,7 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void clearCanvases() {
 
+		
 		AlgebraEditor.log("Clearing canvases...");
 		Iterator<EditorDragPanel> it = panels.iterator();
 		canvi.clear();
@@ -272,7 +277,7 @@ public class AlgebraEditor implements EntryPoint {
 	 *            if true, all other plans will be removed first
 	 */
 	public void createNewPlan(boolean clearFirst) {
-		rmsa.createNewPlan(clearFirst, createCb);
+			rmsa.createNewPlan(clearFirst, createCb);
 	}
 
 	/**
@@ -449,6 +454,7 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalPlanNodeContextItem("Add node") {
 			@Override
 			public void onClick() {
+				removeHelpMessage();
 				getPlanManipulator().showNodeTypes();
 			}
 		});
@@ -467,12 +473,14 @@ public class AlgebraEditor implements EntryPoint {
 		m.addItem(new LogicalPlanNodeContextItem("Zoom in") {
 			@Override
 			public void onClick() {
+				removeHelpMessage();
 				getActiveView().zoomIn();
 			}
 		});
 		m.addItem(new LogicalPlanNodeContextItem("Zoom out") {
 			@Override
 			public void onClick() {
+				removeHelpMessage();
 				getActiveView().zoomOut();
 			}
 		});
@@ -553,6 +561,7 @@ public class AlgebraEditor implements EntryPoint {
 		.create(ExamplePlanLoaderCommunicationService.class);
 
 		AlgebraEditor.log("Loading example plan from server...");
+		removeHelpMessage();
 		exComm.loadExamplePlan(path,
 				new EditorCommunicationCallback<Integer[]>(
 				"loading example plan") {
@@ -575,6 +584,7 @@ public class AlgebraEditor implements EntryPoint {
 	 *            the id of the plan to load
 	 */
 	public void loadFinishedPlanFromServer(final Integer id) {
+		removeHelpMessage();
 		final AlgebraEditorCanvasView c = addCanvasView(id);
 		RemoteCanvasViewFiller f = new RemoteCanvasViewFiller(c);
 		AlgebraEditor.log("Calling remote filler for plan #" + id);
@@ -608,10 +618,6 @@ public class AlgebraEditor implements EntryPoint {
 		BROWSER_VER = Navigator.getAppVersion();
 		BROWSER_OS = Navigator.getPlatform();
 
-		if (Math.random() < 0.2) {
-			TITLE = "the bugFerry";
-		}
-
 		AlgebraEditor.log("Hi! This is " + TITLE + " " + VERSION + " - "
 				+ FACILITY + " - " + YEAR + " " + AUTHOR);
 		AlgebraEditor
@@ -633,7 +639,7 @@ public class AlgebraEditor implements EntryPoint {
 		AlgebraEditor.log("initializing remote manupulation service...");
 		rmsa = (RemoteManipulationServiceAsync) GWT
 		.create(RemoteManipulationService.class);
-
+	
 		m = new PlanModelManipulator(rmsa);
 		m.setEditor(this);
 		s = new PlanSwitcher(this);
@@ -642,14 +648,16 @@ public class AlgebraEditor implements EntryPoint {
 		RootPanel.get("editor").add(new ControlPanel(this, m, 300, 300, rmsa));
 		RootPanel.get("editor").add(s);
 		RootPanel.get("impressum").getElement().setInnerHTML(
-				TITLE + " " + VERSION + " - " + FACILITY + " - " + YEAR + " "
-				+ AUTHOR);
+				TITLE + " " + VERSION + " - " + "<a href='" + FACILITYURL + "' target='_blank'>" + FACILITY + "</a>" + " - " + YEAR + " "
+				+ "<a href='" + AUTHORURL + "' target='_blank'>" + AUTHOR + "</a>");
 		RootPanel.get("bugferrylogo").getElement().setInnerHTML(TITLE);
 
 		initContextMenu();
 		initPlanContextMenu();
 		initTabContextMenu();
 		initZoomPanel();
+
+
 
 		AlgebraEditor.log("Sending registration...");
 
@@ -670,7 +678,7 @@ public class AlgebraEditor implements EntryPoint {
 		}else{
 
 			registor.register(new EditorCommunicationCallback<RemoteConfiguration>(
-					"registering session") {
+			"registering session") {
 
 				@Override
 				public void onSuccess(final RemoteConfiguration result) {
@@ -749,6 +757,12 @@ public class AlgebraEditor implements EntryPoint {
 
 		} else if (result.isLoadEmptyCanvas()) {
 			AlgebraEditor.log("loading empty plan...");
+			if (Window.Location.getParameter("autoload") == null ||
+					Window.Location.getParameter("autoload") == "") {
+				hm = new HelpMessage(this);
+				RootPanel.get("editor").add(hm);
+				
+			}
 			createNewPlan(true);
 		}
 	}
@@ -768,5 +782,14 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void removePlan(int id) {
 		rmsa.removePlan(id, removeCb);
+	}
+
+	public void removeHelpMessage() {
+
+		if (hm!=null) {
+			hm.removeFromParent();
+			hm=null;
+		}
+
 	}
 }

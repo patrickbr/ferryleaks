@@ -570,6 +570,13 @@ table td,table {
 	line-height: 30px;
 }
 
+#impressum a{
+	
+	color: #BBB;
+	text-decoration:none;
+	
+}
+
 .gwt-StackLayoutPanelHeader:hover {
 	background-color: red;
 }
@@ -990,7 +997,56 @@ body.hidden #loading #msg {
 
 .examplebutton:hover {
 
-
+	
 	color:#333;
+
+}
+
+.helpbar .questionmark {
+	
+	font-size:60px;
+	float:left;
+	padding-left:30px;
+	padding-right:40px;
+}
+
+.helpbar .helpmsg {
+	
+	font-size:14px;
+	margin-bottom:20px;
+	margin-top:10px;
+	
+}
+
+
+
+.helpbar .gwt-Button {
+	
+	color:black;
+	margin-right:5px;
+	
+}
+
+.helpbar {
+-webkit-border-radius: 0px;
+-moz-border-radius: 0px;
+border-radius: 0px;
+-webkit-border-top-right-radius: 9px;
+-moz-border-radius-topright: 9px;
+border-top-right-radius: 9px;
+-webkit-border-bottom-left-radius: 9px;
+-moz-border-radius-bottomleft: 9px;
+border-bottom-left-radius: 9px;
+position:absolute;
+margin-top:100px;
+margin-left:130px;
+margin-right:4%;
+width:52%;
+padding-top:60px;
+background-color:#BBB;
+opacity:0.7;
+padding:20px;
+color:black;
+height:80px;
 
 }
