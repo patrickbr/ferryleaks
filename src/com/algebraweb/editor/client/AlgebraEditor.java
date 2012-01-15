@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.algebraweb.editor.client.dialogs.EditorDragPanel;
+import com.algebraweb.editor.client.dialogs.OkPanel;
 import com.algebraweb.editor.client.dialogs.TextPresentationDialog;
 import com.algebraweb.editor.client.dialogs.YesNoPanel;
 import com.algebraweb.editor.client.dialogs.ZoomPanel;
@@ -58,10 +59,10 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.36";
+	private static String VERSION = "Beta 1.37";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2011 (December 19th)";
+	private static String YEAR = "2012 (January 15th)";
 	private static String AUTHORURL = "http://www.patrickbrosi.de/";
 	private static String FACILITY = "Universität Tübingen";
 	private static String FACILITYURL = "http://www.uni-tuebingen.de/";
@@ -187,7 +188,7 @@ public class AlgebraEditor implements EntryPoint {
 		if (hasCanvasWithId(id)) {
 			return getCanvas(id);
 		}
-		
+
 
 		LogicalCanvas c = new LogicalCanvas(id, m,
 				Window.getClientWidth() - 30, Window.getClientHeight() - 30,
@@ -223,7 +224,7 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void changeCanvas(int id) {
 		AlgebraEditor.log("Changing to canvas #" + id);
-	
+
 		Iterator<EditorDragPanel> it = panels.iterator();
 		int activeCanvasId = -1;
 		if (activeCanvas != null) {
@@ -256,7 +257,7 @@ public class AlgebraEditor implements EntryPoint {
 	 */
 	public void clearCanvases() {
 
-		
+
 		AlgebraEditor.log("Clearing canvases...");
 		Iterator<EditorDragPanel> it = panels.iterator();
 		canvi.clear();
@@ -277,7 +278,7 @@ public class AlgebraEditor implements EntryPoint {
 	 *            if true, all other plans will be removed first
 	 */
 	public void createNewPlan(boolean clearFirst) {
-			rmsa.createNewPlan(clearFirst, createCb);
+		rmsa.createNewPlan(clearFirst, createCb);
 	}
 
 	/**
@@ -639,7 +640,7 @@ public class AlgebraEditor implements EntryPoint {
 		AlgebraEditor.log("initializing remote manupulation service...");
 		rmsa = (RemoteManipulationServiceAsync) GWT
 		.create(RemoteManipulationService.class);
-	
+
 		m = new PlanModelManipulator(rmsa);
 		m.setEditor(this);
 		s = new PlanSwitcher(this);
@@ -658,6 +659,30 @@ public class AlgebraEditor implements EntryPoint {
 		initZoomPanel();
 
 
+
+		if ((BROWSER_NAME + BROWSER_VER).toLowerCase().contains("msie 8")) {
+
+			OkPanel p = new OkPanel("You are using Microsoft Internet Explorer 8. <br><br>It is possible to use FerryLeaks with this version of Internet Explorer. <br>However, <b>you will most likely experience some problems with the graphical user interface. </b><br>Consider upgrading to Internet Explorer 9 or using another browser.<br> FerryLeaks has been tested on Firefox, Safari, Opera and Chrome.", "Warning");
+			p.center();
+		}
+
+		if ((BROWSER_NAME + BROWSER_VER).toLowerCase().contains("msie 7")) {
+
+			OkPanel p = new OkPanel("You are using Microsoft Internet Explorer 7. <br><br>It is possible to use FerryLeaks with this version of Internet Explorer. <br>However, <b>you will most likely experience problems with the graphical user interface. </b><br>Consider upgrading to Internet Explorer 9 or using another browser.<br> FerryLeaks has been tested on Firefox, Safari, Opera and Chrome.", "Warning");
+			p.center();
+		}
+
+		if ((BROWSER_NAME + BROWSER_VER).toLowerCase().contains("msie 6")) {
+
+			OkPanel p = new OkPanel("You are using Microsoft Internet Explorer 6. <br><br>It is possible to use FerryLeaks with this version of Internet Explorer. <br>However, <b>you will most likely experience heavy problems with the graphical user interface. </b><br>Consider upgrading to Internet Explorer 9 or using another browser.<br> FerryLeaks has been tested on Firefox, Safari, Opera and Chrome.", "Warning");
+			p.center();
+		}
+
+		if ((BROWSER_NAME + BROWSER_VER).toLowerCase().contains("msie 5")) {
+
+			OkPanel p = new OkPanel("You are using Microsoft Internet Explorer 5. <br><br>It is possible to use FerryLeaks with this version of Internet Explorer. <br>However, <b>you will experience extreme problems with the graphical user interface.</b> <br>Consider upgrading to Internet Explorer 9 or using another browser.<br> FerryLeaks has been tested on Firefox, Safari, Opera and Chrome.", "Warning");
+			p.center();
+		}
 
 		AlgebraEditor.log("Sending registration...");
 
@@ -761,7 +786,7 @@ public class AlgebraEditor implements EntryPoint {
 					Window.Location.getParameter("autoload") == "") {
 				hm = new HelpMessage(this);
 				RootPanel.get("editor").add(hm);
-				
+
 			}
 			createNewPlan(true);
 		}
@@ -792,4 +817,6 @@ public class AlgebraEditor implements EntryPoint {
 		}
 
 	}
+
+
 }

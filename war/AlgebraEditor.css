@@ -596,6 +596,7 @@ table td,table {
 	width: 100%;
 	opacity: 0.8;
 	padding-left: 20px;
+	z-index:200;
 }
 
 body.hidden div {
