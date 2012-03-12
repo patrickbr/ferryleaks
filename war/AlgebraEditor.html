@@ -16,7 +16,7 @@
 				<link type="text/css" rel="stylesheet" href="AlgebraEditorIE6.css">
 			<![endif]>
 		<![endif]-->
-		<![if lt IE 9]>
+		<!--[if lt IE 9]>
 			<link type="text/css" rel="stylesheet" href="AlgebraEditorIE8.css">
 		<![endif]-->
 		
@@ -25,7 +25,7 @@
 	<body class="hidden" onload="window.document.body.className='visible';" >
 		<div style="overflow:hidden;position:absolute;height:1px;width:1px;">    
 			<svg width="1" height="1" version="1.1" xmlns="http://www.w3.org/2000/svg">
-				<defs><filter id="Gaussian_Blur"><feGaussianBlur in="SourceGraphic" stdDeviation="1" /></filter>
+				<defs><filter id="Gaussian_Blur"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" /></filter>
 				</defs>
 			</svg> 
 		</div>
@@ -40,9 +40,11 @@
    			<span id="msg">loading...</span>    
 		</span>
 		<noscript>
-			<div style="display:block;visibility:visible;width: 22em; position: absolute; left: 50%; top:50%;background-color:#FEFEFE;margin-top:15px;margin-left: -11em; color: red; border: 3px double red; padding: 4px">
+		<div style="position: absolute; left: 50%; top:50%">
+			<div style="font-size:16px;position:absolute;top:-70px;display:block;visibility:visible;width: 22em; background-color:#FEFEFE;margin-top:15px;margin-left: -11em; color: red; border: 3px double red; padding: 14px">
 				It seems as if your web browser does not have JavaScript enabled!
 				In order for the bugFerry to sail out correctly, you have to enable JavaScript support.
+			</div>
 			</div>
 		</noscript>
 	</body>

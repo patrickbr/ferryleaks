@@ -59,10 +59,10 @@ import com.google.gwt.user.client.ui.TextArea;
 
 public class AlgebraEditor implements EntryPoint {
 
-	private static String VERSION = "Beta 1.37";
+	private static String VERSION = "Beta 1.38";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
-	private static String YEAR = "2012 (January 15th)";
+	private static String YEAR = "2012 (March 12th)";
 	private static String AUTHORURL = "http://www.patrickbrosi.de/";
 	private static String FACILITY = "Universität Tübingen";
 	private static String FACILITYURL = "http://www.uni-tuebingen.de/";
