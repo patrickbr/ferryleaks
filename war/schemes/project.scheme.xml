@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The node schema file for the PROJECT node -->
+
+
+<nodeschema kind="project">
+
+	<properties>
+		<property name="color">0xeeeeee</property>
+		<property name="reset_columns">true</property>
+		<property name="label_schema">[_kind]\n({column_proj} {column_kept})</property>
+	</properties>
+
+
+	<schema>
+	
+	  	<gointo xmlob="content" humanname="Projection" howoften="1">
+
+			<val xmlob="column" name_to_print="[name]:[old_name]" humanname="Projection columns" name="column_proj" howoften="*">
+				<fields>
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="true">new</field>
+					<field type="__COLUMN">old_name</field>
+				</fields>
+			</val>
+			<val xmlob="column" name_to_print="[name]" humanname="Kept columns"  name="column_kept" howoften="*">
+
+				<fields>
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="false">new</field>
+				</fields>
+			</val>
+		</gointo>
+	
+		<val xmlob="edge" name="edgeto" howoften="1">
+				<fields>
+					<field type="__NID">to</field>
+				</fields>
+		</val>
+	</schema>
+</nodeschema>

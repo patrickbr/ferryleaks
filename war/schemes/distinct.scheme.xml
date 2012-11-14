@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The node schema file for the DISTINCT node -->
+
+<nodeschema kind="distinct">
+
+	<properties>
+		<property name="color">0xffa500</property>
+	</properties>
+
+	<schema>
+		<val xmlob="edge" name="edgeto" howoften="1">
+				<fields>
+					<field type="__NID">to</field>
+				</fields>
+		</val>
+	</schema>
+</nodeschema>

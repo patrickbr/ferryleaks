@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The node schema file for the SELECT node -->
+
+
+<nodeschema kind="select">
+
+	<properties>
+	
+		<property name="color">0x00dddd</property>
+		<property name="label_schema">[_kind]\n({column})</property>
+
+	</properties>
+
+
+	<schema>
+	
+		<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" namefield="name" name_to_print="[name]" humanname="Column" name="column" howoften="1">
+
+				<fields>
+
+					<field type="__COLUMN">name</field>
+					<field type="boolean" must_be="false" >new</field>
+			
+				</fields>
+
+			</val>
+
+		
+
+		</gointo>
+
+		
+		<val xmlob="edge" name="edgeto" howoften="1">
+		
+				<fields>
+
+					<field type="__NID">to</field>
+							
+				</fields>
+				
+		</val>
+
+	</schema>
+
+</nodeschema>

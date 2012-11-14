@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+  <servlet>
+    <servlet-name>RemoteFiller</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.graphcanvas.remotefiller.RemoteFiller</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>RemoteFiller</servlet-name>
+    <url-pattern>/algebraeditor/communication</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>RemoteSorter</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.graphcanvas.remotesorter.RemoteSortingServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>RemoteSorter</servlet-name>
+    <url-pattern>/algebraeditor/sorter</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>PlanModelCommunicationServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.logicalplan.communication.PlanCommunicationServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>PlanModelCommunicationServlet</servlet-name>
+    <url-pattern>/algebraeditor/manipulate</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>RegistrationServiceServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.registrationservice.RegistrationServiceServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>RegistrationServiceServlet</servlet-name>
+    <url-pattern>/algebraeditor/register</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>FileServerServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.fileserver.FileServerServlet</servlet-class>
+  </servlet>  
+    
+   
+  <servlet-mapping>
+    <servlet-name>FileServerServlet</servlet-name>
+    <url-pattern>/algebraeditor/fileserver</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>PostInterfaceServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.postinterface.PostInterfaceServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>PostInterfaceServlet</servlet-name>
+    <url-pattern>/algebraeditor/postinterface</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>XMLExamplePlanLoader</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLExamplePlanLoader</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>XMLExamplePlanLoader</servlet-name>
+    <url-pattern>/algebraeditor/example</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>AlgebraEditor.html</welcome-file>
+  </welcome-file-list>
+  
+    <context-param>
+    <!-- max size of the upload request -->
+    <param-name>maxSize</param-name>
+    <param-value>3145728</param-value>
+  </context-param>
+  <context-param>
+    <!-- Useful in development mode to slow down the uploads in fast networks.
+         Put the number of milliseconds to sleep in each block received in the server.
+         false or 0, means don't use slow uploads  -->
+    <param-name>slowUploads</param-name>
+    <param-value>200</param-value>
+  </context-param>
+
+ <servlet>
+    <servlet-name>uploadServlet</servlet-name>
+    <servlet-class>com.algebraweb.editor.server.logicalplan.xmlplanloader.XMLPlanUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>*.gupld</url-pattern>
+  </servlet-mapping>
+
+</web-app>
