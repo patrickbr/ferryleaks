@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The node schema file for the TABLE node -->
+
+
+<nodeschema kind="table">
+
+	<properties>
+		<property name="color">0xc0c0c0</property>
+		<property name="label_schema">[_kind]\n({column}) ({value})</property>
+	</properties>
+
+	<schema>
+		
+		<gointo xmlob="content" humanname="Columns to add" howoften="1">
+
+			<val xmlob="column" humanname="Column" name_to_print="[name]" name="column" howoften="*">
+
+				<fields>
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="true">new</field>
+				</fields>
+
+				<val xmlob="value" name_to_print="&lt;[_val]&gt;" humanname="Inserted values" hasval="true" name="value" howoften="*">
+
+				<fields>
+					<field type="datatype">type</field>
+				</fields>
+				</val>
+		
+			</val>
+
+		</gointo>
+		
+		<val xmlob="edge" name="edgeto" howoften="0">
+				<fields>
+					<field type="__NID">to</field>
+				</fields>
+		</val>
+	</schema>
+
+</nodeschema>

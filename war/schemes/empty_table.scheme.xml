@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The node schema file for the EMPTY_TBL node -->
+
+
+<nodeschema kind="empty_tbl">
+
+	<properties>
+		<property name="color">0xc0c0c0</property>
+	</properties>
+
+	<schema>
+		<gointo xmlob="content" howoften="1">
+
+			<val xmlob="column" name="column" howoften="*">
+				<fields>
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="true">new</field>
+				</fields>
+			</val>
+
+		</gointo>
+		
+		<val xmlob="edge" name="edgeto" howoften="0">
+				<fields>
+					<field type="__NID">to</field>
+				</fields>
+		</val>
+	</schema>
+</nodeschema>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The node schema file for the AGGR node -->
+
+<nodeschema kind="aggr">
+
+	<properties>
+		<property name="color">0xa0a0a0</property>
+		<property name="label_schema">[_kind] {part_column}{aggregate}</property>
+		<property name="reset_columns">true</property>
+	</properties>
+
+	<schema>
+	  	<gointo xmlob="content" humanname="Aggregate" howoften="1">
+			<val xmlob="column" name_to_print=" / [name]" namefield="name" humanname="Partition column" name="part_column" howoften="?">
+
+				<fields>
+					<field type="__COLUMN_NEW">name</field>
+					<field type="boolean" must_be="false">new</field>
+					<field type="string" must_be="partition">function</field>
+				</fields>
+							
+			</val>
+			
+			<val xmlob="aggregate" name_to_print="\n{rescolumn} = [kind] ({itemcolumn})" namefield="kind" humanname="Functions" name="aggregate" howoften="+">
+
+				<fields>
+					<field type="string" can_be="avg,max,min,sum,count,seqty1,all,prod,distinct">kind</field>
+				</fields>
+				
+				<val xmlob="column" name_to_print="[name]" namefield="name" humanname="Result Column" name="rescolumn" howoften="1">
+					<fields>
+						<field type="__COLUMN_NEW">name</field>
+						<field type="boolean" must_be="true">new</field>
+					</fields>
+				</val>
+				
+				<val xmlob="column" name_to_print="[name]" namefield="name" humanname="Aggr. item" name="itemcolumn" howoften="?">
+					<fields>
+						<field type="__COLUMN">name</field>
+						<field type="boolean" must_be="false">new</field>
+						<field type="string" must_be="item">function</field>
+					</fields>
+				</val>
+			</val>
+		</gointo>
+	
+		<val xmlob="edge" humanname="Childs" namefield="to" name="edgeto" howoften="1">
+				<fields>
+					<field type="__NID">to</field>
+				</fields>
+		</val>
+	</schema>
+</nodeschema>

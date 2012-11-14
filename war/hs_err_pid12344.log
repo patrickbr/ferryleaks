@@ -1,0 +1,507 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0xb4bcc948, pid=12344, tid=2334845808
+#
+# JRE version: 6.0_20-b20
+# Java VM: OpenJDK Server VM (19.0-b09 mixed mode linux-x86 )
+# Derivative: IcedTea6 1.9.9
+# Distribution: Ubuntu 10.04.1 LTS, package 6b20-1.9.9-0ubuntu1~10.04.2
+# Problematic frame:
+# J  org.eclipse.jdt.internal.compiler.parser.Parser.consumeToken(I)V
+#
+# If you would like to submit a bug report, please include
+# instructions how to reproduce the bug and visit:
+#   https://bugs.launchpad.net/ubuntu/+source/openjdk-6/
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x09e67400):  JavaThread "Code server for algebraeditor from Mozilla/5.0 (X11; Linux i686; rv:2.0b13pre) Gecko/20110322 Firefox/4.0b13pre on http://127.0.0.1:8888/AlgebraEditor.html?gwt.codesvr=127.0.0.1:9997 @ 'DejEw+<ir]#"yo4" daemon [_thread_in_Java, id=12387, stack(0x8b25e000,0x8b2af000)]
+
+siginfo:si_signo=SIGSEGV: si_errno=0, si_code=128 (), si_addr=0x00000000
+
+Registers:
+EAX=0x00000001, EBX=0x00400000, ECX=0x95ff35d0, EDX=0x00000110
+ESP=0x8b2ada90, EBP=0x00000000, ESI=0x95ff2658, EDI=0x00000000
+EIP=0xb4bcc948, CR2=0x00000004, EFLAGS=0x00210257
+
+Register to memory mapping:
+
+EAX=0x00000001
+0x00000001 is pointing to unknown location
+
+EBX=0x00400000
+0x00400000: SUNWprivate_1.1+0 in /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjava.so at 0x00400000
+
+ECX=0x95ff35d0
+[I 
+ - klass: {type array int}
+ - length: 30
+
+EDX=0x00000110
+0x00000110 is pointing to unknown location
+
+ESP=0x8b2ada90
+0x8b2ada90 is pointing into the stack for thread: 0x09e67400
+"Code server for algebraeditor from Mozilla/5.0 (X11; Linux i686; rv:2.0b13pre) Gecko/20110322 Firefox/4.0b13pre on http://127.0.0.1:8888/AlgebraEditor.html?gwt.codesvr=127.0.0.1:9997 @ 'DejEw+<ir]#"yo4" daemon prio=10 tid=0x09e67400 nid=0x3063 runnable [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+EBP=0x00000000
+0x00000000 is pointing to unknown location
+
+ESI=0x95ff2658
+org.eclipse.jdt.internal.compiler.parser.Parser 
+ - klass: 'org/eclipse/jdt/internal/compiler/parser/Parser'
+
+EDI=0x00000000
+0x00000000 is pointing to unknown location
+
+
+Top of Stack: (sp=0x8b2ada90)
+0x8b2ada90:   00000000 95ff38f0 ffffffff 95ff2658
+0x8b2adaa0:   95ff2eb0 95ff35dc 95ff2ebc ffffffff
+0x8b2adab0:   00000000 00000003 95ff4510 95ff3818
+0x8b2adac0:   95ff3824 00000004 09e67400 00000002
+0x8b2adad0:   00000000 00000000 0000000e b48b3bf8
+0x8b2adae0:   95ff3fd4 95ff2f44 0000012c 000003e0
+0x8b2adaf0:   95ff2658 000003e0 00000045 95ff4510
+0x8b2adb00:   00000830 00000000 00000043 ae790068 
+
+Instructions: (pc=0xb4bcc948)
+0xb4bcc938:   00 03 7e 20 89 7c 24 3c bf 01 00 00 00 03 7e 38
+0xb4bcc948:   ff 24 15 80 2b bd b4 83 c4 48 5d 85 05 00 70 89 
+
+Stack: [0x8b25e000,0x8b2af000],  sp=0x8b2ada90,  free space=318k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+J  org.eclipse.jdt.internal.compiler.parser.Parser.consumeToken(I)V
+
+[error occurred during error reporting (printing native stack), id 0xb]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+=>0x09e67400 JavaThread "Code server for algebraeditor from Mozilla/5.0 (X11; Linux i686; rv:2.0b13pre) Gecko/20110322 Firefox/4.0b13pre on http://127.0.0.1:8888/AlgebraEditor.html?gwt.codesvr=127.0.0.1:9997 @ 'DejEw+<ir]#"yo4" daemon [_thread_in_Java, id=12387, stack(0x8b25e000,0x8b2af000)]
+  0x8b73e400 JavaThread "btpool0-3" [_thread_blocked, id=12386, stack(0x8b2af000,0x8b300000)]
+  0x8b780000 JavaThread "btpool0-2" [_thread_blocked, id=12385, stack(0x8b8a2000,0x8b8f3000)]
+  0x8b5ec000 JavaThread "Timer-1" daemon [_thread_blocked, id=12375, stack(0x8b450000,0x8b4a1000)]
+  0x8b5a4c00 JavaThread "btpool0-1 - Acceptor0 SelectChannelConnector@127.0.0.1:8888" [_thread_in_native, id=12374, stack(0x8b84b000,0x8b89c000)]
+  0x8b5a4400 JavaThread "btpool0-0" [_thread_blocked, id=12373, stack(0x8b9ee000,0x8ba3f000)]
+  0x8b570400 JavaThread "GC Daemon" daemon [_thread_blocked, id=12372, stack(0x8ba3f000,0x8ba90000)]
+  0x8bcd8c00 JavaThread "com.google.gwt.thirdparty.guava.common.base.internal.Finalizer" daemon [_thread_blocked, id=12368, stack(0x8b8f3000,0x8b944000)]
+  0x8bcc0400 JavaThread "Code server listener" daemon [_thread_in_native, id=12367, stack(0x8b94c000,0x8b99d000)]
+  0x09bf2c00 JavaThread "Timer-0" daemon [_thread_blocked, id=12366, stack(0x8b99d000,0x8b9ee000)]
+  0x8bc74000 JavaThread "Thread-1" daemon [_thread_blocked, id=12363, stack(0x8bd0e000,0x8bd5f000)]
+  0x8bc73400 JavaThread "Thread-0" [_thread_in_native, id=12362, stack(0x8bd5f000,0x8bdb0000)]
+  0x09a7c800 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=12358, stack(0x8bf5c000,0x8bfad000)]
+  0x09a79000 JavaThread "CompilerThread1" daemon [_thread_in_native, id=12357, stack(0x8bfad000,0x8c02e000)]
+  0x09a77000 JavaThread "CompilerThread0" daemon [_thread_in_native, id=12356, stack(0x8c02e000,0x8c0af000)]
+  0x09a75800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=12355, stack(0x8c0af000,0x8c100000)]
+  0x09a62400 JavaThread "Finalizer" daemon [_thread_blocked, id=12354, stack(0x8c146000,0x8c197000)]
+  0x09a60c00 JavaThread "Reference Handler" daemon [_thread_blocked, id=12353, stack(0x8c197000,0x8c1e8000)]
+  0x099d7400 JavaThread "main" [_thread_blocked, id=12349, stack(0xb782d000,0xb787e000)]
+
+Other Threads:
+  0x09a5d000 VMThread [stack: 0x8c1e8000,0x8c269000] [id=12352]
+  0x09a7e400 WatcherThread [stack: 0x8bedb000,0x8bf5c000] [id=12359]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ PSYoungGen      total 135040K, used 76782K [0xa9cc0000, 0xb4760000, 0xb4760000)
+  eden space 95360K, 80% used [0xa9cc0000,0xae7bbaf8,0xaf9e0000)
+  from space 39680K, 0% used [0xaf9e0000,0xaf9e0000,0xb20a0000)
+  to   space 38912K, 0% used [0xb2160000,0xb2160000,0xb4760000)
+ PSOldGen        total 106816K, used 51885K [0x94760000, 0x9afb0000, 0xa9cc0000)
+  object space 106816K, 48% used [0x94760000,0x97a0b680,0x9afb0000)
+ PSPermGen       total 30464K, used 18278K [0x8c760000, 0x8e520000, 0x94760000)
+  object space 30464K, 60% used [0x8c760000,0x8d9399b0,0x8e520000)
+
+Dynamic libraries:
+00110000-00134000 r-xp 00000000 08:01 19340      /lib/tls/i686/cmov/libm-2.11.1.so
+00134000-00135000 r--p 00023000 08:01 19340      /lib/tls/i686/cmov/libm-2.11.1.so
+00135000-00136000 rw-p 00024000 08:01 19340      /lib/tls/i686/cmov/libm-2.11.1.so
+00136000-00149000 r-xp 00000000 08:01 19372      /lib/tls/i686/cmov/libnsl-2.11.1.so
+00149000-0014a000 r--p 00012000 08:01 19372      /lib/tls/i686/cmov/libnsl-2.11.1.so
+0014a000-0014b000 rw-p 00013000 08:01 19372      /lib/tls/i686/cmov/libnsl-2.11.1.so
+0014b000-0014d000 rw-p 00000000 00:00 0 
+0014d000-00154000 r-xp 00000000 08:01 222682     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/native_threads/libhpi.so
+00154000-00155000 r--p 00006000 08:01 222682     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/native_threads/libhpi.so
+00155000-00156000 rw-p 00007000 08:01 222682     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/native_threads/libhpi.so
+00156000-0015e000 r-xp 00000000 08:01 19402      /lib/tls/i686/cmov/libnss_nis-2.11.1.so
+0015e000-0015f000 r--p 00007000 08:01 19402      /lib/tls/i686/cmov/libnss_nis-2.11.1.so
+0015f000-00160000 rw-p 00008000 08:01 19402      /lib/tls/i686/cmov/libnss_nis-2.11.1.so
+00160000-00167000 r-xp 00000000 08:01 222676     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libzip.so
+00167000-00168000 r--p 00006000 08:01 222676     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libzip.so
+00168000-00169000 rw-p 00007000 08:01 222676     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libzip.so
+00169000-0017d000 r-xp 00000000 08:01 222661     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnet.so
+0017d000-0017e000 r--p 00013000 08:01 222661     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnet.so
+0017e000-0017f000 rw-p 00014000 08:01 222661     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnet.so
+0017f000-00183000 r-xp 00000000 08:01 19374      /lib/tls/i686/cmov/libnss_dns-2.11.1.so
+00183000-00184000 r--p 00004000 08:01 19374      /lib/tls/i686/cmov/libnss_dns-2.11.1.so
+00184000-00185000 rw-p 00005000 08:01 19374      /lib/tls/i686/cmov/libnss_dns-2.11.1.so
+00185000-00189000 r-xp 00000000 08:01 33560      /usr/lib/libXtst.so.6.1.0
+00189000-0018a000 r--p 00003000 08:01 33560      /usr/lib/libXtst.so.6.1.0
+0018a000-0018b000 rw-p 00004000 08:01 33560      /usr/lib/libXtst.so.6.1.0
+0018b000-0018d000 r-xp 00000000 08:01 37638      /usr/lib/libplds4.so
+0018d000-0018e000 r--p 00001000 08:01 37638      /usr/lib/libplds4.so
+0018e000-0018f000 rw-p 00002000 08:01 37638      /usr/lib/libplds4.so
+0018f000-00191000 r-xp 00000000 08:01 8240       /lib/libnss_mdns4_minimal.so.2
+00191000-00192000 r--p 00001000 08:01 8240       /lib/libnss_mdns4_minimal.so.2
+00192000-00193000 rw-p 00002000 08:01 8240       /lib/libnss_mdns4_minimal.so.2
+00193000-001a1000 r-xp 00000000 08:01 33532      /usr/lib/libXext.so.6.4.0
+001a1000-001a2000 r--p 0000d000 08:01 33532      /usr/lib/libXext.so.6.4.0
+001a2000-001a3000 rw-p 0000e000 08:01 33532      /usr/lib/libXext.so.6.4.0
+001a3000-001af000 r-xp 00000000 08:01 33540      /usr/lib/libXi.so.6.1.0
+001af000-001b0000 r--p 0000c000 08:01 33540      /usr/lib/libXi.so.6.1.0
+001b0000-001b1000 rw-p 0000d000 08:01 33540      /usr/lib/libXi.so.6.1.0
+001b1000-001c9000 r-xp 00000000 08:01 34522      /usr/lib/libxcb.so.1.1.0
+001c9000-001ca000 r--p 00017000 08:01 34522      /usr/lib/libxcb.so.1.1.0
+001ca000-001cb000 rw-p 00018000 08:01 34522      /usr/lib/libxcb.so.1.1.0
+001cb000-001f9000 r-xp 00000000 08:01 219880     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/liblcms.so
+001f9000-001fa000 r--p 0002d000 08:01 219880     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/liblcms.so
+001fa000-001fb000 rw-p 0002e000 08:01 219880     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/liblcms.so
+001fb000-001fd000 rw-p 00000000 00:00 0 
+001fd000-00206000 r-xp 00000000 08:01 219779     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjpeg.so
+00206000-00207000 r--p 00008000 08:01 219779     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjpeg.so
+00207000-00208000 rw-p 00009000 08:01 219779     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjpeg.so
+00208000-0020b000 r-xp 00000000 08:01 37637      /usr/lib/libplc4.so
+0020b000-0020c000 r--p 00002000 08:01 37637      /usr/lib/libplc4.so
+0020c000-0020d000 rw-p 00003000 08:01 37637      /usr/lib/libplc4.so
+00213000-00298000 r-xp 00000000 08:01 219123     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libawt.so
+00298000-00299000 r--p 00085000 08:01 219123     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libawt.so
+00299000-0029f000 rw-p 00086000 08:01 219123     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libawt.so
+0029f000-002c4000 rw-p 00000000 00:00 0 
+002c4000-002d2000 r-xp 00000000 08:01 219324     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libj2pkcs11.so
+002d2000-002d3000 r--p 0000d000 08:01 219324     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libj2pkcs11.so
+002d3000-002d4000 rw-p 0000e000 08:01 219324     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libj2pkcs11.so
+002d5000-002db000 r-xp 00000000 08:01 19373      /lib/tls/i686/cmov/libnss_compat-2.11.1.so
+002db000-002dc000 r--p 00006000 08:01 19373      /lib/tls/i686/cmov/libnss_compat-2.11.1.so
+002dc000-002dd000 rw-p 00007000 08:01 19373      /lib/tls/i686/cmov/libnss_compat-2.11.1.so
+002dd000-002f2000 r-xp 00000000 08:01 31650      /usr/lib/libnssutil3.so
+002f2000-002f5000 r--p 00014000 08:01 31650      /usr/lib/libnssutil3.so
+002f5000-002f6000 rw-p 00017000 08:01 31650      /usr/lib/libnssutil3.so
+002f6000-00327000 r-xp 00000000 08:01 37636      /usr/lib/libnspr4.so
+00327000-00328000 r--p 00030000 08:01 37636      /usr/lib/libnspr4.so
+00328000-00329000 rw-p 00031000 08:01 37636      /usr/lib/libnspr4.so
+00329000-0032b000 rw-p 00000000 00:00 0 
+00353000-0036e000 r-xp 00000000 08:01 8200       /lib/ld-2.11.1.so
+0036e000-0036f000 r--p 0001a000 08:01 8200       /lib/ld-2.11.1.so
+0036f000-00370000 rw-p 0001b000 08:01 8200       /lib/ld-2.11.1.so
+00370000-003a7000 r-xp 00000000 08:01 32744      /usr/lib/nss/libsoftokn3.so
+003a7000-003a8000 r--p 00037000 08:01 32744      /usr/lib/nss/libsoftokn3.so
+003a8000-003a9000 rw-p 00038000 08:01 32744      /usr/lib/nss/libsoftokn3.so
+003c4000-003c5000 r-xp 00000000 00:00 0          [vdso]
+003c6000-003c9000 r-xp 00000000 08:01 218989     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/jli/libjli.so
+003c9000-003ca000 r--p 00003000 08:01 218989     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/jli/libjli.so
+003ca000-003cb000 rw-p 00004000 08:01 218989     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/jli/libjli.so
+003cb000-003d2000 r-xp 00000000 08:01 222662     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnio.so
+003d2000-003d3000 r--p 00006000 08:01 222662     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnio.so
+003d3000-003d4000 rw-p 00007000 08:01 222662     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libnio.so
+00400000-00424000 r-xp 00000000 08:01 219505     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjava.so
+00424000-00425000 r--p 00023000 08:01 219505     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjava.so
+00425000-00427000 rw-p 00024000 08:01 219505     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libjava.so
+00427000-004a7000 r-xp 00000000 08:01 34414      /usr/lib/libsqlite3.so.0.8.6
+004a7000-004a8000 r--p 0007f000 08:01 34414      /usr/lib/libsqlite3.so.0.8.6
+004a8000-004a9000 rw-p 00080000 08:01 34414      /usr/lib/libsqlite3.so.0.8.6
+004a9000-004aa000 rw-p 00000000 00:00 0 
+004ca000-004d1000 r-xp 00000000 08:01 21684      /lib/tls/i686/cmov/librt-2.11.1.so
+004d1000-004d2000 r--p 00006000 08:01 21684      /lib/tls/i686/cmov/librt-2.11.1.so
+004d2000-004d3000 rw-p 00007000 08:01 21684      /lib/tls/i686/cmov/librt-2.11.1.so
+004d3000-0051e000 r-xp 00000000 08:01 31812      /usr/lib/nss/libfreebl3.so
+0051e000-0051f000 r--p 0004a000 08:01 31812      /usr/lib/nss/libfreebl3.so
+0051f000-00520000 rw-p 0004b000 08:01 31812      /usr/lib/nss/libfreebl3.so
+00520000-00524000 rw-p 00000000 00:00 0 
+0055b000-00567000 r-xp 00000000 08:01 222673     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libverify.so
+00567000-00568000 r--p 0000b000 08:01 222673     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libverify.so
+00568000-00569000 rw-p 0000c000 08:01 222673     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/libverify.so
+00578000-0057c000 r-xp 00000000 08:01 33530      /usr/lib/libXdmcp.so.6.0.0
+0057c000-0057d000 r--p 00003000 08:01 33530      /usr/lib/libXdmcp.so.6.0.0
+0057d000-0057e000 rw-p 00004000 08:01 33530      /usr/lib/libXdmcp.so.6.0.0
+005ca000-005cc000 r-xp 00000000 08:01 19339      /lib/tls/i686/cmov/libdl-2.11.1.so
+005cc000-005cd000 r--p 00001000 08:01 19339      /lib/tls/i686/cmov/libdl-2.11.1.so
+005cd000-005ce000 rw-p 00002000 08:01 19339      /lib/tls/i686/cmov/libdl-2.11.1.so
+00657000-00661000 r-xp 00000000 08:01 19379      /lib/tls/i686/cmov/libnss_files-2.11.1.so
+00661000-00662000 r--p 00009000 08:01 19379      /lib/tls/i686/cmov/libnss_files-2.11.1.so
+00662000-00663000 rw-p 0000a000 08:01 19379      /lib/tls/i686/cmov/libnss_files-2.11.1.so
+00663000-0077c000 r-xp 00000000 08:01 33515      /usr/lib/libX11.so.6.3.0
+0077c000-0077d000 r--p 00118000 08:01 33515      /usr/lib/libX11.so.6.3.0
+0077d000-0077f000 rw-p 00119000 08:01 33515      /usr/lib/libX11.so.6.3.0
+0077f000-00780000 rw-p 00000000 00:00 0 
+007a1000-007e6000 r-xp 00000000 08:01 189023     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/xawt/libmawt.so
+007e6000-007e7000 r--p 00044000 08:01 189023     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/xawt/libmawt.so
+007e7000-007e9000 rw-p 00045000 08:01 189023     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/xawt/libmawt.so
+007e9000-007ea000 rw-p 00000000 00:00 0 
+00814000-0081c000 r-xp 00000000 08:01 33554      /usr/lib/libXrender.so.1.3.0
+0081c000-0081d000 r--p 00007000 08:01 33554      /usr/lib/libXrender.so.1.3.0
+0081d000-0081e000 rw-p 00008000 08:01 33554      /usr/lib/libXrender.so.1.3.0
+00865000-00867000 r-xp 00000000 08:01 33519      /usr/lib/libXau.so.6.0.0
+00867000-00868000 r--p 00001000 08:01 33519      /usr/lib/libXau.so.6.0.0
+00868000-00869000 rw-p 00002000 08:01 33519      /usr/lib/libXau.so.6.0.0
+0089d000-008b0000 r-xp 00000000 08:01 8318       /lib/libz.so.1.2.3.3
+008b0000-008b1000 r--p 00012000 08:01 8318       /lib/libz.so.1.2.3.3
+008b1000-008b2000 rw-p 00013000 08:01 8318       /lib/libz.so.1.2.3.3
+008b2000-009c1000 r-xp 00000000 08:01 32750      /usr/lib/libnss3.so
+009c1000-009c4000 r--p 0010e000 08:01 32750      /usr/lib/libnss3.so
+009c4000-009c6000 rw-p 00111000 08:01 32750      /usr/lib/libnss3.so
+009e8000-009fd000 r-xp 00000000 08:01 19435      /lib/tls/i686/cmov/libpthread-2.11.1.so
+009fd000-009fe000 r--p 00014000 08:01 19435      /lib/tls/i686/cmov/libpthread-2.11.1.so
+009fe000-009ff000 rw-p 00015000 08:01 19435      /lib/tls/i686/cmov/libpthread-2.11.1.so
+009ff000-00a01000 rw-p 00000000 00:00 0 
+00a2e000-00a3e000 r-xp 00000000 08:01 19451      /lib/tls/i686/cmov/libresolv-2.11.1.so
+00a3e000-00a3f000 r--p 00010000 08:01 19451      /lib/tls/i686/cmov/libresolv-2.11.1.so
+00a3f000-00a40000 rw-p 00011000 08:01 19451      /lib/tls/i686/cmov/libresolv-2.11.1.so
+00a40000-00a42000 rw-p 00000000 00:00 0 
+00a51000-00ba4000 r-xp 00000000 08:01 19333      /lib/tls/i686/cmov/libc-2.11.1.so
+00ba4000-00ba5000 ---p 00153000 08:01 19333      /lib/tls/i686/cmov/libc-2.11.1.so
+00ba5000-00ba7000 r--p 00153000 08:01 19333      /lib/tls/i686/cmov/libc-2.11.1.so
+00ba7000-00ba8000 rw-p 00155000 08:01 19333      /lib/tls/i686/cmov/libc-2.11.1.so
+00ba8000-00bab000 rw-p 00000000 00:00 0 
+00bab000-01270000 r-xp 00000000 08:01 222686     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/server/libjvm.so
+01270000-01271000 ---p 006c5000 08:01 222686     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/server/libjvm.so
+01271000-012b6000 r--p 006c5000 08:01 222686     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/server/libjvm.so
+012b6000-012c5000 rw-p 0070a000 08:01 222686     /usr/lib/jvm/java-6-openjdk/jre/lib/i386/server/libjvm.so
+012c5000-016e4000 rw-p 00000000 00:00 0 
+08048000-08051000 r-xp 00000000 08:01 224584     /usr/lib/jvm/java-6-openjdk/jre/bin/java
+08051000-08052000 r--p 00008000 08:01 224584     /usr/lib/jvm/java-6-openjdk/jre/bin/java
+08052000-08053000 rw-p 00009000 08:01 224584     /usr/lib/jvm/java-6-openjdk/jre/bin/java
+099d0000-0aa68000 rw-p 00000000 00:00 0          [heap]
+89c00000-89cec000 rw-p 00000000 00:00 0 
+89cec000-89d00000 ---p 00000000 00:00 0 
+89e00000-8a000000 rw-p 00000000 00:00 0 
+8a000000-8a0fc000 rw-p 00000000 00:00 0 
+8a0fc000-8a100000 ---p 00000000 00:00 0 
+8a100000-8a200000 rw-p 00000000 00:00 0 
+8a200000-8a2f9000 rw-p 00000000 00:00 0 
+8a2f9000-8a300000 ---p 00000000 00:00 0 
+8a300000-8a329000 rw-p 00000000 00:00 0 
+8a329000-8a400000 ---p 00000000 00:00 0 
+8a400000-8a4f9000 rw-p 00000000 00:00 0 
+8a4f9000-8a500000 ---p 00000000 00:00 0 
+8a500000-8a5f9000 rw-p 00000000 00:00 0 
+8a5f9000-8a600000 ---p 00000000 00:00 0 
+8a600000-8a6f9000 rw-p 00000000 00:00 0 
+8a6f9000-8a700000 ---p 00000000 00:00 0 
+8a700000-8a7f9000 rw-p 00000000 00:00 0 
+8a7f9000-8a800000 ---p 00000000 00:00 0 
+8a800000-8a8ff000 rw-p 00000000 00:00 0 
+8a8ff000-8a900000 ---p 00000000 00:00 0 
+8a900000-8a9f9000 rw-p 00000000 00:00 0 
+8a9f9000-8aa00000 ---p 00000000 00:00 0 
+8aa00000-8aafc000 rw-p 00000000 00:00 0 
+8aafc000-8ab00000 ---p 00000000 00:00 0 
+8ab00000-8abef000 rw-p 00000000 00:00 0 
+8abef000-8ac00000 ---p 00000000 00:00 0 
+8ac00000-8ad00000 rw-p 00000000 00:00 0 
+8ad00000-8adfa000 rw-p 00000000 00:00 0 
+8adfa000-8ae00000 ---p 00000000 00:00 0 
+8af00000-8aff9000 rw-p 00000000 00:00 0 
+8aff9000-8b000000 ---p 00000000 00:00 0 
+8b000000-8b100000 rw-p 00000000 00:00 0 
+8b100000-8b1f5000 rw-p 00000000 00:00 0 
+8b1f5000-8b200000 ---p 00000000 00:00 0 
+8b25e000-8b261000 ---p 00000000 00:00 0 
+8b261000-8b2af000 rw-p 00000000 00:00 0 
+8b2af000-8b2b2000 ---p 00000000 00:00 0 
+8b2b2000-8b300000 rw-p 00000000 00:00 0 
+8b300000-8b3f5000 rw-p 00000000 00:00 0 
+8b3f5000-8b400000 ---p 00000000 00:00 0 
+8b450000-8b453000 ---p 00000000 00:00 0 
+8b453000-8b4a1000 rw-p 00000000 00:00 0 
+8b4a1000-8b500000 r--s 00468000 08:01 1576614    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/gwt-servlet.jar
+8b500000-8b5ff000 rw-p 00000000 00:00 0 
+8b5ff000-8b600000 ---p 00000000 00:00 0 
+8b600000-8b6fd000 rw-p 00000000 00:00 0 
+8b6fd000-8b700000 ---p 00000000 00:00 0 
+8b700000-8b7fd000 rw-p 00000000 00:00 0 
+8b7fd000-8b800000 ---p 00000000 00:00 0 
+8b84b000-8b84e000 ---p 00000000 00:00 0 
+8b84e000-8b89c000 rw-p 00000000 00:00 0 
+8b89c000-8b8a2000 r--s 000fc000 08:01 40549      /usr/lib/jvm/java-6-openjdk/jre/lib/resources.jar
+8b8a2000-8b8a5000 ---p 00000000 00:00 0 
+8b8a5000-8b8f3000 rw-p 00000000 00:00 0 
+8b8f3000-8b8f6000 ---p 00000000 00:00 0 
+8b8f6000-8b944000 rw-p 00000000 00:00 0 
+8b944000-8b947000 r--s 00077000 08:01 32789      /usr/lib/jvm/java-6-openjdk/jre/lib/ext/localedata.jar
+8b947000-8b949000 r--s 00001000 08:01 32604      /usr/lib/jvm/java-6-openjdk/jre/lib/ext/dnsns.jar
+8b949000-8b94c000 r--s 00038000 08:01 32603      /usr/lib/jvm/java-6-openjdk/jre/lib/ext/sunpkcs11.jar
+8b94c000-8b94f000 ---p 00000000 00:00 0 
+8b94f000-8b99d000 rw-p 00000000 00:00 0 
+8b99d000-8b9a0000 ---p 00000000 00:00 0 
+8b9a0000-8b9ee000 rw-p 00000000 00:00 0 
+8b9ee000-8b9f1000 ---p 00000000 00:00 0 
+8b9f1000-8ba3f000 rw-p 00000000 00:00 0 
+8ba3f000-8ba42000 ---p 00000000 00:00 0 
+8ba42000-8ba90000 rw-p 00000000 00:00 0 
+8ba90000-8bc00000 r--s 01951000 08:01 937535     /home/patrick/Downloads/gwt-2.3.0/gwt-dev.jar
+8bc00000-8bcfb000 rw-p 00000000 00:00 0 
+8bcfb000-8bd00000 ---p 00000000 00:00 0 
+8bd00000-8bd02000 r--s 00013000 08:01 34333      /usr/lib/jvm/java-6-openjdk/jre/lib/jce.jar
+8bd02000-8bd05000 r--s 00031000 08:01 32791      /usr/lib/jvm/java-6-openjdk/jre/lib/ext/sunjce_provider.jar
+8bd05000-8bd08000 r--s 00009000 08:01 937543     /home/patrick/Downloads/gwt-2.3.0/validation-api-1.0.0.GA.jar
+8bd08000-8bd0a000 r--s 0000e000 08:01 937544     /home/patrick/Downloads/gwt-2.3.0/validation-api-1.0.0.GA-sources.jar
+8bd0a000-8bd0e000 r--s 0007c000 08:01 36936      /usr/lib/jvm/java-6-openjdk/jre/lib/jsse.jar
+8bd0e000-8bd11000 ---p 00000000 00:00 0 
+8bd11000-8bd5f000 rw-p 00000000 00:00 0 
+8bd5f000-8bd62000 ---p 00000000 00:00 0 
+8bd62000-8bdde000 rw-p 00000000 00:00 0 
+8bdde000-8beaf000 r--s 00a99000 08:01 937536     /home/patrick/Downloads/gwt-2.3.0/gwt-user.jar
+8beaf000-8bebd000 r--s 0007f000 08:01 1593822    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/commons-collections-3.2.1.jar
+8bebd000-8bebf000 r--s 0000d000 08:01 1588295    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/commons-logging-1.1.1.jar
+8bebf000-8bec4000 r--s 00041000 08:01 1593771    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/commons-lang-2.6.jar
+8bec4000-8beca000 r--s 00043000 08:01 1593781    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/commons-configuration-1.6.jar
+8beca000-8bed0000 r--s 00075000 08:01 1577814    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/postgresql-9.0-801.jdbc3.jar
+8bed0000-8bed2000 r--s 00009000 08:01 1573110    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/commons-dbutils-1.3.jar
+8bed2000-8bedb000 r--s 0006d000 08:01 1586391    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/log4j-1.2.16.jar
+8bedb000-8bedc000 ---p 00000000 00:00 0 
+8bedc000-8bf5c000 rw-p 00000000 00:00 0 
+8bf5c000-8bf5f000 ---p 00000000 00:00 0 
+8bf5f000-8bfad000 rw-p 00000000 00:00 0 
+8bfad000-8bfb0000 ---p 00000000 00:00 0 
+8bfb0000-8c02e000 rw-p 00000000 00:00 0 
+8c02e000-8c031000 ---p 00000000 00:00 0 
+8c031000-8c0af000 rw-p 00000000 00:00 0 
+8c0af000-8c0b2000 ---p 00000000 00:00 0 
+8c0b2000-8c100000 rw-p 00000000 00:00 0 
+8c100000-8c107000 r--s 00000000 08:01 46330      /usr/lib/gconv/gconv-modules.cache
+8c107000-8c146000 r--p 00000000 08:01 38352      /usr/lib/locale/de_DE.utf8/LC_CTYPE
+8c146000-8c149000 ---p 00000000 00:00 0 
+8c149000-8c197000 rw-p 00000000 00:00 0 
+8c197000-8c19a000 ---p 00000000 00:00 0 
+8c19a000-8c1e8000 rw-p 00000000 00:00 0 
+8c1e8000-8c1e9000 ---p 00000000 00:00 0 
+8c1e9000-8c269000 rw-p 00000000 00:00 0 
+8c269000-8c26b000 r--s 0001d000 08:01 40548      /usr/lib/jvm/java-6-openjdk/jre/lib/plugin.jar
+8c26b000-8c270000 r--s 00045000 08:01 37069      /usr/lib/jvm/java-6-openjdk/jre/lib/netx.jar
+8c270000-8c2a3000 rw-p 00000000 00:00 0 
+8c2a3000-8c432000 r--s 038c2000 08:01 17963      /usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar
+8c432000-8c433000 ---p 00000000 00:00 0 
+8c433000-8c4b3000 rw-p 00000000 00:00 0 
+8c4b3000-8c4b4000 ---p 00000000 00:00 0 
+8c4b4000-8c543000 rw-p 00000000 00:00 0 
+8c543000-8c574000 rw-p 00000000 00:00 0 
+8c574000-8c5a9000 rw-p 00000000 00:00 0 
+8c5a9000-8c61f000 rw-p 00000000 00:00 0 
+8c61f000-8c62e000 rw-p 00000000 00:00 0 
+8c62e000-8c65f000 rw-p 00000000 00:00 0 
+8c65f000-8c694000 rw-p 00000000 00:00 0 
+8c694000-8c709000 rw-p 00000000 00:00 0 
+8c709000-8c75f000 rw-p 00000000 00:00 0 
+8c75f000-8e520000 rw-p 00000000 00:00 0 
+8e520000-94760000 rw-p 00000000 00:00 0 
+94760000-9afb0000 rw-p 00000000 00:00 0 
+9afb0000-a9cc0000 rw-p 00000000 00:00 0 
+a9cc0000-b4760000 rw-p 00000000 00:00 0 
+b4761000-b4764000 r--s 00023000 08:01 1577906    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/jdom.jar
+b4764000-b4767000 r--s 00012000 08:01 1586389    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/commons-io-1.3.1.jar
+b4767000-b4769000 r--s 0000d000 08:01 1586071    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/commons-fileupload-1.2.2.jar
+b4769000-b476d000 r--s 00029000 08:01 1580846    /home/patrick/workspace/AlgebraEditor/war/WEB-INF/lib/gwtupload-0.6.3-compat.jar
+b476d000-b477c000 rw-p 00000000 00:00 0 
+b477c000-b482d000 rw-p 00000000 00:00 0 
+b482d000-b4bdd000 rwxp 00000000 00:00 0 
+b4bdd000-b782d000 rw-p 00000000 00:00 0 
+b782d000-b7830000 ---p 00000000 00:00 0 
+b7830000-b7881000 rw-p 00000000 00:00 0 
+b7882000-b7885000 r--s 0000f000 08:01 32797      /usr/lib/jvm/java-6-openjdk/jre/lib/ext/pulse-java.jar
+b7885000-b788e000 r--s 00065000 08:01 90785      /usr/share/java/gnome-java-bridge.jar
+b788e000-b7896000 rw-s 00000000 08:01 792129     /tmp/hsperfdata_patrick/12344
+b7896000-b7897000 rw-p 00000000 00:00 0 
+b7897000-b7898000 r--p 00000000 00:00 0 
+b7898000-b789a000 rw-p 00000000 00:00 0 
+bfa17000-bfa2c000 rw-p 00000000 00:00 0          [stack]
+
+VM Arguments:
+jvm_args: -Xmx512m -Dfile.encoding=UTF-8 
+java_command: com.google.gwt.dev.DevMode -remoteUI 42136:12166322579348 -startupUrl AlgebraEditor.html -logLevel INFO -codeServerPort 9997 -port 8888 -war /home/patrick/workspace/AlgebraEditor/war com.algebraweb.editor.AlgebraEditor com.algebraweb.editor.AlgebraEditor
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+USERNAME=patrick
+LD_LIBRARY_PATH=/usr/lib/jvm/java-6-openjdk/jre/lib/i386/server:/usr/lib/jvm/java-6-openjdk/jre/lib/i386:/usr/lib/jvm/java-6-openjdk/jre/../lib/i386:/usr/lib/jvm/java-6-openjdk/jre/lib/i386/client:/usr/lib/jvm/java-6-openjdk/jre/lib/i386:/usr/lib/xulrunner-1.9.2.20:/usr/lib/xulrunner-1.9.2.20
+SHELL=/bin/bash
+DISPLAY=:0.0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x649f80], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x649f80], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x51c010], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: SIG_IGN, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGXFSZ: [libjvm.so+0x51c010], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x51c010], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x51b6c0], sa_mask[0]=0x00000004, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x51e230], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: SIG_IGN, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGTERM: [libjvm.so+0x51e230], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGQUIT: [libjvm.so+0x51e230], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Ubuntu 10.04 (lucid)
+uname:Linux 2.6.32-34-generic #75-Ubuntu SMP Tue Aug 23 21:36:31 UTC 2011 i686
+libc:glibc 2.11.1 NPTL 2.11.1 
+rlimit: STACK 8192k, CORE 0k, NPROC infinity, NOFILE 1024, AS infinity
+load average:1.31 0.75 0.62
+
+/proc/meminfo:
+MemTotal:        3095752 kB
+MemFree:          191696 kB
+Buffers:          116100 kB
+Cached:           995632 kB
+SwapCached:            0 kB
+Active:          1965028 kB
+Inactive:         812240 kB
+Active(anon):    1666452 kB
+Inactive(anon):     7252 kB
+Active(file):     298576 kB
+Inactive(file):   804988 kB
+Unevictable:          16 kB
+Mlocked:              16 kB
+HighTotal:       2235208 kB
+HighFree:           2728 kB
+LowTotal:         860544 kB
+LowFree:          188968 kB
+SwapTotal:       4714488 kB
+SwapFree:        4714488 kB
+Dirty:              5236 kB
+Writeback:             0 kB
+AnonPages:       1665556 kB
+Mapped:           194356 kB
+Shmem:              8228 kB
+Slab:              54160 kB
+SReclaimable:      41392 kB
+SUnreclaim:        12768 kB
+KernelStack:        3928 kB
+PageTables:         9036 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     6262364 kB
+Committed_AS:    3314764 kB
+VmallocTotal:     122880 kB
+VmallocUsed:       55596 kB
+VmallocChunk:      60888 kB
+HardwareCorrupted:     0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       4096 kB
+DirectMap4k:       12280 kB
+DirectMap4M:      897024 kB
+
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 6 model 15 stepping 2, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3
+
+Memory: 4k page, physical 3095752k(191696k free), swap 4714488k(4714488k free)
+
+vm_info: OpenJDK Server VM (19.0-b09) for linux-x86 JRE (1.6.0_20-b20), built on Jul 22 2011 02:03:35 by "buildd" with gcc 4.4.3
+
+time: Sun Aug 28 23:06:35 2011
+elapsed time: 32 seconds
+
