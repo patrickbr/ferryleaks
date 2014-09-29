@@ -3,6 +3,12 @@ A Web-Based (Debugging) Editor for the Table-Algebra
 Readme
 ------
 
+0. Example
+----------
+
+http://dbwiscam.informatik.uni-tuebingen.de/AlgebraEditor/
+
+
 1. Requirements
 ---------------
 
@@ -15,7 +21,7 @@ To compile you own version of WebFerry the GWT-SDK is needed which can be downlo
 http://code.google.com/intl/de-DE/webtoolkit/download.html
 You need at least GWT SDK 2.3.
 
-1. Compilation
+2. Compilation
 --------------
 
 WebFerry comes with an ant script to generate a ready-to-go WAR (WebARchive) which can be easily
@@ -31,7 +37,7 @@ NOTE, however, that you must first change the build.properties.example to fit yo
 (More specifically, you have to change the path of GWT-SDK). Otherwise, compilation won't be possible.
 The build.properties.example  HAS TO BE RENAMED  to build.properties after modification.
 
-2. Installation
+3. Installation
 ---------------
 
 Your Tomcat-server must allow file-uploads to use WebFerry's upload mechanisms. It must also allow
