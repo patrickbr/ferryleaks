@@ -75,7 +75,7 @@
 
   <target name="war" depends="build" description="Create a war file">
     <mkdir dir="build"/>
-    <zip destfile="AlgebraEditor.war" basedir="build"/>
+    <zip destfile="build/AlgebraEditor.war" basedir="war"/>
   </target>
 
   <target name="clean" description="Cleans this project">
