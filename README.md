@@ -23,11 +23,11 @@ You need at least GWT SDK 2.3.
 WebFerry comes with an ant script to generate a ready-to-go WAR (WebARchive) which can be easily
 uploaded to a live Tomcat server. Compilation can be started be typing
 
-  ant war
+    ant war
 
 If you only want to compile WebFerry but not to create the WAR-file, you can do so by typing
 
-  ant build
+    ant build
 
 NOTE, however, that you must first change the build.properties.example to fit your system environment.
 (More specifically, you have to change the path of GWT-SDK). Otherwise, compilation won't be possible.
