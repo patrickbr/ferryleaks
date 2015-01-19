@@ -16,7 +16,9 @@ is highly recommended, however not mandatory. Without dot being installed WebFer
 to very simple layouting algorithms.
 To compile you own version of WebFerry the GWT-SDK is needed which can be downloaded at
 http://code.google.com/intl/de-DE/webtoolkit/download.html
-You need at least GWT SDK 2.3.
+
+You need at least GWT SDK 2.3. Newer versions of GWT SDK _MAY_ work, however, 2.3 was the last version
+FerryLeaks has been tested with.
 
 ## 2. Compilation ##
 
@@ -35,6 +37,8 @@ The build.properties.example  HAS TO BE RENAMED  to build.properties after modif
 
 ## 3. Installation ##
 
-Your Tomcat-server must allow file-uploads to use WebFerry's upload mechanisms. It must also allow
+Deploy the WAR-File (build/AlgebraEditor.war) to a Tomcat server.
+
+Your Tomcat must allow file-uploads to use FerryLeaks' upload mechanisms. It must also allow
 system calls to communicate with dot and Ferry.
 
