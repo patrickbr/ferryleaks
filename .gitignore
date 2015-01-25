@@ -2,7 +2,11 @@
 *.war
 war/WEB-INF/classes
 war/WEB-INF/deploy
+war/algebraeditor
 build.properties
 build/
 war/WEB-INF/lib/gwt-servlet-deps.jar
 .gwt/
+.settings
+.classpath
+.project
