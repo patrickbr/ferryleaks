@@ -26,7 +26,6 @@ import com.algebraweb.editor.shared.scheme.NodeScheme;
  */
 
 public class SerializeRelationBuilder {
-
 	private EvaluationContext c;
 	private ServletContext context;
 

@@ -59,27 +59,21 @@ public class GraphNode {
 
 		@Override
 		public void onMouseMove(MouseMoveEvent event) {
-
 			c.setHoverNode(GraphNode.this);
 			GraphNode.this.c.openPopUp(Window.getScrollLeft()
 					+ event.getClientX(), Window.getScrollTop()
 					+ event.getClientY(), GraphNode.this.getId(), 700);
-
 		}
-
 	};
 
 	private MouseOutHandler mouseOutH = new MouseOutHandler() {
-
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
 			c.setHoverNode(null);
 		}
-
 	};
 
 	private DoubleClickHandler doubleC = new DoubleClickHandler() {
-
 		@Override
 		public void onDoubleClick(DoubleClickEvent event) {
 			GraphNode.this.c.selectNodeWithSubs(GraphNode.this);
@@ -87,7 +81,6 @@ public class GraphNode {
 	};
 
 	private ContextMenuHandler contextMenuH = new ContextMenuHandler() {
-
 		@Override
 		public void onContextMenu(ContextMenuEvent event) {
 			event.preventDefault();
@@ -99,10 +92,8 @@ public class GraphNode {
 	};
 
 	private MouseUpHandler mouseUpH = new MouseUpHandler() {
-
 		@Override
 		public void onMouseUp(MouseUpEvent event) {
-
 			if (event.getNativeButton() == NativeEvent.BUTTON_LEFT
 					&& !GraphNode.this.hasBeenDragged()
 					&& GraphNode.this.c.getSelectedNodes().containsValue(
@@ -117,7 +108,6 @@ public class GraphNode {
 	};
 
 	private MouseDownHandler mouseDownH = new MouseDownHandler() {
-
 		@Override
 		public void onMouseDown(MouseDownEvent event) {
 
@@ -193,7 +183,6 @@ public class GraphNode {
 
 		getShape().addDomHandler(doubleC, DoubleClickEvent.getType());
 		getShape().addDomHandler(contextMenuH, ContextMenuEvent.getType());
-
 	}
 
 	public void addEdgeFrom(GraphEdge e) {
@@ -307,7 +296,6 @@ public class GraphNode {
 	}
 
 	public void setText(String txt) {
-
 		boolean update = false;
 
 		if (textLines != null) {
@@ -358,7 +346,6 @@ public class GraphNode {
 			cur.addDomHandler(contextMenuH, ContextMenuEvent.getType());
 
 			i++;
-
 		}
 
 		lineHeight = textHeight;

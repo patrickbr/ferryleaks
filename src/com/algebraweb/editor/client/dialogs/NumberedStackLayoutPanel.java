@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class NumberedStackLayoutPanel extends StackLayoutPanel {
-
 	public NumberedStackLayoutPanel(Unit unit) {
 		super(unit);
 
@@ -72,7 +71,6 @@ public class NumberedStackLayoutPanel extends StackLayoutPanel {
 	}
 
 	private void updateClass() {
-
 		if (super.getWidgetCount() <= 1) {
 			super.getHeaderWidget(super.getWidgetCount() - 1).addStyleName(
 					"first");
@@ -83,5 +81,4 @@ public class NumberedStackLayoutPanel extends StackLayoutPanel {
 					"last");
 		}
 	}
-
 }

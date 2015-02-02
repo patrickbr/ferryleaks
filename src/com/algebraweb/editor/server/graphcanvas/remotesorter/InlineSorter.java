@@ -15,7 +15,6 @@ import com.algebraweb.editor.shared.node.RawNode;
  * 
  */
 public class InlineSorter implements RemoteSorter {
-
 	public Map<Integer, Tuple> getCoordinateHashMap(List<RawNode> nodes) {
 		Iterator<RawNode> i = nodes.iterator();
 		RawNode current;

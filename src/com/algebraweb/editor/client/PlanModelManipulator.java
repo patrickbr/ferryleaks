@@ -33,7 +33,6 @@ import com.algebraweb.editor.shared.node.RawNode;
  */
 
 public class PlanModelManipulator {
-
 	private RemoteManipulationServiceAsync manServ;
 	private AlgebraEditor e;
 
@@ -56,7 +55,6 @@ public class PlanModelManipulator {
 
 		@Override
 		public void onSuccess(RemoteManipulationMessage result) {
-
 			GraphCanvas.hideLoading();
 			if (result.getReturnCode() == 1) {
 
@@ -109,7 +107,6 @@ public class PlanModelManipulator {
 								.iterator();
 
 						while (i.hasNext()) {
-
 							RawEdge ed = i.next();
 							GraphNode to = e.getCanvas(result.getPlanid())
 									.getGraphNodeById(ed.getTo());
@@ -126,11 +123,9 @@ public class PlanModelManipulator {
 				}
 
 				if (result.getAction().equals("add")) {
-
 					Iterator<RawNode> it = result.getNodesAffected().iterator();
 
 					while (it.hasNext()) {
-
 						RawNode current = it.next();
 
 						e.getCanvas(result.getPlanid())
@@ -148,7 +143,6 @@ public class PlanModelManipulator {
 
 					it = result.getNodesAffected().iterator();
 					while (it.hasNext()) {
-
 						RawNode current = it.next();
 
 						GraphNode from = c.getGraphNodeById(current.getNid());

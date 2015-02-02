@@ -11,7 +11,6 @@ import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
  * 
  */
 public class AddSQListenerDialog extends EvaluationDialog {
-
 	private AlgebraEditorCanvasView c;
 	private int nid;
 

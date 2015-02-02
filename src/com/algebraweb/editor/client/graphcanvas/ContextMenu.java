@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
  * 
  */
 public class ContextMenu extends PopupPanel {
-
 	private FlowPanel rows = new FlowPanel();
 	private int x;
 	private int y;
@@ -123,5 +122,4 @@ public class ContextMenu extends PopupPanel {
 		this.add(rows);
 		super.show();
 	}
-
 }

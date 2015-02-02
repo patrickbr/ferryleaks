@@ -23,7 +23,6 @@ import com.algebraweb.editor.shared.node.QueryPlan;
  * 
  */
 public class FileServerServlet extends HttpServlet {
-
 	private static final long serialVersionUID = -4356636877078339046L;
 
 	@Override

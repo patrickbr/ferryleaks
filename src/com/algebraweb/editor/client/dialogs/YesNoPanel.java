@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * 
  */
 public class YesNoPanel extends DialogBox {
-
 	protected Button yes = new Button("Yes");
 	protected Button no = new Button("No");
 
@@ -29,7 +28,6 @@ public class YesNoPanel extends DialogBox {
 	 *            the title of the popup
 	 */
 	public YesNoPanel(String msg, String title) {
-
 		super();
 		super.setText(title);
 		super.setAnimationEnabled(true);
@@ -95,5 +93,4 @@ public class YesNoPanel extends DialogBox {
 		super.show();
 		yes.setFocus(true);
 	}
-
 }

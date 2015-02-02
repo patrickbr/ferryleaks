@@ -23,14 +23,11 @@ public class GraphNodeLayoutingMachine {
 	private static int offsetY = 500;
 
 	public GraphNodeLayoutingMachine(GraphCanvas c, GraphNodeModifier gnm) {
-
 		this.gnm = gnm;
 		this.c = c;
-
 	}
 
 	public void layout(List<GraphNode> nodes2, boolean animate) {
-
 		AlgebraEditor.log("Layouting with animate = "
 				+ Boolean.toString(animate));
 		Iterator<GraphNode> a = nodes2.iterator();
@@ -42,7 +39,6 @@ public class GraphNodeLayoutingMachine {
 		int negH = 0;
 
 		while (a.hasNext()) {
-
 			GraphNode current = a.next();
 			if (current.getX() < negW) {
 				negW = (int) current.getX();
@@ -57,7 +53,6 @@ public class GraphNodeLayoutingMachine {
 			if (current.getY() + Math.abs(negH) > height) {
 				height = Math.abs(negH) + (int) current.getY();
 			}
-
 		}
 
 		int newH = Window.getClientHeight() - 30;
@@ -78,7 +73,6 @@ public class GraphNodeLayoutingMachine {
 		a = nodes2.iterator();
 
 		while (a.hasNext()) {
-
 			GraphNode current = a.next();
 
 			if (!c.isNotActive() && animate) {
@@ -88,11 +82,9 @@ public class GraphNodeLayoutingMachine {
 				gnm.moveTo(current, current.getX() + offsetX, current.getY()
 						+ offsetY);
 			}
-
 		}
 
 		if (gnm.getCanvas().getNodes().size() > 0) {
-
 			Tuple scrollTo = gnm.getCanvas().getScrollIntoViewPos(
 					gnm.getCanvas().getNodes().get(
 							gnm.getCanvas().getNodes().size() - 1).getId());
@@ -102,7 +94,6 @@ public class GraphNodeLayoutingMachine {
 				((FullScreenDragPanel) gnm.getCanvas().getParent())
 						.changeSavedScrollPos((int) scrollTo.getX(),
 								(int) scrollTo.getY());
-
 			}
 		}
 	}
@@ -130,10 +121,8 @@ public class GraphNodeLayoutingMachine {
 
 		GraphCanvas.showLoading("Layouting...");
 		sorter.doSort(nodes, edges, new GraphManipulationCallback() {
-
 			@Override
 			public void onComplete() {
-
 				GraphCanvas.hideLoading();
 				if (layout) {
 					layout(GraphNodeLayoutingMachine.this.nodes, true);

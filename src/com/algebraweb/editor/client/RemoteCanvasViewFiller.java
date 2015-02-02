@@ -9,9 +9,7 @@ import com.algebraweb.editor.client.graphcanvas.remotefiller.GraphCanvasRemoteFi
  * 
  */
 public class RemoteCanvasViewFiller extends GraphCanvasRemoteFillingMachine {
-
 	public RemoteCanvasViewFiller(AlgebraEditorCanvasView v) {
 		super(v);
 	}
-
 }

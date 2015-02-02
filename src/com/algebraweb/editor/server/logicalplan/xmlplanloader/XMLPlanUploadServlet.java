@@ -22,7 +22,6 @@ import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
  * 
  */
 public class XMLPlanUploadServlet extends UploadAction {
-
 	private static final long serialVersionUID = 4992498870698384055L;
 	private Hashtable<String, String> receivedContentTypes = new Hashtable<String, String>();
 	private Hashtable<String, File> receivedFiles = new Hashtable<String, File>();

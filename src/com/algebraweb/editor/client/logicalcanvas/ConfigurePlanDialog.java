@@ -12,7 +12,6 @@ import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
  * 
  */
 public class ConfigurePlanDialog extends EvaluationDialog {
-
 	private EditorCommunicationCallback<Void> updateCb = new EditorCommunicationCallback<Void>(
 			"evaluating") {
 		@Override

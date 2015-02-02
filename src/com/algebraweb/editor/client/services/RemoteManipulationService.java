@@ -429,5 +429,4 @@ public interface RemoteManipulationService extends RemoteService {
 	 */
 	public RemoteManipulationMessage updatePlanNode(int nid, int pid, String xml)
 			throws PlanManipulationException, PlanHasCycleException;
-
 }

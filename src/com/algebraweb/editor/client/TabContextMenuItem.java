@@ -7,7 +7,6 @@ package com.algebraweb.editor.client;
  * 
  */
 public interface TabContextMenuItem {
-
 	/**
 	 * Returns the title if the item
 	 * 
@@ -22,5 +21,4 @@ public interface TabContextMenuItem {
 	 *            the plan id of the clicked tab.
 	 */
 	public void onClick(int pid);
-
 }

@@ -29,9 +29,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
  * @author Patrick Brosi
  * 
  */
-
 public class ControlPanel extends AbsolutePanel {
-
 	final LogicialPlanUploadDialog d;
 
 	private PlanModelManipulator m;
@@ -45,12 +43,10 @@ public class ControlPanel extends AbsolutePanel {
 			GraphCanvas.hideLoading();
 			new TextPresentationDialog("XML source", result);
 		}
-
 	};
 
 	private EditorCommunicationCallback<String> sqlCb = new EditorCommunicationCallback<String>(
 			"compiling SQL") {
-
 		@Override
 		public void onSuccess(String result) {
 			GraphCanvas.hideLoading();
@@ -60,7 +56,6 @@ public class ControlPanel extends AbsolutePanel {
 
 	public ControlPanel(AlgebraEditor e, PlanModelManipulator man, int width,
 			int height, final RemoteManipulationServiceAsync rmsa) {
-
 		super();
 		this.m = man;
 		this.rmsa = rmsa;
@@ -277,5 +272,4 @@ public class ControlPanel extends AbsolutePanel {
 	public PlanModelManipulator getM() {
 		return m;
 	}
-
 }

@@ -58,7 +58,6 @@ import com.google.gwt.user.client.ui.TextArea;
  */
 
 public class AlgebraEditor implements EntryPoint {
-
 	private static String VERSION = "Beta 1.38";
 	private static String TITLE = "FerryLeaks";
 	private static String AUTHOR = "Patrick Brosi";
@@ -184,11 +183,9 @@ public class AlgebraEditor implements EntryPoint {
 	 *         exists
 	 */
 	public AlgebraEditorCanvasView addCanvasView(int id) {
-
 		if (hasCanvasWithId(id)) {
 			return getCanvas(id);
 		}
-
 
 		LogicalCanvas c = new LogicalCanvas(id, m,
 				Window.getClientWidth() - 30, Window.getClientHeight() - 30,
@@ -256,8 +253,6 @@ public class AlgebraEditor implements EntryPoint {
 	 * query bundle stored on the server.
 	 */
 	public void clearCanvases() {
-
-
 		AlgebraEditor.log("Clearing canvases...");
 		Iterator<EditorDragPanel> it = panels.iterator();
 		canvi.clear();
@@ -370,7 +365,6 @@ public class AlgebraEditor implements EntryPoint {
 	}
 
 	private void initContextMenu() {
-
 		AlgebraEditor.log("initializing context menu...");
 		final NodeContextMenu m = getNodeContextMenu();
 
@@ -606,7 +600,6 @@ public class AlgebraEditor implements EntryPoint {
 	 * genesis...
 	 */
 	public void onModuleLoad() {
-
 		if (Window.Location.getParameter("logger") != null) {
 			RootPanel.get("debugger").add(AlgebraEditor.log);
 			RootPanel.get("debugger").getElement().getStyle().setDisplay(
@@ -658,28 +651,22 @@ public class AlgebraEditor implements EntryPoint {
 		initTabContextMenu();
 		initZoomPanel();
 
-
-
 		if ((BROWSER_NAME + BROWSER_VER).toLowerCase().contains("msie 8")) {
-
 			OkPanel p = new OkPanel("You are using Microsoft Internet Explorer 8. <br><br>It is possible to use FerryLeaks with this version of Internet Explorer. <br>However, <b>you will most likely experience some problems with the graphical user interface. </b><br>Consider upgrading to Internet Explorer 9 or using another browser.<br> FerryLeaks has been tested on Firefox, Safari, Opera and Chrome.", "Warning");
 			p.center();
 		}
 
 		if ((BROWSER_NAME + BROWSER_VER).toLowerCase().contains("msie 7")) {
-
 			OkPanel p = new OkPanel("You are using Microsoft Internet Explorer 7. <br><br>It is possible to use FerryLeaks with this version of Internet Explorer. <br>However, <b>you will most likely experience problems with the graphical user interface. </b><br>Consider upgrading to Internet Explorer 9 or using another browser.<br> FerryLeaks has been tested on Firefox, Safari, Opera and Chrome.", "Warning");
 			p.center();
 		}
 
 		if ((BROWSER_NAME + BROWSER_VER).toLowerCase().contains("msie 6")) {
-
 			OkPanel p = new OkPanel("You are using Microsoft Internet Explorer 6. <br><br>It is possible to use FerryLeaks with this version of Internet Explorer. <br>However, <b>you will most likely experience heavy problems with the graphical user interface. </b><br>Consider upgrading to Internet Explorer 9 or using another browser.<br> FerryLeaks has been tested on Firefox, Safari, Opera and Chrome.", "Warning");
 			p.center();
 		}
 
 		if ((BROWSER_NAME + BROWSER_VER).toLowerCase().contains("msie 5")) {
-
 			OkPanel p = new OkPanel("You are using Microsoft Internet Explorer 5. <br><br>It is possible to use FerryLeaks with this version of Internet Explorer. <br>However, <b>you will experience extreme problems with the graphical user interface.</b> <br>Consider upgrading to Internet Explorer 9 or using another browser.<br> FerryLeaks has been tested on Firefox, Safari, Opera and Chrome.", "Warning");
 			p.center();
 		}
@@ -696,12 +683,8 @@ public class AlgebraEditor implements EntryPoint {
 				public void onSuccess(final RemoteConfiguration result) {
 					processConfiguration(result);
 				}
-
 			});
-
-
 		}else{
-
 			registor.register(new EditorCommunicationCallback<RemoteConfiguration>(
 			"registering session") {
 
@@ -709,14 +692,11 @@ public class AlgebraEditor implements EntryPoint {
 				public void onSuccess(final RemoteConfiguration result) {
 					processConfiguration(result);
 				}
-
 			});
-
 		}
 	}
 
 	private void processConfiguration(final RemoteConfiguration result) {
-
 		config = result;
 
 		keepAliveTimer = new Timer() {
@@ -738,10 +718,7 @@ public class AlgebraEditor implements EntryPoint {
 		keepAliveTimer.scheduleRepeating(result.getKeepAliveInterval());
 
 		if (result instanceof RemoteConfigurationWithPlansInSession) {
-
-
 			if (Window.Location.getParameter("autoload") != null) {
-
 				AlgebraEditor
 				.log("Loading existing plans from previous session...");
 				for (Integer id : ((RemoteConfigurationWithPlansInSession) result)
@@ -750,7 +727,6 @@ public class AlgebraEditor implements EntryPoint {
 				}
 
 			}else{
-
 				AlgebraEditor.log("Found existing session on server...");
 
 				YesNoPanel ynp = new YesNoPanel(
@@ -810,13 +786,9 @@ public class AlgebraEditor implements EntryPoint {
 	}
 
 	public void removeHelpMessage() {
-
 		if (hm!=null) {
 			hm.removeFromParent();
 			hm=null;
 		}
-
 	}
-
-
 }

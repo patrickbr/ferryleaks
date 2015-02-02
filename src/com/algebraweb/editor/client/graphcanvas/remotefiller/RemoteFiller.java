@@ -9,7 +9,6 @@ import com.algebraweb.editor.shared.node.RawNode;
 import com.google.gwt.core.client.GWT;
 
 public class RemoteFiller {
-
 	private List<RawNode> nodes;
 	private GraphCanvasRemoteFillingMachine m;
 	private GraphManipulationCallback cb;
@@ -42,5 +41,4 @@ public class RemoteFiller {
 		this.m = m;
 		this.cb = cb;
 	}
-
 }

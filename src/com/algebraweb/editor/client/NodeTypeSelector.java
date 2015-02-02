@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * 
  */
 public class NodeTypeSelector extends DialogBox {
-
 	private ListBox b;
 	private Button ok = new Button("OK");
 	private Button cancel = new Button("Cancel");
@@ -42,7 +41,6 @@ public class NodeTypeSelector extends DialogBox {
 				algebraEditorView.enterNodeAddingMode(getSelectedScheme());
 				hide();
 			}
-
 		});
 		cancel.addClickHandler(new ClickHandler() {
 			@Override

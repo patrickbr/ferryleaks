@@ -12,5 +12,4 @@ public abstract class GraphManipulationCallback {
 	 * Called if manipulation is complete
 	 */
 	public abstract void onComplete();
-
 }

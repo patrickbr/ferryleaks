@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Button;
  * 
  */
 public class CreateEvaluationContextDialog extends TabbedDialog {
-
 	private RemoteManipulationServiceAsync manServ;
 	private final SerializePanel sp;
 	private EvaluationContext loadedContext = new EvaluationContext();

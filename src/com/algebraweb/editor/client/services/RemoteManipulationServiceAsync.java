@@ -25,7 +25,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * 
  */
 public interface RemoteManipulationServiceAsync {
-
 	void addEdge(int planid, Tuple fromTo, int pos,
 			AsyncCallback<RemoteManipulationMessage> callback);
 
@@ -97,5 +96,4 @@ public interface RemoteManipulationServiceAsync {
 
 	void updatePlanNode(int nid, int pid, String xml,
 			AsyncCallback<RemoteManipulationMessage> callback);
-
 }

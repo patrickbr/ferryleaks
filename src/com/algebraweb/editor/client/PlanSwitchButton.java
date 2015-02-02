@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.HTML;
  * 
  */
 public class PlanSwitchButton extends Composite {
-
 	private Button button;
 	private HTML errorLabel = new HTML("<span class='error-count'></span>");
 

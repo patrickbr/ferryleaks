@@ -52,5 +52,4 @@ public interface Fillable {
 	 * @param b
 	 */
 	public void createEdge(int nid, int to, int fixedParentPos, boolean b);
-
 }

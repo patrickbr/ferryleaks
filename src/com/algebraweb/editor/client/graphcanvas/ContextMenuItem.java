@@ -7,7 +7,6 @@ package com.algebraweb.editor.client.graphcanvas;
  * 
  */
 public interface ContextMenuItem {
-
 	/**
 	 * Returns the item's title
 	 * 
@@ -19,5 +18,4 @@ public interface ContextMenuItem {
 	 * The onClick method.
 	 */
 	public void onClick();
-
 }

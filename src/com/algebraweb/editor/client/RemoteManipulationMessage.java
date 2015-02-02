@@ -18,7 +18,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * 
  */
 public class RemoteManipulationMessage implements IsSerializable {
-
 	private int returnCode;
 	private String message;
 	private ValidationResult validationResult;

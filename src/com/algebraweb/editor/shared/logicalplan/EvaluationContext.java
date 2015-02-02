@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/**
+/**}
  * An evaluation context. Hold information on how to assemble the serialize
  * relation node as well as database configurations.
  * 
@@ -268,5 +268,4 @@ public class EvaluationContext implements IsSerializable,Serializable {
 	public void setSortUseColumn(boolean sortUseColumn) {
 		this.sortUseColumn = sortUseColumn;
 	}
-
 }

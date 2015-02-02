@@ -9,7 +9,6 @@ import com.algebraweb.editor.client.graphcanvas.NodeContextMenuItem;
  * 
  */
 public abstract class LogicalNodeContextItem implements NodeContextMenuItem {
-
 	private String title;
 
 	public LogicalNodeContextItem(String title) {
@@ -23,5 +22,4 @@ public abstract class LogicalNodeContextItem implements NodeContextMenuItem {
 
 	@Override
 	public abstract void onClick(int nid);
-
 }

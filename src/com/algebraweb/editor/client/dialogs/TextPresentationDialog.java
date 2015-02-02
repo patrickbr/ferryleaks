@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * 
  */
 public class TextPresentationDialog extends DialogBox {
-
 	private VerticalPanel p = new VerticalPanel();
 	private TextArea ta = new TextArea();
 
@@ -33,7 +32,6 @@ public class TextPresentationDialog extends DialogBox {
 	 *            the plain text to present
 	 */
 	public TextPresentationDialog(String title, String content) {
-
 		super();
 		super.setText(title);
 		super.setAnimationEnabled(true);
@@ -69,5 +67,4 @@ public class TextPresentationDialog extends DialogBox {
 	public void loadText(String t) {
 		ta.setText(t);
 	}
-
 }

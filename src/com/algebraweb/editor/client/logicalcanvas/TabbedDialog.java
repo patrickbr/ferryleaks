@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public abstract class TabbedDialog extends DialogBox {
-
 	private HorizontalPanel buttonsPanel;
 	private TabLayoutPanel t;
 	private LayoutPanel p;
@@ -66,5 +65,4 @@ public abstract class TabbedDialog extends DialogBox {
 	protected TabLayoutPanel getTabPanel() {
 		return t;
 	}
-
 }

@@ -10,7 +10,6 @@ import com.algebraweb.editor.client.graphcanvas.FullScreenDragPanel;
  * 
  */
 public class EditorDragPanel extends FullScreenDragPanel {
-
 	private AlgebraEditorCanvasView c;
 
 	public EditorDragPanel(AlgebraEditorCanvasView c) {
@@ -22,5 +21,4 @@ public class EditorDragPanel extends FullScreenDragPanel {
 	public AlgebraEditorCanvasView getLogicalCanvas() {
 		return c;
 	}
-
 }

@@ -28,7 +28,6 @@ public class XMLExamplePlanLoader extends RemoteServiceServlet implements
 
 	@Override
 	public Integer[] loadExamplePlan(String fileName) throws RemoteIOException {
-
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		XMLPlanLoader planLoader = new XMLPlanLoader();

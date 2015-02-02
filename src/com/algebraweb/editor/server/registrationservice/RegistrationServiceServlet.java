@@ -70,14 +70,11 @@ RegistrationService {
 				+ this.getThreadLocalRequest().getSession().getId() + ")");
 	}
 
-
-
 	@Override
 	public RemoteConfiguration register()
 	throws RemoteConfigurationException {
 		return register(null);
 	}
-
 
 	@Override
 	public RemoteConfiguration register(String id) throws RemoteConfigurationException {
@@ -115,5 +112,4 @@ RegistrationService {
 				true));
 		return remoteConfig;
 	}
-
 }

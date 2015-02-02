@@ -14,5 +14,4 @@ public class SqlErrorException extends Exception {
 	public SqlErrorException(String msg) {
 		super(msg);
 	}
-
 }

@@ -10,7 +10,6 @@ import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
  * 
  */
 public class EditSQLListenerDialog extends AddSQListenerDialog {
-
 	private SQLBubble b;
 
 	public EditSQLListenerDialog(SQLBubble b,

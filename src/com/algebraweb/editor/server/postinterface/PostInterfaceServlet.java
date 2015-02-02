@@ -21,7 +21,6 @@ import com.algebraweb.editor.shared.exceptions.RemoteIOException;
 import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 
 public class PostInterfaceServlet extends HttpServlet  {
-
 	/**
 	 * 
 	 */
@@ -80,8 +79,5 @@ public class PostInterfaceServlet extends HttpServlet  {
 		} catch (SAXException e) {
 			res.getWriter().print("1::Error while parsing XML: " + e.getMessage());
 		}
-
-
 	}
-
 }

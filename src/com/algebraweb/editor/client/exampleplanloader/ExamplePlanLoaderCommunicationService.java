@@ -12,7 +12,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("example")
 public interface ExamplePlanLoaderCommunicationService extends RemoteService {
-
 	/**
 	 * Load an example plan.
 	 * 
@@ -22,5 +21,4 @@ public interface ExamplePlanLoaderCommunicationService extends RemoteService {
 	 * @throws RemoteIOException
 	 */
 	public Integer[] loadExamplePlan(String fileName) throws RemoteIOException;
-
 }

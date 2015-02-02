@@ -15,7 +15,6 @@ import com.algebraweb.editor.shared.node.PlanNode;
 import com.algebraweb.editor.shared.node.QueryPlan;
 
 public class EvaluationContextProvider {
-
 	/**
 	 * A private class for comparing columns
 	 * 
@@ -23,7 +22,6 @@ public class EvaluationContextProvider {
 	 * 
 	 */
 	private class ItemCol implements Comparable<ItemCol> {
-
 		private int pos;
 		private String name;
 
@@ -146,5 +144,4 @@ public class EvaluationContextProvider {
 		}
 		p.setEvContext(c);
 	}
-
 }

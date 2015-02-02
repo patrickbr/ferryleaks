@@ -13,13 +13,11 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  */
 public class ConnectedWidget extends FlowPanel {
-
 	private Widget w;
 	private int x;
 	private int y;
 
 	public ConnectedWidget(Widget w, int x, int y) {
-
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -28,7 +26,6 @@ public class ConnectedWidget extends FlowPanel {
 		this.getElement().getStyle().setHeight(1, Unit.PX);
 		this.getElement().getStyle().setOverflow(Overflow.VISIBLE);
 		this.add(w);
-
 	}
 
 	public Widget getWidget() {
@@ -52,5 +49,4 @@ public class ConnectedWidget extends FlowPanel {
 	public int getY() {
 		return y;
 	}
-
 }

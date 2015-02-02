@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
  * 
  */
 public class PlanSwitcher extends AbsolutePanel {
-
 	private HashMap<Integer, PlanSwitchButton> buttons = new HashMap<Integer, PlanSwitchButton>();
 	private AlgebraEditor editor;
 	private FlowPanel p = new FlowPanel();
@@ -38,7 +37,6 @@ public class PlanSwitcher extends AbsolutePanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				e.createNewPlan(false);
-
 			}
 		});
 
@@ -70,7 +68,6 @@ public class PlanSwitcher extends AbsolutePanel {
 		});
 
 		newB.getButton().addMouseDownHandler(new MouseDownHandler() {
-
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
 

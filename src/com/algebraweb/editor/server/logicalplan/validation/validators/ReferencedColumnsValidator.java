@@ -17,7 +17,6 @@ import com.algebraweb.editor.shared.node.Property;
  * 
  */
 public class ReferencedColumnsValidator implements Validator {
-
 	private boolean containsPropertyByVal(Property p, List<Property> list) {
 		Iterator<Property> it = list.iterator();
 

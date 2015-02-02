@@ -12,7 +12,6 @@ import com.hydro4ge.raphaelgwt.client.Raphael.Shape;
  */
 
 public class ConnectedShape {
-
 	private int x;
 	private int y;
 	private Shape shape;
@@ -40,5 +39,4 @@ public class ConnectedShape {
 	public int getY() {
 		return y;
 	}
-
 }

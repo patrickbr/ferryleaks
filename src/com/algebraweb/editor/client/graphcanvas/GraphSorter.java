@@ -16,5 +16,4 @@ public interface GraphSorter {
 	 */
 	public void doSort(List<GraphNode> nodes, List<GraphEdge> edges,
 			GraphManipulationCallback cb);
-
 }

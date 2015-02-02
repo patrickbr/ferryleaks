@@ -194,5 +194,4 @@ public interface AlgebraEditorCanvasView extends Fillable {
 	 * Zoom out
 	 */
 	public void zoomOut();
-
 }

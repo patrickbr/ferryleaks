@@ -10,7 +10,6 @@ public class NewEdgeDrawer {
 	private double y;
 
 	public NewEdgeDrawer(double x, double y, LogicalCanvas c) {
-
 		this.x = x;
 		this.y = y;
 		p = c.new Path("m" + this.x + " " + this.y + " l" + x + " " + y);
@@ -21,7 +20,6 @@ public class NewEdgeDrawer {
 		arrowPath.attr("stroke", "#B40404");
 		arrowPath.attr("fill", "#B40404");
 		moveTo(x, y);
-
 	}
 
 	public Path getArrowPath() {
@@ -33,7 +31,6 @@ public class NewEdgeDrawer {
 	}
 
 	public void moveTo(double x, double y) {
-
 		double angle = Math.atan2(this.y - y + 30, this.x - x + 30);
 		angle = angle / (2 * Math.PI) * 360;
 
@@ -44,7 +41,5 @@ public class NewEdgeDrawer {
 				+ " L" + this.x + "," + this.y);
 
 		arrowPath.rotate(angle, this.x, this.y);
-
 	}
-
 }

@@ -9,7 +9,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * 
  */
 public class RemoteConfiguration implements IsSerializable {
-
 	private int keepAliveInterval;
 	private boolean loadEmptyCanvas;
 	private boolean invertArrows;
@@ -67,5 +66,4 @@ public class RemoteConfiguration implements IsSerializable {
 	public void setLoadEmptyCanvas(boolean loadEmptyCanvas) {
 		this.loadEmptyCanvas = loadEmptyCanvas;
 	}
-
 }

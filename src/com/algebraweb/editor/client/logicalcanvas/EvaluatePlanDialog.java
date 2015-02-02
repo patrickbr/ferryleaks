@@ -17,7 +17,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * 
  */
 public class EvaluatePlanDialog extends EvaluationDialog {
-
 	private AsyncCallback<List<Map<String, String>>> evalCb = new EditorCommunicationCallback<List<Map<String, String>>>(
 			"evaluating") {
 
@@ -26,7 +25,6 @@ public class EvaluatePlanDialog extends EvaluationDialog {
 			GraphCanvas.hideLoading();
 			new SqlResDialog(result);
 		}
-
 	};
 
 	public EvaluatePlanDialog(int pid, RemoteManipulationServiceAsync manServ) {

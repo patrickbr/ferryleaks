@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
  * 
  */
 public class NodePopup extends PopupPanel {
-
 	private int nodeid = -1;
 
 	public NodePopup() {

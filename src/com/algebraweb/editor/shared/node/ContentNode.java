@@ -19,7 +19,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 
 public abstract class ContentNode implements IsSerializable,Serializable {
-
 	/**
 	 * 
 	 */

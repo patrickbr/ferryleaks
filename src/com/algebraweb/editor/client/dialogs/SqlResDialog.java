@@ -25,7 +25,6 @@ public class SqlResDialog extends DialogBox {
 	 *            the JDBC sql result
 	 */
 	public SqlResDialog(List<Map<String, String>> result) {
-
 		this.setText("Evaluation results");
 
 		SqlResTable t = new SqlResTable(result.size() + 1, result.get(0).size());
@@ -53,5 +52,4 @@ public class SqlResDialog extends DialogBox {
 		this.center();
 		this.show();
 	}
-
 }

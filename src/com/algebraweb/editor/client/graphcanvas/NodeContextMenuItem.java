@@ -22,5 +22,4 @@ public interface NodeContextMenuItem {
 	 *            the id of the node this context menu was opened from
 	 */
 	public void onClick(int nid);
-
 }

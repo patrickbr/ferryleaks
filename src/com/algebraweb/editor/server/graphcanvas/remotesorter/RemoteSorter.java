@@ -8,8 +8,6 @@ import com.algebraweb.editor.shared.exceptions.RemoteIOException;
 import com.algebraweb.editor.shared.node.RawNode;
 
 public interface RemoteSorter {
-
 	public Map<Integer, Tuple> getCoordinateHashMap(List<RawNode> nodes)
 			throws RemoteIOException;
-
 }

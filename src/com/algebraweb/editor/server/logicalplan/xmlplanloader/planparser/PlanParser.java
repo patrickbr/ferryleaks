@@ -181,7 +181,6 @@ public class PlanParser {
 	 * @throws
 	 */
 	public QueryPlanBundle parse() throws IOException, SAXException {
-
 		QueryPlanBundle ret = new QueryPlanBundle();
 		EvaluationContextProvider ecp = new EvaluationContextProvider(session);
 		try {

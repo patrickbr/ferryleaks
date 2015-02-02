@@ -11,11 +11,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
  * 
  */
 public class PlanAddButton extends Composite {
-
 	private Button button;
 
 	public PlanAddButton() {
-
 		button = new Button();
 		button.setText("+");
 		FlowPanel p = new FlowPanel();
@@ -28,5 +26,4 @@ public class PlanAddButton extends Composite {
 	public Button getButton() {
 		return button;
 	}
-
 }

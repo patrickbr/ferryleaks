@@ -23,7 +23,6 @@ import com.hydro4ge.raphaelgwt.client.Raphael.Text;
  * 
  */
 public class GraphNodeModifier {
-
 	public static MouseMoveHandler mouseMoveHandlerBuilder(final GraphNode n) {
 		return new MouseMoveHandler() {
 			@Override
@@ -341,9 +340,7 @@ public class GraphNodeModifier {
 	}
 
 	protected void moveTo(GraphNode n, double x, double y) {
-
 		if ((n.getX() != x || n.getY() != x) && x >= 0 && y >= 0) {
-
 			checkDimension(n, x, y);
 
 			n.getShape().attr("x", x);
@@ -360,7 +357,6 @@ public class GraphNodeModifier {
 			Iterator<String> it = n.getConnectedShapes().keySet().iterator();
 
 			while (it.hasNext()) {
-
 				String cur = it.next();
 				ConnectedShape current = n.getConnectedShapes().get(cur);
 
@@ -378,7 +374,6 @@ public class GraphNodeModifier {
 					.iterator();
 
 			while (itw.hasNext()) {
-
 				ConnectedWidget current = itw.next();
 				current.getElement().getStyle().setTop(
 						(y + n.getHeight() / 2 + current.getY()) / c.getScale()
@@ -396,13 +391,11 @@ public class GraphNodeModifier {
 	}
 
 	protected void removeEdge(GraphNode n, GraphEdge e) {
-
 		n.getEdgesTo().remove(e);
 		n.getEdgesFrom().remove(e);
 		getOffset(n, e.getOrientationFrom(), null, false, -1, true, false,
 				false);
 		getOffset(n, e.getOrientation(), null, false, -1, true, false, false);
-
 	}
 
 	protected void removeShapeFromNode(String identifier, GraphNode n) {
@@ -483,5 +476,4 @@ public class GraphNodeModifier {
 							+ c.getMarginLeft(), Unit.PX);
 		}
 	}
-
 }

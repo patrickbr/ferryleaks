@@ -10,7 +10,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 
 public class Tuple implements IsSerializable {
-
 	private double x;
 	private double y;
 
@@ -38,5 +37,4 @@ public class Tuple implements IsSerializable {
 	public void setY(int y) {
 		this.y = y;
 	}
-
 }

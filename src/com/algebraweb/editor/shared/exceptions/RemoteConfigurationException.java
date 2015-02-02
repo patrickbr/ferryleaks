@@ -13,5 +13,4 @@ public class RemoteConfigurationException extends Exception {
 	public RemoteConfigurationException(String msg) {
 		super("Error while loading configuration from server: " + msg);
 	}
-
 }

@@ -7,7 +7,6 @@ package com.algebraweb.editor.client;
  * 
  */
 public abstract class LogicalTabContextItem implements TabContextMenuItem {
-
 	private String title;
 
 	public LogicalTabContextItem(String title) {

@@ -20,7 +20,6 @@ import com.hydro4ge.raphaelgwt.client.AnimationCallback;
  */
 
 public class GraphEdgeModifier {
-
 	private GraphCanvas c;
 
 	public GraphEdgeModifier(GraphCanvas c) {
@@ -235,7 +234,6 @@ public class GraphEdgeModifier {
 
 	protected void generatePath(GraphEdge e, GraphNode from, GraphNode to,
 			int toPosition, int fromPosition) {
-
 		int fromHeight = from.getHeight();
 		double fromX = from.getX();
 		double fromY = from.getY();
@@ -357,28 +355,21 @@ public class GraphEdgeModifier {
 	}
 
 	protected void setSelected(GraphEdge e) {
-
 		JSONObject newAttrs = new JSONObject();
 		newAttrs.put("stroke-width", new JSONNumber(2));
 		e.getEdgePath().animate(newAttrs, 300);
 		e.getArrowPath().animate(newAttrs, 300);
-
 	}
 
 	protected void show(GraphEdge e) {
-
 		e.getEdgePath().show();
-
 	}
 
 	protected void showArrow(GraphEdge e) {
-
 		e.getArrowPath().show();
-
 	}
 
 	protected AnimationCallback snakeCallbackBuilder(final GraphEdge e) {
-
 		return new AnimationCallback() {
 
 			@Override
@@ -390,7 +381,6 @@ public class GraphEdgeModifier {
 	}
 
 	protected void snakeIn(GraphEdge e, boolean animated) {
-
 		if (e.isSnakedIn()) {
 			return;
 		}
@@ -403,21 +393,15 @@ public class GraphEdgeModifier {
 			JSONObject attrs = new JSONObject();
 			attrs.put("path", new JSONString(e.getEdgePathSmallString()));
 			e.getEdgePath().animate(attrs, 600, snakeInCallbackBuilder(e));
-
 		} else {
-
 			hideArrow(e);
 			e.getEdgePath().attr("path", e.getEdgePathSmallString());
 			snakeInCallbackBuilder(e).onComplete();
-
 		}
-
 	}
 
 	protected AnimationCallback snakeInCallbackBuilder(final GraphEdge e) {
-
 		return new AnimationCallback() {
-
 			@Override
 			public void onComplete() {
 				hide(e);
@@ -428,7 +412,6 @@ public class GraphEdgeModifier {
 	}
 
 	protected void snakeOut(GraphEdge e, boolean animated) {
-
 		if (!e.isSnakedIn()) {
 			return;
 		}
@@ -447,7 +430,6 @@ public class GraphEdgeModifier {
 			snakeCallbackBuilder(e).onComplete();
 
 		}
-
 	}
 
 	protected void toBack(GraphEdge e) {
@@ -462,18 +444,15 @@ public class GraphEdgeModifier {
 
 	protected void update(GraphEdge e, boolean quiet, boolean animated) {
 		makeConnection(e, e.getFrom(), e.getTo(), quiet, animated);
-
 	}
 
 	protected void updateOffset(GraphEdge e, int count, boolean quiet,
 			boolean animated) {
-
 		e.setOffset(count);
 
 		generatePath(e, e.getFrom(), e.getTo(), e.getToPosition(), e
 				.getFromPosition());
 		drawEdge(e, quiet, animated);
-
 	}
 
 	protected void updateOffsetFrom(GraphEdge e, int count, boolean quiet,
@@ -484,7 +463,5 @@ public class GraphEdgeModifier {
 		generatePath(e, e.getFrom(), e.getTo(), e.getToPosition(), e
 				.getFromPosition());
 		drawEdge(e, quiet, animated);
-
 	}
-
 }

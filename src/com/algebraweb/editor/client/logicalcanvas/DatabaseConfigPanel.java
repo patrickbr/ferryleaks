@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
 public class DatabaseConfigPanel extends LayoutPanel {
-
 	private final TextBox serverAdress = new TextBox();
 	private final TextBox serverPort = new TextBox();
 	private final TextBox dbName = new TextBox();

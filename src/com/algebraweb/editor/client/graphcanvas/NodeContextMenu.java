@@ -27,7 +27,6 @@ public class NodeContextMenu extends ContextMenu {
 	}
 
 	public void addItem(final NodeContextMenuItem i) {
-
 		final FlowPanel tmp = new FlowPanel();
 		GraphCanvas.preventTextSelection(tmp.getElement(), true);
 
@@ -45,7 +44,6 @@ public class NodeContextMenu extends ContextMenu {
 		}, ClickEvent.getType());
 
 		tmp.addDomHandler(new MouseMoveHandler() {
-
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 				tmp.addStyleName("hover");
@@ -53,7 +51,6 @@ public class NodeContextMenu extends ContextMenu {
 		}, MouseMoveEvent.getType());
 
 		tmp.addDomHandler(new ContextMenuHandler() {
-
 			@Override
 			public void onContextMenu(ContextMenuEvent event) {
 				event.preventDefault();
@@ -62,7 +59,6 @@ public class NodeContextMenu extends ContextMenu {
 		}, ContextMenuEvent.getType());
 
 		tmp.addDomHandler(new MouseOutHandler() {
-
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 				tmp.removeStyleName("hover");
@@ -81,5 +77,4 @@ public class NodeContextMenu extends ContextMenu {
 		super.show(x, y);
 		this.n = n;
 	}
-
 }

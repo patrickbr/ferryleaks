@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.CheckBox;
  * 
  */
 public class CreateXMLDialog extends CreateEvaluationContextDialog {
-
 	private CheckBox cb;
 	private AsyncCallback<String> xmlCb = new AsyncCallback<String>() {
 		@Override

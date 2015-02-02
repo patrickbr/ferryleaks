@@ -9,14 +9,11 @@ public class PlanNodeCopyMessage implements IsSerializable {
 	private int id;
 
 	public PlanNodeCopyMessage() {
-
 	}
 
 	public PlanNodeCopyMessage(int id, Tuple pos) {
-
 		this.pos = pos;
 		this.id = id;
-
 	}
 
 	/**
@@ -32,5 +29,4 @@ public class PlanNodeCopyMessage implements IsSerializable {
 	public Tuple getPos() {
 		return pos;
 	}
-
 }

@@ -23,22 +23,17 @@ public class LogicalNodePopup extends NodePopup {
 
 		@Override
 		public void onSuccess(String result) {
-
 			LogicalNodePopup.this.clear();
 			LogicalNodePopup.this.add(new HTML(result));
 			correctPosition();
-
 		}
-
 	};
 
 	public LogicalNodePopup(LogicalCanvas c, RemoteManipulationServiceAsync rmsa) {
-
 		super();
 		this.c = c;
 		this.rmsa = rmsa;
 		super.setWidth("400px");
-
 	}
 
 	@Override
@@ -49,5 +44,4 @@ public class LogicalNodePopup extends NodePopup {
 				nodeInfoCallback);
 
 	}
-
 }

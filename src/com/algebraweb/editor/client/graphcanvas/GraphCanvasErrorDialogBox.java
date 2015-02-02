@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class GraphCanvasErrorDialogBox extends DialogBox {
 
 	public GraphCanvasErrorDialogBox(String msg) {
-
 		AlgebraEditor.log("ERROR: " + msg);
 
 		super.setText("Error");

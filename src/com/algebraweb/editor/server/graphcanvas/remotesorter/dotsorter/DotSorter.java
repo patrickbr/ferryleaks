@@ -29,7 +29,6 @@ import com.algebraweb.editor.shared.node.RawNode;
  */
 
 public class DotSorter implements RemoteSorter {
-
 	private double dotCorrector = 0.01818;
 	private String dotPath = "dot";
 	private String arg = "-Tsvg";
@@ -74,7 +73,6 @@ public class DotSorter implements RemoteSorter {
 
 		while (i.hasNext()) {
 			RawNode c = i.next();
-
 			Element coresNode = getNodeByTitle("n_" + c.getNid(),
 					((Element) doc.getElementsByTagName("svg").item(0)));
 			Element nodeRect = (Element) coresNode.getElementsByTagName(

@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
  * 
  */
 public class ZoomPanel extends FlowPanel {
-
 	private Button zoomInButton = new Button("");
 	private Button zoomOutButton = new Button("");
 
@@ -31,5 +30,4 @@ public class ZoomPanel extends FlowPanel {
 	public void registerZoomOutHandler(ClickHandler handler) {
 		zoomOutButton.addClickHandler(handler);
 	}
-
 }

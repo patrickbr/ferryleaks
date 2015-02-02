@@ -30,7 +30,6 @@ public class SQLBubble extends FlowPanel {
 	private FlowPanel p;
 
 	private AsyncCallback<List<Map<String, String>>> sqlCb = new AsyncCallback<List<Map<String, String>>>() {
-
 		@Override
 		public void onFailure(Throwable caught) {
 			p.clear();
@@ -78,7 +77,6 @@ public class SQLBubble extends FlowPanel {
 		}, MouseMoveEvent.getType());
 
 		this.addDomHandler(new MouseOutHandler() {
-
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
 
@@ -93,7 +91,6 @@ public class SQLBubble extends FlowPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				ca.removeSQLListener(SQLBubble.this);
-
 			}
 		});
 
@@ -108,7 +105,6 @@ public class SQLBubble extends FlowPanel {
 		Button d = new Button("");
 		d.addStyleName("sql-bubble-edit");
 		d.addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				new EditSQLListenerDialog(SQLBubble.this, rmsa, ca);
@@ -116,7 +112,6 @@ public class SQLBubble extends FlowPanel {
 		});
 
 		d.addDomHandler(new MouseMoveHandler() {
-
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 				addStyleName("hover");
@@ -134,7 +129,6 @@ public class SQLBubble extends FlowPanel {
 		});
 
 		refresh.addDomHandler(new MouseMoveHandler() {
-
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
 				addStyleName("hover");
@@ -180,5 +174,4 @@ public class SQLBubble extends FlowPanel {
 		this.addStyleName("loading");
 		rmsa.eval(pid, nid, c, false, sqlCb);
 	}
-
 }

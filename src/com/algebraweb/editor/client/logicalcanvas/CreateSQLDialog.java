@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.CheckBox;
  * 
  */
 public class CreateSQLDialog extends CreateEvaluationContextDialog {
-
 	private CheckBox cb;
 	private AsyncCallback<String> sqlCb = new AsyncCallback<String>() {
 		@Override

@@ -8,7 +8,6 @@ package com.algebraweb.editor.client.graphcanvas;
  * 
  */
 public abstract class NodeSelectionHandler {
-
 	/**
 	 * 
 	 * @param node

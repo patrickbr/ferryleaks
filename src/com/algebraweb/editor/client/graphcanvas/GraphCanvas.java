@@ -39,7 +39,6 @@ import com.hydro4ge.raphaelgwt.client.Raphael;
  */
 
 public class GraphCanvas extends Raphael implements Fillable {
-
 	/**
 	 * Hides the loading message display with showLoading(msg)
 	 */
@@ -101,14 +100,14 @@ public class GraphCanvas extends Raphael implements Fillable {
 	private NodeContextMenu m;
 	private ContextMenu canvasMenu;
 	private boolean preventHoverMenu = false;
+
 	private int height;
 	private int width;
-	protected int marginTop = 0;
 
+	protected int marginTop = 0;
 	protected int marginLeft = 0;
 
 	private List<GraphNode> nodes = new ArrayList<GraphNode>();
-
 	private List<GraphEdge> edges = new ArrayList<GraphEdge>();
 
 	public GraphCanvas(int i, int j) {
@@ -370,7 +369,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 	 * @return the GraphNode with the id or null if not found
 	 */
 	public GraphNode getGraphNodeById(int id) {
-
 		Iterator<GraphNode> i = nodes.iterator();
 		while (i.hasNext()) {
 			GraphNode current = i.next();
@@ -476,7 +474,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 	 * @return the selected edges as a HashMap
 	 */
 	public HashMap<Tuple, Integer> getSelectedEdgesWithPos() {
-
 		HashMap<Tuple, Integer> ret = new HashMap<Tuple, Integer>();
 		Iterator<GraphEdge> it = getSelectedEdges().values().iterator();
 
@@ -535,7 +532,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 	}
 
 	public boolean hasEdge(int from, int to, int position) {
-
 		GraphNode fromN = getGraphNodeById(from);
 		GraphNode toN = getGraphNodeById(to);
 
@@ -622,7 +618,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 	}
 
 	private boolean mouseOverNode(int mouseX, int mouseY, int nodeid) {
-
 		int x = Window.getScrollLeft() - marginLeft + mouseX;
 		int y = Window.getScrollTop() - marginTop + mouseY;
 
@@ -636,7 +631,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	@Override
 	public void onLoad() {
-
 		super.onLoad();
 
 		this.addDomHandler(new MouseMoveHandler() {
@@ -690,7 +684,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 		}, MouseMoveEvent.getType());
 
 		this.addDomHandler(new MouseUpHandler() {
-
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				GraphCanvas.this.clearDrag();
@@ -703,7 +696,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 		}, MouseUpEvent.getType());
 
 		this.addDomHandler(new ContextMenuHandler() {
-
 			@Override
 			public void onContextMenu(ContextMenuEvent event) {
 
@@ -718,7 +710,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 		}, ContextMenuEvent.getType());
 
 		this.addDomHandler(new MouseWheelHandler() {
-
 			@Override
 			public void onMouseWheel(MouseWheelEvent event) {
 				if (event.isMetaKeyDown() || event.isAltKeyDown()
@@ -738,7 +729,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 	}
 
 	public void openPopUp(final int x, final int y, final int nodeid, int delay) {
-
 		if (!preventHoverMenu && getPopup().getNodeId() != nodeid
 				&& !getPopup().isShowing() && dragNode == null) {
 
@@ -757,11 +747,9 @@ public class GraphCanvas extends Raphael implements Fillable {
 	}
 
 	protected void registerDrag(GraphNode n, int offsetX, int offsetY) {
-
 		this.dragNode = n;
 		this.dragOffsetX = offsetX;
 		this.dragOffsetY = offsetY;
-
 	}
 
 	public void removeEdge(GraphNode n, int to) {
@@ -782,7 +770,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 	}
 
 	public void removeEdge(int nid, int to, int position) {
-
 		List<GraphEdge> from = getGraphNodeById(nid).getEdgesFrom();
 		GraphEdge current;
 
@@ -883,12 +870,10 @@ public class GraphCanvas extends Raphael implements Fillable {
 	 */
 
 	public void setHeight(int y) {
-
 		this.height = y;
 		this.overlay().setSize(width, height);
 		this.setHeight(y + "px");
 		updateZoom();
-
 	}
 
 	/**
@@ -977,7 +962,6 @@ public class GraphCanvas extends Raphael implements Fillable {
 	 */
 
 	public void setSelectedNodes(ArrayList<GraphNode> nodes) {
-
 		Iterator<GraphNode> it = nodes.iterator();
 		if (popupDelay != null) {
 			popupDelay.cancel();
@@ -1154,5 +1138,4 @@ public class GraphCanvas extends Raphael implements Fillable {
 	public void zoomOut() {
 		zoom(1 / getScale() * 100 - 10);
 	}
-
 }

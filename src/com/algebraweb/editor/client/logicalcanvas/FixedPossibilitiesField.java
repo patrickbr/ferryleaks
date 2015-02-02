@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.ListBox;
  * 
  */
 public class FixedPossibilitiesField extends Composite {
-
 	private ListBox b;
 	private int erroneousIndex = -1;
 	private boolean markError = false;
@@ -151,5 +150,4 @@ public class FixedPossibilitiesField extends Composite {
 			}
 		}
 	}
-
 }

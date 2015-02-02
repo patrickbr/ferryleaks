@@ -24,7 +24,6 @@ import com.algebraweb.editor.shared.scheme.NodeScheme;
  * 
  */
 public class XMLPlanFiller implements GraphCanvasFiller {
-
 	private HttpSession session;
 	private ServletContext context;
 	private Iterator<RawNode> it;
@@ -123,5 +122,4 @@ public class XMLPlanFiller implements GraphCanvasFiller {
 	public RawNode nextNode() {
 		return it.next();
 	}
-
 }

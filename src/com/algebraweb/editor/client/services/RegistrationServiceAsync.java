@@ -10,10 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * 
  */
 public interface RegistrationServiceAsync {
-
 	void keepAlive(AsyncCallback<Void> callback);
-
 	void register(AsyncCallback<RemoteConfiguration> callback);
-
 	void register(String id, AsyncCallback<RemoteConfiguration> callback);
 }

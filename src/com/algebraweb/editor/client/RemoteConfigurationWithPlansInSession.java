@@ -8,7 +8,6 @@ package com.algebraweb.editor.client;
  * 
  */
 public class RemoteConfigurationWithPlansInSession extends RemoteConfiguration {
-
 	private Integer pids[];
 
 	public RemoteConfigurationWithPlansInSession() {
@@ -23,6 +22,4 @@ public class RemoteConfigurationWithPlansInSession extends RemoteConfiguration {
 	public Integer[] getPlanIds() {
 		return pids;
 	}
-	
-
 }

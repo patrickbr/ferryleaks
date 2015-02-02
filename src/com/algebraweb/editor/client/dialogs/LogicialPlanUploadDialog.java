@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * 
  */
 public class LogicialPlanUploadDialog extends DialogBox {
-
 	private final AlgebraEditor e;
 	private String awaitingFileUpload;
 
@@ -67,7 +66,6 @@ public class LogicialPlanUploadDialog extends DialogBox {
 	};
 
 	private IUploader.OnStartUploaderHandler onStartUploaderHandler = new IUploader.OnStartUploaderHandler() {
-
 		@Override
 		public void onStart(IUploader uploader) {
 			awaitingFileUpload = Long.toString(System.currentTimeMillis());

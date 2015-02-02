@@ -16,7 +16,6 @@ import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
  * 
  */
 public class EvaluationDialog extends CreateSQLDialog {
-
 	private DatabaseConfigPanel db;
 
 	private EditorCommunicationCallback<List<Map<String, String>>> evalCb = new EditorCommunicationCallback<List<Map<String, String>>>(
@@ -62,5 +61,4 @@ public class EvaluationDialog extends CreateSQLDialog {
 		getManServ().eval(getPid(), getNid(), c, getSaveCurrenNodeValue(),
 				evalCb);
 	}
-
 }

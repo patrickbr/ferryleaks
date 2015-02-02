@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.ListBox;
  * 
  */
 public class AvailableColumnsField extends FixedPossibilitiesField {
-
 	private String[] projSel;
 	private String[] projDel;
 	private boolean received = false;
@@ -110,7 +109,6 @@ public class AvailableColumnsField extends FixedPossibilitiesField {
 	 *            the item to select
 	 */
 	public void setProjectedSelection(String item) {
-
 		String[] tmp = new String[1];
 		tmp[0] = item;
 		setProjectedSelection(tmp);

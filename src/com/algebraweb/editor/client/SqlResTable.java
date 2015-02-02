@@ -31,7 +31,6 @@ public class SqlResTable extends Grid {
 	 *            the sql result as an ArrayList of HashMaps
 	 */
 	public void fill(List<Map<String, String>> result) {
-
 		if (result.size() < 1) {
 			return;
 		}

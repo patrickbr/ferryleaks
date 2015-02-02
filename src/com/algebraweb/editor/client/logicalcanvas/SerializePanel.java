@@ -57,7 +57,6 @@ public class SerializePanel extends LayoutPanel {
 		this.addStyleName("serialize-panel");
 
 		iterUseValue.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 
@@ -70,7 +69,6 @@ public class SerializePanel extends LayoutPanel {
 		});
 
 		userUseColumn.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 
@@ -111,7 +109,6 @@ public class SerializePanel extends LayoutPanel {
 
 		useSortPreDefButton
 				.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
 					@Override
 					public void onValueChange(ValueChangeEvent<Boolean> event) {
 						if (event.getValue()) {
@@ -185,7 +182,6 @@ public class SerializePanel extends LayoutPanel {
 	}
 
 	public void loadEvaluationContext(EvaluationContext c) {
-
 		this.removeStyleName("loading");
 
 		iterColumn.setProjectedSelection(c.getIterColumnName());
@@ -205,5 +201,4 @@ public class SerializePanel extends LayoutPanel {
 		useSortColumnButton.setValue(c.isSortUseColumn(), true);
 		columnsAvailable.setProjectedSelection(c.getItemColumns());
 	}
-
 }

@@ -298,5 +298,4 @@ public class GraphEdge {
 	public void setY4(double y4) {
 		this.y4 = y4;
 	}
-
 }

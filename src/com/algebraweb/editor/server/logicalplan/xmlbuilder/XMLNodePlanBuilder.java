@@ -34,7 +34,6 @@ import com.algebraweb.editor.shared.node.QueryPlan;
  * 
  */
 public class XMLNodePlanBuilder {
-
 	public XMLNodePlanBuilder() {
 	}
 
