@@ -31,11 +31,11 @@ import com.hydro4ge.raphaelgwt.client.Raphael;
  * A widget to draw directed graphs. Uses the Raphaël-Library
  * (http://raphaeljs.com/) and its GWT-wrapper raphaelgwt
  * (http://code.google.com/p/raphaelgwt/)
- * 
+ *
  * Version Beta 0.6
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 
 public class GraphCanvas extends Raphael implements Fillable {
@@ -48,7 +48,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * We need this to prevent a text selection while dragging around nodes.
-	 * 
+	 *
 	 * @param el
 	 * @param disable
 	 */
@@ -67,7 +67,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Shows a loading message
-	 * 
+	 *
 	 * @param msg
 	 *            the message to show
 	 */
@@ -140,7 +140,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Adds a new node to the canvas at (x,y). Returns the created GraphNode
-	 * 
+	 *
 	 * @param id
 	 *            the id of the new node
 	 * @param x
@@ -175,7 +175,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Adds a new node to the canvas at (x,y) with a <b>fixed count</b> of
 	 * childs. Returns the created GraphNode
-	 * 
+	 *
 	 * @param id
 	 *            the id of the new node
 	 * @param x
@@ -202,7 +202,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Adds a new node selection handler to be called on a node selection.
-	 * 
+	 *
 	 * @param h
 	 *            the handler to be added
 	 * @return true of adding was successful
@@ -214,7 +214,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Adds a node to the current selection. Node selection handlers will be
 	 * called.
-	 * 
+	 *
 	 * @param node
 	 *            the node to be added to the selection
 	 */
@@ -235,7 +235,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Center the scroll position at (x,y)
-	 * 
+	 *
 	 * @param x
 	 *            the x-coordinate
 	 * @param y
@@ -310,7 +310,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Draws an edge from node "from" to node "to"
-	 * 
+	 *
 	 * @param from
 	 * @param to
 	 * @param quiet
@@ -325,7 +325,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Deletes a node from the canvas. Edges comming from or going to this node
 	 * will be removed.
-	 * 
+	 *
 	 * @param n
 	 */
 
@@ -363,7 +363,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Returns the GraphNode with the specified id. Null if np such GraphNode
 	 * could be found.
-	 * 
+	 *
 	 * @param id
 	 *            the id to look for
 	 * @return the GraphNode with the id or null if not found
@@ -385,7 +385,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Returns the current height of the canvas
-	 * 
+	 *
 	 * @return the height of the canvas
 	 */
 	public int getHeight() {
@@ -415,7 +415,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Returns a flat list of all nodes on the canvas
-	 * 
+	 *
 	 * @return the nodes on the canvas
 	 */
 
@@ -425,7 +425,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * returns the popup used on node hovering
-	 * 
+	 *
 	 * @return the popup used for node hovering
 	 */
 	public NodePopup getPopup() {
@@ -435,7 +435,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Returns the current scale. For example, zooming to 50% will make this
 	 * return 2.
-	 * 
+	 *
 	 * @return the current scale
 	 */
 	public double getScale() {
@@ -445,7 +445,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Returns a coordinate tuple (x,y) specifying scroll position so that node
 	 * with the given id is visible.
-	 * 
+	 *
 	 * @param nid
 	 *            the node to scroll to
 	 * @return a coordinate for the browser window to scroll to
@@ -461,7 +461,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Get the selected edges
-	 * 
+	 *
 	 * @return the selected edges as a HashMap
 	 */
 	public Map<Tuple, GraphEdge> getSelectedEdges() {
@@ -470,7 +470,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Get the selected edges with their position on the mother node
-	 * 
+	 *
 	 * @return the selected edges as a HashMap
 	 */
 	public HashMap<Tuple, Integer> getSelectedEdgesWithPos() {
@@ -487,7 +487,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Gets the selected nodes
-	 * 
+	 *
 	 * @return the nodes selected as a HashMap
 	 */
 	public Map<Integer, GraphNode> getSelectedNodes() {
@@ -496,7 +496,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Returns the current width of the canvas
-	 * 
+	 *
 	 * @return the current width of the canvas
 	 */
 	public int getWidth() {
@@ -506,7 +506,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Hangs a shape onto a node. It will be scrolled, animated and removed with
 	 * the node's shape.
-	 * 
+	 *
 	 * @param identifier
 	 *            a string to identify the shape
 	 * @param s
@@ -521,7 +521,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Hangs a widget onto a node. Acts like hangShapeOntoNode() except that it
 	 * works for GWT widgets instead of Raphael-Shapes.
-	 * 
+	 *
 	 * @param identifier
 	 * @param w
 	 * @param nid
@@ -827,8 +827,8 @@ public class GraphCanvas extends Raphael implements Fillable {
 			browserVer = Double.parseDouble(m.getGroup(0));
 		}
 
-		if (browser.matches(".*[fF]irefox.*") && browserVer >= 3) {
-
+		if ((browser.matches(".*[fF]irefox.*") && browserVer >= 3) ||
+			(browser.matches(".*[cC]hrom[ei].*"))) {
 			if (blurr) {
 				this.getRaphaelElement().getFirstChildElement().setAttribute(
 						"filter", "url(#Gaussian_Blur)");
@@ -865,7 +865,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Sets the height ot the canvas
-	 * 
+	 *
 	 * @param y
 	 */
 
@@ -957,7 +957,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Set the GraphNodes nodes selected
-	 * 
+	 *
 	 * @param n
 	 */
 
@@ -986,7 +986,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Sets the size of the canvas to the given dimension
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 */
@@ -1002,7 +1002,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Sets the width of the canvas
-	 * 
+	 *
 	 * @param x
 	 *            the width to be set
 	 */
@@ -1038,7 +1038,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Sort this canvas with GraphSorter s
-	 * 
+	 *
 	 * @param s
 	 *            the GraphSorter to use.
 	 */
@@ -1060,7 +1060,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Unhangs a ConnectedShape from a node
-	 * 
+	 *
 	 * @param identifier
 	 *            the identifier string of the ConnectedShape to unhang
 	 * @param nid
@@ -1073,7 +1073,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 	/**
 	 * Unhangs a ConnectedWidget from a node. Acts like unHangShapeFromNode()
 	 * except for the fact that it it for GWT-widgets instead of shapes.
-	 * 
+	 *
 	 * @param identifier
 	 *            the identifier string of the ConnectedWidget to unhang
 	 * @param nid
@@ -1099,7 +1099,7 @@ public class GraphCanvas extends Raphael implements Fillable {
 
 	/**
 	 * Zoom the canvas
-	 * 
+	 *
 	 * @param percent
 	 *            the percent to zoom to
 	 */
