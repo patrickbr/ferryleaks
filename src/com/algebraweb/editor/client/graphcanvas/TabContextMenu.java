@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.InlineHTML;
  * 
  */
 public class TabContextMenu extends ContextMenu {
-
 	private int pid;
 
 	public TabContextMenu() {

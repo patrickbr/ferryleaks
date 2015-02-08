@@ -10,7 +10,6 @@ import com.algebraweb.editor.shared.node.RawNode;
  * 
  */
 public class RandomFiller implements GraphCanvasFiller {
-
 	private int howManyNodes = 80;
 	private int count = 0;
 	private int edgeCount = 0;

@@ -2,6 +2,10 @@ A Web-Based (Debugging) Editor for the Table-Algebra
 
 # Readme #
 
+FerryLeaks is an editor for the table algebra, used for debugging query plans for [Ferry](http://db.inf.uni-tuebingen.de/projects/Ferry.html) and [Pathfinder](http://db.inf.uni-tuebingen.de/projects/Pathfinder.html). It supports SQL-generation for either the whole plan or sub-plans, features 'SQL-Listeners' that can be attached to any node and provides editing in a graphical manner as well as through direct XML-manipulation.
+
+Moreover, FerryLeaks comes with a simple XML descriptor language that is used to define and validate nodes and plans. It is highly flexible and can be used as an editor/evaluator for almost any kind of algebra that can be expressed in a tree-like structure. A testing example for FerryLeaks, loaded with descriptor files for a simple algebra supporting literals, 'plus', 'minus', 'mult' and 'div', can be found [here](http://patrickbrosi.de/algebraeditor/).
+
 ## 0. Example ##
 
 http://dbwiscam.informatik.uni-tuebingen.de/AlgebraEditor/
