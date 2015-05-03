@@ -46,3 +46,7 @@ Deploy the WAR-File (build/AlgebraEditor.war) to a Tomcat server.
 Your Tomcat must allow file-uploads to use FerryLeaks' upload mechanisms. It must also allow
 system calls to communicate with dot and Ferry.
 
+## 4. License ##
+
+FerryLeaks is distributed under GPL v2. This software uses 3rd party libraries distributed under various licenses,
+see LICENSE-3RD-PARTY for more information.
