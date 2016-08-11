@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 
 public class NodeEditDialog extends DialogBox {
-
 	private RemoteManipulationServiceAsync manServ;
 	private PlanModelManipulator pmm;
 	private int nid;

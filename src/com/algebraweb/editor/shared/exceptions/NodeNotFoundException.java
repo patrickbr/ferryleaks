@@ -3,7 +3,7 @@ package com.algebraweb.editor.shared.exceptions;
 public class NodeNotFoundException extends RuntimeException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -17,5 +17,4 @@ public class NodeNotFoundException extends RuntimeException {
 	public String getMessage() {
 		return "No node with nid=" + nid + " was found.";
 	}
-
 }

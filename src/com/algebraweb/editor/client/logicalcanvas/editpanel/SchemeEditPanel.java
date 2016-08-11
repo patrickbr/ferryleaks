@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class SchemeEditPanel extends Composite {
-
 	private LogicalSchemeTreeItem treeItem;
 	private GoAble scheme;
 
@@ -35,18 +34,15 @@ public class SchemeEditPanel extends Composite {
 		Button b = new Button("Add content");
 
 		b.addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				SchemeEditPanel.this.treeItem.addNewEmptyItem();
 
 			}
-
 		});
 
 		p.add(b);
 
 		initWidget(p);
 	}
-
 }

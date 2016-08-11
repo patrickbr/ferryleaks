@@ -3,10 +3,9 @@ package com.algebraweb.editor.client.graphcanvas;
 import java.util.List;
 
 public interface GraphSorter {
-
 	/**
 	 * Sort the given nodes with the given edges.
-	 * 
+	 *
 	 * @param nodes
 	 *            the list of nodes
 	 * @param edges

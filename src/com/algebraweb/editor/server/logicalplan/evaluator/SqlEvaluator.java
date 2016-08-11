@@ -13,12 +13,11 @@ import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 
 /**
  * Evaluates an SQL query against a back end database
- * 
+ *
  * @author patrick
- * 
+ *
  */
 public class SqlEvaluator {
-
 	private static Connection conn = null;
 
 	public SqlEvaluator(EvaluationContext c) throws LogicalCanvasSQLException {
@@ -57,7 +56,7 @@ public class SqlEvaluator {
 	/**
 	 * Returns a list of maps where every list entry is a row, every map entry a
 	 * pair column,value
-	 * 
+	 *
 	 * @param qry
 	 *            the sql query to evaluate
 	 * @return the resulting list of maps

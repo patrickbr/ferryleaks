@@ -5,7 +5,6 @@ import com.algebraweb.editor.shared.node.PropertyValue;
 import com.algebraweb.editor.shared.scheme.Field;
 
 public class PropertyEditFieldWithFixedPossibilities extends PropertyEditField {
-
 	private FixedPossibilitiesField lb;
 
 	public PropertyEditFieldWithFixedPossibilities(Field f) {
@@ -17,7 +16,6 @@ public class PropertyEditFieldWithFixedPossibilities extends PropertyEditField {
 		lb.loadStringArray(f.getCanBe());
 		p.add(lb);
 		initWidget(p);
-
 	}
 
 	@Override
@@ -30,5 +28,4 @@ public class PropertyEditFieldWithFixedPossibilities extends PropertyEditField {
 	public void save() {
 		pv.setVal(lb.getListBox().getValue(lb.getListBox().getSelectedIndex()));
 	}
-
 }

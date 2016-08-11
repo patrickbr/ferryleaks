@@ -11,8 +11,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("sorter")
 public interface RemoteSorterService extends RemoteService {
-
 	public Map<Integer, Tuple> doSort(String sorter, List<RawNode> nodes)
 			throws RemoteIOException;
-
 }

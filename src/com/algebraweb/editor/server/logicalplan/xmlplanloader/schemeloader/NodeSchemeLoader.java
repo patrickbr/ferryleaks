@@ -28,13 +28,12 @@ import com.algebraweb.editor.shared.scheme.Value;
  * The node scheme loader and parser. Node schemes have to be saved as single
  * scheme files or as scheme bundles using the format specified in the * docs.
  * Only filenames ending with .scheme.xml will be parsed.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 
 public class NodeSchemeLoader {
-
 	private class SchemeFileFilter implements FileFilter {
 		public boolean accept(File file) {
 			return file.getName().toLowerCase().endsWith(".scheme.xml");
@@ -46,7 +45,7 @@ public class NodeSchemeLoader {
 	/**
 	 * Initializes a NodeSchemeLoader. You can use a specific file or a whole
 	 * directory here.
-	 * 
+	 *
 	 * @param file
 	 */
 	public NodeSchemeLoader(String file) {
@@ -118,7 +117,7 @@ public class NodeSchemeLoader {
 	 * Start parsing. An ArrayList containing all NodeSchemes found in the
 	 * file/directory will be returned or an empty ArrayList if no schemes could
 	 * be found.
-	 * 
+	 *
 	 * @return
 	 * @throws RemoteIOException
 	 */

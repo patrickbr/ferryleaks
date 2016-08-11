@@ -18,9 +18,9 @@ import com.algebraweb.editor.shared.scheme.Value;
 
 /**
  * A validator for the grammar specified in the *.scheme.xml files.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 
 public class GrammarValidator implements Validator {

@@ -22,9 +22,9 @@ import com.algebraweb.editor.shared.exceptions.PathFinderCompilationErrorExcepti
 /**
  * Builds SQL queries from plan bundles using an external Pathfinder
  * installation
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class PlanNodeSQLBuilder {
 	private String[] args = new String[2];
@@ -36,7 +36,7 @@ public class PlanNodeSQLBuilder {
 
 	/**
 	 * Returns a map of sql queries from a given XML element
-	 * 
+	 *
 	 * @param planToCompile
 	 *            the plan or plan bundle to give Pathfinder
 	 * @return a map of all SQL queries with plan ids as a key

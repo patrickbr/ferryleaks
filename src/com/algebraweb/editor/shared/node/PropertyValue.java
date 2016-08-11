@@ -6,14 +6,14 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Holds a value as well as the value's type
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class PropertyValue implements IsSerializable,Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private String val;
@@ -30,7 +30,7 @@ public class PropertyValue implements IsSerializable,Serializable {
 
 	/**
 	 * Returns the type of this value
-	 * 
+	 *
 	 * @return the type of this value
 	 */
 	public String getType() {
@@ -39,7 +39,7 @@ public class PropertyValue implements IsSerializable,Serializable {
 
 	/**
 	 * Returns the actual value of this PropertyValue
-	 * 
+	 *
 	 * @return the value as a string
 	 */
 	public String getVal() {
@@ -48,7 +48,7 @@ public class PropertyValue implements IsSerializable,Serializable {
 
 	/**
 	 * Set the type of this PropertyValue
-	 * 
+	 *
 	 * @param type
 	 *            the type to set
 	 */
@@ -58,7 +58,7 @@ public class PropertyValue implements IsSerializable,Serializable {
 
 	/**
 	 * Sets the value of this PropertyValue
-	 * 
+	 *
 	 * @param val
 	 *            the value as a string
 	 */

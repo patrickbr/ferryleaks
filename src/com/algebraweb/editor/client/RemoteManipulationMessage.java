@@ -13,9 +13,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 /**
  * The answer to manipulation requests. Holds information on the action to be
  * performed on the view, the status code etc.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class RemoteManipulationMessage implements IsSerializable {
 	private int returnCode;
@@ -27,7 +27,6 @@ public class RemoteManipulationMessage implements IsSerializable {
 	private String action;
 
 	public RemoteManipulationMessage() {
-
 	}
 
 	public RemoteManipulationMessage(int planid, String action, int returnCode,
@@ -41,7 +40,7 @@ public class RemoteManipulationMessage implements IsSerializable {
 
 	/**
 	 * Returns the action to be performed on the server
-	 * 
+	 *
 	 * @return the action string
 	 */
 	public String getAction() {
@@ -50,7 +49,7 @@ public class RemoteManipulationMessage implements IsSerializable {
 
 	/**
 	 * Returns coordinates for "add" messages
-	 * 
+	 *
 	 * @return the coordinates
 	 */
 	public Map<Integer, Tuple> getCoordinates() {
@@ -59,7 +58,7 @@ public class RemoteManipulationMessage implements IsSerializable {
 
 	/**
 	 * Returns the error message
-	 * 
+	 *
 	 * @return the error message
 	 */
 	public String getMessage() {
@@ -68,7 +67,7 @@ public class RemoteManipulationMessage implements IsSerializable {
 
 	/**
 	 * Returns a list of affected nodes
-	 * 
+	 *
 	 * @return the affected nodes
 	 */
 	public List<RawNode> getNodesAffected() {
@@ -77,7 +76,7 @@ public class RemoteManipulationMessage implements IsSerializable {
 
 	/**
 	 * Returns the affected plan's id
-	 * 
+	 *
 	 * @return the pid
 	 */
 	public int getPlanid() {
@@ -86,7 +85,7 @@ public class RemoteManipulationMessage implements IsSerializable {
 
 	/**
 	 * Returns the return code. 1 = OK, 3 = ERROR
-	 * 
+	 *
 	 * @return
 	 */
 	public int getReturnCode() {
@@ -95,7 +94,7 @@ public class RemoteManipulationMessage implements IsSerializable {
 
 	/**
 	 * Returns the validation result after the manipulation
-	 * 
+	 *
 	 * @return the validaiton result
 	 */
 	public ValidationResult getValidationResult() {

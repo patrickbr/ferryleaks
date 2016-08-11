@@ -7,7 +7,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 public abstract class PropertyEditField extends Composite {
-
 	protected PropertyValue pv;
 	protected FlowPanel p = new FlowPanel();
 	protected boolean locked = false;
@@ -41,5 +40,4 @@ public abstract class PropertyEditField extends Composite {
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
-
 }

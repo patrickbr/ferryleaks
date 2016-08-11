@@ -7,14 +7,14 @@ import java.util.List;
 /**
  * A lightweight object holding drawing information for nodes. Is used for
  * transfers.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class RawNode implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 2613849213898458764L;
 	private int nid;
@@ -43,7 +43,7 @@ public class RawNode implements Serializable {
 
 	/**
 	 * Returns the node's color
-	 * 
+	 *
 	 * @return the color as a hex int
 	 */
 	public int getColor() {
@@ -52,7 +52,7 @@ public class RawNode implements Serializable {
 
 	/**
 	 * Returns the list of edges pointing to this node
-	 * 
+	 *
 	 * @return the list of edges
 	 */
 	public List<RawEdge> getEdgesToList() {
@@ -61,7 +61,7 @@ public class RawNode implements Serializable {
 
 	/**
 	 * Returns the fixed child count of this node
-	 * 
+	 *
 	 * @return the fixedChildCount
 	 */
 	public int getFixedChildCount() {
@@ -86,7 +86,7 @@ public class RawNode implements Serializable {
 
 	/**
 	 * Sets the color of this node.
-	 * 
+	 *
 	 * @param color
 	 *            the color as a hex integer.
 	 */
@@ -96,7 +96,7 @@ public class RawNode implements Serializable {
 
 	/**
 	 * Sets the number of children this node has to hold.
-	 * 
+	 *
 	 * @param fixedChildCount
 	 *            the fixedChildCount to set
 	 */
@@ -119,5 +119,4 @@ public class RawNode implements Serializable {
 	public void setWidth(int width) {
 		this.width = width;
 	}
-
 }

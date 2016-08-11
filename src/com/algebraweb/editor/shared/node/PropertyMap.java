@@ -10,15 +10,15 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * A map for properties
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class PropertyMap extends HashMap<String, PropertyValue> implements
 		IsSerializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class PropertyMap extends HashMap<String, PropertyValue> implements
 
 	/**
 	 * Return the property specified by its string identifiert
-	 * 
+	 *
 	 * @param key
 	 *            the property name to return
 	 * @return the Property with the given name
@@ -39,7 +39,7 @@ public class PropertyMap extends HashMap<String, PropertyValue> implements
 
 	/**
 	 * Returns a collection of all properties hold by this PropertyMap
-	 * 
+	 *
 	 * @return all properties as a collection
 	 */
 	public Collection<Property> properties() {
@@ -55,7 +55,7 @@ public class PropertyMap extends HashMap<String, PropertyValue> implements
 
 	/**
 	 * Adds a property to this map
-	 * 
+	 *
 	 * @param p
 	 *            the property to add
 	 * @return the propertyvalue added

@@ -10,12 +10,11 @@ import com.algebraweb.editor.shared.node.PlanNode;
 
 /**
  * A validator checking for abandonded nodes
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class AbandondedNodeValidator implements Validator {
-
 	@Override
 	public void validate(List<PlanNode> ps, List<PlanNode> plan,
 			ValidationResult r) {

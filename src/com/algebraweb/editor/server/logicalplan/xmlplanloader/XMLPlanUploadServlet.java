@@ -17,9 +17,9 @@ import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 
 /**
  * The upload servlet, handling plan uploads
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class XMLPlanUploadServlet extends UploadAction {
 	private static final long serialVersionUID = 4992498870698384055L;

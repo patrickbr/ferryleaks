@@ -22,7 +22,7 @@ import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 
 public class PostInterfaceServlet extends HttpServlet  {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4298624527659355950L;
 
@@ -61,14 +61,14 @@ public class PostInterfaceServlet extends HttpServlet  {
 				if (log != null && log.equals("true")) {
 					res.getWriter().print("0::" + request.getContextPath() + "/?autoload=" +id.toString() +"&logger");
 				}else{
-					res.getWriter().print("0::" + request.getContextPath() + "/?autoload=" +id.toString());	
+					res.getWriter().print("0::" + request.getContextPath() + "/?autoload=" +id.toString());
 				}
 			}else{
 				res.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
 				if (log != null && log.equals("true")) {
 					res.setHeader("Location", request.getContextPath() + "/?autoload=" +id.toString() +"&logger");
 				}else{
-					res.setHeader("Location", request.getContextPath() + "/?autoload=" +id.toString());	
+					res.setHeader("Location", request.getContextPath() + "/?autoload=" +id.toString());
 				}
 			}
 

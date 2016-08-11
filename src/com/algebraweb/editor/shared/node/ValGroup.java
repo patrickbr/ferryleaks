@@ -7,15 +7,15 @@ import java.util.Iterator;
  * A group of node values with no own parameters. On editing a node, the
  * corresponding GoInto will be presented by an own tab in the editor window and
  * this group will be filled with the values provided there.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 
 public class ValGroup extends NodeContent {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4630462466854800864L;
 

@@ -16,14 +16,14 @@ import com.algebraweb.editor.shared.scheme.Value;
 
 /**
  * Holds an entire query plan.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class QueryPlan implements Serializable, Cloneable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 2371425529625584530L;
 	private int id = -1;
@@ -59,7 +59,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Removes a list of plan nodes from a node's childs
-	 * 
+	 *
 	 * @param p
 	 *            the PlanNode the childs should be deleted from
 	 * @param remove
@@ -75,7 +75,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Returns the EvaluationContext of this whole plan
-	 * 
+	 *
 	 * @return the evContext
 	 */
 	public EvaluationContext getEvContext() {
@@ -84,7 +84,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Returns a free node id.
-	 * 
+	 *
 	 * @return a free node id
 	 */
 	public int getFreeId() {
@@ -93,7 +93,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Returns a free node id not contained in the <i>nids</i> blacklist
-	 * 
+	 *
 	 * @param nids
 	 *            the blacklist
 	 * @return a free node id
@@ -108,7 +108,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Returns the plan id
-	 * 
+	 *
 	 * @return the plan id
 	 */
 	public int getId() {
@@ -117,7 +117,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Returns a nodes parents
-	 * 
+	 *
 	 * @param n
 	 *            the node
 	 * @return a list of parents
@@ -136,7 +136,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Returns a list of all plan nodes
-	 * 
+	 *
 	 * @return the plan node list
 	 */
 	public List<PlanNode> getPlan() {
@@ -145,7 +145,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Returns a plan node with a given id
-	 * 
+	 *
 	 * @param id
 	 *            the id to look for
 	 * @return the plan node
@@ -163,7 +163,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Returns all properties of this query plan as specified in the xml file
-	 * 
+	 *
 	 * @return the properties
 	 */
 	public List<Property> getProperties() {
@@ -173,7 +173,7 @@ public class QueryPlan implements Serializable, Cloneable {
 	/**
 	 * Returns the root node of this plan. Throws exceptions if plan has cycles,
 	 * is empty or has multiple roots.
-	 * 
+	 *
 	 * @return the root node
 	 * @throws GraphNotConnectedException
 	 * @throws GraphIsEmptyException
@@ -188,7 +188,7 @@ public class QueryPlan implements Serializable, Cloneable {
 	 * Returns the root node of this plan. Throws exceptions if plan has cycles,
 	 * is empty or has multiple roots. Skips serialize relation if parameter is
 	 * set to true
-	 * 
+	 *
 	 * @param skipSerializeRelation
 	 *            true if serialize relation should be skipped
 	 * @return the root node
@@ -229,7 +229,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Sets the evaluation context of this plan
-	 * 
+	 *
 	 * @param evContext
 	 *            the evContext to set
 	 */
@@ -239,7 +239,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Sets the plan of this query plan
-	 * 
+	 *
 	 * @param plan
 	 *            the plan as a list of plan nodes
 	 */
@@ -249,7 +249,7 @@ public class QueryPlan implements Serializable, Cloneable {
 
 	/**
 	 * Sets the properties of this query plan
-	 * 
+	 *
 	 * @param properties
 	 *            the properties
 	 */

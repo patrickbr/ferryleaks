@@ -3,7 +3,6 @@ package com.algebraweb.editor.client.logicalcanvas.editpanel;
 import com.algebraweb.editor.client.graphcanvas.ContextMenuItem;
 
 public abstract class LogicalPlanNodeContextItem implements ContextMenuItem {
-
 	private String title;
 
 	public LogicalPlanNodeContextItem(String title) {

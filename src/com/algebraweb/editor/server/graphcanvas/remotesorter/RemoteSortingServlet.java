@@ -14,9 +14,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class RemoteSortingServlet extends RemoteServiceServlet implements
 		RemoteSorterService {
-
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -284758450069045235L;
 

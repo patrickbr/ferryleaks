@@ -13,14 +13,14 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 /**
  * A ContentNode is, contrary to a NodeContent, a Node that can <i>hold</i>
  * NodeContents.
- * 
+ *
  * @author patrick
- * 
+ *
  */
 
 public abstract class ContentNode implements IsSerializable,Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 3587617554315766060L;
 	protected ArrayList<NodeContent> childs = new ArrayList<NodeContent>();
@@ -28,7 +28,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 
 	/**
 	 * Adds a label object to this ContentNode
-	 * 
+	 *
 	 * @param ob
 	 */
 	public void addLabelOb(LabelOb ob) {
@@ -45,7 +45,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 	/**
 	 * Returns ALL values in this ContentNode with a given internal name (as
 	 * specified in the scheme XML file) Goes into content childs!
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -66,7 +66,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 	/**
 	 * Returns ALL values in this ContentNode with a given internal name (as
 	 * specified in the scheme XML file) Goes into content childs!
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -86,7 +86,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 
 	/**
 	 * returns the contents of this ContentNode
-	 * 
+	 *
 	 * @return
 	 */
 	public abstract List<NodeContent> getContent();
@@ -117,7 +117,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 	 * Returns values in this ContentNode with a given internal name (as
 	 * specified in the scheme XML file) Stays flat, does NOT go into content
 	 * childs!
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -136,7 +136,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 	/**
 	 * Returns contents in this ContentNode that fit a given scheme. Stays flat,
 	 * doet NOT go into content childs!
-	 * 
+	 *
 	 * @param g
 	 *            the scheme to look for
 	 * @return a list of NodeContents fitting the scheme
@@ -180,7 +180,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 	/**
 	 * Return the internal name of this content node. This is usually the XML
 	 * object's name.
-	 * 
+	 *
 	 * @return the internal name
 	 */
 	public abstract String getInternalName();
@@ -188,7 +188,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 	/**
 	 * Returns the <i>label</i> of this content node. This is the label built
 	 * from the information given in the node scheme file.
-	 * 
+	 *
 	 * @return the assembled label
 	 */
 	public abstract String getLabel();
@@ -196,7 +196,7 @@ public abstract class ContentNode implements IsSerializable,Serializable {
 	/**
 	 * Removes a NodeContent object from this content node or from any of its
 	 * childs (does not stay flat).
-	 * 
+	 *
 	 * @param con
 	 *            the NodeContent object to remove
 	 * @return true if the deletion was successfull

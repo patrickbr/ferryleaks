@@ -5,9 +5,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * (See RegistrationService)
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public interface RegistrationServiceAsync {
 	void keepAlive(AsyncCallback<Void> callback);

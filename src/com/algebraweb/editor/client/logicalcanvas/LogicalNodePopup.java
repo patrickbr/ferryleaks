@@ -38,10 +38,8 @@ public class LogicalNodePopup extends NodePopup {
 
 	@Override
 	protected void render() {
-
 		super.add(new HTML("<img style='margin:auto' src='loading-yellow.gif'>"));
 		rmsa.getNodeInformationHTML(super.getNodeId(), c.getId(),
 				nodeInfoCallback);
-
 	}
 }

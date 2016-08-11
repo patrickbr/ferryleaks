@@ -46,13 +46,12 @@ import com.algebraweb.editor.shared.scheme.Value;
 /**
  * A parser for webferry's XML-format using the node schemes specified in the
  * documentation.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 
 public class PlanParser {
-
 	private InputStream inputStream;
 	private Map<String, NodeScheme> schemes;
 	private HttpSession session;
@@ -72,7 +71,7 @@ public class PlanParser {
 		this.inputStream = new FileInputStream(new File(file));
 		this.session = session;
 	}
-	
+
 	public PlanParser(Map<String, NodeScheme> nodeSchemes, InputStream inputStream,
 			HttpSession session) throws FileNotFoundException {
 		this.schemes = nodeSchemes;
@@ -82,7 +81,7 @@ public class PlanParser {
 
 	/**
 	 * Fills an empty PlanNode with content and attributes
-	 * 
+	 *
 	 * @param n
 	 * @param nodeEl
 	 */
@@ -99,7 +98,7 @@ public class PlanParser {
 	 * Returns all XML objects from the parent matching the given schema. Please
 	 * note that this is not "depth-aware" for later editing reasons. See
 	 * documentation for further details.
-	 * 
+	 *
 	 * @param parent
 	 * @param g
 	 * @return
@@ -139,7 +138,7 @@ public class PlanParser {
 
 	/**
 	 * Gets a NodeScheme from the servlet context
-	 * 
+	 *
 	 * @param type
 	 *            the string type of the scheme
 	 * @return the NodeScheme specifie by type
@@ -226,7 +225,7 @@ public class PlanParser {
 
 	/**
 	 * Parses a List of node contents
-	 * 
+	 *
 	 * @param e
 	 *            the underlying XML node
 	 * @param retEl
@@ -258,7 +257,7 @@ public class PlanParser {
 
 	/**
 	 * Parses an element e with respect to a GoAble scheme g
-	 * 
+	 *
 	 * @param g
 	 *            the schema to use for parsing
 	 * @param e
@@ -309,7 +308,7 @@ public class PlanParser {
 	/**
 	 * Parse the string label schema for a specific ContentNode and writes label
 	 * elements to the node.
-	 * 
+	 *
 	 * @param retEl
 	 *            the element to be parsed
 	 * @param schema
@@ -347,7 +346,7 @@ public class PlanParser {
 
 	/**
 	 * Parses a PlanNode from a single DOM-element
-	 * 
+	 *
 	 * @param mother
 	 *            the surrounding plan
 	 * @param el
@@ -367,7 +366,7 @@ public class PlanParser {
 	/**
 	 * Parse the string label schema for a specific PlanNode and writes the
 	 * result to the node.
-	 * 
+	 *
 	 * @param node
 	 *            the node to be processed
 	 * @param s
@@ -387,7 +386,7 @@ public class PlanParser {
 	/**
 	 * Parses all PlanNodes from a given parent DOM-element to the
 	 * mother-QueryPlan
-	 * 
+	 *
 	 * @param parent
 	 *            the underlying XML element
 	 * @param mother

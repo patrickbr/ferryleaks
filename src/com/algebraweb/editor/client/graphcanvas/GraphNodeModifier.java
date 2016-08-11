@@ -18,9 +18,9 @@ import com.hydro4ge.raphaelgwt.client.Raphael.Text;
 
 /**
  * Provides methods for basic graph node manipulation on the canvas.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class GraphNodeModifier {
 	public static MouseMoveHandler mouseMoveHandlerBuilder(final GraphNode n) {

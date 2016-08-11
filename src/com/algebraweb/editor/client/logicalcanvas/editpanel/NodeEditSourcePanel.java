@@ -7,7 +7,6 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
 
 public class NodeEditSourcePanel extends LayoutPanel {
-
 	private TextArea editArea = new TextArea();
 	private RemoteManipulationServiceAsync manServ;
 	private PlanModelManipulator pmm;

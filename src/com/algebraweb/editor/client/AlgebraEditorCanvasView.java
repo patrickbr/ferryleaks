@@ -11,15 +11,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Declares methods a view for the editor has to implement.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public interface AlgebraEditorCanvasView extends Fillable {
-
 	/**
 	 * Hangs a SQL listener to a node
-	 * 
+	 *
 	 * @param nid
 	 *            the nid of the node
 	 * @param c
@@ -34,7 +33,7 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * Removes a node
-	 * 
+	 *
 	 * @param graphNodeById
 	 *            the node's id
 	 */
@@ -47,7 +46,7 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * Enter the node adding mode where users should be able to add new nodes.
-	 * 
+	 *
 	 * @param selectedScheme
 	 *            the scheme of the node to be added
 	 */
@@ -55,7 +54,7 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * Returns a loaded GraphNode object specified by its id
-	 * 
+	 *
 	 * @param nid
 	 *            the node's id
 	 * @return the GraphNode object
@@ -64,14 +63,14 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * Returne the id of this view
-	 * 
+	 *
 	 * @return the id
 	 */
 	public int getId();
 
 	/**
 	 * Returns the current zoom scale
-	 * 
+	 *
 	 * @return the scale
 	 */
 	public double getScale();
@@ -79,21 +78,21 @@ public interface AlgebraEditorCanvasView extends Fillable {
 	/**
 	 * Returns a map of selected edges. A coordinate object is used for tuple
 	 * representation (from,to)
-	 * 
+	 *
 	 * @return the map of edges
 	 */
 	public Map<Tuple, Integer> getSelectedEdgesWithPos();
 
 	/**
 	 * Returns a map of selected nodes. The keys are the node ids.
-	 * 
+	 *
 	 * @return the map of selected nodes
 	 */
 	public Map<Integer, GraphNode> getSelectedNodes();
 
 	/**
 	 * Returns the underlying widget element
-	 * 
+	 *
 	 * @return the widget
 	 */
 	public Widget getWidget();
@@ -101,7 +100,7 @@ public interface AlgebraEditorCanvasView extends Fillable {
 	/**
 	 * Checks whether an edge between two nodes (specified by their id) exists
 	 * at the given child position of the from-node
-	 * 
+	 *
 	 * @param id
 	 *            the id of the from-node
 	 * @param id2
@@ -114,7 +113,7 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * Removes an edge (from,to) from the given position at the from node
-	 * 
+	 *
 	 * @param from
 	 *            the from node's id
 	 * @param to
@@ -126,7 +125,7 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * Select a node with all its sub nodes
-	 * 
+	 *
 	 * @param n
 	 *            the node's id
 	 */
@@ -134,14 +133,14 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * If true, the canvas should be blurred
-	 * 
+	 *
 	 * @param blur
 	 */
 	public void setBlurred(boolean blur);
 
 	/**
 	 * Mark a node as erroneous
-	 * 
+	 *
 	 * @param nodeId
 	 *            the id of the node to mark
 	 */
@@ -149,14 +148,14 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * Set the view to not active
-	 * 
+	 *
 	 * @param b
 	 */
 	public void setNotActive(boolean b);
 
 	/**
 	 * Sets the selected node
-	 * 
+	 *
 	 * @param n
 	 *            the graph node to select
 	 */
@@ -169,7 +168,7 @@ public interface AlgebraEditorCanvasView extends Fillable {
 
 	/**
 	 * Sort the canvas with a given remoteSorter
-	 * 
+	 *
 	 * @param remoteSorter
 	 *            the sorter to use
 	 */

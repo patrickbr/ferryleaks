@@ -17,15 +17,15 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 /**
  * A servlet for client registrations. Returns possible plans saved in the
  * session as well as the central server configuration
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class RegistrationServiceServlet extends RemoteServiceServlet implements
 RegistrationService {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1031957668151394521L;
 
@@ -36,7 +36,7 @@ RegistrationService {
 	private RemoteConfiguration getRemoteConfiguration(
 			HttpServletRequest request, HttpSession session) {
 		RemoteConfiguration tmp;
-		if (session != null 
+		if (session != null
 				&& ((QueryPlanBundle) session.getAttribute("queryPlans")) != null
 				&& ((QueryPlanBundle) session.getAttribute("queryPlans"))
 				.getPlans().size() > 0
@@ -83,8 +83,8 @@ RegistrationService {
 
 		if (id != null) {
 			if (getServletContext().getAttribute("postplan" + id) == null) throw new RemoteConfigurationException("Plan not found.");
-			QueryPlanBundle b = (QueryPlanBundle) getServletContext().getAttribute("postplan" + id); 
-			session = initSession(request, session);			
+			QueryPlanBundle b = (QueryPlanBundle) getServletContext().getAttribute("postplan" + id);
+			session = initSession(request, session);
 			session.setAttribute("queryPlans", SerializationClone.clone(b));
 		}
 

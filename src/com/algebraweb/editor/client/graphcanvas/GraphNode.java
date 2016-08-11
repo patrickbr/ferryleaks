@@ -26,13 +26,12 @@ import com.hydro4ge.raphaelgwt.client.Raphael.Text;
 
 /**
  * A node on the GraphCanvas.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 
 public class GraphNode {
-
 	private Rect rect;
 	private Text[] textLines;
 	private double lineHeight;
@@ -363,7 +362,6 @@ public class GraphNode {
 		if (update) {
 			c.getGraphNodeModifier().update(this, false, false);
 		}
-
 	}
 
 	public void setWidth(int w) {

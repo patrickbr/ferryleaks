@@ -9,7 +9,6 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.hydro4ge.raphaelgwt.client.Raphael.Path;
 
 public class GraphEdge {
-
 	private GraphCanvas c;
 	private Path edgePath;
 	private Path arrowPath;

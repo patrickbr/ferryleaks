@@ -4,12 +4,11 @@ import com.google.gwt.user.client.ui.Button;
 
 /**
  * A button for the control panel. Will be styled accordingly.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class ControlPanelButton extends Button {
-
 	public ControlPanelButton(String desc) {
 		super();
 

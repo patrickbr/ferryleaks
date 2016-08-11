@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TreeItem;
 
 public class LogicalSchemeTreeItem extends NodeTreeItem {
-
 	protected GoAble scheme;
 	protected ContentNode content;
 	protected RemoteManipulationServiceAsync manServ;

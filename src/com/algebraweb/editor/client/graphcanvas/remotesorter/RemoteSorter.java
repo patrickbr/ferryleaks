@@ -17,7 +17,6 @@ import com.algebraweb.editor.shared.node.RawNode;
 import com.google.gwt.core.client.GWT;
 
 public class RemoteSorter implements GraphSorter {
-
 	private RemoteSorterServiceAsync commServ;
 	private List<GraphNode> nodes;
 	private String sorter;

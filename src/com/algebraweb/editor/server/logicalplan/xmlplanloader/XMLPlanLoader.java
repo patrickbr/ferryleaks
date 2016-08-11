@@ -19,11 +19,10 @@ import com.algebraweb.editor.shared.logicalplan.QueryPlanBundle;
 import com.algebraweb.editor.shared.scheme.NodeScheme;
 
 public class XMLPlanLoader {
-
 	/**
 	 * Parses the plan file into the given server context. A previously loaded
 	 * node schema will be reused
-	 * 
+	 *
 	 * @param file
 	 *            the filename to use
 	 * @param context
@@ -45,7 +44,7 @@ public class XMLPlanLoader {
 		QueryPlanBundle qpb = p.parse();
 		return qpb;
 	}
-	
+
 	public QueryPlanBundle parsePlans(InputStream inputStream, ServletContext context,
 			HttpSession session) throws IOException, SAXException,
 			RemoteIOException {

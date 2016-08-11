@@ -25,16 +25,16 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 /**
  * The Remote Manipulation Service. The main class for editing communications.
  * Provides methods for changed to plan model on the server.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 @RemoteServiceRelativePath("manipulate")
 public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Adds an edge to the plan model.
-	 * 
+	 *
 	 * @param planid
 	 *            The plan to use
 	 * @param fromTo
@@ -50,7 +50,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Adds a new node to the plan.
-	 * 
+	 *
 	 * @param planid
 	 *            The plan to use
 	 * @param nodeType
@@ -69,7 +69,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Copy nodes to the clipboard
-	 * 
+	 *
 	 * @param msg
 	 *            the PlanNodeCopyMessage
 	 * @param pid
@@ -82,7 +82,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Create a new plan on the server.
-	 * 
+	 *
 	 * @param clearFirst
 	 *            set to true of old plans should be cleared first.
 	 * @return the id of the added plan
@@ -93,7 +93,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Delete edges.
-	 * 
+	 *
 	 * @param map
 	 *            a map of all edges that should be deleted. Key is tuple
 	 *            (from,to), value is the child position.
@@ -108,7 +108,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Delete nodes.
-	 * 
+	 *
 	 * @param nids
 	 *            an integer array of all node ids to be deleted
 	 * @param planid
@@ -122,7 +122,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Evaluate a node.
-	 * 
+	 *
 	 * @param pid
 	 *            the plan to use
 	 * @param nid
@@ -145,7 +145,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Evaluate a whole plan
-	 * 
+	 *
 	 * @param pid
 	 *            the plan's id
 	 * @param c
@@ -168,7 +168,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Get the (saved) evaluation context for a node
-	 * 
+	 *
 	 * @param pid
 	 *            the node's id
 	 * @param nid
@@ -185,7 +185,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Get a HTML representation of the node information
-	 * 
+	 *
 	 * @param nid
 	 *            the node's id
 	 * @param planid
@@ -199,7 +199,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns all node types loaded on the server.
-	 * 
+	 *
 	 * @return a string array of node types
 	 * @throws RemoteIOException
 	 */
@@ -207,7 +207,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns a plan node object for editing
-	 * 
+	 *
 	 * @param nid
 	 *            the node's id
 	 * @param pid
@@ -220,7 +220,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns a list of all referencable columns within a node
-	 * 
+	 *
 	 * @param nid
 	 *            the node's id
 	 * @param pid
@@ -237,7 +237,7 @@ public interface RemoteManipulationService extends RemoteService {
 	/**
 	 * Returns a list of referencable columns without the columns added within
 	 * this node
-	 * 
+	 *
 	 * @param nid
 	 *            the node's id
 	 * @param pid
@@ -254,7 +254,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns a plan's root node
-	 * 
+	 *
 	 * @param pid
 	 *            the plan to use
 	 * @return the root node
@@ -272,7 +272,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the compiled SQL for plan
-	 * 
+	 *
 	 * @param pid
 	 *            the plan's id
 	 * @return the SQL query as a string
@@ -288,7 +288,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the compiled SQL for a plan node
-	 * 
+	 *
 	 * @param pid
 	 *            the plan to use
 	 * @param nid
@@ -308,7 +308,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the validation of a plan. The plan is revalidated.
-	 * 
+	 *
 	 * @param planid
 	 *            the plan's id
 	 * @return the ValidationResult
@@ -320,7 +320,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the XML of a ContentNode (for editing purposes)
-	 * 
+	 *
 	 * @param c
 	 *            the ContentNoe
 	 * @return the XML string
@@ -329,7 +329,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the XML of a PlanNode
-	 * 
+	 *
 	 * @param pid
 	 *            the plan to use
 	 * @param nid
@@ -342,7 +342,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Returns the XML for a whole plan, beginning with the root node
-	 * 
+	 *
 	 * @param pid
 	 *            the plan's id
 	 * @param nid
@@ -361,7 +361,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Pastes the clipboard into a plan at a given position
-	 * 
+	 *
 	 * @param pid
 	 *            the plan's id
 	 * @param x
@@ -377,7 +377,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Removes a plan from the serve
-	 * 
+	 *
 	 * @param pid
 	 *            the plan's id
 	 * @return the removed plan's id
@@ -387,7 +387,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Updates the evaluation context of a plan
-	 * 
+	 *
 	 * @param c
 	 *            the evaluation context
 	 * @param pid
@@ -399,7 +399,7 @@ public interface RemoteManipulationService extends RemoteService {
 
 	/**
 	 * Updates a plan node. Changes to ID and type will be ignored.
-	 * 
+	 *
 	 * @param nid
 	 *            the node's id
 	 * @param pid
@@ -416,7 +416,7 @@ public interface RemoteManipulationService extends RemoteService {
 	/**
 	 * Updates a plan node from XML source. Changes to ID and type will be
 	 * ignored.
-	 * 
+	 *
 	 * @param nid
 	 *            the node's id
 	 * @param pid

@@ -8,13 +8,12 @@ import com.google.gwt.user.client.Window;
 
 /**
  * Provides animated layouting after sorting by a GraphSorter
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 
 public class GraphNodeLayoutingMachine {
-
 	protected List<GraphNode> nodes;
 	protected List<GraphEdge> edges;
 	protected GraphNodeModifier gnm;
@@ -100,14 +99,13 @@ public class GraphNodeLayoutingMachine {
 
 	/**
 	 * Sort the given nodes with the GraphSorter sorter
-	 * 
+	 *
 	 * @param nodes
 	 * @param sorter
 	 */
 
 	public void sortGraph(List<GraphNode> nodes, List<GraphEdge> edges,
 			GraphSorter sorter, final boolean layout) {
-
 		this.nodes = nodes;
 		this.edges = edges;
 

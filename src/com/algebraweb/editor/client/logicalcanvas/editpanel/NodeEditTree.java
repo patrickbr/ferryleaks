@@ -5,13 +5,9 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Tree;
 
 public class NodeEditTree extends Tree {
-
 	protected interface CustomImages extends Tree.Resources {
-
 		ImageResource treeClosed();
-
 		ImageResource treeOpen();
-
 	}
 
 	NodeTreeItem root;

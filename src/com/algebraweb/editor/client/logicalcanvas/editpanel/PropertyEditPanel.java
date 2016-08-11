@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 public class PropertyEditPanel extends Composite {
-
 	private NodeContent c;
 	private GoAble scheme;
 
@@ -48,7 +47,6 @@ public class PropertyEditPanel extends Composite {
 		p.add(title);
 
 		if (treeItem.getErrors() != null) {
-
 			HTML errorP = new HTML();
 			String tmpRet = "";
 			Iterator<ValidationError> i = treeItem.getErrors().iterator();
@@ -60,20 +58,17 @@ public class PropertyEditPanel extends Composite {
 			errorP.setHTML(tmpRet);
 
 			p.add(errorP);
-
 		}
 
 		Button deleteButton = new Button("X");
 
 		deleteButton.addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				((LogicalSchemeTreeItem) PropertyEditPanel.this.treeItem
 						.getParentItem())
 						.deleteContent(PropertyEditPanel.this.treeItem);
 			}
-
 		});
 
 		deleteButton.addStyleName("delete-button");
@@ -83,7 +78,6 @@ public class PropertyEditPanel extends Composite {
 			Iterator<Field> it = scheme.getFields().iterator();
 
 			while (it.hasNext()) {
-
 				Field current = it.next();
 
 				PropertyValue pv;
@@ -135,17 +129,13 @@ public class PropertyEditPanel extends Composite {
 		}
 
 		initWidget(p);
-
 	}
 
 	public void save() {
-
 		Iterator<PropertyEditField> it = fields.iterator();
 
 		while (it.hasNext()) {
 			it.next().save();
 		}
-
 	}
-
 }

@@ -8,9 +8,8 @@ import com.algebraweb.editor.shared.node.QueryPlan;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class QueryPlanBundle implements IsSerializable,Serializable, Cloneable {
-
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3431461437145187991L;
 	private Map<Integer, QueryPlan> plans = new HashMap<Integer, QueryPlan>();
@@ -19,11 +18,10 @@ public class QueryPlanBundle implements IsSerializable,Serializable, Cloneable {
 
 	}
 
-
 	/**
 	 * Adds a plan p to this bundle. Returns true if adding was successful,
 	 * false if the bundle already contains a plan with the same id
-	 * 
+	 *
 	 * @param p
 	 *            the query plan to add
 	 * @return
@@ -39,7 +37,7 @@ public class QueryPlanBundle implements IsSerializable,Serializable, Cloneable {
 
 	/**
 	 * Return a free plan id
-	 * 
+	 *
 	 * @return a free plan id
 	 */
 	public int getFreePlanId() {
@@ -53,7 +51,7 @@ public class QueryPlanBundle implements IsSerializable,Serializable, Cloneable {
 	/**
 	 * Returns the plan with the specific id, null if the bundle does not
 	 * contain any such plan
-	 * 
+	 *
 	 * @param id
 	 *            the id to look for
 	 * @return
@@ -64,7 +62,7 @@ public class QueryPlanBundle implements IsSerializable,Serializable, Cloneable {
 
 	/**
 	 * Returns all plans in this bundle
-	 * 
+	 *
 	 * @return the plans as a map. Plan ids are the keys.
 	 */
 	public Map<Integer, QueryPlan> getPlans() {
@@ -74,7 +72,7 @@ public class QueryPlanBundle implements IsSerializable,Serializable, Cloneable {
 
 	/**
 	 * Returns true if the bundle holds a plan with a given id
-	 * 
+	 *
 	 * @param id
 	 *            the plan id to look for
 	 * @return true if the bundle holds a plan with the given id

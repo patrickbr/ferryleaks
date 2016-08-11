@@ -8,14 +8,14 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * A property which can hold an identifying name as well as a PropertyValue
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class Property implements IsSerializable,Serializable, Cloneable{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 60118871698032614L;
 	String propertyName;
@@ -38,7 +38,7 @@ public class Property implements IsSerializable,Serializable, Cloneable{
 
 	/**
 	 * Returns the childs of this property
-	 * 
+	 *
 	 * @return the childs of this property
 	 */
 	public List<Property> getProperties() {
@@ -47,7 +47,7 @@ public class Property implements IsSerializable,Serializable, Cloneable{
 
 	/**
 	 * Returns the identifier of this property
-	 * 
+	 *
 	 * @return the identifier
 	 */
 	public String getPropertyName() {
@@ -56,7 +56,7 @@ public class Property implements IsSerializable,Serializable, Cloneable{
 
 	/**
 	 * Returns the value hold by this property as a PropertyVal
-	 * 
+	 *
 	 * @return the PropertyVal hold by this value
 	 */
 	public PropertyValue getPropertyVal() {
@@ -65,7 +65,7 @@ public class Property implements IsSerializable,Serializable, Cloneable{
 
 	/**
 	 * Sets the name of this property
-	 * 
+	 *
 	 * @param propertyName
 	 *            the name to set
 	 */
@@ -75,7 +75,7 @@ public class Property implements IsSerializable,Serializable, Cloneable{
 
 	/**
 	 * Sets the value of this property
-	 * 
+	 *
 	 * @param propertyVal
 	 *            the value to set.
 	 */

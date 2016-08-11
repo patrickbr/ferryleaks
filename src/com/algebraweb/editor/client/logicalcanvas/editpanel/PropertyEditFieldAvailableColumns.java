@@ -6,7 +6,6 @@ import com.algebraweb.editor.shared.node.PropertyValue;
 import com.algebraweb.editor.shared.scheme.Field;
 
 public class PropertyEditFieldAvailableColumns extends PropertyEditField {
-
 	private AvailableColumnsField lb;
 
 	public PropertyEditFieldAvailableColumns(int pid, int nid,
@@ -37,5 +36,4 @@ public class PropertyEditFieldAvailableColumns extends PropertyEditField {
 	public void save() {
 		pv.setVal(lb.getListBox().getValue(lb.getListBox().getSelectedIndex()));
 	}
-
 }

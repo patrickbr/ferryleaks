@@ -14,12 +14,11 @@ import com.google.gwt.user.client.ui.InlineHTML;
 
 /**
  * The node context menu.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class NodeContextMenu extends ContextMenu {
-
 	private GraphNode n;
 
 	public NodeContextMenu() {

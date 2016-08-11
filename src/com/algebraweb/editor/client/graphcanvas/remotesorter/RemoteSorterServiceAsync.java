@@ -8,8 +8,6 @@ import com.algebraweb.editor.shared.node.RawNode;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface RemoteSorterServiceAsync {
-
 	public void doSort(String sorter, List<RawNode> nodes,
 			AsyncCallback<Map<Integer, Tuple>> callback);
-
 }

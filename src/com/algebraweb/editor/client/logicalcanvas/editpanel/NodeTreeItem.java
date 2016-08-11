@@ -6,7 +6,6 @@ import java.util.Iterator;
 import com.google.gwt.user.client.ui.TreeItem;
 
 public class NodeTreeItem extends TreeItem {
-
 	public NodeTreeItem() {
 		super();
 		setState(true, true);
@@ -26,7 +25,5 @@ public class NodeTreeItem extends TreeItem {
 			this.addItem(it.next());
 
 		}
-
 	}
-
 }

@@ -17,7 +17,7 @@ import java.util.Queue;
  * @author Patrick Brosi
  *
  */
-public class SerializationClone {	
+public class SerializationClone {
 	public static <T> T clone(T x) {
 		try {
 			return cloneX(x);

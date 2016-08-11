@@ -25,9 +25,9 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 
 /**
  * The editor's control panel. ControllPanelButtons can be added to this.
- * 
+ *
  * @author Patrick Brosi
- * 
+ *
  */
 public class ControlPanel extends AbsolutePanel {
 	final LogicialPlanUploadDialog d;
@@ -113,10 +113,10 @@ public class ControlPanel extends AbsolutePanel {
 							.getSelectedNodes().values().iterator().next()
 							.getId(), AlgebraEditor.getActiveView().getId());
 				}else{
-					OkPanel p = new OkPanel("No node(s) selected!", "Warning"); 
+					OkPanel p = new OkPanel("No node(s) selected!", "Warning");
 					p.center();
 					p.show();
-					
+
 				}
 			}
 		});
@@ -135,7 +135,7 @@ public class ControlPanel extends AbsolutePanel {
 							.getActiveView().getSelectedNodes().values()
 							.iterator().next().getId(), xmlCb);
 				}else{
-					OkPanel p = new OkPanel("No node(s) selected!","Warning"); 
+					OkPanel p = new OkPanel("No node(s) selected!","Warning");
 					p.show();
 					p.center();
 				}
@@ -154,7 +154,7 @@ public class ControlPanel extends AbsolutePanel {
 							.getActiveView().getSelectedNodes().keySet()
 							.toArray(new Integer[0])[0], rmsa);
 				}else{
-					OkPanel p = new OkPanel("No node(s) selected!", "Warning"); 
+					OkPanel p = new OkPanel("No node(s) selected!", "Warning");
 					p.center();
 					p.show();
 				}
