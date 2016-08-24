@@ -1,5 +1,8 @@
 package com.algebraweb.editor.server.logicalplan.evaluator;
 
+import javax.servlet.ServletContext;
+import org.apache.commons.configuration.Configuration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,27 +23,30 @@ import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
 public class SqlEvaluator {
 	private static Connection conn = null;
 
-	public SqlEvaluator(EvaluationContext c) throws LogicalCanvasSQLException {
+	public SqlEvaluator(EvaluationContext c, ServletContext sCon) throws LogicalCanvasSQLException {
 		try {
 			Class.forName("org.postgresql.Driver");
 
-			String dbHost = c.getDatabaseServer();
-			String dbPort = Integer.toString(c.getDatabasePort());
-			String database = c.getDatabase();
-			String dbUser = c.getDatabaseUser();
-			String dbPassword = c.getDatabasePassword();
+			Configuration cc = (Configuration) sCon.getAttribute(
+							"configuration");
+
+			String dbHost = cc.getString("server.postgres.host");
+			String dbPort = cc.getString("server.postgres.port");
+			String database = cc.getString("server.postgres.database");
+			String dbUser = cc.getString("server.postgres.user");
+			String dbPassword = cc.getString("server.postgres.password");
 
 			if (dbHost.equals("")) {
 				throw new LogicalCanvasSQLException(
-						"Please provide a valid host with PostgreSQL running!");
+						"No DB host configured.");
 			}
 			if (database.equals("")) {
 				throw new LogicalCanvasSQLException(
-						"Please provide a valid database name!");
+						"No DB configured.");
 			}
 			if (dbUser.equals("")) {
 				throw new LogicalCanvasSQLException(
-						"Please provide a valid database user!");
+						"No DB host configured.");
 			}
 
 			conn = DriverManager.getConnection("jdbc:postgresql://" + dbHost

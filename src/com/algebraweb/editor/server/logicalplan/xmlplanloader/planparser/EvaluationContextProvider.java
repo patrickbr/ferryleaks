@@ -80,15 +80,6 @@ public class EvaluationContextProvider {
 		}
 		EvaluationContext c = new EvaluationContext();
 
-		c.setDatabase((String) session.getAttribute("databaseName"));
-		c.setDatabasePassword((String) session.getAttribute("databasePw"));
-		c
-				.setDatabasePort((session.getAttribute("databasePort") != null ? (Integer) session
-						.getAttribute("databasePort")
-						: 0));
-		c.setDatabaseServer((String) session.getAttribute("databaseHost"));
-		c.setDatabaseUser((String) session.getAttribute("databaseUser"));
-
 		if (root != null && root.getKind().equals("serialize relation")) {
 
 			if (root.getContentWithAttributeValue("function", "iter").size() > 0) {

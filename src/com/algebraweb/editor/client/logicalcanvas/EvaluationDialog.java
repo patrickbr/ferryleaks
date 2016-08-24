@@ -16,8 +16,6 @@ import com.algebraweb.editor.shared.logicalplan.EvaluationContext;
  * 
  */
 public class EvaluationDialog extends CreateSQLDialog {
-	private DatabaseConfigPanel db;
-
 	private EditorCommunicationCallback<List<Map<String, String>>> evalCb = new EditorCommunicationCallback<List<Map<String, String>>>(
 			"evaluating") {
 
@@ -32,24 +30,16 @@ public class EvaluationDialog extends CreateSQLDialog {
 			RemoteManipulationServiceAsync manServ) {
 		super(pid, nid, manServ);
 		super.setText("Evaluation");
-		db = new DatabaseConfigPanel(pid, nid, manServ);
-		super.addTab(db, "Database");
-	}
-
-	protected DatabaseConfigPanel getDatabaseConfigPanel() {
-		return db;
 	}
 
 	@Override
 	protected void processContextResult(EvaluationContext result) {
 		super.processContextResult(result);
-		getDatabaseConfigPanel().loadEvaluationContext(result);
 	}
 
 	@Override
 	protected EvaluationContext saveContext() {
 		EvaluationContext c = super.saveContext();
-		db.fillEvaluationContext(c);
 		return c;
 	}
 

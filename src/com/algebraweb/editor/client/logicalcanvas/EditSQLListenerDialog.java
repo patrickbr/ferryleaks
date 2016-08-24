@@ -18,8 +18,6 @@ public class EditSQLListenerDialog extends AddSQListenerDialog {
 		this.b = b;
 		super.getSerializationPanel().loadEvaluationContext(
 				b.getEvaluationContext());
-		super.getDatabaseConfigPanel().loadEvaluationContext(
-				b.getEvaluationContext());
 	}
 
 	@Override

@@ -286,11 +286,7 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 		if (saveContext) {
 			saveEvaluationContextForNode(nid, pid, context);
 		}
-		if (context.isDatabaseSetGlobal()) {
-			System.out.println("tester");
-			saveDefaultDatabaseConfiguration(context);
-		}
-		SqlEvaluator eval = new SqlEvaluator(context);
+		SqlEvaluator eval = new SqlEvaluator(context, getServletContext());
 		return eval.eval(getSQLFromPlanNode(pid, nid, context, saveContext));
 	}
 
@@ -301,9 +297,6 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 			PathFinderCompilationErrorException, LogicalCanvasSQLException,
 			PlanHasCycleException {
 		PlanNode root = getPlanToWork(pid).getRootNode();
-		if (c.isDatabaseSetGlobal()) {
-			saveDefaultDatabaseConfiguration(c);
-		}
 		if (saveContext) {
 			getPlanToWork(pid).setEvContext(c);
 		}
@@ -312,17 +305,6 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 
 	private void fillDatabaseConfigurationFromGlobalDefault(EvaluationContext c)
 			throws SessionExpiredException {
-		c.setDatabase((String) getSession().getAttribute("databaseName"));
-		c.setDatabasePassword((String) getSession().getAttribute("databasePw"));
-		c
-				.setDatabasePort((getSession().getAttribute("databasePort") != null ? (Integer) getSession()
-						.getAttribute("databasePort")
-						: 5432));
-		c
-				.setDatabaseServer((getSession().getAttribute("databaseHost") != null ? (String) getSession()
-						.getAttribute("databaseHost")
-						: "localhost"));
-		c.setDatabaseUser((String) getSession().getAttribute("databaseUser"));
 	}
 
 	private Configuration getConfiguration() {
@@ -355,9 +337,6 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 			} else {
 				c = getNodeToWork(pid, nid).getEvaluationContext();
 			}
-		}
-		if (c.getDatabase() == null || c.getDatabase() == "") {
-			fillDatabaseConfigurationFromGlobalDefault(c);
 		}
 		return c;
 	}
@@ -526,9 +505,6 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 			p.fillEvaluationContext(getPlanToWork(pid));
 		}
 		EvaluationContext c = getPlanToWork(pid).getEvContext();
-		if (c.getDatabase() == null && c.getDatabaseServer() == null) {
-			fillDatabaseConfigurationFromGlobalDefault(c);
-		}
 		return getPlanToWork(pid).getEvContext();
 	}
 
@@ -776,27 +752,16 @@ public class PlanCommunicationServlet extends RemoteServiceServlet implements
 
 	private void saveDefaultDatabaseConfiguration(EvaluationContext c)
 			throws SessionExpiredException {
-		getSession().setAttribute("databaseHost", c.getDatabaseServer());
-		getSession().setAttribute("databasePort", c.getDatabasePort());
-		getSession().setAttribute("databaseName", c.getDatabase());
-		getSession().setAttribute("databaseUser", c.getDatabaseUser());
-		getSession().setAttribute("databasePw", c.getDatabasePassword());
 	}
 
 	private void saveEvaluationContextForNode(int nid, int pid,
 			EvaluationContext c) throws PlanManipulationException {
-		if (c.isDatabaseSetGlobal()) {
-			saveDefaultDatabaseConfiguration(c);
-		}
 		getNodeToWork(pid, nid).setEvaluationContext(c);
 	}
 
 	@Override
 	public void updatePlanEvaluationContext(EvaluationContext c, int pid)
 			throws PlanManipulationException {
-		if (c.isDatabaseSetGlobal()) {
-			saveDefaultDatabaseConfiguration(c);
-		}
 		getPlanToWork(pid).setEvContext(c);
 	}
 

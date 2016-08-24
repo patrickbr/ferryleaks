@@ -17,11 +17,6 @@ public class EvaluationContext implements IsSerializable,Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String databaseServer;
-	private int databasePort;
-	private String databaseUser;
-	private String database;
-	private String databasePassword;
 	private boolean iterUseColumn;
 	private boolean sortUseColumn;
 	private String iterColumnName;
@@ -30,7 +25,6 @@ public class EvaluationContext implements IsSerializable,Serializable {
 	private String sortOrder;
 	private String sortOrderColumnOn;
 	private String[] itemColumns = new String[0];
-	private boolean databaseSetGlobal = false;
 
 	public EvaluationContext() {
 
@@ -40,11 +34,6 @@ public class EvaluationContext implements IsSerializable,Serializable {
 		
 		EvaluationContext copy = new EvaluationContext();
 		
-		copy.database = this.database;
-		copy.databaseServer = this.databaseServer;
-		copy.databaseUser = this.databaseUser;
-		copy.databasePassword = this.databasePassword;
-		copy.databasePort = this.databasePort;
 		copy.itemColumns = this.itemColumns;
 		copy.iterColumnName = this.iterColumnName;
 		copy.iterColumnNat = this.iterColumnNat;
@@ -53,45 +42,9 @@ public class EvaluationContext implements IsSerializable,Serializable {
 		copy.sortColumnName = this.sortColumnName;
 		copy.sortOrder = this.sortOrder;
 		copy.sortOrderColumnOn = this.sortOrderColumnOn;
-		copy.databaseSetGlobal = this.databaseSetGlobal;
 		
 		return copy;
 		
-	}
-
-	/**
-	 * @return the database
-	 */
-	public String getDatabase() {
-		return database;
-	}
-
-	/**
-	 * @return the databasePassword
-	 */
-	public String getDatabasePassword() {
-		return databasePassword;
-	}
-
-	/**
-	 * @return the databasePort
-	 */
-	public int getDatabasePort() {
-		return databasePort;
-	}
-
-	/**
-	 * @return the databaseServer
-	 */
-	public String getDatabaseServer() {
-		return databaseServer;
-	}
-
-	/**
-	 * @return the databaseUser
-	 */
-	public String getDatabaseUser() {
-		return databaseUser;
 	}
 
 	/**
@@ -137,13 +90,6 @@ public class EvaluationContext implements IsSerializable,Serializable {
 	}
 
 	/**
-	 * @return the databaseSetGlobal
-	 */
-	public boolean isDatabaseSetGlobal() {
-		return databaseSetGlobal;
-	}
-
-	/**
 	 * @return the iterUseColumn
 	 */
 	public boolean isIterUseColumn() {
@@ -155,54 +101,6 @@ public class EvaluationContext implements IsSerializable,Serializable {
 	 */
 	public boolean isSortUseColumn() {
 		return sortUseColumn;
-	}
-
-	/**
-	 * @param database
-	 *            the database to set
-	 */
-	public void setDatabase(String database) {
-		this.database = database;
-	}
-
-	/**
-	 * @param databasePassword
-	 *            the databasePassword to set
-	 */
-	public void setDatabasePassword(String databasePassword) {
-		this.databasePassword = databasePassword;
-	}
-
-	/**
-	 * @param databasePort
-	 *            the databasePort to set
-	 */
-	public void setDatabasePort(int databasePort) {
-		this.databasePort = databasePort;
-	}
-
-	/**
-	 * @param databaseServer
-	 *            the databaseServer to set
-	 */
-	public void setDatabaseServer(String databaseServer) {
-		this.databaseServer = databaseServer;
-	}
-
-	/**
-	 * @param databaseSetGlobal
-	 *            the databaseSetGlobal to set
-	 */
-	public void setDatabaseSetGlobal(boolean databaseSetGlobal) {
-		this.databaseSetGlobal = databaseSetGlobal;
-	}
-
-	/**
-	 * @param databaseUser
-	 *            the databaseUser to set
-	 */
-	public void setDatabaseUser(String databaseUser) {
-		this.databaseUser = databaseUser;
 	}
 
 	/**
