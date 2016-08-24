@@ -8,7 +8,7 @@ Moreover, FerryLeaks comes with a simple XML descriptor language that is used to
 
 ## 0. Example ##
 
-http://dbwiscam.informatik.uni-tuebingen.de/AlgebraEditor/
+http://patrickbrosi.de/ferryleaks
 
 
 ## 1. Requirements ##
