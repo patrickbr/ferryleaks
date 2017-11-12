@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/patrickbr/ferryleaks.svg?branch=master)](https://travis-ci.org/patrickbr/ferryleaks)
+
 A Web-Based (Debugging) Editor for the Table-Algebra
 
 # Readme #
