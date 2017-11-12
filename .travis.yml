@@ -1,4 +1,5 @@
 language: java
 install: wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/google-web-toolkit/gwt-2.3.0.zip &&
     unzip gwt-2.3.0.zip && (echo "gwt.sdk = gwt-2.3.0" > build.properties)
-build: ant build
+script:
+    ant build
